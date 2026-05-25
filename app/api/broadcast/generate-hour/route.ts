@@ -150,18 +150,24 @@ async function getJocktalk(
       segmentProgress = `[CLB Step 3 - Core Content]: Wrap up the discussion on "${topic}". Summarize your final thoughts.`;
   }
 
+  let timeOfDay = "Day";
+  if (istHour >= 4 && istHour < 12) timeOfDay = "Morning (Subah)";
+  else if (istHour >= 12 && istHour < 17) timeOfDay = "Afternoon (Dopahar)";
+  else if (istHour >= 17 && istHour < 21) timeOfDay = "Evening (Shaam)";
+  else timeOfDay = "Night (Raat)";
+
   const prompt = `${customRjPrompt || `You are an Expert News Anchor and Data Analyst for 'Future Radio', hosting the broadcast "${currentShow.name}".
 Your name is ${rjProfile.name} (${rjProfile.gender}). You deliver data-driven, fact-based news with high professionalism and authority.`}
 
 Show Context:
-- Current Time: ${istHour}:00 IST in ${cityId}.
+- Current Time: ${istHour}:00 IST (${timeOfDay}) in ${cityId}.
 - Show Vibe: ${currentShow.contentStrategy}
 - Hourly Topic: "${topic}"
 
 CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
 0. [CRITICAL GRAMMAR CONSTRAINT]: Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns. For example, if you are FEMALE, you MUST say "Main aa gayi hoon", "Main soch rahi thi", "Main sun rahi hoon". NEVER use masculine verbs like "Main aa gaya hoon" or "Main soch raha tha". Check every single sentence before outputting!
 1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain radio ka future 'Future Radio', main hoon ${dostWord} ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
-2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}).
+2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}). DO NOT say "aaj ka din" or "good morning" if it is night time. Use accurate context like "aaj raat", "is shaam", or "aaj subah".
 3. ${segmentProgress}
 4. [CLB Step 4 - Tease Next Song]: Build hype for the upcoming song: "${upcomingSongTitle}".
 5. [CLB Step 5 - Outro]: Always end your talk exactly with: "Sunte rahiye Future Radio, ab future suno."
