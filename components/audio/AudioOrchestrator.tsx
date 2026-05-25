@@ -87,6 +87,7 @@ export default function AudioOrchestrator() {
   const currentElementIdRef = useRef<string | null>(null);
   const isGeneratingRef = useRef<boolean>(false);
   const zapperFiredRef = useRef<boolean>(false);
+  const prefetchedUrlsRef = useRef<Set<string>>(new Set());
   const [listenerId] = useState(() => typeof window !== "undefined" ? crypto.randomUUID() : "anon");
 
   // Realtime Presence Tracker for Live Listeners Count
@@ -242,6 +243,17 @@ export default function AudioOrchestrator() {
         bedRef.current.volume = Math.max(0, Math.min(1, targetVol));
       }
 
+      // --- 60s PRE-FETCH QUEUE LOGIC (BUG 2 FIX) ---
+      // Triggers LLM + TTS generation 60s early so it's fully cached before the break
+      const nextElement = schedule[activeElementIndex + 1];
+      if (nextElement && (nextElement.element_type === "jocktalk" || nextElement.element_type === "traffic")) {
+        if (remainingSeconds <= 60 && remainingSeconds > 0 && !prefetchedUrlsRef.current.has(nextElement.id)) {
+          console.log(`[Sync Engine] Pre-fetching TTS (60s early) for upcoming block: ${nextElement.id}`);
+          prefetchedUrlsRef.current.add(nextElement.id);
+          fetch(nextElement.media_url, { cache: "force-cache" }).catch(e => console.error("Prefetch failed", e));
+        }
+      }
+
       // --- MAGIC 1.5s ZAPPER CROSSFADE SEGUE ---
       if (remainingSeconds <= 1.5 && remainingSeconds > 0 && !zapperFiredRef.current) {
         console.log(`[Sync Engine] Firing Zapper crossfade (1.5s remaining)`);
@@ -337,7 +349,19 @@ export default function AudioOrchestrator() {
                   try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
                 }
               };
-              audioRef.current.play().catch(e => console.error("Audio block failed:", e));
+              audioRef.current.play().catch(e => {
+                console.error("Audio block failed:", e);
+                // FAILSAFE (BUG 2 FIX): Play local station ID if TTS fetch fails
+                if (audioRef.current) {
+                  audioRef.current.src = "/audio/jingles/lofi-bed.mp3";
+                  audioRef.current.play().catch(() => {});
+                }
+              });
+              
+              // CLEAR BUFFER (BUG 1 FIX)
+              audioRef.current.onended = () => {
+                if (audioRef.current) audioRef.current.src = "";
+              };
             }
           } else {
             // It's a Station ID or Sweeper! Use the dedicated overlapping Jingle player
