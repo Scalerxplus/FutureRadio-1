@@ -30,7 +30,7 @@ export async function GET(request: Request) {
     }
 
     const voiceIdParam = url.searchParams.get("voiceId");
-    const VOICE_ID = voiceIdParam || "SAz9YHcvj6GT2YYXdXww"; // Default to AIRA
+    const VOICE_ID = voiceIdParam || "cgSgspJ2msm6clMCkdW9"; // Default to new AIRA voice
 
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}?output_format=mp3_44100_128`, {
       method: "POST",

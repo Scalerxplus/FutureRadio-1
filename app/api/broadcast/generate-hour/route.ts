@@ -197,13 +197,13 @@ export async function POST(request: Request) {
         name: "AIRA",
         gender: "female",
         personality: "Energetic, playful, and incredibly smart Gen-Z girl",
-        voiceId: "SAz9YHcvj6GT2YYXdXww"
+        voiceId: "cgSgspJ2msm6clMCkdW9"
       },
       {
         name: "Maanas",
         gender: "male",
         personality: "Chill, deeply intellectual, smooth, and very respectful Gen-Z guy",
-        voiceId: "OjhyJYXVq6FwwU6cV5qv"
+        voiceId: "nPczCjzI2devNBz1zQrb"
       }
     ];
 
@@ -258,7 +258,7 @@ export async function POST(request: Request) {
       
       let cbParam = Date.now() + Math.floor(Math.random() * 1000);
       let ttsUrl = `/api/broadcast/tts?text=${encodeURIComponent(newsScript)}&voiceId=${currentRj.voiceId}&cb=${cbParam}`;
-      let dynamicMs = Math.floor((newsScript.length / 13.0) * 1000) + 1500; 
+      let dynamicMs = Math.floor((newsScript.length / 10.0) * 1000) + 3500; 
 
       addElement("jocktalk", dynamicMs, ttsUrl, { transcript: newsScript, rjName: currentRj.name, rjVoice: currentRj.voiceId });
       
@@ -288,7 +288,7 @@ export async function POST(request: Request) {
       
       cbParam = Date.now() + Math.floor(Math.random() * 1000);
       ttsUrl = `/api/broadcast/tts?text=${encodeURIComponent(trafficScript)}&voiceId=${currentRj.voiceId}&cb=${cbParam}`;
-      dynamicMs = Math.floor((trafficScript.length / 13.0) * 1000) + 1500; 
+      dynamicMs = Math.floor((trafficScript.length / 10.0) * 1000) + 3500; 
 
       addElement('traffic', dynamicMs, ttsUrl, { transcript: trafficScript, rjName: currentRj.name, rjVoice: currentRj.voiceId });
       
