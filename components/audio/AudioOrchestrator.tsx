@@ -334,17 +334,37 @@ export default function AudioOrchestrator() {
           }
         }
       } else {
-        // --- CONTINUOUS SYNC CORRECTION ---
+        // --- CONTINUOUS SYNC CORRECTION & PLAYBACK RESUMPTION ---
         // If an ad interrupts the YouTube iframe or it buffers heavily, aggressively seek it to the master clock
         if (activeElement.element_type === "song" && ytPlayerRef.current && typeof ytPlayerRef.current.getCurrentTime === "function") {
           const ytTime = ytPlayerRef.current.getCurrentTime();
-          const state = ytPlayerRef.current.getPlayerState();
+          const state = ytPlayerRef.current.getPlayerState(); // 1 = playing, 2 = paused
           
-          // If we drift by more than 3 seconds (due to ads or lag), force sync!
-          if (Math.abs(ytTime - offsetSeconds) > 3.0 && state !== 3) {
+          // Force play if it was paused (e.g. user hit play again)
+          if (state === 2 || state === -1) {
+            ytPlayerRef.current.seekTo(offsetSeconds, true);
+            ytPlayerRef.current.playVideo();
+          } else if (Math.abs(ytTime - offsetSeconds) > 3.0 && state !== 3) {
+            // Drift correction
             console.warn(`[Sync Engine] Clock Drift Detected (Expected: ${offsetSeconds.toFixed(1)}, Actual: ${ytTime.toFixed(1)}). Seeking to master clock.`);
             ytPlayerRef.current.seekTo(offsetSeconds, true);
-            ytPlayerRef.current.playVideo(); // Force play through ads
+            ytPlayerRef.current.playVideo(); 
+          }
+        } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+          // Resume HTML5 Audio if paused
+          if (audioRef.current && audioRef.current.paused) {
+            try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
+            audioRef.current.play().catch(() => {});
+          }
+          if (bedRef.current && bedRef.current.paused) {
+            try { bedRef.current.currentTime = offsetSeconds; } catch(e) {}
+            bedRef.current.play().catch(() => {});
+          }
+        } else {
+          // Resume Jingle if paused
+          if (jingleRef.current && jingleRef.current.paused) {
+            try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
+            jingleRef.current.play().catch(() => {});
           }
         }
       }
@@ -354,10 +374,15 @@ export default function AudioOrchestrator() {
     return () => clearInterval(interval);
   }, [hasGesture, isPlaying, schedule, syncOffsetMs, setPhase, setCurrentBlock]);
 
-  // Keep alive audio to maintain AudioContext focus
+  // Handle play/pause state
   useEffect(() => {
-    if (isPlaying && keepAliveRef.current) {
-      keepAliveRef.current.play().catch(() => {});
+    if (isPlaying) {
+      if (keepAliveRef.current) keepAliveRef.current.play().catch(() => {});
+    } else {
+      // Pause all active media when user hits Stop
+      if (ytPlayerRef.current?.pauseVideo) ytPlayerRef.current.pauseVideo();
+      if (audioRef.current) audioRef.current.pause();
+      if (bedRef.current) bedRef.current.pause();
     }
   }, [isPlaying]);
 
