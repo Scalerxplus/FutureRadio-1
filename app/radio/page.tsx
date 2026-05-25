@@ -103,7 +103,7 @@ export default function RadioPlayerPage() {
     const shareData = {
       title: "Future Radio",
       text: "Vibe with GenZ on Future Radio 📻 - 100% Autonomous AI Radio Station. Tune in live!",
-      url: "https://futureradio.vercel.app",
+      url: "https://radio.factoricai.com/radio",
     };
 
     if (navigator.share) {
