@@ -68,24 +68,23 @@ export default function PlayerBar() {
       </button>
 
       <div className="max-w-md w-full text-center space-y-8">
-        <div 
-          className={`w-64 h-64 rounded-full mx-auto relative shadow-[0_0_50px_rgba(127,119,221,0.2)] border-[6px] border-[#0a0a0a] flex items-center justify-center bg-gradient-to-tr from-[#111] via-[#2a2a2a] to-[#111] ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`}
-        >
-          {/* Record Grooves */}
-          <div className="absolute inset-3 rounded-full border border-[#333]/40 pointer-events-none" />
-          <div className="absolute inset-8 rounded-full border border-[#333]/40 pointer-events-none" />
-          <div className="absolute inset-14 rounded-full border border-[#333]/40 pointer-events-none" />
-          <div className="absolute inset-20 rounded-full border border-[#333]/40 pointer-events-none" />
-          
-          {/* Center Label */}
-          <div className="w-24 h-24 rounded-full bg-brand-purple flex items-center justify-center flex-col shadow-inner z-10 border-4 border-brand-purple/30 relative">
-             <span className="text-[10px] font-bold text-white tracking-widest text-center leading-tight">FUTURE<br/>RADIO</span>
-             {/* Spindle Hole */}
-             <div className="w-4 h-4 bg-[#0a0a0a] rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-inner" />
+        <div className="relative w-64 h-64 mx-auto flex items-center justify-center">
+          {/* Spinning Logo Background */}
+          <div className={`absolute inset-0 rounded-full overflow-hidden shadow-[0_0_50px_rgba(127,119,221,0.3)] border-4 border-[#222] ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`}>
+            <img src="/logo_app.png" alt="Future Radio" className="w-full h-full object-cover" />
           </div>
+          
+          {/* Center Play/Pause Button Overlay */}
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="relative z-10 w-20 h-20 rounded-full bg-black/60 backdrop-blur-md border-2 border-brand-purple/50 hover:bg-brand-purple hover:border-white/50 text-white text-3xl flex items-center justify-center shadow-[0_0_30px_rgba(127,119,221,0.6)] hover:scale-110 active:scale-95 transition-all duration-300"
+            aria-label={isPlaying ? "Stop stream" : "Start stream"}
+          >
+            <span className="ml-1">{isPlaying ? "⏹" : "▶"}</span>
+          </button>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 mt-8">
           <span className="text-xs font-bold tracking-widest text-brand-teal uppercase">
             {isPlaying ? "Currently Tuned" : "Radio Deck"}
           </span>
@@ -95,16 +94,6 @@ export default function PlayerBar() {
           <p className="text-sm text-gray-400">
             {currentBlock ? `by ${currentBlock.songArtist}` : "Local Voiceovers & Ambient Synth Beats"}
           </p>
-        </div>
-
-        <div className="flex justify-center items-center gap-6">
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="w-20 h-20 rounded-full bg-brand-purple hover:bg-brand-purple/90 text-white text-2xl flex items-center justify-center shadow-xl hover:scale-105 transition duration-300"
-            aria-label={isPlaying ? "Stop stream" : "Start stream"}
-          >
-            {isPlaying ? "⏹" : "▶"}
-          </button>
         </div>
       </div>
     </div>
