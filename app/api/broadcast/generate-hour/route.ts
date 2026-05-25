@@ -4,6 +4,7 @@ import Groq from "groq-sdk";
 import yts from "yt-search";
 import * as mm from "music-metadata";
 import path from "path";
+import { getLiveWeather } from "@/lib/live-data";
 
 // Allow the Vercel Serverless Function to run for the absolute maximum time allowed on the Hobby Tier (60 seconds)
 // This is critical because the LLM + external API calls may exceed the default 10-second limit.
@@ -105,7 +106,8 @@ async function getJocktalk(
   upcomingSongTitle: string,
   currentRj: any,
   otherRj: any,
-  segmentProgress: string
+  segmentProgress: string,
+  liveWeather: string
 ) {
   const prompt = `You are the Lead Scriptwriter for 'Future Radio', writing a script for a dual-hosted show.
 The hosts are ${currentRj.name} (${currentRj.gender}, ${currentRj.personality}) and ${otherRj.name} (${otherRj.gender}, ${otherRj.personality}). They are extremely friendly, respectful, and intelligent co-hosts.
@@ -129,7 +131,8 @@ Just Played: ${previousSongTitle}
 Next Song: ${upcomingSongTitle}
 
 CONTENT LOG BUILDER: ${segmentProgress}.
-${segmentType === "traffic" ? `Also weave in a quick, helpful local street traffic update for ${cityId} (invent a realistic street name). Be the smart, aware co-pilot saving them time.` : ''}
+REAL-TIME WEATHER: The actual live weather in ${cityId} right now is ${liveWeather}. Weave this seamlessly into your talk.
+${segmentType === "traffic" ? `REAL-TIME TRAFFIC: Act as a smart co-pilot. Use your deep knowledge of the city of ${cityId} to invent a highly realistic, specific street traffic update for this exact time of day (${daypart}). Mention a real major arterial road in ${cityId} that is typically jammed right now and tell them to take an alternate route or just chill to the music.` : ''}
 
 EXAMPLE OUTPUT FORMAT:
 "[amused] Bhai... [pause] bahar ki garmi toh alag hi level pe hai aaj. [long pause] AC full pe rakho aur seatbelt baandh lo. [pause] Kyunki ab jo track aa raha hai na... [excited] woh seedha vibe set karega."`;
@@ -197,6 +200,9 @@ export async function POST(request: Request) {
     const selectedHourlyTopic = await getTrendingHourlyTopic(cityId, currentDaypart);
     console.log(`[Master Clock] CLB Hourly Topic Selected: ${selectedHourlyTopic}`);
 
+    const liveWeather = await getLiveWeather(cityId);
+    console.log(`[Master Clock] Live Weather for ${cityId}: ${liveWeather}`);
+
     const RJS = [
       {
         name: "AIRA",
@@ -259,7 +265,7 @@ export async function POST(request: Request) {
       let currentRj = RJS[rjIndex];
       let otherRj = RJS[(rjIndex + 1) % 2];
       
-      const newsScript = await getJocktalk("news", cityId, currentDaypart, selectedHourlyTopic, currentPhase, lastSongTitle, song1.title, currentRj, otherRj, segmentProgress1);
+      const newsScript = await getJocktalk("news", cityId, currentDaypart, selectedHourlyTopic, currentPhase, lastSongTitle, song1.title, currentRj, otherRj, segmentProgress1, liveWeather);
       
       const blockId1 = crypto.randomUUID();
       let cbParam = Date.now() + Math.floor(Math.random() * 1000);
@@ -290,7 +296,7 @@ export async function POST(request: Request) {
       currentRj = RJS[rjIndex];
       otherRj = RJS[(rjIndex + 1) % 2];
 
-      const trafficScript = await getJocktalk("traffic", cityId, currentDaypart, selectedHourlyTopic, currentPhase, song2.title, song3.title, currentRj, otherRj, segmentProgress2);
+      const trafficScript = await getJocktalk("traffic", cityId, currentDaypart, selectedHourlyTopic, currentPhase, song2.title, song3.title, currentRj, otherRj, segmentProgress2, liveWeather);
       
       const blockId2 = crypto.randomUUID();
       cbParam = Date.now() + Math.floor(Math.random() * 1000);
