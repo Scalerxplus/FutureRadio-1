@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Future Radio | Vibe with GenZ",
   description: "Experience the next generation of sound, AI news, and curated futuristic radio streams. Powered by AI RJ AIRA.",
   icons: {
-    icon: "/logo.png",
+    icon: "/logo-badge.png",
     apple: "/icons/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",
