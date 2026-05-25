@@ -149,9 +149,19 @@ export default function RadioPlayerPage() {
             />
           </div>
 
-          <div className="flex items-center gap-1.5 bg-[#111118] px-2.5 py-1 rounded-full border border-brand-border">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping" />
-            <span className="text-[10px] font-bold tracking-wider text-red-500 uppercase">LIVE</span>
+          <div className="flex items-center gap-2 bg-[#111118]/50 px-3 py-1.5 rounded-full border border-[#2a2a35]">
+            <span className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${isPlaying ? 'text-brand-purple' : 'text-gray-500'}`}>
+              {isPlaying ? 'ON' : 'OFF'}
+            </span>
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className={`w-10 h-5 rounded-full relative transition-colors duration-300 focus:outline-none ${isPlaying ? 'bg-brand-purple' : 'bg-[#2a2a35]'}`}
+              aria-label={isPlaying ? "Turn Radio Off" : "Turn Radio On"}
+            >
+              <div
+                className={`w-4 h-4 bg-white rounded-full absolute top-[2px] shadow-sm transition-transform duration-300 ${isPlaying ? 'left-[22px]' : 'left-[2px]'}`}
+              />
+            </button>
           </div>
         </header>
 
@@ -241,64 +251,31 @@ export default function RadioPlayerPage() {
           {/* Time Codes */}
           <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 tracking-wider select-none">
             <span>{formatTime(progressS)}</span>
-            <span className="font-bold tracking-widest text-xs flex items-center gap-1">
-              <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">FUTURE</span>
-              <span className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">RADIO</span>
-            </span>
             <span>{formatTime(duration)}</span>
           </div>
         </div>
 
         {/* Interactive Controls Panel */}
         <div className="flex justify-between items-center px-4">
-          {/* Placeholder to keep spacing for removed rewind controls */}
-          <div className="w-8" />
+          
           <div className="w-8" />
           
-          {/* Primary Play / Pause Toggle */}
+          {/* Primary Play / Pause Toggle (Now just the logo) */}
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-200"
+            className="w-[84px] h-[84px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-200 focus:outline-none"
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            {/* Spinning Vinyl Background Layer */}
-            <div className={`absolute inset-0 rounded-full bg-[#111] border border-[#2a2a35] shadow-[0_0_20px_rgba(229,9,20,0.4)] flex items-center justify-center transition-all duration-500 ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : ''}`}>
-              {/* Vinyl Grooves */}
-              <div className="absolute inset-[6px] rounded-full border border-white/5 pointer-events-none"></div>
-              <div className="absolute inset-[14px] rounded-full border border-white/5 pointer-events-none"></div>
-              <div className="absolute inset-[22px] rounded-full border border-white/5 pointer-events-none"></div>
-              
-              {/* Inner Red Label */}
-              <div className="absolute w-[30px] h-[30px] bg-red-600 rounded-full shadow-[inset_0_0_5px_rgba(0,0,0,0.8)] border border-red-800">
-                {/* Vintage text/lines on label for realism */}
-                <div className="absolute top-1 left-1/2 -translate-x-1/2 w-4 h-[1px] bg-red-900/40"></div>
-                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-[1px] bg-red-900/40"></div>
-              </div>
-              
-              {/* Center Spindle Hole */}
-              <div className="absolute w-2 h-2 bg-[#0a0a0f] rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,1)]"></div>
-            </div>
-
-            {/* Static Play/Pause Icon Overlay (does not spin) */}
-            <div className="absolute text-white z-10 flex items-center justify-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] pointer-events-none">
-              {isPlaying ? (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[14px] h-[14px]">
-                  <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25Zm7.5 0A.75.75 0 0 1 15 4.5h1.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H15a.75.75 0 0 1-.75-.75V5.25Z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px] ml-0.5">
-                  <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
-                </svg>
-              )}
+            {/* Spinning Logo Background */}
+            <div className={`absolute inset-0 rounded-full overflow-hidden shadow-[0_0_25px_rgba(127,119,221,0.25)] border-[3px] border-[#222] transition-all duration-500 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+              <img src="/logo_app.png" alt="Future Radio" className="w-full h-full object-cover" />
             </div>
           </button>
 
-          {/* Placeholder to keep spacing for removed forward controls */}
-          <div className="w-8" />
           {/* Like Toggle */}
           <button
             onClick={handleLikeToggle}
-            className={`p-2 transition text-lg ${isLiked ? "text-red-500 scale-110" : "text-gray-400 hover:text-white"}`}
+            className={`p-2 transition text-lg w-8 focus:outline-none ${isLiked ? "text-red-500 scale-110" : "text-gray-400 hover:text-white"}`}
             aria-label="Like this song"
           >
             {isLiked ? "❤️" : "🤍"}
