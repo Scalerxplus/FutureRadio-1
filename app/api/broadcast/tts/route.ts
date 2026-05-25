@@ -26,9 +26,14 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Missing 'text' or 'blockId' parameter" }, { status: 400 });
     }
 
-    // Clean up text for Edge TTS
+    // Clean up text for Edge TTS and inject natural breathing pauses
     let processedText = text;
-    processedText = processedText.replace(/[\[\(\*\{<【].*?[\]\)\*\}>】]/g, ''); // Remove all emotion tags
+    // Convert LLM pause tags into actual punctuation that forces the Neural voice to take a breath
+    processedText = processedText.replace(/[\[\(\*\{<【]?long pause[\]\)\*\}>】]?/gi, '... ...');
+    processedText = processedText.replace(/[\[\(\*\{<【]?pause[\]\)\*\}>】]?/gi, '...');
+    processedText = processedText.replace(/[\[\(\*\{<【]?laughs[\]\)\*\}>】]?/gi, 'haha...');
+    
+    processedText = processedText.replace(/[\[\(\*\{<【].*?[\]\)\*\}>】]/g, ''); // Remove any remaining hidden tags
 
     console.log("[Audio Agent] Generating completely free Microsoft Edge TTS for text length:", processedText.length);
 
@@ -44,9 +49,9 @@ export async function GET(request: Request) {
       voice: edgeVoice,
       lang: "en-IN",
       outputFormat: "audio-24khz-48kbitrate-mono-mp3",
-      pitch: "default",
-      rate: "default",
-      volume: "default"
+      pitch: "+4Hz",     // Slightly higher pitch for more energy
+      rate: "+12%",      // Faster speech rate typical of FM Radio Jockeys
+      volume: "+15%"     // Punchy volume to sit above the music bed
     });
 
     const tmpFile = path.join(os.tmpdir(), `tts-${crypto.randomUUID()}.mp3`);
