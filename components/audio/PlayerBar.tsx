@@ -68,32 +68,35 @@ export default function PlayerBar() {
       </button>
 
       <div className="max-w-md w-full text-center space-y-8">
-        <div className="relative w-64 h-64 mx-auto flex items-center justify-center">
-          {/* Spinning Logo Background */}
+        <div className="relative w-64 h-64 mx-auto flex items-center justify-center group">
+          {/* Spinning Logo Background (Unobstructed) */}
           <div className={`absolute inset-0 rounded-full overflow-hidden shadow-[0_0_50px_rgba(127,119,221,0.3)] border-4 border-[#222] ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`}>
             <img src="/logo_app.png" alt="Future Radio" className="w-full h-full object-cover" />
           </div>
-          
-          {/* Center Play/Pause Button Overlay */}
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="relative z-10 w-20 h-20 rounded-full bg-black/60 backdrop-blur-md border-2 border-brand-purple/50 hover:bg-brand-purple hover:border-white/50 text-white text-3xl flex items-center justify-center shadow-[0_0_30px_rgba(127,119,221,0.6)] hover:scale-110 active:scale-95 transition-all duration-300"
-            aria-label={isPlaying ? "Stop stream" : "Start stream"}
-          >
-            <span className="ml-1">{isPlaying ? "⏹" : "▶"}</span>
-          </button>
         </div>
 
-        <div className="space-y-2 mt-8">
-          <span className="text-xs font-bold tracking-widest text-brand-teal uppercase">
-            {isPlaying ? "Currently Tuned" : "Radio Deck"}
-          </span>
-          <h2 className="text-3xl font-extrabold text-white">
-            {currentBlock ? currentBlock.songTitle : "Future Radio"}
-          </h2>
-          <p className="text-sm text-gray-400">
-            {currentBlock ? `by ${currentBlock.songArtist}` : "Local Voiceovers & Ambient Synth Beats"}
-          </p>
+        <div className="space-y-3 mt-8">
+          <div className="space-y-1">
+            <span className="text-xs font-bold tracking-widest text-brand-teal uppercase">
+              {isPlaying ? "Currently Tuned" : "Radio Deck"}
+            </span>
+            <h2 className="text-2xl font-extrabold text-white line-clamp-2 leading-tight">
+              {currentBlock ? currentBlock.songTitle : "Future Radio"}
+            </h2>
+            <p className="text-sm text-gray-400 truncate px-4">
+              {currentBlock ? `by ${currentBlock.songArtist}` : "Local Voiceovers & Ambient Synth Beats"}
+            </p>
+          </div>
+
+          <div className="flex justify-center items-center pt-6">
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="w-16 h-16 rounded-full bg-brand-purple hover:bg-brand-purple/90 text-white text-2xl flex items-center justify-center shadow-[0_0_30px_rgba(127,119,221,0.4)] hover:scale-110 active:scale-95 transition-all duration-300"
+              aria-label={isPlaying ? "Stop stream" : "Start stream"}
+            >
+              <span className={isPlaying ? "" : "ml-1"}>{isPlaying ? "⏹" : "▶"}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
