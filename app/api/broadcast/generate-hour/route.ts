@@ -55,12 +55,12 @@ function getSweeperByGenre(energy: string) {
 }
 
 const SHOWS = [
-  { id: "morning_zen", name: "Morning Zen", rj: "Maanas", startHour: 6, endHour: 8, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Calm, motivational start to the day. Positivity, light local news, weather." },
-  { id: "morning_drive", name: "The Morning Drive", rj: "Aaira", startHour: 8, endHour: 11, energy: "high", musicQuery: "High energy latest bollywood punjabi trending highest played songs", contentStrategy: "High energy, interactive, traffic updates, viral news, waking up the city." },
-  { id: "mid_day", name: "Mid-Day Cafe", rj: "Maanas", startHour: 11, endHour: 16, energy: "mid", musicQuery: "Easy listening latest hit songs", contentStrategy: "Office companion, Bollywood trivia, light humor, relaxed workplace vibe." },
-  { id: "evening_rush", name: "Evening Rush", rj: "Aaira", startHour: 16, endHour: 21, energy: "high", musicQuery: "High energy bollywood punjabi trending hit songs", contentStrategy: "High energy, pop-culture, beat the commute traffic, extremely interactive." },
-  { id: "global_club", name: "The Global Club", rj: "Aaira", startHour: 21, endHour: 1, energy: "high", musicQuery: "EDM globally trending dj mixes dance music songs", contentStrategy: "Weekend/Party vibe every night, high bass, global trends, hype talks." },
-  { id: "night_shift", name: "Night Shift", rj: "Maanas", startHour: 1, endHour: 6, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Deep late-night thoughts, emotional storytelling, nostalgia, minimal talk." },
+  { id: "morning_zen", name: "Morning Zen", rj: "Maanas", startHour: 6, endHour: 8, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Morning business news, pre-market analysis, global economy summaries, very factual." },
+  { id: "morning_drive", name: "The Morning Drive", rj: "Aaira", startHour: 8, endHour: 11, energy: "high", musicQuery: "High energy latest bollywood punjabi trending highest played songs", contentStrategy: "Opening bell insights, corporate news, Indian tycoons, fast-paced financial data." },
+  { id: "mid_day", name: "Mid-Day Cafe", rj: "Maanas", startHour: 11, endHour: 16, energy: "mid", musicQuery: "Easy listening latest hit songs", contentStrategy: "Mid-day market updates, sports scores, economy deep dives, intellectual analysis." },
+  { id: "evening_rush", name: "Evening Rush", rj: "Aaira", startHour: 16, endHour: 21, energy: "high", musicQuery: "High energy bollywood punjabi trending hit songs", contentStrategy: "Market closing bells, GDP stats, major sports/cricket news, celebrity business ventures." },
+  { id: "global_club", name: "The Global Club", rj: "Aaira", startHour: 21, endHour: 1, energy: "high", musicQuery: "EDM globally trending dj mixes dance music songs", contentStrategy: "Global markets, international business, late-night breaking news, fast-paced reports." },
+  { id: "night_shift", name: "Night Shift", rj: "Maanas", startHour: 1, endHour: 6, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Economy retrospectives, long-form factual storytelling, sports history, very serious tone." },
 ];
 
 const RJS = {
@@ -150,8 +150,8 @@ async function getJocktalk(
       segmentProgress = `[CLB Step 3 - Core Content]: Wrap up the discussion on "${topic}". Summarize your final thoughts.`;
   }
 
-  const prompt = `${customRjPrompt || `You are the star Radio Jockey for 'Future Radio', hosting the show "${currentShow.name}".
-Your name is ${rjProfile.name} (${rjProfile.gender}). You are a top-tier, world-class presenter.`}
+  const prompt = `${customRjPrompt || `You are an Expert News Anchor and Data Analyst for 'Future Radio', hosting the broadcast "${currentShow.name}".
+Your name is ${rjProfile.name} (${rjProfile.gender}). You deliver data-driven, fact-based news with high professionalism and authority.`}
 
 Show Context:
 - Current Time: ${istHour}:00 IST in ${cityId}.
@@ -167,9 +167,9 @@ CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link 
 5. [CLB Step 5 - Outro]: Always end your talk exactly with: "Sunte rahiye Future Radio, ab future suno."
 
 MANDATORY DURATION & STYLE:
-- LENGTH: You MUST write a MINIMUM of 150 words. This is extremely important to guarantee a 45-second audio duration. Elaborate on your points!
-- LANGUAGE: Fluent, stylish, conversational Hinglish. 
-- MICRO-PAUSES: Use [pause] or [laughs] to force the AI voice to take natural breaths.
+- LENGTH: You MUST write a MINIMUM of 150 words. This is extremely important to guarantee a 45-second audio duration. Provide precise statistics, numbers, and deep analysis!
+- LANGUAGE: Fluent, authoritative, formal Hinglish (like a prime-time national news anchor). Be serious and monotonous. NO jokes. NO informal slang.
+- MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate reading from a teleprompter.
 
 Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
     
@@ -187,11 +187,12 @@ Output ONLY the raw script text. Do not output any titles, brackets, or translat
 
 async function getTrendingHourlyTopic(cityId: string, currentShow: any) {
   const dateString = new Date().toLocaleDateString('en-IN', { weekday: 'long', month: 'long', day: 'numeric' });
-  const prompt = `You are the Content Director for 'Future Radio'.
-Generate exactly ONE extremely engaging, intellectual, or pop-culture trending topic for the RJ to talk about for the entire next hour.
-City: ${cityId}. Show: ${currentShow.name} (Vibe: ${currentShow.contentStrategy}). Date: ${dateString}.
-Make it highly relevant to Gen-Z / Millennials in India. It must match the vibe of the show.
-Keep it under 15 words. DO NOT wrap it in quotes. DO NOT output any other text, just the topic itself.`;
+  const prompt = `You are the Executive News Producer for 'Future Radio'.
+Generate exactly ONE breaking news or intellectual headline for the News Anchor to analyze for the entire next hour.
+City: ${cityId}. Show: ${currentShow.name} (Content Strategy: ${currentShow.contentStrategy}). Date: ${dateString}.
+The topic MUST be strictly about one of these: Share Market, Business Tycoons of India (Ambani, Adani, Tata, etc.), Economy/GDP, Indian Cricket Team, or Major Global Sports.
+It must be factual, data-driven, and highly professional.
+Keep it under 15 words. DO NOT wrap it in quotes. DO NOT output any other text, just the headline itself.`;
 
   try {
     const chatCompletion = await groq.chat.completions.create({
