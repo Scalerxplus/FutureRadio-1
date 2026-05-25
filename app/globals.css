@@ -16,7 +16,8 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background-color: var(--background);
+  background-image: url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 15C15 15 18 12 25 12C32 12 35 15 35 15V32C35 32 32 29 25 29C18 29 15 32 15 32V15ZM15 32C15 36 12 38 9 38C6 38 4 36 4 32C4 28 6 26 9 26C12 26 15 28 15 32ZM35 32C35 36 32 38 29 38C26 38 24 36 24 32C24 28 26 26 29 26C32 26 35 28 35 32Z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -24,4 +25,32 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Custom equalizer audio animations */
+@keyframes eq-bar {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+
+.animate-eq-1 {
+  animation: eq-bar 0.8s ease-in-out infinite;
+}
+.animate-eq-2 {
+  animation: eq-bar 0.5s ease-in-out infinite 0.15s;
+}
+.animate-eq-3 {
+  animation: eq-bar 0.7s ease-in-out infinite 0.05s;
+}
+.animate-eq-4 {
+  animation: eq-bar 0.6s ease-in-out infinite 0.25s;
+}
+
+/* Slow spinner animations */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
 }

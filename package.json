@@ -9,18 +9,30 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.1",
+    "@xstate/react": "^5.0.5",
+    "cheerio": "^1.2.0",
+    "framer-motion": "^12.40.0",
+    "google-tts-api": "^2.0.2",
+    "groq-sdk": "^1.2.0",
+    "music-metadata": "^11.12.3",
+    "next": "14.2.35",
+    "node-edge-tts": "^1.2.10",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.35"
+    "xstate": "^5.31.1",
+    "yt-search": "^2.13.1",
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.35"
+    "typescript": "^5"
   }
 }

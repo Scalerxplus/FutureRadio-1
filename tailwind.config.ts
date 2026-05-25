@@ -11,6 +11,11 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "brand-purple": "#E50914", // Vibrant GenZ Red
+        "brand-teal": "#FFFFFF",   // Pure White
+        "brand-dark": "#000000",   // Deep Black
+        "brand-surface": "#111111",// Charcoal Black
+        "brand-border": "#222222", // Dark Gray Border
       },
     },
   },
