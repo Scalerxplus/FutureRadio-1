@@ -12,7 +12,7 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" })
 const ytCache = new Map<string, { video: any; expiresAt: number }>();
 
 const STATION_IDS = [
-  "/audio/Jingles/Station_Jingle_EDM.mp3",
+  "/audio/jingles/Station_Jingle_EDM.mp3",
 ];
 const BUMPERS = [
   "/audio/Sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
