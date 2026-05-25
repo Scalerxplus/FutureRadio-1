@@ -122,7 +122,8 @@ async function getJocktalk(
   segmentIndex: number, 
   previousSongTitle: string, 
   upcomingSongTitle: string,
-  liveWeather: string
+  liveWeather: string,
+  customRjPrompt: string = ""
 ) {
   const rjProfile = RJS[currentShow.rj as keyof typeof RJS];
   let segmentProgress = "";
@@ -135,8 +136,8 @@ async function getJocktalk(
       segmentProgress = `[CLB Step 3 - Core Content]: Wrap up the discussion on "${topic}". Summarize your final thoughts.`;
   }
 
-  const prompt = `You are the star Radio Jockey for 'Future Radio', hosting the show "${currentShow.name}".
-Your name is ${rjProfile.name} (${rjProfile.gender}). You are a top-tier, world-class presenter.
+  const prompt = `${customRjPrompt || `You are the star Radio Jockey for 'Future Radio', hosting the show "${currentShow.name}".
+Your name is ${rjProfile.name} (${rjProfile.gender}). You are a top-tier, world-class presenter.`}
 
 Show Context:
 - Current Time: ${istHour}:00 IST in ${cityId}.
@@ -203,6 +204,22 @@ export async function POST(request: Request) {
 
     console.log(`[Master Clock] Generating ${currentShow.name} (RJ: ${rjProfile.name}) for ${cityId} at ${currentIstHour}:00 IST`);
 
+    // --- HITL: Fetch Global Station Settings ---
+    let globalRjPrompt = "";
+    const { data: settingsData } = await supabase
+      .from("station_settings")
+      .select("*")
+      .eq("city_id", cityId)
+      .limit(1);
+
+    if (settingsData && settingsData.length > 0) {
+      if (settingsData[0].rj_prompt) globalRjPrompt = settingsData[0].rj_prompt;
+      if (settingsData[0].playlist_mood) {
+         currentShow.contentStrategy = settingsData[0].playlist_mood;
+         currentShow.energy = settingsData[0].playlist_mood;
+      }
+    }
+
     // --- HITL: Check for Human-In-The-Loop Override ---
     let selectedHourlyTopic = "";
     const { data: overrideData } = await supabase
@@ -258,7 +275,7 @@ export async function POST(request: Request) {
 
         const song1 = await getSong(getSearchQueryForShow(currentShow), cityId);
         
-        const rjScript = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, song1.title, liveWeather);
+        const rjScript = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, song1.title, liveWeather, globalRjPrompt);
         let ttsUrl = `/api/broadcast/tts?blockId=temp&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
         let rjDur = Math.floor((rjScript.length / 10.0) * 1000) + 3500; 
         
