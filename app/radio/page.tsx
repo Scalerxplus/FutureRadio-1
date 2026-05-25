@@ -241,8 +241,9 @@ export default function RadioPlayerPage() {
           {/* Time Codes */}
           <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 tracking-wider select-none">
             <span>{formatTime(progressS)}</span>
-            <span className="text-brand-purple font-extrabold uppercase">
-              {breakCountdown > 0 ? `RJ BREAK IN ${formatTime(breakCountdown)}` : "RJ BREAK ACTIVE"}
+            <span className="font-black tracking-[0.2em] italic text-xs flex items-center gap-1.5">
+              <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">FUTURE</span>
+              <span className="text-red-600 drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]">RADIO</span>
             </span>
             <span>{formatTime(duration)}</span>
           </div>
