@@ -12,17 +12,39 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" })
 const ytCache = new Map<string, { video: any; expiresAt: number }>();
 
 const STATION_IDS = [
-  "/audio/Sweepers/Future_Sweeper_High_Energy_India.mp3",
+  "/audio/Jingles/Station_Jingle_EDM.mp3",
 ];
 const BUMPERS = [
   "/audio/Sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
 ];
-const SWEEPERS = [
-  "/audio/Sweepers/Future_Sweeper_High_Energy.mp3",
+
+const DESI_SWEEPERS = [
+  "/audio/Sweepers/Sweeper_Desi_High_Energy_01.mp3",
   "/audio/Sweepers/Future_Sweeper_High_Energy_Dhol.mp3",
-  "/audio/Sweepers/Future_Sweeper_High_Energy_Fun.mp3",
-  "/audio/Sweepers/Future_Sweeper_Mid_Energy_.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy_India.mp3"
 ];
+
+const EDM_SWEEPERS = [
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_01.mp3",
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_02.mp3",
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_03.mp3",
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_04.mp3",
+  "/audio/Sweepers/Sweeper_EDM_High_Energy_05.mp3"
+];
+
+const MID_ENERGY_SWEEPERS = [
+  "/audio/Sweepers/Future_Sweeper_Mid_Energy_.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy_Fun.mp3"
+];
+
+function getSweeperByGenre(energy: string) {
+  let list = MID_ENERGY_SWEEPERS;
+  if (energy === "high") list = [...DESI_SWEEPERS, ...MID_ENERGY_SWEEPERS];
+  if (energy === "high" && Math.random() > 0.5) list = EDM_SWEEPERS; // Mix EDM slightly everywhere
+  // Pure EDM for global club handled by returning EDM for late nights, but energy="high"
+  return list[Math.floor(Math.random() * list.length)];
+}
 
 const SHOWS = [
   { id: "morning_zen", name: "Morning Zen", rj: "Maanas", startHour: 6, endHour: 8, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Calm, motivational start to the day. Positivity, light local news, weather." },
@@ -106,15 +128,11 @@ async function getJocktalk(
   let segmentProgress = "";
 
   if (segmentIndex === 1) {
-      segmentProgress = `This is Segment 1: The Top of the Hour Hook. 
-Welcome the listeners to the hour! Introduce the show name "${currentShow.name}" and tell them you are ${rjProfile.name}.
-Introduce the main topic of the hour: "${topic}". Get them hooked!`;
+      segmentProgress = `[CLB Step 3 - Core Content]: The Top of the Hour Hook! Introduce the main topic of the hour: "${topic}". Give a quick, catchy hot take to get them hooked!`;
   } else if (segmentIndex === 2) {
-      segmentProgress = `This is Segment 2: The Core Content.
-Dive deep into the hourly topic: "${topic}". Give your personal (or AI) hot take, tell a quick relatable story, or share an interesting fact about it. Make it feel like a real conversation. Mention what song just played (${previousSongTitle}).`;
+      segmentProgress = `[CLB Step 3 - Core Content]: Dive deep into the hourly topic: "${topic}". Tell a quick relatable story, or share an interesting fact about it. Mention what song just played (${previousSongTitle}).`;
   } else {
-      segmentProgress = `This is Segment 3: The Wrap-up & Tease.
-Conclude the discussion on "${topic}". Send love to the listeners of ${cityId}, and tease what's coming up next hour or simply wish them a great time ahead.`;
+      segmentProgress = `[CLB Step 3 - Core Content]: Wrap up the discussion on "${topic}". Summarize your final thoughts.`;
   }
 
   const prompt = `You are the star Radio Jockey for 'Future Radio', hosting the show "${currentShow.name}".
@@ -125,19 +143,19 @@ Show Context:
 - Show Vibe: ${currentShow.contentStrategy}
 - Hourly Topic: "${topic}"
 
-CRITICAL RULES FOR GENERATION:
-1. THE BRAND INTRO: If this is Segment 1, you MUST start with exactly: "Aap sun rahe hain radio ka future 'Future Radio', main hoon aapka dost ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
-2. LOCAL TOUCH: Mention the city "${cityId}" naturally at least once.
-3. LANGUAGE: Fluent, stylish, conversational Hinglish. Keep it highly engaging, like a real FM radio star.
-4. SEGMENT FOCUS: 
-   ${segmentProgress}
-5. LENGTH: Write exactly 120-160 words. Keep it punchy and high-impact.
-6. MICRO-PAUSES: Use [pause] for natural breath, [laughs], [excited], or [warm smile] to guide the TTS engine emotion.
-7. OUTRO: End your talk by teasing the next song: "${upcomingSongTitle}". End with exactly: "Sunte rahiye Future Radio, ab future suno."
+CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
+1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain radio ka future 'Future Radio', main hoon aapka dost ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
+2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}).
+3. ${segmentProgress}
+4. [CLB Step 4 - Tease Next Song]: Build hype for the upcoming song: "${upcomingSongTitle}".
+5. [CLB Step 5 - Outro]: Always end your talk exactly with: "Sunte rahiye Future Radio, ab future suno."
 
-REAL-TIME WEATHER: ${liveWeather}. Weave this in if relevant to the vibe.
+MANDATORY DURATION & STYLE:
+- LENGTH: You MUST write a MINIMUM of 150 words. This is extremely important to guarantee a 45-second audio duration. Elaborate on your points!
+- LANGUAGE: Fluent, stylish, conversational Hinglish. 
+- MICRO-PAUSES: Use [pause] or [laughs] to force the AI voice to take natural breaths.
 
-Output ONLY the raw script text. No titles, no quotes.`;
+Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
     
   try {
     const chatCompletion = await groq.chat.completions.create({
@@ -147,7 +165,7 @@ Output ONLY the raw script text. No titles, no quotes.`;
     });
     return chatCompletion.choices[0]?.message?.content || "Namaskar! Enjoy the music on Future Radio.";
   } catch(e) {
-    return `Hey ${cityId}, you are listening to ${currentShow.name} with ${rjProfile.name}. Enjoy the music! Sunte rahiye Future Radio, ab future suno.`;
+    return `Aap sun rahe hain radio ka future Future Radio, main hoon aapka dost ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par. Aaj ka din ${cityId} mein bahut hi behtareen lag raha hai, aur weather bhi ekdum perfect hai. Main janta hoon ki aaj kal zindagi kitni fast-paced ho gayi hai, isliye hum yahan hain aapko thoda relax karne ke liye. Pichla gaana kaisa laga? Aise hi aur hits sunte rahiye kyunki aage aane wala hai ek aur chartbuster, "${upcomingSongTitle}". Toh kahin mat jayiye, apni seatbelt baandh lijiye, volume full kar lijiye. Sunte rahiye Future Radio, ab future suno.`;
   }
 }
 
@@ -227,13 +245,13 @@ export async function POST(request: Request) {
 
         addElement('song', Math.min(Math.round(song1.seconds * 1000), 300000), song1.videoId, { title: song1.title, artist: song1.author.name });
         
-        const sweeper = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
+        const sweeper = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
 
         const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
         addElement('song', Math.min(Math.round(song2.seconds * 1000), 300000), song2.videoId, { title: song2.title, artist: song2.author.name });
         
-        const sweeper2 = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
+        const sweeper2 = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
 
         const song3 = await getSong(getSearchQueryForShow(currentShow), cityId);
@@ -256,13 +274,13 @@ export async function POST(request: Request) {
 
         addElement('song', Math.min(Math.round(song1.seconds * 1000), 300000), song1.videoId, { title: song1.title, artist: song1.author.name });
         
-        const sweeper1 = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
+        const sweeper1 = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
 
         const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
         addElement('song', Math.min(Math.round(song2.seconds * 1000), 300000), song2.videoId, { title: song2.title, artist: song2.author.name });
 
-        const sweeper = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
+        const sweeper = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
 
         const song3 = await getSong(getSearchQueryForShow(currentShow), cityId);
@@ -271,7 +289,7 @@ export async function POST(request: Request) {
         
       } else {
         // --- FILLER BLOCKS ---
-        const sweeper = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
+        const sweeper = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
 
         const song1 = await getSong(getSearchQueryForShow(currentShow), cityId);
