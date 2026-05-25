@@ -11,38 +11,46 @@ export const maxDuration = 60;
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" });
 const ytCache = new Map<string, { video: any; expiresAt: number }>();
 
-const STATION_IDS = [
-  "/audio/jingles/Station_Jingle_EDM.mp3",
-];
+const STATION_IDS: Record<string, string[]> = {
+  high: ["/audio/jingles/Station_Jingle_EDM.mp3"],
+  mid: ["/audio/jingles/Station_Jingle_Mid.mp3"],
+  low: ["/audio/jingles/Station_Jingle_LoFi.mp3"],
+};
+
 const BUMPERS = [
-  "/audio/Sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
+  "/audio/sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
 ];
 
-const DESI_SWEEPERS = [
-  "/audio/Sweepers/Sweeper_Desi_High_Energy_01.mp3",
-  "/audio/Sweepers/Future_Sweeper_High_Energy_Dhol.mp3",
-  "/audio/Sweepers/Future_Sweeper_High_Energy_India.mp3"
-];
-
-const EDM_SWEEPERS = [
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_01.mp3",
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_02.mp3",
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_03.mp3",
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_04.mp3",
-  "/audio/Sweepers/Sweeper_EDM_High_Energy_05.mp3"
+const HIGH_ENERGY_SWEEPERS = [
+  "/audio/sweepers/Future_Sweeper_High_Energy.mp3",
+  "/audio/sweepers/Future_Sweeper_High_Energy_Fun.mp3",
+  "/audio/sweepers/Future_Sweeper_High_Energy_India.mp3",
+  "/audio/sweepers/Sweeper_Desi_High_Energy_01.mp3",
+  "/audio/sweepers/Sweeper_EDM_High_Energy_05.mp3",
+  "/audio/sweepers/Sweeper_Edm_High_Energy_01.mp3",
+  "/audio/sweepers/Sweeper_Edm_High_Energy_02.mp3",
+  "/audio/sweepers/Sweeper_Edm_High_Energy_03.mp3",
+  "/audio/sweepers/Sweeper_Edm_High_Energy_04.mp3",
 ];
 
 const MID_ENERGY_SWEEPERS = [
-  "/audio/Sweepers/Future_Sweeper_Mid_Energy_.mp3",
-  "/audio/Sweepers/Future_Sweeper_High_Energy.mp3",
-  "/audio/Sweepers/Future_Sweeper_High_Energy_Fun.mp3"
+  "/audio/sweepers/Future_Sweeper_Mid_Energy_.mp3",
+  "/audio/sweepers/Sweeper_MidEnergy_01.mp3",
+  "/audio/sweepers/Sweeper_MidEnergy_02.mp3",
+];
+
+const LOW_ENERGY_SWEEPERS = [
+  "/audio/sweepers/Sweeper_LoFi_01.mp3",
+  "/audio/sweepers/Sweeper_LoFi_02.mp3",
+  "/audio/sweepers/Sweeper_LoFi_03.mp3",
+  "/audio/sweepers/Sweeper_LoFi_04.mp3",
 ];
 
 function getSweeperByGenre(energy: string) {
   let list = MID_ENERGY_SWEEPERS;
-  if (energy === "high") list = [...DESI_SWEEPERS, ...MID_ENERGY_SWEEPERS];
-  if (energy === "high" && Math.random() > 0.5) list = EDM_SWEEPERS; // Mix EDM slightly everywhere
-  // Pure EDM for global club handled by returning EDM for late nights, but energy="high"
+  if (energy === "high") list = HIGH_ENERGY_SWEEPERS;
+  if (energy === "low") list = LOW_ENERGY_SWEEPERS;
+  
   return list[Math.floor(Math.random() * list.length)];
 }
 
@@ -285,7 +293,8 @@ export async function POST(request: Request) {
     while (currentTimeMs < targetEndTime) {
       // 1. TOTH Station ID (Only once per hour)
       if (segmentIndex === 1) {
-        const stationId = STATION_IDS[Math.floor(Math.random() * STATION_IDS.length)];
+        const jingleList = STATION_IDS[currentShow.energy] || STATION_IDS.mid;
+        const stationId = jingleList[Math.floor(Math.random() * jingleList.length)];
         addElement('station_id', await getLocalAudioDuration(stationId), stationId, { title: "Station ID" });
       }
 
