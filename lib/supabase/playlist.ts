@@ -100,22 +100,23 @@ export async function getBroadcastSchedule(cityId: string) {
       .from("broadcast_schedule")
       .select("*")
       .eq("city_id", cityId)
-      .order("start_time", { ascending: true });
+      .order("created_at", { ascending: false })
+      .limit(100);
     
     if (error) throw error;
     if (!data || data.length === 0) return [];
 
     // Filter out old overlapping schedules by only keeping elements created in the most recent batch
-    // Find the maximum created_at date (the newest schedule generation run)
-    const latestCreatedAt = new Date(
-      Math.max(...data.map(el => new Date(el.created_at).getTime()))
-    );
+    const latestCreatedAt = new Date(data[0].created_at);
 
     // Keep only elements that were created within 10 seconds of the latest batch
     const filteredData = data.filter(el => {
       const diffMs = latestCreatedAt.getTime() - new Date(el.created_at).getTime();
       return diffMs < 10000;
     });
+
+    // Sort chronologically for the player
+    filteredData.sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
 
     return filteredData;
   } catch (err) {
