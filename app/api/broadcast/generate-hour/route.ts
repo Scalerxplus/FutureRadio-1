@@ -233,6 +233,9 @@ export async function POST(request: Request) {
         const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
         addElement('song', Math.min(Math.round(song2.seconds * 1000), 300000), song2.videoId, { title: song2.title, artist: song2.author.name });
         
+        const sweeper2 = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
+        addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
+
         const song3 = await getSong(getSearchQueryForShow(currentShow), cityId);
         addElement('song', Math.min(Math.round(song3.seconds * 1000), 300000), song3.videoId, { title: song3.title, artist: song3.author.name });
         lastSongTitle = song3.title;
@@ -253,6 +256,9 @@ export async function POST(request: Request) {
 
         addElement('song', Math.min(Math.round(song1.seconds * 1000), 300000), song1.videoId, { title: song1.title, artist: song1.author.name });
         
+        const sweeper1 = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
+        addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
+
         const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
         addElement('song', Math.min(Math.round(song2.seconds * 1000), 300000), song2.videoId, { title: song2.title, artist: song2.author.name });
 
