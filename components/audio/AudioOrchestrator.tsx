@@ -380,13 +380,13 @@ export default function AudioOrchestrator() {
           // Start ambient bed
           if ((activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") && bedRef.current) {
             
-            // Dynamic Day-Part Music Bed Mapping
+            // Dynamic Day-Part News Bed Mapping
             const hour = serverNow.getHours();
-            let bedFile = "lofi-bed.mp3"; // Default for Night/Morning Zen (low energy)
-            if (hour >= 8 && hour < 11) bedFile = "upbeat-bed.mp3"; // Morning Drive (high energy)
-            else if (hour >= 11 && hour < 16) bedFile = "chill-bed.mp3"; // Mid-Day (mid energy)
-            else if (hour >= 16 && hour < 21) bedFile = "upbeat-bed.mp3"; // Evening Rush (high energy)
-            else if (hour >= 21 || hour < 1) bedFile = "club-bed.mp3"; // Global Club (high energy)
+            let bedFile = "news-bed-deep.mp3"; // Default for Night/Morning Zen (analytical/deep economy)
+            if (hour >= 8 && hour < 11) bedFile = "news-bed-urgent.mp3"; // Morning Drive (fast-paced opening bell)
+            else if (hour >= 11 && hour < 16) bedFile = "news-bed-analytical.mp3"; // Mid-Day (market insights)
+            else if (hour >= 16 && hour < 21) bedFile = "news-bed-urgent.mp3"; // Evening Rush (breaking news / closing bell)
+            else if (hour >= 21 || hour < 1) bedFile = "news-bed-global.mp3"; // Global Club (international markets)
             
             const targetBedSrc = `/audio/jingles/${bedFile}`;
 
