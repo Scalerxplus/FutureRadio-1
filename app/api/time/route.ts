@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   // Prevent caching of this endpoint so it always returns the true live time
   return NextResponse.json(
