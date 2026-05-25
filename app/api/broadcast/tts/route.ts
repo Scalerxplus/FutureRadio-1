@@ -1,14 +1,25 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 export const maxDuration = 60; // Max allowed duration on Vercel Hobby Tier
 
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
-    const text = url.searchParams.get("text");
+    const blockId = url.searchParams.get("blockId");
+    let text = url.searchParams.get("text");
+
+    if (blockId) {
+      // Fetch transcript securely from the database to bypass Vercel's 4096-byte URI limits
+      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+      const { data } = await supabase.from("broadcast_schedule").select("metadata").eq("id", blockId).single();
+      if (data?.metadata?.transcript) {
+        text = data.metadata.transcript;
+      }
+    }
 
     if (!text) {
-      return NextResponse.json({ error: "Missing 'text' parameter" }, { status: 400 });
+      return NextResponse.json({ error: "Missing 'text' or 'blockId' parameter" }, { status: 400 });
     }
 
     // Safely translate Gemini-style bracket tags for ElevenLabs

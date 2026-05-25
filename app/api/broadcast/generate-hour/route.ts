@@ -178,8 +178,9 @@ export async function POST(request: Request) {
     const schedule = [];
     let currentTimeMs = startTime.getTime();
 
-    const addElement = (type: any, durationMs: number, urlOrId: string, metadata: any = {}) => {
+    const addElement = (blockId: string, type: any, durationMs: number, urlOrId: string, metadata: any = {}) => {
       schedule.push({
+        id: blockId,
         city_id: cityId,
         start_time: new Date(currentTimeMs).toISOString(),
         end_time: new Date(currentTimeMs + durationMs).toISOString(),
@@ -250,7 +251,7 @@ export async function POST(request: Request) {
       // 1. Station ID
       const stationId = STATION_IDS[Math.floor(Math.random() * STATION_IDS.length)];
       const stationDur = await getLocalAudioDuration(stationId);
-      addElement('station_id', stationDur, stationId, { title: "Station ID" });
+      addElement(crypto.randomUUID(), 'station_id', stationDur, stationId, { title: "Station ID" });
 
       // 2. RJ Jocktalk (Top of block)
       let segmentProgress1 = segmentIndex === 1 
@@ -262,27 +263,28 @@ export async function POST(request: Request) {
       
       const newsScript = await getJocktalk("news", cityId, currentDaypart, selectedHourlyTopic, currentPhase, lastSongTitle, song1.title, currentRj, otherRj, segmentProgress1);
       
+      const blockId1 = crypto.randomUUID();
       let cbParam = Date.now() + Math.floor(Math.random() * 1000);
-      let ttsUrl = `/api/broadcast/tts?text=${encodeURIComponent(newsScript)}&voiceId=${currentRj.voiceId}&cb=${cbParam}`;
+      let ttsUrl = `/api/broadcast/tts?blockId=${blockId1}&voiceId=${currentRj.voiceId}&cb=${cbParam}`;
       let dynamicMs = Math.floor((newsScript.length / 10.0) * 1000) + 3500; 
 
-      addElement("jocktalk", dynamicMs, ttsUrl, { transcript: newsScript, rjName: currentRj.name, rjVoice: currentRj.voiceId });
+      addElement(blockId1, "jocktalk", dynamicMs, ttsUrl, { transcript: newsScript, rjName: currentRj.name, rjVoice: currentRj.voiceId });
       
       rjIndex = (rjIndex + 1) % 2; // Toggle RJ
       segmentIndex++;
 
       // 3. Song 1
       const duration1 = Math.min(Math.round(song1.seconds * 1000), 300000);
-      addElement('song', duration1, song1.videoId, { title: song1.title, artist: song1.author.name });
+      addElement(crypto.randomUUID(), 'song', duration1, song1.videoId, { title: song1.title, artist: song1.author.name });
 
       // 4. Sweeper
       const sweeper = SWEEPERS[Math.floor(Math.random() * SWEEPERS.length)];
       const sweeperDur = await getLocalAudioDuration(sweeper);
-      addElement('sweeper', sweeperDur, sweeper, { title: "Radio Sweeper" });
+      addElement(crypto.randomUUID(), 'sweeper', sweeperDur, sweeper, { title: "Radio Sweeper" });
 
       // 5. Song 2
       const duration2 = Math.min(Math.round(song2.seconds * 1000), 300000);
-      addElement('song', duration2, song2.videoId, { title: song2.title, artist: song2.author.name });
+      addElement(crypto.randomUUID(), 'song', duration2, song2.videoId, { title: song2.title, artist: song2.author.name });
 
       // 6. RJ Jocktalk (Traffic Bumper)
       let segmentProgress2 = `This is Segment ${segmentIndex}. Briefly connect back to the overarching topic: "${selectedHourlyTopic}". Keep it perfectly interwoven.`;
@@ -292,18 +294,19 @@ export async function POST(request: Request) {
 
       const trafficScript = await getJocktalk("traffic", cityId, currentDaypart, selectedHourlyTopic, currentPhase, song2.title, song3.title, currentRj, otherRj, segmentProgress2);
       
+      const blockId2 = crypto.randomUUID();
       cbParam = Date.now() + Math.floor(Math.random() * 1000);
-      ttsUrl = `/api/broadcast/tts?text=${encodeURIComponent(trafficScript)}&voiceId=${currentRj.voiceId}&cb=${cbParam}`;
+      ttsUrl = `/api/broadcast/tts?blockId=${blockId2}&voiceId=${currentRj.voiceId}&cb=${cbParam}`;
       dynamicMs = Math.floor((trafficScript.length / 10.0) * 1000) + 3500; 
 
-      addElement('traffic', dynamicMs, ttsUrl, { transcript: trafficScript, rjName: currentRj.name, rjVoice: currentRj.voiceId });
+      addElement(blockId2, 'traffic', dynamicMs, ttsUrl, { transcript: trafficScript, rjName: currentRj.name, rjVoice: currentRj.voiceId });
       
       rjIndex = (rjIndex + 1) % 2; // Toggle RJ
       segmentIndex++;
 
       // 7. Song 3
       const duration3 = Math.min(Math.round(song3.seconds * 1000), 300000);
-      addElement('song', duration3, song3.videoId, { title: song3.title, artist: song3.author.name });
+      addElement(crypto.randomUUID(), 'song', duration3, song3.videoId, { title: song3.title, artist: song3.author.name });
       lastSongTitle = song3.title;
     }
 
