@@ -241,9 +241,9 @@ export default function RadioPlayerPage() {
           {/* Time Codes */}
           <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 tracking-wider select-none">
             <span>{formatTime(progressS)}</span>
-            <span className="font-black tracking-[0.2em] italic text-xs flex items-center gap-1.5">
+            <span className="font-bold tracking-widest text-xs flex items-center gap-1">
               <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">FUTURE</span>
-              <span className="text-red-600 drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]">RADIO</span>
+              <span className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">RADIO</span>
             </span>
             <span>{formatTime(duration)}</span>
           </div>
