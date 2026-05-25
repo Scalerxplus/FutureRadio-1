@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAudioStore } from "./useAudioStore";
 import { useUiStore, useCityStore } from "@/lib/store";
 import { getBroadcastSchedule } from "@/lib/supabase/playlist";
+import { createClient } from "@/lib/supabase/client";
 import { PlaylistBlock } from "@/lib/types";
 
 interface YTPlayerInstance {
@@ -86,6 +87,29 @@ export default function AudioOrchestrator() {
   const currentElementIdRef = useRef<string | null>(null);
   const isGeneratingRef = useRef<boolean>(false);
   const zapperFiredRef = useRef<boolean>(false);
+  const [listenerId] = useState(() => typeof window !== "undefined" ? crypto.randomUUID() : "anon");
+
+  // Realtime Presence Tracker for Live Listeners Count
+  useEffect(() => {
+    if (!isPlaying) return;
+    
+    const supabase = createClient();
+    const channel = supabase.channel(`radio_listeners_${cityId}`, {
+      config: { presence: { key: listenerId } }
+    });
+
+    channel.on('presence', { event: 'sync' }, () => {
+      console.log("[Presence] Synced listeners.");
+    }).subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        channel.track({ status: 'listening', startedAt: Date.now() });
+      }
+    });
+
+    return () => {
+      channel.untrack().then(() => supabase.removeChannel(channel));
+    };
+  }, [isPlaying, cityId, listenerId]);
 
   // 1. Initialize YouTube Iframe API
   useEffect(() => {

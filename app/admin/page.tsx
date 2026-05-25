@@ -1,4 +1,5 @@
-import { Activity, Clock, RadioTower, Users } from "lucide-react";
+import { Activity, Clock, RadioTower } from "lucide-react";
+import LiveListenersCard from "@/components/admin/LiveListenersCard";
 
 export default function AdminDashboard() {
   return (
@@ -27,12 +28,7 @@ export default function AdminDashboard() {
           value="24 Items"
           subtitle="Next generated at 18:00 IST"
         />
-        <StatCard 
-          icon={<Users className="text-orange-400" />}
-          title="Global Listeners"
-          value="1,204"
-          subtitle="Across 3 nodes"
-        />
+        <LiveListenersCard cityId="raipur" />
         <StatCard 
           icon={<Activity className="text-red-400" />}
           title="LLM Health"
