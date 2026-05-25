@@ -77,6 +77,7 @@ export default function AudioOrchestrator() {
 
   const ytPlayerRef = useRef<YTPlayerInstance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const jingleRef = useRef<HTMLAudioElement | null>(null);
   const bedRef = useRef<HTMLAudioElement | null>(null);
   const keepAliveRef = useRef<HTMLAudioElement | null>(null);
 
@@ -259,8 +260,11 @@ export default function AudioOrchestrator() {
           setTimeout(() => yt.pauseVideo(), 2000);
         }
         
-        // For HTML5 audio, since we reuse the same audioRef tag, we just pause it immediately to swap the SRC
+        // For HTML5 audio (Jocktalk), we pause immediately
         audioRef.current?.pause();
+        
+        // We DO NOT pause jingleRef! This allows the Jingle to overlap and 
+        // organically "smartfade" into the next song or jocktalk!
 
         // If transitioning AWAY from a jocktalk, fade out the bed naturally instead of hard cutting
         if (activeElement.element_type !== "jocktalk" && activeElement.element_type !== "traffic") {
@@ -279,23 +283,29 @@ export default function AudioOrchestrator() {
         } else {
           setPhase(activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic" ? "playing_jocktalk" : "playing_jingle");
           
-          if (audioRef.current) {
-            audioRef.current.src = activeElement.media_url;
-            audioRef.current.volume = 1.0;
-            
-            // Wait for the audio metadata to load before attempting to seek, 
-            // otherwise dynamically generated TTS streams will crash the player!
-            audioRef.current.onloadedmetadata = () => {
-              if (audioRef.current && offsetSeconds > 0.5 && offsetSeconds < (activeElement.duration_ms / 1000)) {
-                try {
-                  audioRef.current.currentTime = offsetSeconds;
-                } catch (e) {
-                  console.warn("[Sync Engine] Could not seek dynamically generated stream", e);
+          if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+            if (audioRef.current) {
+              audioRef.current.src = activeElement.media_url;
+              audioRef.current.volume = 1.0;
+              audioRef.current.onloadedmetadata = () => {
+                if (audioRef.current && offsetSeconds > 0.5 && offsetSeconds < (activeElement.duration_ms / 1000)) {
+                  try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
                 }
-              }
-            };
-
-            audioRef.current.play().catch(e => console.error("Audio block failed:", e));
+              };
+              audioRef.current.play().catch(e => console.error("Audio block failed:", e));
+            }
+          } else {
+            // It's a Station ID or Sweeper! Use the dedicated overlapping Jingle player
+            if (jingleRef.current) {
+              jingleRef.current.src = activeElement.media_url;
+              jingleRef.current.volume = 1.0;
+              jingleRef.current.onloadedmetadata = () => {
+                if (jingleRef.current && offsetSeconds > 0.5 && offsetSeconds < (activeElement.duration_ms / 1000)) {
+                  try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
+                }
+              };
+              jingleRef.current.play().catch(e => console.error("Jingle block failed:", e));
+            }
           }
 
           // Start ambient bed
@@ -385,6 +395,7 @@ export default function AudioOrchestrator() {
 
       <audio ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
       <audio ref={audioRef} />
+      <audio ref={jingleRef} />
       <audio ref={bedRef} loop />
     </>
   );

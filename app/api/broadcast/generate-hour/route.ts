@@ -15,11 +15,17 @@ const ytCache = new Map<string, { video: any; expiresAt: number }>();
 const STATION_IDS = [
   "/audio/jingles/Future Radio Jingle.mp3",
   "/audio/jingles/Future Radio Tuned.mp3",
+  "/audio/jingles/Future Radio Suno.mp3",
+  "/audio/jingles/Future Radio Suno (1).mp3",
+  "/audio/jingles/Khali Road Jingle.mp3",
 ];
 const SWEEPERS = [
   "/audio/jingles/Future Radio Tuned (1).mp3",
   "/audio/jingles/Future Radio.mp3",
   "/audio/jingles/Future Radio (1).mp3",
+  "/audio/jingles/Future Radio (2).mp3",
+  "/audio/jingles/Future Suno.mp3",
+  "/audio/jingles/Khali Road Jingle (1).mp3",
 ];
 
 const ARTIST_DATABASE = [
