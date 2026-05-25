@@ -48,15 +48,15 @@ function getSweeperByGenre(energy: string) {
 
 const SHOWS = [
   { id: "morning_zen", name: "Morning Zen", rj: "Maanas", startHour: 6, endHour: 8, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Calm, motivational start to the day. Positivity, light local news, weather." },
-  { id: "morning_drive", name: "The Morning Drive", rj: "AIRA", startHour: 8, endHour: 11, energy: "high", musicQuery: "High energy latest bollywood punjabi trending highest played songs", contentStrategy: "High energy, interactive, traffic updates, viral news, waking up the city." },
+  { id: "morning_drive", name: "The Morning Drive", rj: "Aaira", startHour: 8, endHour: 11, energy: "high", musicQuery: "High energy latest bollywood punjabi trending highest played songs", contentStrategy: "High energy, interactive, traffic updates, viral news, waking up the city." },
   { id: "mid_day", name: "Mid-Day Cafe", rj: "Maanas", startHour: 11, endHour: 16, energy: "mid", musicQuery: "Easy listening latest hit songs", contentStrategy: "Office companion, Bollywood trivia, light humor, relaxed workplace vibe." },
-  { id: "evening_rush", name: "Evening Rush", rj: "AIRA", startHour: 16, endHour: 21, energy: "high", musicQuery: "High energy bollywood punjabi trending hit songs", contentStrategy: "High energy, pop-culture, beat the commute traffic, extremely interactive." },
-  { id: "global_club", name: "The Global Club", rj: "AIRA", startHour: 21, endHour: 1, energy: "high", musicQuery: "EDM globally trending dj mixes dance music songs", contentStrategy: "Weekend/Party vibe every night, high bass, global trends, hype talks." },
+  { id: "evening_rush", name: "Evening Rush", rj: "Aaira", startHour: 16, endHour: 21, energy: "high", musicQuery: "High energy bollywood punjabi trending hit songs", contentStrategy: "High energy, pop-culture, beat the commute traffic, extremely interactive." },
+  { id: "global_club", name: "The Global Club", rj: "Aaira", startHour: 21, endHour: 1, energy: "high", musicQuery: "EDM globally trending dj mixes dance music songs", contentStrategy: "Weekend/Party vibe every night, high bass, global trends, hype talks." },
   { id: "night_shift", name: "Night Shift", rj: "Maanas", startHour: 1, endHour: 6, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Deep late-night thoughts, emotional storytelling, nostalgia, minimal talk." },
 ];
 
 const RJS = {
-  "AIRA": { name: "AIRA", gender: "female", voiceId: "cgSgspJ2msm6clMCkdW9" },
+  "Aaira": { name: "Aaira", gender: "female", voiceId: "cgSgspJ2msm6clMCkdW9" },
   "Maanas": { name: "Maanas", gender: "male", voiceId: "nPczCjzI2devNBz1zQrb" }
 };
 
@@ -132,6 +132,7 @@ async function getJocktalk(
 ) {
   const rjProfile = RJS[currentShow.rj as keyof typeof RJS];
   let segmentProgress = "";
+  const dostWord = rjProfile.gender === "female" ? "aapki dost" : "aapka dost";
 
   if (segmentIndex === 1) {
       segmentProgress = `[CLB Step 3 - Core Content]: The Top of the Hour Hook! Introduce the main topic of the hour: "${topic}". Give a quick, catchy hot take to get them hooked!`;
@@ -150,8 +151,8 @@ Show Context:
 - Hourly Topic: "${topic}"
 
 CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
-0. [CRITICAL GRAMMAR CONSTRAINT]: Because your gender is ${rjProfile.gender}, you MUST use strictly ${rjProfile.gender} grammar rules when writing Hindi sentences. For example, if female, you MUST write "Main aa gayi hoon", "Main sun rahi hoon", NOT "Main aa gaya hoon". DO NOT break character.
-1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain radio ka future 'Future Radio', main hoon aapka dost ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
+0. [CRITICAL GRAMMAR CONSTRAINT]: Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns. For example, if you are FEMALE, you MUST say "Main aa gayi hoon", "Main soch rahi thi", "Main sun rahi hoon". NEVER use masculine verbs like "Main aa gaya hoon" or "Main soch raha tha". Check every single sentence before outputting!
+1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain radio ka future 'Future Radio', main hoon ${dostWord} ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
 2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}).
 3. ${segmentProgress}
 4. [CLB Step 4 - Tease Next Song]: Build hype for the upcoming song: "${upcomingSongTitle}".
