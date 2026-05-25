@@ -39,15 +39,15 @@ export async function GET(request: Request) {
 
     const voiceIdParam = url.searchParams.get("voiceId");
     
-    // Map ElevenLabs Voice IDs to free Microsoft Azure Neural Voices
-    let edgeVoice = "en-IN-NeerjaNeural"; // Default female
+    // Map ElevenLabs Voice IDs to free Microsoft Azure Native Hindi Neural Voices
+    let edgeVoice = "hi-IN-SwaraNeural"; // Default female (Perfect Hindi pronunciation)
     if (voiceIdParam === "nPczCjzI2devNBz1zQrb") {
-        edgeVoice = "en-IN-PrabhatNeural"; // Male voice (Maanas)
+        edgeVoice = "hi-IN-MadhurNeural"; // Male voice (Maanas)
     }
 
     const tts = new EdgeTTS({
       voice: edgeVoice,
-      lang: "en-IN",
+      lang: "hi-IN",
       outputFormat: "audio-24khz-48kbitrate-mono-mp3",
       pitch: "+4Hz",     // Slightly higher pitch for more energy
       rate: "+12%",      // Faster speech rate typical of FM Radio Jockeys

@@ -145,6 +145,7 @@ Show Context:
 - Hourly Topic: "${topic}"
 
 CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
+0. [CRITICAL GRAMMAR CONSTRAINT]: Because your gender is ${rjProfile.gender}, you MUST use strictly ${rjProfile.gender} grammar rules when writing Hindi sentences. For example, if female, you MUST write "Main aa gayi hoon", "Main sun rahi hoon", NOT "Main aa gaya hoon". DO NOT break character.
 1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain radio ka future 'Future Radio', main hoon aapka dost ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
 2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}).
 3. ${segmentProgress}
@@ -264,6 +265,13 @@ export async function POST(request: Request) {
       return blockId;
     };
 
+    // Helper to calculate a safe song duration and prevent the "2-second zapper bug"
+    const getSafeSongDuration = (song: any) => {
+      let durMs = Math.round((song.seconds || 0) * 1000);
+      if (durMs < 60000) durMs = 240000; // Fallback to 4 mins if YT search returns a short clip or 0
+      return Math.min(durMs, 300000); // Max 5 mins
+    };
+
     let segmentIndex = 1;
     let lastSongTitle = "nothing";
 
@@ -282,19 +290,19 @@ export async function POST(request: Request) {
         const blockId = addElement('jocktalk', rjDur, ttsUrl, { transcript: rjScript, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
         schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
 
-        addElement('song', Math.min(Math.round(song1.seconds * 1000), 300000), song1.videoId, { title: song1.title, artist: song1.author.name });
+        addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
         
         const sweeper = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
 
         const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', Math.min(Math.round(song2.seconds * 1000), 300000), song2.videoId, { title: song2.title, artist: song2.author.name });
+        addElement('song', getSafeSongDuration(song2), song2.videoId, { title: song2.title, artist: song2.author.name });
         
         const sweeper2 = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
 
         const song3 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', Math.min(Math.round(song3.seconds * 1000), 300000), song3.videoId, { title: song3.title, artist: song3.author.name });
+        addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
         lastSongTitle = song3.title;
 
       } else if (segmentIndex === 2 || segmentIndex === 3) {
@@ -311,19 +319,19 @@ export async function POST(request: Request) {
         const blockId = addElement('jocktalk', rjDur, ttsUrl, { transcript: rjScript, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
         schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
 
-        addElement('song', Math.min(Math.round(song1.seconds * 1000), 300000), song1.videoId, { title: song1.title, artist: song1.author.name });
+        addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
         
         const sweeper1 = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
 
         const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', Math.min(Math.round(song2.seconds * 1000), 300000), song2.videoId, { title: song2.title, artist: song2.author.name });
+        addElement('song', getSafeSongDuration(song2), song2.videoId, { title: song2.title, artist: song2.author.name });
 
         const sweeper = getSweeperByGenre(currentShow.energy);
         addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
 
         const song3 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', Math.min(Math.round(song3.seconds * 1000), 300000), song3.videoId, { title: song3.title, artist: song3.author.name });
+        addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
         lastSongTitle = song3.title;
         
       } else {
@@ -332,7 +340,7 @@ export async function POST(request: Request) {
         addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
 
         const song1 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', Math.min(Math.round(song1.seconds * 1000), 300000), song1.videoId, { title: song1.title, artist: song1.author.name });
+        addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
         lastSongTitle = song1.title;
       }
       

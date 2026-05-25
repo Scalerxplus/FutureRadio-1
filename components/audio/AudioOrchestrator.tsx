@@ -325,9 +325,20 @@ export default function AudioOrchestrator() {
 
           // Start ambient bed
           if ((activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") && bedRef.current) {
-            // Only restart bed if it's not already playing from a previous block
-            if (bedRef.current.paused || !bedRef.current.src.includes("lofi-bed")) {
-              bedRef.current.src = "/audio/jingles/lofi-bed.mp3";
+            
+            // Dynamic Day-Part Music Bed Mapping
+            const hour = serverNow.getHours();
+            let bedFile = "lofi-bed.mp3"; // Default for Night/Morning Zen (low energy)
+            if (hour >= 8 && hour < 11) bedFile = "upbeat-bed.mp3"; // Morning Drive (high energy)
+            else if (hour >= 11 && hour < 16) bedFile = "chill-bed.mp3"; // Mid-Day (mid energy)
+            else if (hour >= 16 && hour < 21) bedFile = "upbeat-bed.mp3"; // Evening Rush (high energy)
+            else if (hour >= 21 || hour < 1) bedFile = "club-bed.mp3"; // Global Club (high energy)
+            
+            const targetBedSrc = `/audio/jingles/${bedFile}`;
+
+            // Only restart bed if it's not already playing the correct track
+            if (bedRef.current.paused || !bedRef.current.src.includes(bedFile)) {
+              bedRef.current.src = targetBedSrc;
               bedRef.current.volume = 0.4; // Starts normalized at 40%, ducking logic will push it down to 10%
               bedRef.current.play().catch(() => {});
             }
