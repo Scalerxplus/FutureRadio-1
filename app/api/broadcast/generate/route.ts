@@ -5,7 +5,7 @@ import Groq from "groq-sdk";
 import yts from "yt-search";
 
 // Initialize Groq client
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" });
 
 // In-memory cache for YouTube lookups (Key: mood+cityId, Value: { video, expiresAt })
 const ytCache = new Map<string, { video: any; expiresAt: number }>();

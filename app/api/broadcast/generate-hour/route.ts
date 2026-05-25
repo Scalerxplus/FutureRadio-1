@@ -9,7 +9,7 @@ import path from "path";
 // This is critical because the LLM + external API calls may exceed the default 10-second limit.
 export const maxDuration = 60;
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" });
 const ytCache = new Map<string, { video: any; expiresAt: number }>();
 
 const STATION_IDS = [
