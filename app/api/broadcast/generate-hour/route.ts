@@ -14,19 +14,14 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" })
 const ytCache = new Map<string, { video: any; expiresAt: number }>();
 
 const STATION_IDS = [
-  "/audio/jingles/Future Radio Jingle.mp3",
-  "/audio/jingles/Future Radio Tuned.mp3",
-  "/audio/jingles/Future Radio Suno.mp3",
-  "/audio/jingles/Future Radio Suno (1).mp3",
-  "/audio/jingles/Khali Road Jingle.mp3",
+  "/audio/Sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy_India.mp3",
 ];
 const SWEEPERS = [
-  "/audio/jingles/Future Radio Tuned (1).mp3",
-  "/audio/jingles/Future Radio.mp3",
-  "/audio/jingles/Future Radio (1).mp3",
-  "/audio/jingles/Future Radio (2).mp3",
-  "/audio/jingles/Future Suno.mp3",
-  "/audio/jingles/Khali Road Jingle (1).mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy_Dhol.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy_Fun.mp3",
+  "/audio/Sweepers/Future_Sweeper_Mid_Energy_.mp3",
 ];
 
 const ARTIST_DATABASE = [
