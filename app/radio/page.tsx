@@ -98,7 +98,26 @@ export default function RadioPlayerPage() {
     }
   }, [phase, currentBlock]);
 
-  // Format seconds to M:SS helper
+  // Share functionality with Web Share API
+  const handleShare = async () => {
+    const shareData = {
+      title: "Future Radio",
+      text: "Vibe with GenZ on Future Radio 📻 - 100% Autonomous AI Radio Station. Tune in live!",
+      url: "https://futureradio.vercel.app",
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      // Fallback: Copy to clipboard if Web Share API is not supported (e.g. desktop)
+      navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+      alert("Link copied to clipboard! You can now paste it in WhatsApp.");
+    }
+  };  // Format seconds to M:SS helper
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = Math.floor(totalSeconds % 60);
@@ -258,7 +277,14 @@ export default function RadioPlayerPage() {
         {/* Interactive Controls Panel */}
         <div className="flex justify-between items-center px-4">
           
-          <div className="w-8" />
+          {/* Share Button */}
+          <button
+            onClick={handleShare}
+            className="p-2 transition text-lg w-8 text-gray-400 hover:text-white focus:outline-none hover:scale-110 active:scale-95"
+            aria-label="Share Future Radio"
+          >
+            📤
+          </button>
           
           {/* Primary Play / Pause Toggle (Now just the logo) */}
           <button

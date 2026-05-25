@@ -5,6 +5,25 @@ import { useAudioStore } from "./useAudioStore";
 export default function PlayerBar() {
   const { isPlaying, currentBlock, viewMode, setIsPlaying, setViewMode } = useAudioStore();
 
+  const handleShare = async () => {
+    const shareData = {
+      title: "Future Radio",
+      text: "Vibe with GenZ on Future Radio 📻 - 100% Autonomous AI Radio Station. Tune in live!",
+      url: "https://futureradio.vercel.app",
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+      alert("Link copied to clipboard! You can now paste it in WhatsApp.");
+    }
+  };
+
   if (viewMode === "bubble") {
     return (
       <div className="fixed bottom-6 right-6 z-40">
@@ -88,13 +107,21 @@ export default function PlayerBar() {
             </p>
           </div>
 
-          <div className="flex justify-center items-center pt-6">
+          <div className="flex justify-center items-center gap-6 pt-6">
+            <div className="w-12" /> {/* Spacer for centering */}
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="w-16 h-16 rounded-full bg-brand-purple hover:bg-brand-purple/90 text-white text-2xl flex items-center justify-center shadow-[0_0_30px_rgba(127,119,221,0.4)] hover:scale-110 active:scale-95 transition-all duration-300"
+              className="w-16 h-16 rounded-full bg-brand-purple hover:bg-brand-purple/90 text-white text-2xl flex items-center justify-center shadow-[0_0_30px_rgba(127,119,221,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none"
               aria-label={isPlaying ? "Stop stream" : "Start stream"}
             >
               <span className={isPlaying ? "" : "ml-1"}>{isPlaying ? "⏹" : "▶"}</span>
+            </button>
+            <button
+              onClick={handleShare}
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-[#111118]/50 border border-[#2a2a35] text-gray-400 hover:text-white hover:bg-[#2a2a35] transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none"
+              aria-label="Share Future Radio"
+            >
+              <span className="text-xl">📤</span>
             </button>
           </div>
         </div>
