@@ -266,9 +266,24 @@ export default function AudioOrchestrator() {
         // We DO NOT pause jingleRef! This allows the Jingle to overlap and 
         // organically "smartfade" into the next song or jocktalk!
 
-        // If transitioning AWAY from a jocktalk, fade out the bed naturally instead of hard cutting
+        // If transitioning AWAY from a jocktalk, fade out the bed naturally over 1.5 seconds instead of hard cutting
         if (activeElement.element_type !== "jocktalk" && activeElement.element_type !== "traffic") {
-          bedRef.current?.pause();
+          if (bedRef.current && !bedRef.current.paused) {
+            const bed = bedRef.current;
+            const startVol = bed.volume;
+            let step = 0;
+            const fadeInterval = setInterval(() => {
+              step++;
+              const newVol = startVol - (startVol * (step / 15)); // 15 steps over 1.5s
+              if (newVol <= 0.05 || step >= 15) {
+                bed.pause();
+                bed.volume = 0;
+                clearInterval(fadeInterval);
+              } else {
+                bed.volume = Math.max(0, newVol);
+              }
+            }, 100);
+          }
         }
 
         // Start new element
