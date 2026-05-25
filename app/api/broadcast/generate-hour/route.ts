@@ -140,14 +140,14 @@ async function getJocktalk(
 ) {
   const rjProfile = RJS[currentShow.rj as keyof typeof RJS];
   let segmentProgress = "";
-  const dostWord = rjProfile.gender === "female" ? "aapki dost" : "aapka dost";
+  const anchorWord = rjProfile.gender === "female" ? "aapki news anchor" : "aapka news anchor";
 
   if (segmentIndex === 1) {
-      segmentProgress = `[CLB Step 3 - Core Content]: The Top of the Hour Hook! Introduce the main topic of the hour: "${topic}". Give a quick, catchy hot take to get them hooked!`;
+      segmentProgress = `[CLB Step 3 - Core Content]: The Top of the Hour Headline! Introduce the main news topic of the hour: "${topic}". Deliver a precise, professional summary of the facts.`;
   } else if (segmentIndex === 2) {
-      segmentProgress = `[CLB Step 3 - Core Content]: Dive deep into the hourly topic: "${topic}". Tell a quick relatable story, or share an interesting fact about it. Mention what song just played (${previousSongTitle}).`;
+      segmentProgress = `[CLB Step 3 - Core Content]: Dive deep into the hourly topic: "${topic}". Provide statistical analysis, market insights, or expert commentary. Briefly mention the musical break that just played (${previousSongTitle}).`;
   } else {
-      segmentProgress = `[CLB Step 3 - Core Content]: Wrap up the discussion on "${topic}". Summarize your final thoughts.`;
+      segmentProgress = `[CLB Step 3 - Core Content]: Wrap up the discussion on "${topic}". Summarize your final analytical thoughts.`;
   }
 
   let timeOfDay = "Day";
@@ -166,11 +166,11 @@ Show Context:
 
 CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
 0. [CRITICAL GRAMMAR CONSTRAINT]: Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns. For example, if you are FEMALE, you MUST say "Main aa gayi hoon", "Main soch rahi thi", "Main sun rahi hoon". NEVER use masculine verbs like "Main aa gaya hoon" or "Main soch raha tha". Check every single sentence before outputting!
-1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain radio ka future 'Future Radio', main hoon ${dostWord} ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
-2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}). DO NOT say "aaj ka din" or "good morning" if it is night time. Use accurate context like "aaj raat", "is shaam", or "aaj subah".
+1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain Future Radio News Desk se live, main hoon ${anchorWord} ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
+2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather or market condition (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}). DO NOT say "aaj ka din" or "good morning" if it is night time. Use accurate context like "aaj raat", "is shaam", or "aaj subah".
 3. ${segmentProgress}
-4. [CLB Step 4 - Tease Next Song]: Build hype for the upcoming song: "${upcomingSongTitle}".
-5. [CLB Step 5 - Outro]: Always end your talk exactly with: "Sunte rahiye Future Radio, ab future suno."
+4. [CLB Step 4 - Tease Next Song]: Seamlessly transition to a short musical break featuring the track: "${upcomingSongTitle}" before the next headline.
+5. [CLB Step 5 - Outro]: Always end your talk exactly with: "Bane rahiye Future Radio ke saath, updates jaari rahenge."
 
 MANDATORY DURATION & STYLE:
 - LENGTH: You MUST write a MINIMUM of 150 words. This is extremely important to guarantee a 45-second audio duration. Provide precise statistics, numbers, and deep analysis!
