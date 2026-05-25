@@ -14,14 +14,16 @@ export default function JocktalkOverridePage() {
     setSuccess(false);
 
     try {
-      // In a real implementation, this hits an API route that inserts into Supabase
-      // For now, we simulate the delay
-      await new Promise(r => setTimeout(r, 1000));
+      const response = await fetch("/api/admin/jocktalk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic_text: topicText, city_id: "raipur" })
+      });
       
-      // Simulate successful insert
+      if (!response.ok) throw new Error("Failed to insert override");
+      
       setSuccess(true);
       setTopicText("");
-      
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       console.error(err);

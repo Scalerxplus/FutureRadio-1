@@ -203,7 +203,29 @@ export async function POST(request: Request) {
 
     console.log(`[Master Clock] Generating ${currentShow.name} (RJ: ${rjProfile.name}) for ${cityId} at ${currentIstHour}:00 IST`);
 
-    const selectedHourlyTopic = await getTrendingHourlyTopic(cityId, currentShow);
+    // --- HITL: Check for Human-In-The-Loop Override ---
+    let selectedHourlyTopic = "";
+    const { data: overrideData } = await supabase
+      .from("jocktalk_overrides")
+      .select("*")
+      .eq("city_id", cityId)
+      .eq("status", "pending")
+      .order("created_at", { ascending: true })
+      .limit(1);
+
+    if (overrideData && overrideData.length > 0) {
+      selectedHourlyTopic = "[HUMAN SCRIPT OVERRIDE] " + overrideData[0].topic_text;
+      console.log(`[Master Clock] HITL Override detected! Prioritizing human script: ${selectedHourlyTopic}`);
+      
+      // Mark as used so we don't repeat it next hour
+      await supabase
+        .from("jocktalk_overrides")
+        .update({ status: "used" })
+        .eq("id", overrideData[0].id);
+    } else {
+      selectedHourlyTopic = await getTrendingHourlyTopic(cityId, currentShow);
+    }
+
     const liveWeather = await getLiveWeather(cityId);
 
     const schedule = [];
