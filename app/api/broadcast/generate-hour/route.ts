@@ -89,17 +89,22 @@ function getSearchQueryForShow(show: any) {
   return `${artist} ${show.musicQuery} audio`;
 }
 
-async function getSong(searchQuery: string, cityId: string) {
-  const cacheKey = `${searchQuery}-${cityId}`;
-  const cached = ytCache.get(cacheKey);
-  if (cached && cached.expiresAt > Date.now()) return cached.video;
+async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>) {
+  // Add "lyrical" or "audio" to avoid long video compilations or dialogs
+  const searchResults = await yts(searchQuery + " lyrical");
+  
+  // Filter out songs longer than 6 minutes (360 seconds) and already played songs
+  const validVideos = searchResults.videos.filter((v: any) => v.seconds <= 360 && !playedSongs.has(v.videoId));
 
-  const searchResults = await yts(searchQuery);
-  const videos = searchResults.videos.slice(0, 7);
-  if (videos.length === 0) throw new Error("No videos found");
-  const selectedSong = videos[Math.floor(Math.random() * videos.length)];
+  if (validVideos.length === 0) {
+    const fallback = searchResults.videos.slice(0, 5);
+    const selected = fallback[Math.floor(Math.random() * fallback.length)];
+    if (selected) playedSongs.add(selected.videoId);
+    return selected;
+  }
 
-  ytCache.set(cacheKey, { video: selectedSong, expiresAt: Date.now() + 60 * 60 * 1000 });
+  const selectedSong = validVideos[Math.floor(Math.random() * Math.min(validVideos.length, 5))];
+  playedSongs.add(selectedSong.videoId);
   return selectedSong;
 }
 
@@ -269,82 +274,64 @@ export async function POST(request: Request) {
     const getSafeSongDuration = (song: any) => {
       let durMs = Math.round((song.seconds || 0) * 1000);
       if (durMs < 60000) durMs = 240000; // Fallback to 4 mins if YT search returns a short clip or 0
-      return Math.min(durMs, 300000); // Max 5 mins
+      return durMs; // No more Math.min cap, let the song play fully!
     };
 
     let segmentIndex = 1;
     let lastSongTitle = "nothing";
+    const playedSongs = new Set<string>();
 
     while (currentTimeMs < targetEndTime) {
+      // 1. TOTH Station ID (Only once per hour)
       if (segmentIndex === 1) {
-        // --- BLOCK 1: Top of the Hour ---
         const stationId = STATION_IDS[Math.floor(Math.random() * STATION_IDS.length)];
         addElement('station_id', await getLocalAudioDuration(stationId), stationId, { title: "Station ID" });
-
-        const song1 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        
-        const rjScript = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, song1.title, liveWeather, globalRjPrompt);
-        let ttsUrl = `/api/broadcast/tts?blockId=temp&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
-        let rjDur = Math.floor((rjScript.length / 10.0) * 1000) + 3500; 
-        
-        const blockId = addElement('jocktalk', rjDur, ttsUrl, { transcript: rjScript, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
-        schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
-
-        addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
-        
-        const sweeper = getSweeperByGenre(currentShow.energy);
-        addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
-
-        const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', getSafeSongDuration(song2), song2.videoId, { title: song2.title, artist: song2.author.name });
-        
-        const sweeper2 = getSweeperByGenre(currentShow.energy);
-        addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
-
-        const song3 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
-        lastSongTitle = song3.title;
-
-      } else if (segmentIndex === 2 || segmentIndex === 3) {
-        // --- BLOCKS 2 & 3: Content Links ---
-        const bumper = BUMPERS[Math.floor(Math.random() * BUMPERS.length)];
-        addElement('sweeper', await getLocalAudioDuration(bumper), bumper, { title: "RJ Bumper" });
-
-        const song1 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        
-        const rjScript = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, song1.title, liveWeather);
-        let ttsUrl = `/api/broadcast/tts?blockId=temp&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
-        let rjDur = Math.floor((rjScript.length / 10.0) * 1000) + 3500; 
-        
-        const blockId = addElement('jocktalk', rjDur, ttsUrl, { transcript: rjScript, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
-        schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
-
-        addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
-        
-        const sweeper1 = getSweeperByGenre(currentShow.energy);
-        addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
-
-        const song2 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', getSafeSongDuration(song2), song2.videoId, { title: song2.title, artist: song2.author.name });
-
-        const sweeper = getSweeperByGenre(currentShow.energy);
-        addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
-
-        const song3 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
-        lastSongTitle = song3.title;
-        
-      } else {
-        // --- FILLER BLOCKS ---
-        const sweeper = getSweeperByGenre(currentShow.energy);
-        addElement('sweeper', await getLocalAudioDuration(sweeper), sweeper, { title: "Radio Sweeper" });
-
-        const song1 = await getSong(getSearchQueryForShow(currentShow), cityId);
-        addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
-        lastSongTitle = song1.title;
       }
+
+      // 2. Jocktalk (Intro/Topic)
+      const rjScript1 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, "upcoming hits", liveWeather, globalRjPrompt);
+      let ttsUrl = `/api/broadcast/tts?blockId=temp&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
+      let rjDur1 = Math.floor((rjScript1.length / 10.0) * 1000) + 3500; 
       
-      segmentIndex++;
+      const blockId1 = addElement('jocktalk', rjDur1, ttsUrl, { transcript: rjScript1, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
+      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId1}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
+
+      // 3. Song 1
+      const song1 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+      addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
+      
+      // 4. Short Sweeper
+      const sweeper1 = getSweeperByGenre(currentShow.energy);
+      addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
+
+      // 5. Song 2
+      const song2 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+      addElement('song', getSafeSongDuration(song2), song2.videoId, { title: song2.title, artist: song2.author.name });
+      
+      // 6. Long Sweeper
+      const sweeper2 = getSweeperByGenre(currentShow.energy);
+      addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
+
+      // 7. Jocktalk (Content wrap)
+      const rjScript2 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex + 1, song2.title, "more hits", liveWeather, globalRjPrompt);
+      let rjDur2 = Math.floor((rjScript2.length / 10.0) * 1000) + 3500; 
+      const blockId2 = addElement('jocktalk', rjDur2, ttsUrl, { transcript: rjScript2, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
+      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId2}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
+
+      // 8. Song 3
+      const song3 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+      addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
+
+      // 9. Song 4
+      const song4 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+      addElement('song', getSafeSongDuration(song4), song4.videoId, { title: song4.title, artist: song4.author.name });
+      lastSongTitle = song4.title;
+
+      // 10. Short Sweeper
+      const sweeper3 = getSweeperByGenre(currentShow.energy);
+      addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
+
+      segmentIndex += 2;
     }
 
     const { error } = await supabase.from("broadcast_schedule").insert(schedule);

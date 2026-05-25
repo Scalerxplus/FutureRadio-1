@@ -85,6 +85,7 @@ export default function AudioOrchestrator() {
   const [syncOffsetMs, setSyncOffsetMs] = useState<number>(0);
   const currentElementIdRef = useRef<string | null>(null);
   const isGeneratingRef = useRef<boolean>(false);
+  const zapperFiredRef = useRef<boolean>(false);
 
   // 1. Initialize YouTube Iframe API
   useEffect(() => {
@@ -217,13 +218,18 @@ export default function AudioOrchestrator() {
         bedRef.current.volume = Math.max(0, Math.min(1, targetVol));
       }
 
+      // --- MAGIC 1.5s ZAPPER CROSSFADE SEGUE ---
+      if (remainingSeconds <= 1.5 && remainingSeconds > 0 && !zapperFiredRef.current) {
+        console.log(`[Sync Engine] Firing Zapper crossfade (1.5s remaining)`);
+        playRadioZapper();
+        zapperFiredRef.current = true;
+      }
+
       // --- STATE TRANSITION DETECTED ---
       if (currentElementIdRef.current !== activeElement.id) {
         console.log(`[Sync Engine] Transitioning to ${activeElement.element_type} (Offset: ${offsetSeconds.toFixed(1)}s)`);
         currentElementIdRef.current = activeElement.id;
-        
-        // Trigger the Radio Zapper Bridge Effect
-        playRadioZapper();
+        zapperFiredRef.current = false; // Reset for the next transition
 
         // Map to mock PlaylistBlock for the UI
         const mockBlock: PlaylistBlock = {
