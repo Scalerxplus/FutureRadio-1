@@ -21,6 +21,14 @@ export const metadata: Metadata = {
   description: "Experience the next generation of sound, AI news, and curated futuristic radio streams. Powered by AI RJ AIRA.",
   icons: {
     icon: "/logo.png",
+    apple: "/icons/apple-touch-icon.png",
+  },
+  manifest: "/manifest.webmanifest",
+  themeColor: "#0a0a0f",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Future Radio",
   },
 };
 
