@@ -109,7 +109,7 @@ ${currentRj.name} is currently speaking on air alone for this segment. ${current
 
 CRITICAL RULES FOR GENERATION:
 1. LANGUAGE: Speak entirely in conversational Hinglish (Hindi written in English alphabet, mixed with casual English words).
-2. BREVITY: Keep the script exactly between 25 to 30 words so it takes exactly 15 seconds to speak.
+2. LENGTH: Write a highly detailed, engaging script of exactly 200 to 250 words so it takes about 120 seconds (2 minutes) to speak. Go deep into the topic, tell a short relatable story, or elaborate heavily on the idea.
 3. THE MICRO-PAUSE & EMOTION HACK (BRACKET TAGS): You must use bracketed performance tags to direct the AI voice.
     - Use [pause] for a quick, natural comma-like breath.
     - Use [long pause] before introducing a song or changing topics for dramatic effect.
