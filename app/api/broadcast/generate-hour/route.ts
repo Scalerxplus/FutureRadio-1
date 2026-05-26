@@ -89,12 +89,19 @@ function getCurrentShow(istHour: number) {
 
 function getSearchQueryForShow(show: any) {
   let artist = ARTISTS[Math.floor(Math.random() * ARTISTS.length)];
+  let vibe = "hit song";
+  
   if (show.id === "night_shift" || show.id === "morning_zen") {
       if (Math.random() > 0.4) artist = OLD_ARTISTS[Math.floor(Math.random() * OLD_ARTISTS.length)];
+      vibe = "melody";
   } else if (show.id === "global_club") {
       if (Math.random() > 0.3) artist = EDM_ARTISTS[Math.floor(Math.random() * EDM_ARTISTS.length)];
+      vibe = "club mix";
+  } else if (show.energy === "high") {
+      vibe = "party hit";
   }
-  return `${artist} ${show.musicQuery} audio`;
+  
+  return `${artist} ${vibe}`;
 }
 
 async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>) {
