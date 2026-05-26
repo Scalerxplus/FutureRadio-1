@@ -98,20 +98,46 @@ function getSearchQueryForShow(show: any) {
 }
 
 async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>) {
-  // Add "lyrical" or "audio" to avoid long video compilations or dialogs
-  const searchResults = await yts(searchQuery + " lyrical");
+  // Use "official audio" or "official video" instead of "lyrical" to prioritize official music labels
+  const querySuffix = Math.random() > 0.5 ? " official audio" : " official video";
+  const searchResults = await yts(searchQuery + querySuffix);
   
-  // Filter out songs longer than 6 minutes (360 seconds) and already played songs
-  const validVideos = searchResults.videos.filter((v: any) => v.seconds <= 360 && !playedSongs.has(v.videoId));
+  const excludeKeywords = ["jukebox", "mashup", "mixtape", "lofi", "8d", "status", "ringtone", "cover"];
+  
+  const isCleanVideo = (v: any) => {
+    // Strict duration enforcement: Between 2 minutes and 7 minutes
+    if (v.seconds < 120 || v.seconds > 420) return false;
+    
+    // Filter out compilation/un-official keywords
+    const lowerTitle = v.title.toLowerCase();
+    for (const kw of excludeKeywords) {
+      if (lowerTitle.includes(kw)) return false;
+    }
+    return true;
+  };
 
+  // Primary filter: Clean videos that haven't been played
+  let validVideos = searchResults.videos.filter((v: any) => isCleanVideo(v) && !playedSongs.has(v.videoId));
+
+  // Fallback 1: If all clean videos are played, drop the unplayed requirement but KEEP the strict duration/clean filter!
+  // Repeating a proper 3-minute song is much better than a 72-minute mixtape crashing the broadcast.
   if (validVideos.length === 0) {
-    const fallback = searchResults.videos.slice(0, 5);
-    const selected = fallback[Math.floor(Math.random() * fallback.length)];
-    if (selected) playedSongs.add(selected.videoId);
-    return selected;
+    validVideos = searchResults.videos.filter((v: any) => isCleanVideo(v));
   }
 
-  const selectedSong = validVideos[Math.floor(Math.random() * Math.min(validVideos.length, 5))];
+  // Fallback 2: Extreme edge case where the search query returns absolutely no normal songs
+  if (validVideos.length === 0) {
+    console.warn(`[Master Clock] No clean videos found for query: ${searchQuery}. Using generic safe fallback.`);
+    // A safe fallback ID just to keep the stream alive
+    const fallbackId = "kJQP7kiw5Fk"; 
+    playedSongs.add(fallbackId);
+    return { videoId: fallbackId, title: "Future Radio Safe Fallback", seconds: 280, author: { name: "System" } };
+  }
+
+  // Pick from the top 3 most relevant results to guarantee the highest quality/official upload
+  const topResults = validVideos.slice(0, 3);
+  const selectedSong = topResults[Math.floor(Math.random() * topResults.length)];
+  
   playedSongs.add(selectedSong.videoId);
   return selectedSong;
 }
