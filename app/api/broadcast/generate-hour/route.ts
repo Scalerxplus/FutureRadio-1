@@ -365,14 +365,18 @@ export async function POST(request: Request) {
       const song3 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
       addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
 
-      // 9. Song 4
+      // 9. Sweeper
+      const sweeper3 = getSweeperByGenre(currentShow.energy);
+      addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
+
+      // 10. Song 4
       const song4 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
       addElement('song', getSafeSongDuration(song4), song4.videoId, { title: song4.title, artist: song4.author.name });
       lastSongTitle = song4.title;
 
-      // 10. Short Sweeper
-      const sweeper3 = getSweeperByGenre(currentShow.energy);
-      addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
+      // 11. Sweeper
+      const sweeper4 = getSweeperByGenre(currentShow.energy);
+      addElement('sweeper', await getLocalAudioDuration(sweeper4), sweeper4, { title: "Radio Sweeper" });
 
       segmentIndex += 2;
     }
