@@ -448,6 +448,7 @@ export default function AudioOrchestrator() {
       if (ytPlayerRef.current?.pauseVideo) ytPlayerRef.current.pauseVideo();
       if (audioRef.current) audioRef.current.pause();
       if (bedRef.current) bedRef.current.pause();
+      if (jingleRef.current) jingleRef.current.pause();
     }
   }, [isPlaying]);
 
@@ -456,6 +457,7 @@ export default function AudioOrchestrator() {
     if (ytPlayerRef.current?.playVideo) ytPlayerRef.current.playVideo();
     audioRef.current?.play().catch(() => {});
     bedRef.current?.play().catch(() => {});
+    jingleRef.current?.play().catch(() => {});
     keepAliveRef.current?.play().catch(() => {});
 
     setHasGesture(true);
