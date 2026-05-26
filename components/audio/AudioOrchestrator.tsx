@@ -464,7 +464,7 @@ export default function AudioOrchestrator() {
 
   const isRadioMode = mode === "radio";
   const playerStyleClass = isRadioMode
-    ? "absolute top-[96px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[390px] aspect-[16/9] rounded-2xl border border-[#2a2a35] bg-[#111118] shadow-2xl z-30 overflow-hidden pointer-events-none"
+    ? "absolute top-[76px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[390px] aspect-[16/9] rounded-2xl border border-[#2a2a35] bg-[#111118] shadow-2xl z-30 overflow-hidden pointer-events-none"
     : "absolute bottom-0 left-0 w-[1px] h-[1px] overflow-hidden pointer-events-none";
 
   return (
