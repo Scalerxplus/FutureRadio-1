@@ -31,7 +31,7 @@ function playRadioZapper() {
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioContext) return;
     const ctx = new AudioContext();
-    const bufferSize = ctx.sampleRate * 1.5; // 1.5 seconds of noise
+    const bufferSize = ctx.sampleRate * 3.0; // 3.0 seconds of noise
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
@@ -45,12 +45,13 @@ function playRadioZapper() {
     const filter = ctx.createBiquadFilter();
     filter.type = 'bandpass';
     filter.frequency.setValueAtTime(200, ctx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(7000, ctx.currentTime + 0.8);
+    filter.frequency.exponentialRampToValueAtTime(7000, ctx.currentTime + 1.5);
     
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.1); // Smooth fade in
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2); // Long tail fade out
+    // 30% volume boost (0.2 -> 0.26) and peak exactly in the middle (1.5s)
+    gain.gain.linearRampToValueAtTime(0.26, ctx.currentTime + 1.5); // Smooth fade in
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2.8); // Long tail fade out
 
     
     noise.connect(filter);
