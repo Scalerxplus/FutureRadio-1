@@ -300,7 +300,11 @@ export default function AudioOrchestrator() {
         // for 2 seconds while the new audio element starts. 
         if (activeElement.element_type !== "song" && ytPlayerRef.current?.pauseVideo) {
           const yt = ytPlayerRef.current;
-          setTimeout(() => yt.pauseVideo(), 2000);
+          if (activeElement.element_type === "sweeper" || activeElement.element_type === "station_id") {
+            yt.pauseVideo();
+          } else {
+            setTimeout(() => yt.pauseVideo(), 2000);
+          }
         }
         
         // For HTML5 audio (Jocktalk), we pause immediately
@@ -502,9 +506,9 @@ export default function AudioOrchestrator() {
       </div>
 
       <audio ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
-      <audio ref={audioRef} />
-      <audio ref={jingleRef} />
-      <audio ref={bedRef} loop />
+      <audio ref={audioRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" />
+      <audio ref={jingleRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" />
+      <audio ref={bedRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop />
     </>
   );
 }
