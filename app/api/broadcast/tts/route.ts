@@ -35,34 +35,66 @@ export async function GET(request: Request) {
     
     processedText = processedText.replace(/[\[\(\*\{<【].*?[\]\)\*\}>】]/g, ''); // Remove any remaining hidden tags
 
-    const voiceIdParam = url.searchParams.get("voiceId");
+    const voiceIdParam = url.searchParams.get("voiceId") || "pm";
+    const languageParam = url.searchParams.get("language") || "hi";
+    const speedParam = parseFloat(url.searchParams.get("speed") || "1.0");
 
-    // --- NEURAL TTS UPGRADE (F5-TTS / XTTSv2) ---
-    // If the user has hosted F5-TTS or XTTSv2 (e.g. on RunPod, HuggingFace, or local GPU)
-    if (process.env.F5_TTS_API_URL) {
-      console.log(`[Audio Agent] Generating Natural Neural TTS (F5/XTTS) for text length: ${processedText.length}`);
-      const ttsResponse = await fetch(process.env.F5_TTS_API_URL, {
+    // --- NEURAL TTS UPGRADE (F5-TTS LOCAL GPU WORKER) ---
+    console.log(`[Audio Agent] Requesting Local GPU Worker (Language: ${languageParam}, Speed: ${speedParam})`);
+    
+    try {
+      const ttsResponse = await fetch("http://127.0.0.1:8000/generate-broadcast", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           text: processedText, 
-          language: voiceIdParam === "cgSgspJ2msm6clMCkdW9" ? "en" : "hi",
-          voice: voiceIdParam 
+          language: languageParam,
+          voice_id: voiceIdParam,
+          speed: speedParam
         })
       });
 
       if (ttsResponse.ok) {
-        const audioBuffer = Buffer.from(await ttsResponse.arrayBuffer());
-        return new NextResponse(audioBuffer, {
-          headers: {
-            "Content-Type": "audio/mpeg",
-            "Content-Length": audioBuffer.length.toString(),
-            "Cache-Control": "public, max-age=31536000, immutable", 
-          },
-        });
+        const jobData = await ttsResponse.json();
+        const jobId = jobData.job_id;
+        console.log(`[Audio Agent] Job queued on GPU Worker: ${jobId}. Polling for completion...`);
+        
+        let isComplete = false;
+        let outputPath = "";
+        
+        // Poll for up to 45 seconds
+        for (let i = 0; i < 45; i++) {
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 sec
+          
+          const statusRes = await fetch(`http://127.0.0.1:8000/status/${jobId}`);
+          if (statusRes.ok) {
+            const statusData = await statusRes.json();
+            if (statusData.status === "completed") {
+              isComplete = true;
+              outputPath = path.join(process.cwd(), "f5-tts-server", statusData.output_path);
+              break;
+            }
+          }
+        }
+        
+        if (isComplete && fs.existsSync(outputPath)) {
+          console.log(`[Audio Agent] Audio generation complete! Streaming ${outputPath}...`);
+          const audioBuffer = fs.readFileSync(outputPath);
+          return new NextResponse(audioBuffer, {
+            headers: {
+              "Content-Type": "audio/wav",
+              "Content-Length": audioBuffer.length.toString(),
+              "Cache-Control": "public, max-age=31536000, immutable", 
+            },
+          });
+        } else {
+          console.warn(`[Audio Agent] GPU Worker timed out for job ${jobId}.`);
+        }
       } else {
-        console.warn("[Audio Agent] F5-TTS API failed, falling back to Edge TTS...");
+        console.warn("[Audio Agent] GPU Worker API unreachable. Is main.py running?");
       }
+    } catch (e) {
+      console.warn("[Audio Agent] Error communicating with GPU Worker:", e);
     }
     
     // --- FALLBACK: EDGE TTS ---

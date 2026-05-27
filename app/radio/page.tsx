@@ -217,7 +217,7 @@ export default function RadioPlayerPage() {
               />
             </svg>
             <span>
-              {phase === "playing_jocktalk" ? `AI RJ ${currentBlock?.metadata?.rjName || "AIRA"} · speaking live` : `AI RJ ${currentBlock?.metadata?.rjName || "AIRA"} · speaking next`}
+              {phase === "playing_jocktalk" ? `AI RJ Prameesh · speaking live` : `AI RJ Prameesh · speaking next`}
             </span>
           </div>
 
@@ -238,7 +238,7 @@ export default function RadioPlayerPage() {
           </div>
           <div className="space-y-1 overflow-hidden flex-1">
             <span className="text-[9px] font-extrabold text-brand-purple uppercase tracking-widest block">
-              AI RJ {currentBlock?.metadata?.rjName || "AIRA"} · Raipur
+              AI RJ Prameesh · Raipur
             </span>
             <div className="text-xs text-gray-300 leading-relaxed overflow-y-auto max-h-[46px] pr-1">
               {phase === "playing_jocktalk" ? (

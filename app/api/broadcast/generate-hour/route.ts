@@ -64,17 +64,16 @@ function getSweeperByGenre(energy: string, playedSweepers: Set<string>) {
 }
 
 const SHOWS = [
-  { id: "morning_zen", name: "Morning Zen", rj: "Maanas", startHour: 6, endHour: 8, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Morning business news, pre-market analysis, global economy summaries, very factual." },
-  { id: "morning_drive", name: "The Morning Drive", rj: "Aaira", startHour: 8, endHour: 11, energy: "high", musicQuery: "High energy latest bollywood punjabi trending highest played songs", contentStrategy: "Opening bell insights, corporate news, Indian tycoons, fast-paced financial data." },
-  { id: "mid_day", name: "Mid-Day Cafe", rj: "Maanas", startHour: 11, endHour: 16, energy: "mid", musicQuery: "Easy listening latest hit songs", contentStrategy: "Mid-day market updates, sports scores, economy deep dives, intellectual analysis." },
-  { id: "evening_rush", name: "Evening Rush", rj: "Aaira", startHour: 16, endHour: 21, energy: "high", musicQuery: "High energy bollywood punjabi trending hit songs", contentStrategy: "Market closing bells, GDP stats, major sports/cricket news, celebrity business ventures." },
-  { id: "global_club", name: "The Global Club", rj: "Aaira", startHour: 21, endHour: 1, energy: "high", musicQuery: "EDM globally trending dj mixes dance music songs", contentStrategy: "Global markets, international business, late-night breaking news, fast-paced reports." },
-  { id: "night_shift", name: "Night Shift", rj: "Maanas", startHour: 1, endHour: 6, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Economy retrospectives, long-form factual storytelling, sports history, very serious tone." },
+  { id: "morning_zen", name: "Morning Zen", rj: "PM", startHour: 6, endHour: 8, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Morning business news, pre-market analysis, global economy summaries, very factual." },
+  { id: "morning_drive", name: "The Morning Drive", rj: "PM", startHour: 8, endHour: 11, energy: "high", musicQuery: "High energy latest bollywood punjabi trending highest played songs", contentStrategy: "Opening bell insights, corporate news, Indian tycoons, fast-paced financial data." },
+  { id: "mid_day", name: "Mid-Day Cafe", rj: "PM", startHour: 11, endHour: 16, energy: "mid", musicQuery: "Easy listening latest hit songs", contentStrategy: "Mid-day market updates, sports scores, economy deep dives, intellectual analysis." },
+  { id: "evening_rush", name: "Evening Rush", rj: "PM", startHour: 16, endHour: 20, energy: "high", musicQuery: "High energy bollywood punjabi trending hit songs", contentStrategy: "Market closing bells, GDP stats, major sports/cricket news, celebrity business ventures." },
+  { id: "global_club", name: "The Global Club", rj: "PM", startHour: 20, endHour: 1, energy: "high", musicQuery: "EDM globally trending dj mixes dance music songs", contentStrategy: "Global markets, international business, late-night breaking news, fast-paced reports." },
+  { id: "night_shift", name: "Night Shift", rj: "PM", startHour: 1, endHour: 6, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Economy retrospectives, long-form factual storytelling, sports history, very serious tone." },
 ];
 
 const RJS = {
-  "Aaira": { name: "Aaira", gender: "female", voiceId: "cgSgspJ2msm6clMCkdW9" },
-  "Maanas": { name: "Maanas", gender: "male", voiceId: "nPczCjzI2devNBz1zQrb" }
+  "PM": { name: "Prameesh", gender: "male", voiceId: "pm" }
 };
 
 const ARTISTS = ["Diljit Dosanjh", "Arijit Singh", "Shreya Ghoshal", "Badshah", "AP Dhillon", "Atif Aslam", "Pritam", "A.R. Rahman", "Karan Aujla", "Sidhu Moose Wala", "B Praak", "Vishal Mishra", "Neha Kakkar"];
@@ -90,8 +89,8 @@ function getCurrentShow(istHour: number) {
   if (istHour >= 6 && istHour < 8) return SHOWS[0];
   if (istHour >= 8 && istHour < 11) return SHOWS[1];
   if (istHour >= 11 && istHour < 16) return SHOWS[2];
-  if (istHour >= 16 && istHour < 21) return SHOWS[3];
-  if (istHour >= 21 || istHour < 1) return SHOWS[4]; 
+  if (istHour >= 16 && istHour < 20) return SHOWS[3];
+  if (istHour >= 20 || istHour < 1) return SHOWS[4]; 
   if (istHour >= 1 && istHour < 6) return SHOWS[5];  
   return SHOWS[1]; 
 }
@@ -104,7 +103,7 @@ function getSearchQueryForShow(show: any) {
       if (Math.random() > 0.4) artist = OLD_ARTISTS[Math.floor(Math.random() * OLD_ARTISTS.length)];
       vibe = "melody";
   } else if (show.id === "global_club") {
-      if (Math.random() > 0.3) artist = EDM_ARTISTS[Math.floor(Math.random() * EDM_ARTISTS.length)];
+      artist = EDM_ARTISTS[Math.floor(Math.random() * EDM_ARTISTS.length)];
       vibe = "club mix";
   } else if (show.energy === "high") {
       vibe = "party hit";
@@ -116,7 +115,13 @@ function getSearchQueryForShow(show: any) {
 async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>) {
   // Use "official audio" or "official video" instead of "lyrical" to prioritize official music labels
   const querySuffix = Math.random() > 0.5 ? " official audio" : " official video";
-  const searchResults = await yts(searchQuery + querySuffix);
+    let searchResults;
+    try {
+        searchResults = await yts(searchQuery + querySuffix);
+    } catch (e: any) {
+        console.warn(`[Master Clock] yts failed for query ${searchQuery}: ${e.message}`);
+        searchResults = { videos: [] };
+    }
   
   const excludeKeywords = ["jukebox", "mashup", "mixtape", "lofi", "8d", "status", "ringtone", "cover"];
   
@@ -224,7 +229,7 @@ CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link 
 
 MANDATORY DURATION & STYLE:
 - LENGTH: You MUST write a MINIMUM of 150 words. Provide precise statistics, numbers, and deep analysis!
-- LANGUAGE: ${isNightPersona ? "Fluent, dynamic, high-energy American English. Sound like an EDM DJ at a global festival." : 'Fluent, authoritative, formal Hindi written STRICTLY in Devanagari script (हिंदी लिपि). Example: "आप सुन रहे हैं फ्यूचर रेडियो". DO NOT use Roman English (Hinglish) letters.'}
+- LANGUAGE: ${isNightPersona ? "Fluent, dynamic, high-energy American English. Sound like an EDM DJ at a global festival." : 'Modern, conversational Gen-Z Hinglish (a natural mix of Hindi and English vocabulary), but written STRICTLY in Devanagari script (हिंदी लिपि). For example, write "टेक्नोलॉजी" instead of "technology", "वाइब" instead of "vibe". DO NOT use pure, formal shuddh Hindi if English words are more natural. CRITICAL: You must NEVER output any A-Z English characters, write everything in Devanagari.'}
 - MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate natural breathing.
 
 Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
@@ -267,7 +272,8 @@ export async function POST(request: Request) {
     const supabase = createClient();
     const url = new URL(request.url);
     const cityId = url.searchParams.get("city") || "raipur";
-    const startTime = new Date();
+    const startTimeParam = url.searchParams.get("startTime");
+    const startTime = startTimeParam ? new Date(startTimeParam) : new Date();
     
     // TOTH Sync: Generate schedule ONLY until the end of the current hour (xx:59:59)
     const targetEndTime = new Date(startTime).setMinutes(59, 59, 999);
@@ -384,13 +390,15 @@ export async function POST(request: Request) {
       const newsItem1 = localNewsItems.length > 0 ? localNewsItems[0] : null;
       const rjScript1 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, "upcoming hits", liveWeather, newsItem1, globalRjPrompt);
       
-      // Override TTS Voice for Night Persona
-      const voiceId = currentShow.id === "global_club" ? "cgSgspJ2msm6clMCkdW9" : rjProfile.voiceId; // "cgSgspJ2msm6clMCkdW9" = Jessica (American)
-      let ttsUrl = `/api/broadcast/tts?blockId=temp&voiceId=${voiceId}&cb=${Date.now()}`;
+      // Dual-Model TTS Logic
+      const voiceId = "pm";
+      const language = currentShow.id === "global_club" ? "en" : "hi";
+      const speed = currentShow.id === "global_club" ? 0.8 : 0.95;
+      
       let rjDur1 = Math.floor((rjScript1.length / 10.0) * 1000) + 3500; 
       
-      const blockId1 = addElement('jocktalk', rjDur1, ttsUrl, { transcript: rjScript1, rjName: rjProfile.name, rjVoice: voiceId });
-      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId1}&voiceId=${voiceId}&cb=${Date.now()}`;
+      const blockId1 = addElement('jocktalk', rjDur1, "", { transcript: rjScript1, rjName: rjProfile.name, rjVoice: voiceId, language, speed });
+      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId1}&voiceId=${voiceId}&language=${language}&speed=${speed}&cb=${Date.now()}`;
 
       // 3. Song 1
       const song1 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
@@ -413,8 +421,8 @@ export async function POST(request: Request) {
       const rjScript2 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, 2, song2.title, "upcoming hits", liveWeather, newsItem2, globalRjPrompt);
       let rjDur2 = Math.floor((rjScript2.length / 10.0) * 1000) + 3500; 
       
-      const blockId2 = addElement('jocktalk', rjDur2, ttsUrl, { transcript: rjScript2, rjName: rjProfile.name, rjVoice: voiceId });
-      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId2}&voiceId=${voiceId}&cb=${Date.now()}`;
+      const blockId2 = addElement('jocktalk', rjDur2, "", { transcript: rjScript2, rjName: rjProfile.name, rjVoice: voiceId, language, speed });
+      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId2}&voiceId=${voiceId}&language=${language}&speed=${speed}&cb=${Date.now()}`;
 
       // 8. Song 3
       const song3 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
