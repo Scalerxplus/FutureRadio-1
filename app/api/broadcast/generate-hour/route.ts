@@ -18,32 +18,32 @@ const STATION_IDS: Record<string, string[]> = {
 };
 
 const BUMPERS = [
-  "/audio/sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
+  "/audio/Sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
 ];
 
 const HIGH_ENERGY_SWEEPERS = [
-  "/audio/sweepers/Future_Sweeper_High_Energy.mp3",
-  "/audio/sweepers/Future_Sweeper_High_Energy_Fun.mp3",
-  "/audio/sweepers/Future_Sweeper_High_Energy_India.mp3",
-  "/audio/sweepers/Sweeper_Desi_High_Energy_01.mp3",
-  "/audio/sweepers/Sweeper_EDM_High_Energy_05.mp3",
-  "/audio/sweepers/Sweeper_Edm_High_Energy_01.mp3",
-  "/audio/sweepers/Sweeper_Edm_High_Energy_02.mp3",
-  "/audio/sweepers/Sweeper_Edm_High_Energy_03.mp3",
-  "/audio/sweepers/Sweeper_Edm_High_Energy_04.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy_Fun.mp3",
+  "/audio/Sweepers/Future_Sweeper_High_Energy_India.mp3",
+  "/audio/Sweepers/Sweeper_Desi_High_Energy_01.mp3",
+  "/audio/Sweepers/Sweeper_EDM_High_Energy_05.mp3",
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_01.mp3",
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_02.mp3",
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_03.mp3",
+  "/audio/Sweepers/Sweeper_Edm_High_Energy_04.mp3",
 ];
 
 const MID_ENERGY_SWEEPERS = [
-  "/audio/sweepers/Future_Sweeper_Mid_Energy_.mp3",
-  "/audio/sweepers/Sweeper_MidEnergy_01.mp3",
-  "/audio/sweepers/Sweeper_MidEnergy_02.mp3",
+  "/audio/Sweepers/Future_Sweeper_Mid_Energy_.mp3",
+  "/audio/Sweepers/Sweeper_MidEnergy_01.mp3",
+  "/audio/Sweepers/Sweeper_MidEnergy_02.mp3",
 ];
 
 const LOW_ENERGY_SWEEPERS = [
-  "/audio/sweepers/Sweeper_LoFi_01.mp3",
-  "/audio/sweepers/Sweeper_LoFi_02.mp3",
-  "/audio/sweepers/Sweeper_LoFi_03.mp3",
-  "/audio/sweepers/Sweeper_LoFi_04.mp3",
+  "/audio/Sweepers/Sweeper_LoFi_01.mp3",
+  "/audio/Sweepers/Sweeper_LoFi_02.mp3",
+  "/audio/Sweepers/Sweeper_LoFi_03.mp3",
+  "/audio/Sweepers/Sweeper_LoFi_04.mp3",
 ];
 
 function getSweeperByGenre(energy: string) {
