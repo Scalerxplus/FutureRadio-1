@@ -460,6 +460,12 @@ export default function AudioOrchestrator() {
   const handleGestureClick = () => {
     // Unblock browser autoplay stack
     if (ytPlayerRef.current?.playVideo) ytPlayerRef.current.playVideo();
+    
+    const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+    if (audioRef.current && !audioRef.current.src) audioRef.current.src = silentSrc;
+    if (bedRef.current && !bedRef.current.src) bedRef.current.src = silentSrc;
+    if (jingleRef.current && !jingleRef.current.src) jingleRef.current.src = silentSrc;
+
     audioRef.current?.play().catch(() => {});
     bedRef.current?.play().catch(() => {});
     jingleRef.current?.play().catch(() => {});
@@ -506,9 +512,9 @@ export default function AudioOrchestrator() {
       </div>
 
       <audio ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
-      <audio ref={audioRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" />
-      <audio ref={jingleRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" />
-      <audio ref={bedRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop />
+      <audio ref={audioRef} />
+      <audio ref={jingleRef} />
+      <audio ref={bedRef} loop />
     </>
   );
 }
