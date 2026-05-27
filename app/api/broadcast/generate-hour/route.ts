@@ -46,12 +46,21 @@ const LOW_ENERGY_SWEEPERS = [
   "/audio/Sweepers/Sweeper_LoFi_04.mp3",
 ];
 
-function getSweeperByGenre(energy: string) {
+function getSweeperByGenre(energy: string, playedSweepers: Set<string>) {
   let list = MID_ENERGY_SWEEPERS;
   if (energy === "high") list = HIGH_ENERGY_SWEEPERS;
   if (energy === "low") list = LOW_ENERGY_SWEEPERS;
   
-  return list[Math.floor(Math.random() * list.length)];
+  let available = list.filter(s => !playedSweepers.has(s));
+  if (available.length === 0) {
+      // If all sweepers for this energy level are exhausted in a single hour, reset
+      available = list;
+      playedSweepers.clear();
+  }
+  
+  const picked = available[Math.floor(Math.random() * available.length)];
+  playedSweepers.add(picked);
+  return picked;
 }
 
 const SHOWS = [
@@ -198,19 +207,19 @@ Show Context:
 - Hourly Topic: "${topic}"
 
 CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
-0. [CRITICAL GRAMMAR CONSTRAINT]: Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns. For example, if you are FEMALE, you MUST say "Main aa gayi hoon", "Main soch rahi thi", "Main sun rahi hoon". NEVER use masculine verbs like "Main aa gaya hoon" or "Main soch raha tha". Check every single sentence before outputting!
-1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with: "Aap sun rahe hain Future Radio News Desk se live, main hoon ${anchorWord} ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par."
-2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather or market condition (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}). DO NOT say "aaj ka din" or "good morning" if it is night time. Use accurate context like "aaj raat", "is shaam", or "aaj subah".
+0. [CRITICAL GRAMMAR CONSTRAINT]: Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns.
+1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with introducing yourself as the anchor of Future Radio.
+2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather or market condition (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}). Use accurate context like "aaj raat", "is shaam", or "aaj subah".
 3. ${segmentProgress}
 4. [CLB Step 4 - Tease Next Song]: Seamlessly transition to a short musical break featuring the track: "${upcomingSongTitle}" before the next headline.
-5. [CLB Step 5 - Outro]: Always end your talk exactly with: "Bane rahiye Future Radio ke saath, updates jaari rahenge."
+5. [CLB Step 5 - Outro]: Always end your talk asking listeners to stay tuned for more updates on Future Radio.
 
 MANDATORY DURATION & STYLE:
 - LENGTH: You MUST write a MINIMUM of 150 words. This is extremely important to guarantee a 45-second audio duration. Provide precise statistics, numbers, and deep analysis!
-- LANGUAGE: Fluent, authoritative, formal Hinglish (like a prime-time national news anchor). Be serious and monotonous. NO jokes. NO informal slang.
+- LANGUAGE: Fluent, authoritative, formal Hindi written STRICTLY in Devanagari script (हिंदी लिपि). Example: "आप सुन रहे हैं फ्यूचर रेडियो". DO NOT use Roman English (Hinglish) letters for the script.
 - MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate reading from a teleprompter.
 
-Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
+Output ONLY the raw script text in Devanagari (Hindi) characters. Do not output any titles, brackets, or translations.`;
     
   try {
     const chatCompletion = await groq.chat.completions.create({
@@ -252,7 +261,9 @@ export async function POST(request: Request) {
     const cityId = url.searchParams.get("city") || "raipur";
     const startTime = new Date();
     
-    const targetEndTime = startTime.getTime() + (60 * 60 * 1000); // 1 hour
+    // TOTH Sync: Generate schedule ONLY until the end of the current hour (xx:59:59)
+    const targetEndTime = new Date(startTime).setMinutes(59, 59, 999);
+
     const currentIstHour = getIstHour(startTime);
     const currentShow = getCurrentShow(currentIstHour);
     const rjProfile = RJS[currentShow.rj as keyof typeof RJS];
@@ -329,6 +340,7 @@ export async function POST(request: Request) {
     let segmentIndex = 1;
     let lastSongTitle = "nothing";
     const playedSongs = new Set<string>();
+    const playedSweepers = new Set<string>();
 
     while (currentTimeMs < targetEndTime) {
       // 1. TOTH Station ID (Only once per hour)
@@ -351,15 +363,15 @@ export async function POST(request: Request) {
       addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
       
       // 4. Short Sweeper
-      const sweeper1 = getSweeperByGenre(currentShow.energy);
+      const sweeper1 = getSweeperByGenre(currentShow.energy, playedSweepers);
       addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
 
       // 5. Song 2
       const song2 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
       addElement('song', getSafeSongDuration(song2), song2.videoId, { title: song2.title, artist: song2.author.name });
       
-      // 6. Long Sweeper
-      const sweeper2 = getSweeperByGenre(currentShow.energy);
+      // 6. Sweeper Before Break
+      const sweeper2 = getSweeperByGenre(currentShow.energy, playedSweepers);
       addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
 
       // 7. Jocktalk (Content wrap)
@@ -373,7 +385,7 @@ export async function POST(request: Request) {
       addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
 
       // 9. Sweeper
-      const sweeper3 = getSweeperByGenre(currentShow.energy);
+      const sweeper3 = getSweeperByGenre(currentShow.energy, playedSweepers);
       addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
 
       // 10. Song 4
@@ -381,8 +393,8 @@ export async function POST(request: Request) {
       addElement('song', getSafeSongDuration(song4), song4.videoId, { title: song4.title, artist: song4.author.name });
       lastSongTitle = song4.title;
 
-      // 11. Sweeper
-      const sweeper4 = getSweeperByGenre(currentShow.energy);
+      // 11. Sweeper Before Next Block
+      const sweeper4 = getSweeperByGenre(currentShow.energy, playedSweepers);
       addElement('sweeper', await getLocalAudioDuration(sweeper4), sweeper4, { title: "Radio Sweeper" });
 
       segmentIndex += 2;
