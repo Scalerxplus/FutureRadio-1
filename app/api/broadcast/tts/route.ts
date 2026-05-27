@@ -35,14 +35,45 @@ export async function GET(request: Request) {
     
     processedText = processedText.replace(/[\[\(\*\{<【].*?[\]\)\*\}>】]/g, ''); // Remove any remaining hidden tags
 
-    console.log("[Audio Agent] Generating completely free Microsoft Edge TTS for text length:", processedText.length);
-
     const voiceIdParam = url.searchParams.get("voiceId");
+
+    // --- NEURAL TTS UPGRADE (F5-TTS / XTTSv2) ---
+    // If the user has hosted F5-TTS or XTTSv2 (e.g. on RunPod, HuggingFace, or local GPU)
+    if (process.env.F5_TTS_API_URL) {
+      console.log(`[Audio Agent] Generating Natural Neural TTS (F5/XTTS) for text length: ${processedText.length}`);
+      const ttsResponse = await fetch(process.env.F5_TTS_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          text: processedText, 
+          language: voiceIdParam === "cgSgspJ2msm6clMCkdW9" ? "en" : "hi",
+          voice: voiceIdParam 
+        })
+      });
+
+      if (ttsResponse.ok) {
+        const audioBuffer = Buffer.from(await ttsResponse.arrayBuffer());
+        return new NextResponse(audioBuffer, {
+          headers: {
+            "Content-Type": "audio/mpeg",
+            "Content-Length": audioBuffer.length.toString(),
+            "Cache-Control": "public, max-age=31536000, immutable", 
+          },
+        });
+      } else {
+        console.warn("[Audio Agent] F5-TTS API failed, falling back to Edge TTS...");
+      }
+    }
     
-    // Map ElevenLabs Voice IDs to free Microsoft Azure Native Hindi Neural Voices
+    // --- FALLBACK: EDGE TTS ---
+    console.log("[Audio Agent] Generating Microsoft Edge TTS for text length:", processedText.length);
+    
+    // Map Voice IDs to free Microsoft Azure Native Neural Voices
     let edgeVoice = "hi-IN-SwaraNeural"; // Default female (Perfect Hindi pronunciation)
     if (voiceIdParam === "nPczCjzI2devNBz1zQrb") {
         edgeVoice = "hi-IN-MadhurNeural"; // Male voice (Maanas)
+    } else if (voiceIdParam === "cgSgspJ2msm6clMCkdW9") {
+        edgeVoice = "en-US-JennyNeural"; // Global Club US Persona (Female)
     }
 
     const tts = new EdgeTTS({

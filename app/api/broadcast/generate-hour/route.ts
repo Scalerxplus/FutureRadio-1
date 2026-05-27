@@ -178,18 +178,26 @@ async function getJocktalk(
   previousSongTitle: string, 
   upcomingSongTitle: string,
   liveWeather: string,
+  localNewsCache: any,
   customRjPrompt: string = ""
 ) {
   const rjProfile = RJS[currentShow.rj as keyof typeof RJS];
+  const isNightPersona = currentShow.id === "global_club";
   let segmentProgress = "";
   const anchorWord = rjProfile.gender === "female" ? "aapki news anchor" : "aapka news anchor";
 
+  let hookContent = "";
   if (segmentIndex === 1) {
-      segmentProgress = `[CLB Step 3 - Core Content]: The Top of the Hour Headline! Introduce the main news topic of the hour: "${topic}". Deliver a precise, professional summary of the facts.`;
-  } else if (segmentIndex === 2) {
-      segmentProgress = `[CLB Step 3 - Core Content]: Dive deep into the hourly topic: "${topic}". Provide statistical analysis, market insights, or expert commentary. Briefly mention the musical break that just played (${previousSongTitle}).`;
+      hookContent = `[CLB Part 1 - Contextual Intro / Hook]: You MUST start by praising the station's sound. Example: "Future radio ka sound kitna sahi hai na" (or English equivalent). Introduce yourself as the anchor of Future Radio.`;
   } else {
-      segmentProgress = `[CLB Step 3 - Core Content]: Wrap up the discussion on "${topic}". Summarize your final analytical thoughts.`;
+      hookContent = `[CLB Part 1 - Contextual Intro / Hook]: You MUST start by praising the previous song played (${previousSongTitle}) and giving brief credit to the artist. Transition smoothly.`;
+  }
+
+  let localNewsProgress = "";
+  if (localNewsCache && localNewsCache.headline) {
+      localNewsProgress = `[CLB Part 3 - Core Local Content]: Discuss this Breaking Local Utility/Infra News: "${localNewsCache.headline}" - ${localNewsCache.description}. Provide a highly intelligent, empathetic, and connecting reaction/take on it so the audience feels informed and connected.`;
+  } else {
+      localNewsProgress = `[CLB Part 3 - Core Content]: Dive into the hourly discussion: "${topic}". Provide deep, relatable insights.`;
   }
 
   let timeOfDay = "Day";
@@ -207,19 +215,19 @@ Show Context:
 - Hourly Topic: "${topic}"
 
 CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
-0. [CRITICAL GRAMMAR CONSTRAINT]: Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns.
-1. [CLB Step 1 - Brand Intro]: If this is Segment 1, you MUST start exactly with introducing yourself as the anchor of Future Radio.
-2. [CLB Step 2 - Local Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather or market condition (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}). Use accurate context like "aaj raat", "is shaam", or "aaj subah".
-3. ${segmentProgress}
-4. [CLB Step 4 - Tease Next Song]: Seamlessly transition to a short musical break featuring the track: "${upcomingSongTitle}" before the next headline.
-5. [CLB Step 5 - Outro]: Always end your talk asking listeners to stay tuned for more updates on Future Radio.
+0. [CRITICAL GRAMMAR CONSTRAINT]: ${isNightPersona ? "You are hosting the Global Club EDM show. You MUST speak 100% in FLUENT AMERICAN ENGLISH. Do not use Hindi." : `Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns.`}
+1. ${hookContent}
+2. [CLB Part 2 - Live Weather & Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}).
+3. ${localNewsProgress}
+4. [CLB Part 4 - Tease Next Song]: Seamlessly transition to a short musical break featuring the track: "${upcomingSongTitle}".
+5. [CLB Part 5 - Outro]: Always end your talk EXACTLY with: "${isNightPersona ? `Keep listening to Future Radio, my name is ${rjProfile.name}, Future Radio, Hear the future.` : `Sunte rahiye Future radio, mera nam hai ${rjProfile.name}, Future Radio, Ab future suno.`}"
 
 MANDATORY DURATION & STYLE:
-- LENGTH: You MUST write a MINIMUM of 150 words. This is extremely important to guarantee a 45-second audio duration. Provide precise statistics, numbers, and deep analysis!
-- LANGUAGE: Fluent, authoritative, formal Hindi written STRICTLY in Devanagari script (हिंदी लिपि). Example: "आप सुन रहे हैं फ्यूचर रेडियो". DO NOT use Roman English (Hinglish) letters for the script.
-- MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate reading from a teleprompter.
+- LENGTH: You MUST write a MINIMUM of 150 words. Provide precise statistics, numbers, and deep analysis!
+- LANGUAGE: ${isNightPersona ? "Fluent, dynamic, high-energy American English. Sound like an EDM DJ at a global festival." : 'Fluent, authoritative, formal Hindi written STRICTLY in Devanagari script (हिंदी लिपि). Example: "आप सुन रहे हैं फ्यूचर रेडियो". DO NOT use Roman English (Hinglish) letters.'}
+- MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate natural breathing.
 
-Output ONLY the raw script text in Devanagari (Hindi) characters. Do not output any titles, brackets, or translations.`;
+Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
     
   try {
     const chatCompletion = await groq.chat.completions.create({
@@ -309,6 +317,28 @@ export async function POST(request: Request) {
       selectedHourlyTopic = await getTrendingHourlyTopic(cityId, currentShow);
     }
 
+    // --- FETCH HYPER-LOCAL NEWS CACHE ---
+    let localNewsItems: any[] = [];
+    try {
+      const { data: newsData } = await supabase
+        .from("local_news_cache")
+        .select("*")
+        .eq("city_id", cityId)
+        .eq("is_read", false)
+        .order("created_at", { ascending: false })
+        .limit(5);
+      
+      if (newsData && newsData.length > 0) {
+         localNewsItems = newsData;
+         // Mark them as read
+         await supabase.from("local_news_cache")
+           .update({ is_read: true })
+           .in("id", localNewsItems.map(n => n.id));
+      }
+    } catch (e) {
+      console.error("[Master Clock] Error fetching local news cache", e);
+    }
+
     const liveWeather = await getLiveWeather(cityId);
 
     const schedule = [];
@@ -351,12 +381,16 @@ export async function POST(request: Request) {
       }
 
       // 2. Jocktalk (Intro/Topic)
-      const rjScript1 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, "upcoming hits", liveWeather, globalRjPrompt);
-      let ttsUrl = `/api/broadcast/tts?blockId=temp&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
+      const newsItem1 = localNewsItems.length > 0 ? localNewsItems[0] : null;
+      const rjScript1 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, "upcoming hits", liveWeather, newsItem1, globalRjPrompt);
+      
+      // Override TTS Voice for Night Persona
+      const voiceId = currentShow.id === "global_club" ? "cgSgspJ2msm6clMCkdW9" : rjProfile.voiceId; // "cgSgspJ2msm6clMCkdW9" = Jessica (American)
+      let ttsUrl = `/api/broadcast/tts?blockId=temp&voiceId=${voiceId}&cb=${Date.now()}`;
       let rjDur1 = Math.floor((rjScript1.length / 10.0) * 1000) + 3500; 
       
-      const blockId1 = addElement('jocktalk', rjDur1, ttsUrl, { transcript: rjScript1, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
-      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId1}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
+      const blockId1 = addElement('jocktalk', rjDur1, ttsUrl, { transcript: rjScript1, rjName: rjProfile.name, rjVoice: voiceId });
+      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId1}&voiceId=${voiceId}&cb=${Date.now()}`;
 
       // 3. Song 1
       const song1 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
@@ -375,10 +409,12 @@ export async function POST(request: Request) {
       addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
 
       // 7. Jocktalk (Content wrap)
-      const rjScript2 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex + 1, song2.title, "more hits", liveWeather, globalRjPrompt);
+      const newsItem2 = localNewsItems.length > 1 ? localNewsItems[1] : null;
+      const rjScript2 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, 2, song2.title, "upcoming hits", liveWeather, newsItem2, globalRjPrompt);
       let rjDur2 = Math.floor((rjScript2.length / 10.0) * 1000) + 3500; 
-      const blockId2 = addElement('jocktalk', rjDur2, ttsUrl, { transcript: rjScript2, rjName: rjProfile.name, rjVoice: rjProfile.voiceId });
-      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId2}&voiceId=${rjProfile.voiceId}&cb=${Date.now()}`;
+      
+      const blockId2 = addElement('jocktalk', rjDur2, ttsUrl, { transcript: rjScript2, rjName: rjProfile.name, rjVoice: voiceId });
+      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId2}&voiceId=${voiceId}&cb=${Date.now()}`;
 
       // 8. Song 3
       const song3 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
