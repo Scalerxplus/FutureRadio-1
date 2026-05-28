@@ -116,8 +116,8 @@ export default function EntrySplashPage() {
           <div className="absolute -left-8 -bottom-8 w-24 h-24 bg-brand-teal/10 rounded-full blur-2xl group-hover:bg-brand-teal/20 transition duration-500" />
           
           <div className="flex items-center gap-3.5 relative z-10 w-full">
-            <div className="w-11 h-11 shrink-0 rounded-full bg-black border border-brand-purple/40 flex items-center justify-center p-2 shadow-[0_0_15px_rgba(127,119,221,0.25)]">
-              <img src="/logo-badge.png" alt="Future Radio Icon" className="w-full h-full object-contain" />
+            <div className="h-11 shrink-0 bg-black rounded-xl border border-brand-purple/40 flex items-center justify-center px-3 shadow-[0_0_15px_rgba(127,119,221,0.25)]">
+              <img src="/logo.png" alt="Future Radio" className="h-full w-auto object-contain py-1.5" />
             </div>
             <div className="flex flex-col">
               <span className="text-[9px] text-brand-teal font-bold tracking-[0.25em] uppercase leading-tight mb-0.5">
