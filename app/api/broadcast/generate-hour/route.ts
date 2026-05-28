@@ -78,22 +78,23 @@ const STATION_VOICES = {
   "AIRA": { name: "Future Radio Nova", voiceId: "aira" }
 };
 
-const CHILL_GENRES = [
-  "hindi lofi", "bollywood lofi chill", "indian ambient", "desi acoustic chill", 
-  "lofi beats", "ambient electronic", "indian classical chill", "bollywood slow reverb",
-  "acoustic hindi", "chillout desi", "sufi chill", "night drive lo-fi", "ghazal modern",
-  "relaxing indian beats", "hindi instrumental chill"
-];
-const PARTY_GENRES = [
-  "desi edm mix", "bollywood edm", "indian house mix", "bhangra edm dance", "punjabi edm hit",
-  "tech house", "bass boost edm", "punjabi dj remix", "trance energy", "bollywood club mix",
-  "mumbai dance", "desi bass", "festival house", "electronic dance", "party anthems", "bhangra drop"
-];
-const INDIE_GENRES = [
-  "desi indie pop", "hindi alternative pop", "indian electronic pop", "bedroom pop hindi",
-  "indie rock", "synth pop", "alternative r&b", "hindi synthwave", "indian folk pop",
-  "desi urban", "mumbai indie", "acoustic pop india", "hindi chillwave", "indie electronic"
-];
+const PREMIUM_GENRES = {
+  chill: {
+    punjabi: ["punjabi acoustic chill", "punjabi sufi lofi", "punjabi slow jam", "punjabi chillout", "acoustic punjabi hit"],
+    hindi: ["bollywood lofi chill", "desi acoustic chill", "hindi chillwave", "hindi instrumental chill", "sufi chill"],
+    intl: ["chillout lounge", "lofi beats", "ambient electronic", "chill r&b pop", "night drive lo-fi"]
+  },
+  party: {
+    punjabi: ["bhangra edm dance", "punjabi tech house", "punjabi club mix", "punjabi dj remix", "desi punjabi hit bass"],
+    hindi: ["bollywood edm", "desi bass house", "mumbai dance club", "hindi party anthems", "bollywood house mix"],
+    intl: ["festival tech house", "global party anthems", "electronic dance", "trance energy", "bass boost edm"]
+  },
+  indie: {
+    punjabi: ["punjabi indie pop", "punjabi folk alternative", "urban punjabi chill", "desi punjabi bedroom pop"],
+    hindi: ["desi indie pop", "hindi alternative pop", "indian folk pop", "hindi synthwave", "mumbai indie"],
+    intl: ["indie electronic", "synth pop", "alternative r&b", "indie rock pop", "bedroom pop"]
+  }
+};
 
 const ZAPPERS = [
   "/audio/Zappers/zapper_swoosh_01.mp3",
@@ -117,17 +118,27 @@ function getCurrentShow(istHour: number) {
 }
 
 function getSearchQueryForShow(show: any) {
-  let genreArray = INDIE_GENRES;
+  let vibe = "indie";
   
   if (show.id === "night_shift" || show.id === "morning_zen") {
-      genreArray = CHILL_GENRES;
-  } else if (show.id === "global_club") {
-      genreArray = PARTY_GENRES;
-  } else if (show.energy === "high") {
-      genreArray = PARTY_GENRES;
+      vibe = "chill";
+  } else if (show.id === "global_club" || show.energy === "high") {
+      vibe = "party";
+  }
+
+  // 35% Punjabi, 35% Hindi, 30% International
+  const roll = Math.random() * 100;
+  let categoryArray = [];
+
+  if (roll < 35) {
+      categoryArray = PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES].punjabi;
+  } else if (roll < 70) {
+      categoryArray = PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES].hindi;
+  } else {
+      categoryArray = PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES].intl;
   }
   
-  return genreArray[Math.floor(Math.random() * genreArray.length)];
+  return categoryArray[Math.floor(Math.random() * categoryArray.length)];
 }
 
 async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>): Promise<AudiusTrack> {
@@ -151,18 +162,30 @@ async function getSong(searchQuery: string, cityId: string, playedSongs: Set<str
     }
   }
 
-  // Filter out played songs
-  let unplayedTracks = tracks.filter(t => !playedSongs.has(t.id));
+  // Filter out played songs and apply strict duration limits (120s to 420s)
+  let validTracks = tracks.filter(t => 
+    !playedSongs.has(t.id) && 
+    t.durationSeconds >= 120 && 
+    t.durationSeconds <= 420
+  );
   
-  // If all returned tracks are already played, reset memory to prevent crashing
-  if (unplayedTracks.length === 0) {
-      console.warn(`[Master Clock] All ${tracks.length} tracks for '${cleanQuery}' were already played. Resetting memory.`);
-      playedSongs.clear();
-      unplayedTracks = tracks;
+  // If no valid tracks exist within the time limit, fall back to any unplayed track
+  if (validTracks.length === 0) {
+      console.warn(`[Master Clock] No unplayed tracks in 2-7 min range for '${cleanQuery}'. Relaxing duration limits.`);
+      validTracks = tracks.filter(t => !playedSongs.has(t.id));
+      
+      // If still empty, all tracks were played. Reset memory.
+      if (validTracks.length === 0) {
+          console.warn(`[Master Clock] All ${tracks.length} tracks for '${cleanQuery}' were already played. Resetting memory.`);
+          playedSongs.clear();
+          // Still try to enforce duration even if played before
+          validTracks = tracks.filter(t => t.durationSeconds >= 120 && t.durationSeconds <= 420);
+          if (validTracks.length === 0) validTracks = tracks; // Ultimate fallback
+      }
   }
 
   // Pick a random track from the remaining ones
-  const track = unplayedTracks[Math.floor(Math.random() * unplayedTracks.length)];
+  const track = validTracks[Math.floor(Math.random() * validTracks.length)];
   
   playedSongs.add(track.id);
   return track;
