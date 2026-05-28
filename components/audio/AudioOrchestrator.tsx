@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useAudioStore } from "./useAudioStore";
+import { useAudioStore, unlockAudio } from "./useAudioStore";
 import { useUiStore, useCityStore } from "@/lib/store";
 import { getBroadcastSchedule } from "@/lib/supabase/playlist";
 import { createClient } from "@/lib/supabase/client";
@@ -142,10 +142,31 @@ export default function AudioOrchestrator() {
     };
   }, []);
 
+  // 1.5 Global interaction listener to auto-unlock audio on first touch/scroll anywhere
+  useEffect(() => {
+    if (hasGesture) return;
+    
+    const unlockFn = () => {
+      unlockAudio();
+      setHasGesture(true);
+      if (!isPlaying) setIsPlaying(true);
+    };
+
+    window.addEventListener("click", unlockFn, { once: true });
+    window.addEventListener("touchstart", unlockFn, { once: true });
+    window.addEventListener("scroll", unlockFn, { once: true });
+    window.addEventListener("keydown", unlockFn, { once: true });
+
+    return () => {
+      window.removeEventListener("click", unlockFn);
+      window.removeEventListener("touchstart", unlockFn);
+      window.removeEventListener("scroll", unlockFn);
+      window.removeEventListener("keydown", unlockFn);
+    };
+  }, [hasGesture, isPlaying, setHasGesture, setIsPlaying]);
+
   // 2. Fetch Master Clock and Schedule on Mount
   useEffect(() => {
-    if (!hasGesture) return;
-
     let active = true;
     async function initSync() {
       try {
