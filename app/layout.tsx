@@ -29,11 +29,11 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
   title: "Future Radio | India's First Autonomous AI Virtual Radio Station",
-  description: "Experience the next generation of sound. Future Radio is India's first 100% autonomous, AI-powered virtual radio station. Freeing radio from heavy infrastructure and legacy policies.",
+  description: "Experience the next generation of sound. Future Radio is India's first 100% autonomous, AI-powered virtual radio station. The New-age radio station.",
   keywords: ["radio", "internet radio india", "ai radio station", "virtual radio", "future radio", "indie music", "web3 radio", "audius india"],
   openGraph: {
     title: "Future Radio | India's First Autonomous AI Radio",
-    description: "Freeing radio from heavy infrastructure and legacy policies. Tune into the future of sound with India's 100% autonomous virtual radio station.",
+    description: "The New-age radio station. Tune into the future of sound with India's 100% autonomous virtual radio.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",
     images: [
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Future Radio | AI Virtual Radio Station",
-    description: "India's first 100% autonomous, AI-powered virtual radio station.",
+    description: "India's first 100% autonomous, AI-powered virtual radio station. The New-age radio.",
     images: ["/logo-horizontal.png"],
   },
   icons: {
@@ -97,7 +97,7 @@ export default function RootLayout({
               "name": "Future Radio",
               "url": "https://thefutureradio.com",
               "logo": "https://thefutureradio.com/logo-badge.png",
-              "description": "India's first 100% autonomous, AI-powered virtual radio station. Freeing radio from heavy infrastructure.",
+              "description": "India's first 100% autonomous, AI-powered virtual radio station. The New-age radio station.",
               "sameAs": [
                 "https://thefutureradio.com"
               ]
