@@ -486,10 +486,12 @@ export default function AudioOrchestrator() {
     if (audiusRef.current && audiusRef.current.paused) audiusRef.current.play().catch(() => {});
     
     const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+    if (audiusRef.current && !audiusRef.current.src) audiusRef.current.src = silentSrc;
     if (audioRef.current && !audioRef.current.src) audioRef.current.src = silentSrc;
     if (bedRef.current && !bedRef.current.src) bedRef.current.src = silentSrc;
     if (jingleRef.current && !jingleRef.current.src) jingleRef.current.src = silentSrc;
 
+    audiusRef.current?.play().catch(() => {});
     audioRef.current?.play().catch(() => {});
     bedRef.current?.play().catch(() => {});
     jingleRef.current?.play().catch(() => {});
