@@ -103,8 +103,8 @@ export default function RadioPlayerPage() {
   // Share functionality with Web Share API
   const handleShare = async () => {
     const shareData = {
-      title: "Future Radio",
-      text: "Vibe with GenZ on Future Radio 📻 - 100% Autonomous AI Radio Station. Tune in live!",
+      title: "Future Radio | Radio Reborn",
+      text: "The New-age radio station is here. Tune into Future Radio 📻 — India's first 100% autonomous, AI-powered virtual radio.",
       url: "https://thefutureradio.com",
     };
 
