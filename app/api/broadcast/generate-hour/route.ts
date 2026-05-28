@@ -80,19 +80,19 @@ const STATION_VOICES = {
 
 const PREMIUM_GENRES = {
   chill: {
-    punjabi: ["punjabi acoustic chill", "punjabi sufi lofi", "punjabi slow jam", "punjabi chillout", "acoustic punjabi hit", "punjabi unplugged", "punjabi folk chill", "punjabi romantic chill", "punjabi sad lofi", "punjabi ghazal"],
-    hindi: ["bollywood lofi chill", "desi acoustic chill", "hindi chillwave", "hindi instrumental chill", "sufi chill", "ghazal lofi", "bollywood sad romance chill", "hindi unplugged acoustic", "indian classical fusion", "coke studio chill", "bollywood 90s lofi", "sufi rock acoustic"],
-    intl: ["chillout lounge", "lofi beats", "ambient electronic", "chill r&b pop", "night drive lo-fi"]
+    punjabi: ["punjabi lofi", "punjabi chill", "punjabi acoustic", "punjabi slow", "desi chill"],
+    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill"],
+    intl: ["lofi beats", "chillout", "ambient electronic", "chillhop", "night drive lo-fi"]
   },
   party: {
-    punjabi: ["bhangra edm dance", "punjabi tech house", "punjabi club mix", "punjabi dj remix", "desi punjabi hit bass", "punjabi hip hop", "punjabi trap bass", "bhangra mashup dj", "punjabi wedding mix", "punjabi drill"],
-    hindi: ["bollywood edm", "desi bass house", "mumbai dance club", "hindi party anthems", "bollywood house mix", "bollywood remix dj", "desi hip hop party", "hindi trap mix", "bollywood mashup", "hindi item song mix", "desi dhol bass"],
-    intl: ["festival tech house", "global party anthems", "electronic dance", "trance energy", "bass boost edm"]
+    punjabi: ["punjabi trap", "punjabi edm", "bhangra bass", "desi trap", "punjabi dj"],
+    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm"],
+    intl: ["tech house", "festival bass", "electronic dance", "house mix", "bass boost"]
   },
   indie: {
-    punjabi: ["punjabi indie pop", "punjabi folk alternative", "urban punjabi chill", "desi punjabi bedroom pop", "punjabi rap indie", "punjabi R&B", "punjabi lofi hip hop", "urban punjabi pop"],
-    hindi: ["desi indie pop", "hindi alternative pop", "indian folk pop", "hindi synthwave", "mumbai indie", "indian lo-fi hip hop", "desi rap", "hindi bedroom pop", "indian shoegaze", "mumbai underground"],
-    intl: ["indie electronic", "synth pop", "alternative r&b", "indie rock pop", "bedroom pop"]
+    punjabi: ["punjabi pop", "punjabi hip hop", "desi hip hop", "punjabi rap"],
+    hindi: ["desi indie", "hindi pop", "indian lofi hip hop", "desi rap", "hindi synth"],
+    intl: ["synth pop", "indie electronic", "alternative pop", "bedroom pop"]
   }
 };
 
@@ -150,15 +150,16 @@ async function getSong(searchQuery: string, cityId: string, playedSongs: Set<str
     console.warn(`[Master Clock] No Audius track found for query: ${cleanQuery}. Using safe fallback.`);
     tracks = await searchAudiusTrack("hindi lofi chill");
     if (tracks.length === 0) {
+        // If API is completely down, use a hardcoded safe fallback track so we don't get dead air
         const track = {
-            id: "system-fallback",
-            title: "Future Radio Safe Fallback",
+            id: "system-fallback-" + Math.random().toString(36).substring(7),
+            title: "Future Radio Chill Mix (Backup)",
             artist: "System",
-            durationSeconds: 200,
-            streamUrl: ""
+            durationSeconds: 339,
+            streamUrl: "https://discoveryprovider.audius.co/v1/tracks/50ENP3g/stream?app_name=FutureRadio"
         };
         playedSongs.add(track.id);
-        return track;
+        return track as AudiusTrack;
     }
   }
 
