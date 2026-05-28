@@ -78,9 +78,22 @@ const STATION_VOICES = {
   "AIRA": { name: "Future Radio Nova", voiceId: "aira" }
 };
 
-const CHILL_GENRES = ["hindi lofi", "bollywood lofi chill", "indian ambient", "desi acoustic chill"];
-const PARTY_GENRES = ["desi edm mix", "bollywood edm", "indian house mix", "bhangra edm dance", "punjabi edm hit"];
-const INDIE_GENRES = ["desi indie pop", "hindi alternative pop", "indian electronic pop", "bedroom pop hindi"];
+const CHILL_GENRES = [
+  "hindi lofi", "bollywood lofi chill", "indian ambient", "desi acoustic chill", 
+  "lofi beats", "ambient electronic", "indian classical chill", "bollywood slow reverb",
+  "acoustic hindi", "chillout desi", "sufi chill", "night drive lo-fi", "ghazal modern",
+  "relaxing indian beats", "hindi instrumental chill"
+];
+const PARTY_GENRES = [
+  "desi edm mix", "bollywood edm", "indian house mix", "bhangra edm dance", "punjabi edm hit",
+  "tech house", "bass boost edm", "punjabi dj remix", "trance energy", "bollywood club mix",
+  "mumbai dance", "desi bass", "festival house", "electronic dance", "party anthems", "bhangra drop"
+];
+const INDIE_GENRES = [
+  "desi indie pop", "hindi alternative pop", "indian electronic pop", "bedroom pop hindi",
+  "indie rock", "synth pop", "alternative r&b", "hindi synthwave", "indian folk pop",
+  "desi urban", "mumbai indie", "acoustic pop india", "hindi chillwave", "indie electronic"
+];
 
 const ZAPPERS = [
   "/audio/Zappers/zapper_swoosh_01.mp3",
@@ -120,22 +133,37 @@ function getSearchQueryForShow(show: any) {
 async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>): Promise<AudiusTrack> {
   const cleanQuery = searchQuery.replace(/official audio|official video/gi, "").trim();
   
-  let track = await searchAudiusTrack(cleanQuery);
+  let tracks = await searchAudiusTrack(cleanQuery);
   
-  if (!track) {
+  if (tracks.length === 0) {
     console.warn(`[Master Clock] No Audius track found for query: ${cleanQuery}. Using safe fallback.`);
-    track = await searchAudiusTrack("hindi lofi chill");
-    if (!track) {
-        track = {
+    tracks = await searchAudiusTrack("hindi lofi chill");
+    if (tracks.length === 0) {
+        const track = {
             id: "system-fallback",
             title: "Future Radio Safe Fallback",
             artist: "System",
             durationSeconds: 200,
             streamUrl: ""
         };
+        playedSongs.add(track.id);
+        return track;
     }
   }
 
+  // Filter out played songs
+  let unplayedTracks = tracks.filter(t => !playedSongs.has(t.id));
+  
+  // If all returned tracks are already played, reset memory to prevent crashing
+  if (unplayedTracks.length === 0) {
+      console.warn(`[Master Clock] All ${tracks.length} tracks for '${cleanQuery}' were already played. Resetting memory.`);
+      playedSongs.clear();
+      unplayedTracks = tracks;
+  }
+
+  // Pick a random track from the remaining ones
+  const track = unplayedTracks[Math.floor(Math.random() * unplayedTracks.length)];
+  
   playedSongs.add(track.id);
   return track;
 }
