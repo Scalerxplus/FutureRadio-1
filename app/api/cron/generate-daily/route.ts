@@ -51,8 +51,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Daily schedule generation completed successfully.",
-      dateGeneratedFor: `${year}-${month}-${day}`
+      message: "Daily schedule generation completed successfully."
     });
 
   } catch (err: unknown) {
