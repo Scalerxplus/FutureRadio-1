@@ -64,6 +64,45 @@ function playRadioZapper() {
   }
 }
 
+let globalAudioCtx: AudioContext | null = null;
+let globalCompressor: DynamicsCompressorNode | null = null;
+let sourcesAttached = false;
+
+function initWebAudioCompressor(elements: (HTMLAudioElement | null)[]) {
+  if (typeof window === "undefined" || !(window.AudioContext || (window as any).webkitAudioContext)) return;
+  if (!globalAudioCtx) {
+    globalAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    globalCompressor = globalAudioCtx.createDynamicsCompressor();
+    // Configure for heavy FM broadcast normalization
+    globalCompressor.threshold.value = -24; // Compress anything above -24dB heavily
+    globalCompressor.knee.value = 30; // Smooth compression transition
+    globalCompressor.ratio.value = 12; // High ratio for leveling out quiet indie tracks vs loud hits
+    globalCompressor.attack.value = 0.003; // Fast attack to catch peaks
+    globalCompressor.release.value = 0.25; // Smooth release
+    globalCompressor.connect(globalAudioCtx.destination);
+  }
+  
+  if (!sourcesAttached && elements.every(el => el !== null)) {
+    try {
+      elements.forEach(el => {
+        if (el) {
+          // Connect each raw audio element to the compressor instead of direct output
+          const source = globalAudioCtx!.createMediaElementSource(el);
+          source.connect(globalCompressor!);
+        }
+      });
+      sourcesAttached = true;
+      console.log("[Web Audio API] Broadcast Compressor & Loudness Normalizer initialized");
+    } catch(e) {
+      console.warn("[Web Audio API] Could not attach sources (maybe already attached)", e);
+    }
+  }
+  
+  if (globalAudioCtx.state === "suspended") {
+    globalAudioCtx.resume().catch(() => {});
+  }
+}
+
 export default function AudioOrchestrator() {
   const { mode } = useUiStore();
   const { cityId } = useCityStore();
@@ -150,6 +189,7 @@ export default function AudioOrchestrator() {
       unlockAudio(true);
       setHasGesture(true);
       if (!isPlaying) setIsPlaying(true);
+      initWebAudioCompressor([audiusRef.current, audioRef.current, jingleRef.current, bedRef.current, keepAliveRef.current]);
     };
 
     window.addEventListener("click", unlockFn, { once: true });
