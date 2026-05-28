@@ -20,6 +20,29 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   const [isGeneratingBatch, setIsGeneratingBatch] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
 
+  // Diagnostics State
+  const [isRunningDiagnostics, setIsRunningDiagnostics] = useState(false);
+
+  const handleRunDiagnostics = async () => {
+    if (!confirm("Run System Diagnostics? This will scan the next 24 hours for overlaps or missing data and automatically rebuild corrupted hours.")) return;
+    
+    setIsRunningDiagnostics(true);
+    try {
+      const res = await fetch("/api/cron/self-healing");
+      const data = await res.json();
+      if (data.success) {
+        alert(`Diagnostics Complete.\nIssues Found: ${data.issuesFound}\nHealed: ${data.healed}\nDetails:\n${data.details.join("\\n")}`);
+        if (data.healed > 0) window.location.reload();
+      } else {
+        alert("Diagnostics failed: " + data.error);
+      }
+    } catch (err) {
+      alert("Failed to run diagnostics.");
+    } finally {
+      setIsRunningDiagnostics(false);
+    }
+  };
+
   const handleGenerateTomorrow = async () => {
     if (!confirm("Are you sure you want to generate the next 24 hours of programming? This will take a few minutes.")) return;
     
@@ -263,6 +286,15 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           >
             <Target size={18} className="text-red-500" />
             Now Playing
+          </button>
+          <button 
+            onClick={handleRunDiagnostics}
+            disabled={isRunningDiagnostics}
+            className="flex items-center gap-2 bg-blue-900/40 hover:bg-blue-800 text-blue-300 hover:text-white px-4 py-2 rounded-lg font-medium transition-colors border border-blue-500/30 disabled:opacity-50"
+            title="Scan for missing or overlapping hours and self-heal"
+          >
+            <AlertCircle size={18} />
+            {isRunningDiagnostics ? "Scanning..." : "Run Diagnostics"}
           </button>
           <button 
             onClick={handleGenerateTomorrow}

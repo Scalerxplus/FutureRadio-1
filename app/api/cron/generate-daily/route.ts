@@ -68,9 +68,20 @@ export async function GET(request: Request) {
 
     console.log("[Daily Cron] Successfully generated 24-hour schedule for tomorrow.");
 
+    // Trigger the Self-Healing Watchdog to verify the integrity of the generated schedule
+    console.log("[Daily Cron] Triggering Self-Healing Diagnostics...");
+    try {
+        await fetch(`${baseUrl}/api/cron/self-healing`, {
+            method: "GET",
+            headers: request.headers.get("authorization") ? { "authorization": request.headers.get("authorization") as string } : {}
+        });
+    } catch (e) {
+        console.error("[Daily Cron] Failed to trigger self-healing:", e);
+    }
+
     return NextResponse.json({
       success: true,
-      message: "Daily schedule generation completed successfully."
+      message: "Daily schedule generation and diagnostics completed successfully."
     });
 
   } catch (err: unknown) {
