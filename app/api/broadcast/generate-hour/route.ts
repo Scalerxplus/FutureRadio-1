@@ -450,7 +450,25 @@ export async function POST(request: Request) {
     const playedSongs = new Set<string>();
     const playedSweepers = new Set<string>();
 
+    // Preflight Check: Is the Audius API down?
+    const preflightSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+    const isFallbackMode = preflightSong.id.startsWith("system-fallback");
+    if (!isFallbackMode) {
+        playedSongs.delete(preflightSong.id);
+    } else {
+        console.warn("[Master Clock] Preflight failed. Engaging STRICT FALLBACK MODE for this hour.");
+    }
+
     while (currentTimeMs < targetEndTime) {
+      if (isFallbackMode) {
+          const fallbackTrack = await getSong("fallback", cityId, playedSongs);
+          addElement('song', getSafeSongDuration(fallbackTrack), fallbackTrack.streamUrl, { title: fallbackTrack.title, artist: fallbackTrack.artist, trackId: fallbackTrack.id });
+          
+          const zapper = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
+          addElement('sweeper', await getLocalAudioDuration(zapper), zapper, { title: "Zapper Transition" });
+          continue;
+      }
+
       // 1. TOTH Station ID (Only once per hour at segment 1)
       if (segmentIndex === 1) {
         const jingleList = STATION_IDS[currentShow.energy] || STATION_IDS.mid;
