@@ -1,141 +1,159 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Settings, Save, Sparkles, Music, CheckCircle } from "lucide-react";
-
-const MOODS = [
-  { id: "high_energy", name: "High Energy (Party/Drive)", color: "bg-red-500" },
-  { id: "chill_lofi", name: "Chill & Lo-Fi (Late Night)", color: "bg-purple-500" },
-  { id: "romantic", name: "Romantic Hits", color: "bg-pink-500" },
-  { id: "retro", name: "Retro Classics", color: "bg-orange-500" },
-  { id: "mixed", name: "Mixed (Daytime Rotation)", color: "bg-blue-500" }
-];
+import { Save, Mic2, Languages, Music, Info } from "lucide-react";
+import { saveStationSettings, getStationSettings } from "./actions";
 
 export default function SettingsPage() {
-  const [activeMood, setActiveMood] = useState("high_energy");
-  const [rjPrompt, setRjPrompt] = useState(
-    "You are RJ AIRA, a vibrant, highly energetic, and witty radio jockey for 'Future Radio'. Your tone is extremely Gen-Z, stylish, and conversational Hinglish. You love EDM music and keeping the listeners hyped."
-  );
-  
+  const [cityId, setCityId] = useState("raipur");
+  const [voiceId, setVoiceId] = useState("pm");
+  const [language, setLanguage] = useState("hi");
+  const [rjPrompt, setRjPrompt] = useState("");
+  const [playlistMood, setPlaylistMood] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  // In a real app, we would fetch these settings from Supabase on mount
   useEffect(() => {
-    // Simulated fetch
-  }, []);
+    async function load() {
+      const { data } = await getStationSettings(cityId);
+      if (data) {
+        setVoiceId(data.voice_id || "pm");
+        setLanguage(data.language || "hi");
+        setRjPrompt(data.rj_prompt || "");
+        setPlaylistMood(data.playlist_mood || "");
+      }
+    }
+    load();
+  }, [cityId]);
 
   const handleSave = async () => {
     setIsSaving(true);
-    setSuccess(false);
-
-    try {
-      const response = await fetch("/api/admin/settings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rjPrompt, playlistMood: activeMood, cityId: "raipur" })
-      });
-      
-      if (!response.ok) throw new Error("Failed to save settings");
-      
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsSaving(false);
-    }
+    await saveStationSettings(cityId, voiceId, language, rjPrompt, playlistMood);
+    setIsSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
   };
 
   return (
-    <div className="p-8 max-w-4xl pb-24">
-      <header className="mb-8 flex justify-between items-end">
-        <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Station Settings</h2>
-          <p className="text-gray-400">Instantly change the broadcast vibe and AI persona.</p>
-        </div>
-        <button 
-          onClick={handleSave}
-          disabled={isSaving}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all ${
-            success 
-              ? 'bg-green-600 text-white'
-              : 'bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50'
-          }`}
-        >
-          {isSaving ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          ) : success ? (
-            <>
-              <CheckCircle size={18} /> Saved
-            </>
-          ) : (
-            <>
-              <Save size={18} /> Apply Changes
-            </>
-          )}
-        </button>
+    <div className="p-8 max-w-4xl">
+      <header className="mb-10">
+        <h2 className="text-3xl font-bold text-white mb-2">Station Settings</h2>
+        <p className="text-gray-400">Configure core AI RJ behavior, voice, and language for the broadcast.</p>
       </header>
 
       <div className="space-y-8">
-        
-        {/* Playlist Mood Selector */}
-        <section className="bg-[#111118] border border-[#1a1a24] rounded-2xl p-6 shadow-xl">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-blue-500/10">
-              <Music className="text-blue-400" size={20} />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-white">Broadcast Mood</h3>
-              <p className="text-sm text-gray-400">Changes the type of songs and sweepers the auto-pilot selects.</p>
-            </div>
-          </div>
+        {/* City Selector */}
+        <div className="bg-[#111118] border border-[#1a1a24] p-6 rounded-2xl">
+          <label className="block text-sm font-bold text-gray-300 mb-2">Target Station (City)</label>
+          <select 
+            value={cityId} 
+            onChange={(e) => setCityId(e.target.value)}
+            className="w-full bg-[#1a1a24] border border-[#2a2a35] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-primary"
+          >
+            <option value="raipur">Raipur, CG</option>
+            <option value="indore">Indore, MP</option>
+            <option value="nagpur">Nagpur, MH</option>
+          </select>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MOODS.map((mood) => (
-              <div 
-                key={mood.id}
-                onClick={() => setActiveMood(mood.id)}
-                className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                  activeMood === mood.id 
-                    ? 'border-blue-500 bg-blue-500/10' 
-                    : 'border-[#2a2a34] hover:border-gray-500 bg-[#15151e]'
-                }`}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <span className={`w-3 h-3 rounded-full ${mood.color} ${activeMood === mood.id ? 'animate-pulse' : ''}`} />
-                  <span className={`font-semibold ${activeMood === mood.id ? 'text-white' : 'text-gray-300'}`}>
-                    {mood.name}
-                  </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* AI Voice Engine */}
+          <div className="bg-[#111118] border border-[#1a1a24] p-6 rounded-2xl space-y-4">
+            <div className="flex items-center gap-3 text-brand-primary">
+              <Mic2 size={24} />
+              <h3 className="text-lg font-bold text-white">AI Voice Engine</h3>
+            </div>
+            <p className="text-xs text-gray-400">Select the TTS synthesis engine. Changes take effect on the next hourly generation.</p>
+            
+            <div className="space-y-3">
+              <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
+                <input type="radio" name="voice" value="pm" checked={voiceId === "pm"} onChange={() => setVoiceId("pm")} className="w-4 h-4 accent-brand-primary" />
+                <div>
+                  <div className="text-white font-bold">RJ Prameesh (Male)</div>
+                  <div className="text-[10px] text-gray-500">Kokoro-82M Engine • Ultra-Low Latency</div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* AI RJ Persona Prompt */}
-        <section className="bg-[#111118] border border-[#1a1a24] rounded-2xl p-6 shadow-xl">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-purple-500/10">
-              <Sparkles className="text-purple-400" size={20} />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-white">AI RJ System Persona</h3>
-              <p className="text-sm text-gray-400">The core prompt that dictates how the AI RJ behaves and talks.</p>
+              </label>
+              <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
+                <input type="radio" name="voice" value="aaira" checked={voiceId === "aaira"} onChange={() => setVoiceId("aaira")} className="w-4 h-4 accent-brand-primary" />
+                <div>
+                  <div className="text-white font-bold">RJ Aaira (Female)</div>
+                  <div className="text-[10px] text-gray-500">F5-TTS Engine • High Expressiveness</div>
+                </div>
+              </label>
             </div>
           </div>
 
-          <textarea
-            value={rjPrompt}
-            onChange={(e) => setRjPrompt(e.target.value)}
-            className="w-full h-48 bg-[#1a1a24] border border-[#2a2a34] rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all resize-none font-mono text-sm leading-relaxed"
-          />
-          <div className="mt-3 flex justify-between items-center text-sm text-gray-500">
-            <p>Tip: Mention specific phrases or taglines you want the AI to use frequently.</p>
-            <p>{rjPrompt.length} characters</p>
+          {/* Broadcast Language */}
+          <div className="bg-[#111118] border border-[#1a1a24] p-6 rounded-2xl space-y-4">
+            <div className="flex items-center gap-3 text-blue-400">
+              <Languages size={24} />
+              <h3 className="text-lg font-bold text-white">Broadcast Language</h3>
+            </div>
+            <p className="text-xs text-gray-400">Force the AI RJ to use a specific linguistic constraint during script generation.</p>
+            
+            <div className="space-y-3">
+              <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
+                <input type="radio" name="language" value="hi" checked={language === "hi"} onChange={() => setLanguage("hi")} className="w-4 h-4 accent-blue-500" />
+                <div>
+                  <div className="text-white font-bold">Hinglish / Hindi (Devenagari)</div>
+                  <div className="text-[10px] text-gray-500">Natural Gen-Z mix of Hindi & English words</div>
+                </div>
+              </label>
+              <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
+                <input type="radio" name="language" value="en" checked={language === "en"} onChange={() => setLanguage("en")} className="w-4 h-4 accent-blue-500" />
+                <div>
+                  <div className="text-white font-bold">Pure English</div>
+                  <div className="text-[10px] text-gray-500">100% fluent American English (Global Club style)</div>
+                </div>
+              </label>
+            </div>
           </div>
-        </section>
+        </div>
 
+        {/* Advanced Overrides */}
+        <div className="bg-[#111118] border border-[#1a1a24] p-6 rounded-2xl space-y-6">
+          <div className="flex items-center gap-3 text-orange-400 border-b border-[#2a2a35] pb-4">
+            <Info size={24} />
+            <h3 className="text-lg font-bold text-white">Advanced Persona & Music Overrides</h3>
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold text-gray-300 mb-2">Custom RJ Persona Prompt (Optional)</label>
+            <p className="text-xs text-gray-500 mb-3">Overrides the default AI instructions. Leave blank to use defaults.</p>
+            <textarea 
+              value={rjPrompt}
+              onChange={(e) => setRjPrompt(e.target.value)}
+              placeholder="e.g., You are hosting a retro 90s show. Use 90s slang and talk about cassette tapes..."
+              className="w-full bg-[#1a1a24] border border-[#2a2a35] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-primary h-24 resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold text-gray-300 mb-2">Playlist Mood Strategy Override (Optional)</label>
+            <p className="text-xs text-gray-500 mb-3">Forces all music queries to follow this mood strategy.</p>
+            <input 
+              type="text"
+              value={playlistMood}
+              onChange={(e) => setPlaylistMood(e.target.value)}
+              placeholder="e.g., High energy Punjabi trending songs"
+              className="w-full bg-[#1a1a24] border border-[#2a2a35] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-primary"
+            />
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex justify-end pt-4">
+          <button 
+            onClick={handleSave}
+            disabled={isSaving}
+            className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white transition-all ${
+              saved ? "bg-green-500" : isSaving ? "bg-gray-600 cursor-not-allowed" : "bg-brand-primary hover:bg-brand-primary/90 shadow-[0_0_20px_rgba(255,51,102,0.3)]"
+            }`}
+          >
+            <Save size={20} />
+            {saved ? "Settings Saved Live" : isSaving ? "Saving..." : "Deploy Settings"}
+          </button>
+        </div>
       </div>
     </div>
   );

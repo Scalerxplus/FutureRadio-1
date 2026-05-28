@@ -25,19 +25,8 @@ export default function PlayerBar() {
   };
 
   if (viewMode === "bubble") {
-    return (
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => setViewMode("minimized")}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-brand-purple text-white border border-brand-purple/20 hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_15px_rgba(127,119,221,0.4)]"
-        >
-          <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping" />
-          <span className="text-xs font-semibold uppercase tracking-wider">
-            {isPlaying ? "Live Playing" : "Tune In"}
-          </span>
-        </button>
-      </div>
-    );
+    // Redundant floating LIVE PLAYING button removed to fix overlap and UI clutter
+    return null;
   }
 
   if (viewMode === "minimized") {

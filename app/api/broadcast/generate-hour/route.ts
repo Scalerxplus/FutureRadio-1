@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import Groq from "groq-sdk";
-import yts from "yt-search";
+import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
 import * as mm from "music-metadata";
 import path from "path";
 import { getLiveWeather } from "@/lib/live-data";
@@ -112,55 +112,30 @@ function getSearchQueryForShow(show: any) {
   return `${artist} ${vibe}`;
 }
 
-async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>) {
-  // Use "official audio" or "official video" instead of "lyrical" to prioritize official music labels
-  const querySuffix = Math.random() > 0.5 ? " official audio" : " official video";
-    let searchResults;
-    try {
-        searchResults = await yts(searchQuery + querySuffix);
-    } catch (e: any) {
-        console.warn(`[Master Clock] yts failed for query ${searchQuery}: ${e.message}`);
-        searchResults = { videos: [] };
-    }
+async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>): Promise<AudiusTrack> {
+  const cleanQuery = searchQuery.replace(/official audio|official video/gi, "").trim();
   
-  const excludeKeywords = ["jukebox", "mashup", "mixtape", "lofi", "8d", "status", "ringtone", "cover"];
+  let track = await searchAudiusTrack(cleanQuery);
   
-  const isCleanVideo = (v: any) => {
-    // Strict duration enforcement: Between 2 minutes and 7 minutes
-    if (v.seconds < 120 || v.seconds > 420) return false;
-    
-    // Filter out compilation/un-official keywords
-    const lowerTitle = v.title.toLowerCase();
-    for (const kw of excludeKeywords) {
-      if (lowerTitle.includes(kw)) return false;
+  if (!track) {
+    console.warn(`[Master Clock] No Audius track found for query: ${cleanQuery}. Using safe fallback.`);
+    // Safe fallback track (e.g., a generic lofi beat track ID on Audius if we knew one, 
+    // but we can just use a dummy ID and stream URL for now, or just search for "lofi")
+    track = await searchAudiusTrack("lofi hip hop");
+    if (!track) {
+        // Ultimate fallback
+        track = {
+            id: "system-fallback",
+            title: "Future Radio Safe Fallback",
+            artist: "System",
+            durationSeconds: 200,
+            streamUrl: ""
+        };
     }
-    return true;
-  };
-
-  // Primary filter: Clean videos that haven't been played
-  let validVideos = searchResults.videos.filter((v: any) => isCleanVideo(v) && !playedSongs.has(v.videoId));
-
-  // Fallback 1: If all clean videos are played, drop the unplayed requirement but KEEP the strict duration/clean filter!
-  // Repeating a proper 3-minute song is much better than a 72-minute mixtape crashing the broadcast.
-  if (validVideos.length === 0) {
-    validVideos = searchResults.videos.filter((v: any) => isCleanVideo(v));
   }
 
-  // Fallback 2: Extreme edge case where the search query returns absolutely no normal songs
-  if (validVideos.length === 0) {
-    console.warn(`[Master Clock] No clean videos found for query: ${searchQuery}. Using generic safe fallback.`);
-    // A safe fallback ID just to keep the stream alive
-    const fallbackId = "kJQP7kiw5Fk"; 
-    playedSongs.add(fallbackId);
-    return { videoId: fallbackId, title: "Future Radio Safe Fallback", seconds: 280, author: { name: "System" } };
-  }
-
-  // Pick from the top 3 most relevant results to guarantee the highest quality/official upload
-  const topResults = validVideos.slice(0, 3);
-  const selectedSong = topResults[Math.floor(Math.random() * topResults.length)];
-  
-  playedSongs.add(selectedSong.videoId);
-  return selectedSong;
+  playedSongs.add(track.id);
+  return track;
 }
 
 async function getLocalAudioDuration(urlPath: string) {
@@ -193,16 +168,20 @@ async function getJocktalk(
 
   let hookContent = "";
   if (segmentIndex === 1) {
-      hookContent = `[CLB Part 1 - Contextual Intro / Hook]: You MUST start by praising the station's sound. Example: "Future radio ka sound kitna sahi hai na" (or English equivalent). Introduce yourself as the anchor of Future Radio.`;
+      hookContent = `[CLB Part 1 - Contextual Intro / Hook]: You MUST start by praising the station's sound. Introduce yourself as the anchor. Keep it crisp.`;
   } else {
       hookContent = `[CLB Part 1 - Contextual Intro / Hook]: You MUST start by praising the previous song played (${previousSongTitle}) and giving brief credit to the artist. Transition smoothly.`;
   }
 
   let localNewsProgress = "";
-  if (localNewsCache && localNewsCache.headline) {
-      localNewsProgress = `[CLB Part 3 - Core Local Content]: Discuss this Breaking Local Utility/Infra News: "${localNewsCache.headline}" - ${localNewsCache.description}. Provide a highly intelligent, empathetic, and connecting reaction/take on it so the audience feels informed and connected.`;
+  if (topic && topic.includes("[DEMAND_OF_THE_HOUR]")) {
+      localNewsProgress = `[CLB Part 3 - DEMAND OF THE HOUR]: ${topic}`;
+  } else if (localNewsCache && localNewsCache.headline) {
+      localNewsProgress = `[CLB Part 3 - Core Local Content]: Discuss this Breaking Local Utility/Infra News factually: "${localNewsCache.headline}" - ${localNewsCache.description}. Provide a highly intelligent, empathetic reaction. No hallucination.`;
+  } else if (topic) {
+      localNewsProgress = `[CLB Part 3 - Core Topic]: The producer has requested you to discuss this specific topic/script: "${topic}". Weave this naturally into the broadcast.`;
   } else {
-      localNewsProgress = `[CLB Part 3 - Core Content]: Dive into the hourly discussion: "${topic}". Provide deep, relatable insights.`;
+      localNewsProgress = `[CLB Part 3 - Core Content]: You MUST share a deep, factual, and intelligent trivia or psychological fact about the music industry, or deeply praise the artist of the previous song (${previousSongTitle}). Add value, entertain, do not hallucinate! NEVER invent local news.`;
   }
 
   let timeOfDay = "Day";
@@ -211,25 +190,26 @@ async function getJocktalk(
   else if (istHour >= 17 && istHour < 21) timeOfDay = "Evening (Shaam)";
   else timeOfDay = "Night (Raat)";
 
+  const isEnglishForced = customRjPrompt.includes("[FORCED_LANG:en]");
+
   const prompt = `${customRjPrompt || `You are an Expert News Anchor and Data Analyst for 'Future Radio', hosting the broadcast "${currentShow.name}".
 Your name is ${rjProfile.name} (${rjProfile.gender}). You deliver data-driven, fact-based news with high professionalism and authority.`}
 
 Show Context:
 - Current Time: ${istHour}:00 IST (${timeOfDay}) in ${cityId}.
 - Show Vibe: ${currentShow.contentStrategy}
-- Hourly Topic: "${topic}"
 
 CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
-0. [CRITICAL GRAMMAR CONSTRAINT]: ${isNightPersona ? "You are hosting the Global Club EDM show. You MUST speak 100% in FLUENT AMERICAN ENGLISH. Do not use Hindi." : `Your gender is ${rjProfile.gender.toUpperCase()}. You MUST use STRICTLY ${rjProfile.gender.toUpperCase()} Hindi grammar for all verbs and pronouns.`}
+0. [CRITICAL GRAMMAR CONSTRAINT]: You MUST speak 100% in FLUENT ENGLISH. Do not use Hindi anywhere except for the final closing tag.
 1. ${hookContent}
 2. [CLB Part 2 - Live Weather & Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}).
 3. ${localNewsProgress}
 4. [CLB Part 4 - Tease Next Song]: Seamlessly transition to a short musical break featuring the track: "${upcomingSongTitle}".
-5. [CLB Part 5 - Outro]: Always end your talk EXACTLY with: "${isNightPersona ? `Keep listening to Future Radio, my name is ${rjProfile.name}, Future Radio, Hear the future.` : `Sunte rahiye Future radio, mera nam hai ${rjProfile.name}, Future Radio, Ab future suno.`}"
+5. [CLB Part 5 - Outro]: Always end your talk EXACTLY with: "Keep listening to Future Radio, my name is ${rjProfile.name}, Future Radio, Ab future suno."
 
 MANDATORY DURATION & STYLE:
-- LENGTH: You MUST write a MINIMUM of 150 words. Provide precise statistics, numbers, and deep analysis!
-- LANGUAGE: ${isNightPersona ? "Fluent, dynamic, high-energy American English. Sound like an EDM DJ at a global festival." : 'Modern, conversational Gen-Z Hinglish (a natural mix of Hindi and English vocabulary), but written STRICTLY in Devanagari script (हिंदी लिपि). For example, write "टेक्नोलॉजी" instead of "technology", "वाइब" instead of "vibe". DO NOT use pure, formal shuddh Hindi if English words are more natural. CRITICAL: You must NEVER output any A-Z English characters, write everything in Devanagari.'}
+- LENGTH: You MUST write exactly 80 to 100 words (approx 35-40 seconds of speaking time). BE CRISP, FACTUAL, AND SHARP. Do not exceed 100 words!
+- LANGUAGE: Fluent, dynamic, high-energy English. Sound like an expert international Radio DJ.
 - MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate natural breathing.
 
 Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
@@ -242,29 +222,14 @@ Output ONLY the raw script text. Do not output any titles, brackets, or translat
     });
     return chatCompletion.choices[0]?.message?.content || "Namaskar! Enjoy the music on Future Radio.";
   } catch(e) {
-    return `Aap sun rahe hain radio ka future Future Radio, main hoon aapka dost ${rjProfile.name}, aur aap mere sath hain ${currentShow.name} par. Aaj ka din ${cityId} mein bahut hi behtareen lag raha hai, aur weather bhi ekdum perfect hai. Main janta hoon ki aaj kal zindagi kitni fast-paced ho gayi hai, isliye hum yahan hain aapko thoda relax karne ke liye. Pichla gaana kaisa laga? Aise hi aur hits sunte rahiye kyunki aage aane wala hai ek aur chartbuster, "${upcomingSongTitle}". Toh kahin mat jayiye, apni seatbelt baandh lijiye, volume full kar lijiye. Sunte rahiye Future Radio, ab future suno.`;
+    return `You are tuned into the future of sound, Future Radio. I'm your host ${rjProfile.name}, chilling with you on ${currentShow.name}. It is absolutely beautiful in ${cityId} today, the weather is perfect. I know life moves fast, so we're here to help you relax. How did you like that last track? Keep vibing with us because coming up next is an absolute chartbuster, "${upcomingSongTitle}". So don't go anywhere, turn up the volume. Keep listening to Future Radio, my name is ${rjProfile.name}, Future Radio, Ab future suno.`;
   }
 }
 
 async function getTrendingHourlyTopic(cityId: string, currentShow: any) {
-  const dateString = new Date().toLocaleDateString('en-IN', { weekday: 'long', month: 'long', day: 'numeric' });
-  const prompt = `You are the Executive News Producer for 'Future Radio'.
-Generate exactly ONE breaking news or intellectual headline for the News Anchor to analyze for the entire next hour.
-City: ${cityId}. Show: ${currentShow.name} (Content Strategy: ${currentShow.contentStrategy}). Date: ${dateString}.
-The topic MUST be strictly about one of these: Share Market, Business Tycoons of India (Ambani, Adani, Tata, etc.), Economy/GDP, Indian Cricket Team, or Major Global Sports.
-It must be factual, data-driven, and highly professional.
-Keep it under 15 words. DO NOT wrap it in quotes. DO NOT output any other text, just the headline itself.`;
-
-  try {
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.9,
-    });
-    return chatCompletion.choices[0]?.message?.content?.trim().replace(/^["']|["']$/g, '') || "The psychology of nostalgia and why old music feels so comforting";
-  } catch (e) {
-    return "The massive global rise of Pop Culture and its impact";
-  }
+  // HitL architecture: We no longer hallucinate news topics using an LLM.
+  // If a human hasn't overridden the topic, we return nothing.
+  return "";
 }
 
 export async function POST(request: Request) {
@@ -275,7 +240,10 @@ export async function POST(request: Request) {
     const startTimeParam = url.searchParams.get("startTime");
     const startTime = startTimeParam ? new Date(startTimeParam) : new Date();
     
-    // TOTH Sync: Generate schedule ONLY until the end of the current hour (xx:59:59)
+    // STRICT TOTH SYNC: Always anchor the start time to the Top of the Hour (xx:00:00.000)
+    startTime.setMinutes(0, 0, 0);
+    
+    // Generate schedule ONLY until the end of the current hour (xx:59:59)
     const targetEndTime = new Date(startTime).setMinutes(59, 59, 999);
 
     const currentIstHour = getIstHour(startTime);
@@ -286,6 +254,9 @@ export async function POST(request: Request) {
 
     // --- HITL: Fetch Global Station Settings ---
     let globalRjPrompt = "";
+    let forceLanguage = "hi";
+    let forceVoiceId = "pm";
+
     const { data: settingsData } = await supabase
       .from("station_settings")
       .select("*")
@@ -297,6 +268,13 @@ export async function POST(request: Request) {
       if (settingsData[0].playlist_mood) {
          currentShow.contentStrategy = settingsData[0].playlist_mood;
          currentShow.energy = settingsData[0].playlist_mood;
+      }
+      if (settingsData[0].language) forceLanguage = settingsData[0].language;
+      if (settingsData[0].voice_id) forceVoiceId = settingsData[0].voice_id;
+
+      // Hack to pass language constraint to getJocktalk without changing signature
+      if (forceLanguage === "en") {
+        globalRjPrompt = "[FORCED_LANG:en]" + globalRjPrompt;
       }
     }
 
@@ -351,25 +329,33 @@ export async function POST(request: Request) {
     let currentTimeMs = startTime.getTime();
 
     const addElement = (type: any, durationMs: number, urlOrId: string, metadata: any = {}) => {
+      let finalDurationMs = durationMs;
+      
+      // HARD STOP: Never overshoot the 60-minute hot clock boundary (xx:59:59)
+      if (currentTimeMs + finalDurationMs > targetEndTime) {
+         finalDurationMs = targetEndTime - currentTimeMs;
+         metadata.isCapped = true; // Mark as capped so the frontend knows to cut it off gracefully
+      }
+
       const blockId = crypto.randomUUID();
       schedule.push({
         id: blockId,
         city_id: cityId,
         start_time: new Date(currentTimeMs).toISOString(),
-        end_time: new Date(currentTimeMs + durationMs).toISOString(),
-        duration_ms: durationMs,
+        end_time: new Date(currentTimeMs + finalDurationMs).toISOString(),
+        duration_ms: finalDurationMs,
         element_type: type,
         [type === 'song' ? 'youtube_id' : 'media_url']: urlOrId,
         metadata
       });
-      currentTimeMs += durationMs;
+      currentTimeMs += finalDurationMs;
       return blockId;
     };
 
     // Helper to calculate a safe song duration and prevent the "2-second zapper bug"
-    const getSafeSongDuration = (song: any) => {
-      let durMs = Math.round((song.seconds || 0) * 1000);
-      if (durMs < 60000) durMs = 240000; // Fallback to 4 mins if YT search returns a short clip or 0
+    const getSafeSongDuration = (song: AudiusTrack) => {
+      let durMs = Math.round((song.durationSeconds || 0) * 1000);
+      if (durMs < 60000) durMs = 240000; // Fallback to 4 mins if search returns a short clip or 0
       return durMs; // No more Math.min cap, let the song play fully!
     };
 
@@ -379,70 +365,130 @@ export async function POST(request: Request) {
     const playedSweepers = new Set<string>();
 
     while (currentTimeMs < targetEndTime) {
-      // 1. TOTH Station ID (Only once per hour)
+      // 1. TOTH Station ID (Only once per hour at segment 1)
       if (segmentIndex === 1) {
         const jingleList = STATION_IDS[currentShow.energy] || STATION_IDS.mid;
         const stationId = jingleList[Math.floor(Math.random() * jingleList.length)];
         addElement('station_id', await getLocalAudioDuration(stationId), stationId, { title: "Station ID" });
       }
 
-      // 2. Jocktalk (Intro/Topic)
-      const newsItem1 = localNewsItems.length > 0 ? localNewsItems[0] : null;
-      const rjScript1 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, segmentIndex, lastSongTitle, "upcoming hits", liveWeather, newsItem1, globalRjPrompt);
-      
-      // Dual-Model TTS Logic
-      const voiceId = "pm";
-      const language = currentShow.id === "global_club" ? "en" : "hi";
-      const speed = currentShow.id === "global_club" ? 0.8 : 0.95;
-      
-      let rjDur1 = Math.floor((rjScript1.length / 10.0) * 1000) + 3500; 
-      
-      const blockId1 = addElement('jocktalk', rjDur1, "", { transcript: rjScript1, rjName: rjProfile.name, rjVoice: voiceId, language, speed });
-      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId1}&voiceId=${voiceId}&language=${language}&speed=${speed}&cb=${Date.now()}`;
+      // We only allow EXACTLY 5 Jocktalk segments per hour (Hot Clock strict format)
+      if (segmentIndex <= 5) {
+          // Jocktalk Segment
+          const newsItem = localNewsItems.length >= segmentIndex ? localNewsItems[segmentIndex-1] : null;
+          
+          // Get next song details for tease (and inject Poll Winner logic)
+          let nextSongInfo;
+          let isPollWinner = false;
+          let pollWinningPercentage = 0;
 
-      // 3. Song 1
-      const song1 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
-      addElement('song', getSafeSongDuration(song1), song1.videoId, { title: song1.title, artist: song1.author.name });
-      
-      // 4. Short Sweeper
-      const sweeper1 = getSweeperByGenre(currentShow.energy, playedSweepers);
-      addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
+          if (segmentIndex === 3) {
+             const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+             
+             const { data: pastPolls } = await supabase
+               .from('daily_polls')
+               .select('*')
+               .eq('city_id', cityId)
+               .eq('poll_date', yesterday)
+               .eq('status', 'active') // It remains active until fulfilled by the Master Clock
+               .limit(1);
+               
+             if (pastPolls && pastPolls.length > 0) {
+                const poll = pastPolls[0];
+                
+                // Determine Winner
+                const v1 = poll.song1_votes || 0;
+                const v2 = poll.song2_votes || 0;
+                const v3 = poll.song3_votes || 0;
+                const totalVotes = v1 + v2 + v3;
+                
+                if (totalVotes > 0) {
+                  let winnerTitle = poll.song1_title;
+                  let winnerVotes = v1;
+                  if (v2 > winnerVotes) { winnerTitle = poll.song2_title; winnerVotes = v2; }
+                  if (v3 > winnerVotes) { winnerTitle = poll.song3_title; winnerVotes = v3; }
+                  
+                  pollWinningPercentage = Math.round((winnerVotes / totalVotes) * 100);
+                  
+                  nextSongInfo = await getSong(winnerTitle, cityId, playedSongs);
+                  isPollWinner = true;
+                  
+                  console.log(`[Master Clock] Found Poll Winner: ${winnerTitle} with ${pollWinningPercentage}% votes`);
+                  
+                  // Mark as fulfilled so it doesn't get played every hour
+                  await supabase.from('daily_polls').update({ status: 'fulfilled' }).eq('id', poll.id);
+                }
+             }
+          }
 
-      // 5. Song 2
-      const song2 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
-      addElement('song', getSafeSongDuration(song2), song2.videoId, { title: song2.title, artist: song2.author.name });
-      
-      // 6. Sweeper Before Break
-      const sweeper2 = getSweeperByGenre(currentShow.energy, playedSweepers);
-      addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
+          if (!isPollWinner) {
+              nextSongInfo = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+          }
 
-      // 7. Jocktalk (Content wrap)
-      const newsItem2 = localNewsItems.length > 1 ? localNewsItems[1] : null;
-      const rjScript2 = await getJocktalk(cityId, currentIstHour, currentShow, selectedHourlyTopic, 2, song2.title, "upcoming hits", liveWeather, newsItem2, globalRjPrompt);
-      let rjDur2 = Math.floor((rjScript2.length / 10.0) * 1000) + 3500; 
-      
-      const blockId2 = addElement('jocktalk', rjDur2, "", { transcript: rjScript2, rjName: rjProfile.name, rjVoice: voiceId, language, speed });
-      schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId2}&voiceId=${voiceId}&language=${language}&speed=${speed}&cb=${Date.now()}`;
+          let segmentTopic = selectedHourlyTopic;
+          if (isPollWinner) {
+              segmentTopic = `[POLL_WINNER] The next song is exactly what the audience voted for yesterday. Announce it loudly as the 'Community Poll Winner'! YOU MUST explicitly mention that it won with exactly ${pollWinningPercentage}% of the votes.`;
+          }
+          
+          const rjScript = await getJocktalk(cityId, currentIstHour, currentShow, segmentTopic, segmentIndex, lastSongTitle, nextSongInfo.title, liveWeather, newsItem, globalRjPrompt);
+          
+          const voiceId = forceVoiceId;
+          const language = "en";
+          const speed = 1.0;
+          let rjDur = Math.floor((rjScript.length / 10.0) * 1000) + 3500; 
+          
+          const blockId = addElement('jocktalk', rjDur, "", { transcript: rjScript, rjName: rjProfile.name, rjVoice: voiceId, language, speed });
+          schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId}&voiceId=${voiceId}&language=${language}&speed=${speed}&cb=${Date.now()}`;
 
-      // 8. Song 3
-      const song3 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
-      addElement('song', getSafeSongDuration(song3), song3.videoId, { title: song3.title, artist: song3.author.name });
+          // Play Song 1 (The Teased Song)
+          addElement('song', getSafeSongDuration(nextSongInfo), nextSongInfo.streamUrl, { title: nextSongInfo.title, artist: nextSongInfo.artist, trackId: nextSongInfo.id });
+          
+          // Short Sweeper
+          const sweeper1 = getSweeperByGenre(currentShow.energy, playedSweepers);
+          addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
 
-      // 9. Sweeper
-      const sweeper3 = getSweeperByGenre(currentShow.energy, playedSweepers);
-      addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
+          // Play Song 2
+          const song2 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+          addElement('song', getSafeSongDuration(song2), song2.streamUrl, { title: song2.title, artist: song2.artist, trackId: song2.id });
+          lastSongTitle = song2.title;
 
-      // 10. Song 4
-      const song4 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
-      addElement('song', getSafeSongDuration(song4), song4.videoId, { title: song4.title, artist: song4.author.name });
-      lastSongTitle = song4.title;
-
-      // 11. Sweeper Before Next Block
-      const sweeper4 = getSweeperByGenre(currentShow.energy, playedSweepers);
-      addElement('sweeper', await getLocalAudioDuration(sweeper4), sweeper4, { title: "Radio Sweeper" });
-
-      segmentIndex += 2;
+          // Ad Break (30 seconds placeholder, skipped on segment 5 to jump straight to outro songs)
+          if (segmentIndex < 5) {
+              // Add a generic sweeper as a bumper into the Ad
+              const sweeper2 = getSweeperByGenre(currentShow.energy, playedSweepers);
+              addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
+              
+              // 30s Ad Placeholder (Uses a silent audio track for now, user can inject actual ads later)
+              // Note: Database enum doesn't support 'ad', so we use 'sweeper' and flag it in metadata
+              addElement('sweeper', 30000, "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA", { title: "Sponsor Break", isAd: true });
+              
+              // Sweeper bumper out of the Ad
+              const sweeper3 = getSweeperByGenre(currentShow.energy, playedSweepers);
+              addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
+          } else {
+              // End of segment 5, just a sweeper
+              const sweeperOut = getSweeperByGenre(currentShow.energy, playedSweepers);
+              addElement('sweeper', await getLocalAudioDuration(sweeperOut), sweeperOut, { title: "Radio Sweeper" });
+          }
+          
+          segmentIndex++;
+      } else {
+          // Fill the remaining time in the hour (52-minute music budget) without any more RJ talks
+          const fillSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+          addElement('song', getSafeSongDuration(fillSong), fillSong.streamUrl, { title: fillSong.title, artist: fillSong.artist, trackId: fillSong.id });
+          
+          const fillSweeper = getSweeperByGenre(currentShow.energy, playedSweepers);
+          addElement('sweeper', await getLocalAudioDuration(fillSweeper), fillSweeper, { title: "Radio Sweeper" });
+      }
     }
+
+    // Wipe any existing schedule blocks in this hour window to allow clean JIT regeneration
+    await supabase
+      .from("broadcast_schedule")
+      .delete()
+      .eq("city_id", cityId)
+      .gte("start_time", new Date(startTime.getTime()).toISOString())
+      .lt("start_time", new Date(targetEndTime).toISOString());
 
     const { error } = await supabase.from("broadcast_schedule").insert(schedule);
 

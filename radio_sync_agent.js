@@ -9,7 +9,6 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const VERCEL_API = "http://127.0.0.1:3000";
 const GPU_WORKER = "http://127.0.0.1:8000";
-const HOURS_TO_BUFFER = 4;
 
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -17,6 +16,30 @@ async function sleep(ms) {
 
 async function runBatch() {
   console.log("🚀 Starting Future Radio 4-Hour Sync Agent...\n");
+
+  // 0. Cleanup orphaned local outputs older than 24 hours
+  console.log("[0] Cleaning up old audio files...");
+  try {
+      const outDir = path.join(process.cwd(), "kokoro-tts-server", "outputs");
+      if (fs.existsSync(outDir)) {
+          const files = fs.readdirSync(outDir);
+          const now = Date.now();
+          let deleted = 0;
+          for (const f of files) {
+              if (f.endsWith(".wav")) {
+                  const fp = path.join(outDir, f);
+                  const stats = fs.statSync(fp);
+                  if (now - stats.mtimeMs > 24 * 60 * 60 * 1000) {
+                      fs.unlinkSync(fp);
+                      deleted++;
+                  }
+              }
+          }
+          console.log(`    🧹 Deleted ${deleted} old files.`);
+      }
+  } catch(e) {
+      console.log(`    ❌ Cleanup failed:`, e.message);
+  }
 
   // 1. Check current schedule and build up to 4 hours
   console.log("[1] Checking Master Clock Buffer...");
@@ -35,7 +58,9 @@ async function runBatch() {
   
   console.log(`Current Buffer: ${hoursAhead} hours ahead.`);
 
-  while (hoursAhead < HOURS_TO_BUFFER) {
+  // JIT Logic: We only ever want to generate exactly the next upcoming hour.
+  // We do not need a 4-hour buffer anymore.
+  if (hoursAhead < 1) {
     const nextHour = new Date(latestTime);
     nextHour.setHours(nextHour.getHours() + 1);
     nextHour.setMinutes(0, 0, 0); // Start of next hour
@@ -47,7 +72,7 @@ async function runBatch() {
         });
         if (!res.ok) {
             console.error("Failed to generate hour on Vercel. Error code:", res.status);
-            break;
+            return;
         }
         const json = await res.json();
         console.log("   -> Success:", json.message);
@@ -56,7 +81,7 @@ async function runBatch() {
     } catch (e) {
         console.error("Error calling Vercel API:", e.message);
         console.log("Are you sure Vercel is deployed? We can fallback to localhost:3000 if needed.");
-        break;
+        return;
     }
   }
 
@@ -71,7 +96,7 @@ async function runBatch() {
     .order("start_time", { ascending: true });
 
   if (!pendingJobs || pendingJobs.length === 0) {
-    console.log("✅ No pending audios! You have a full 4-hour pre-rendered buffer.");
+    console.log("✅ No pending audios! The 60-Minute Hot Clock is fully rendered for the next hour.");
     return;
   }
 
@@ -110,14 +135,14 @@ async function runBatch() {
         // Poll GPU Worker
         let isComplete = false;
         let outputPath = "";
-        for (let poll = 0; poll < 180; poll++) { // Wait up to 3 minutes per long script
+        for (let poll = 0; poll < 600; poll++) { // Wait up to 10 minutes per long script
             await sleep(1000);
             const statusRes = await fetch(`${GPU_WORKER}/status/${jobId}`);
             if (statusRes.ok) {
                 const statusData = await statusRes.json();
                 if (statusData.status === "completed") {
                     isComplete = true;
-                    outputPath = path.join(process.cwd(), "f5-tts-server", statusData.output_path);
+                    outputPath = path.join(process.cwd(), "kokoro-tts-server", statusData.output_path);
                     break;
                 }
             }
@@ -151,6 +176,8 @@ async function runBatch() {
                 .update({ media_url: publicUrl })
                 .eq("id", job.id);
 
+            // AUTO-CLEANUP DEFERRED: Files are kept for 24 hours for review, 
+            // and will be deleted by the startup cleanup routine later.
             console.log(`   ✅ Success!`);
         } else {
             console.log(`   ❌ GPU Worker Timed Out.`);
@@ -160,8 +187,33 @@ async function runBatch() {
     }
   }
 
-  console.log("\n🎉 BATCH COMPLETE! You can now turn off your laptop.");
-  console.log("Future Radio will stream seamlessly from the cloud for the next 4 hours.");
+  console.log("\n🎉 HOT CLOCK BATCH COMPLETE!");
+  console.log("Future Radio will stream seamlessly from the cloud.");
 }
 
-runBatch();
+async function startDaemon() {
+    console.log("🕒 Starting Future Radio XX:15 JIT Daemon...");
+    while (true) {
+        const now = new Date();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        
+        // We want to trigger exactly at XX:15:00
+        if (minutes === 15) {
+            console.log(`\n⏰ Target Time Reached (XX:15)! Triggering Hot Clock Generation...`);
+            await runBatch();
+            // Sleep for 60 seconds so we don't trigger again in the same minute
+            await sleep(60000);
+        } else {
+            // Calculate minutes until the next 15th minute mark
+            let waitMinutes = 15 - minutes;
+            if (waitMinutes <= 0) waitMinutes += 60;
+            
+            const waitMs = (waitMinutes * 60 * 1000) - (seconds * 1000);
+            console.log(`💤 Sleeping for ${waitMinutes} minutes until the next XX:15 trigger...`);
+            await sleep(Math.min(waitMs, 60000)); // Sleep in 1-minute chunks to show heartbeat or just wait
+        }
+    }
+}
+
+startDaemon();

@@ -6,11 +6,14 @@ import { motion } from "framer-motion";
 import { useUiStore, useAuthStore } from "@/lib/store";
 import { useAudioStore } from "@/components/audio/useAudioStore";
 import { toggleLikeSong, getUserLikedSongs } from "@/lib/supabase/playlist";
+import LivePollingDisplay from "@/components/audio/LivePollingDisplay";
+import { useCityStore } from "@/lib/store";
 
 // Removed mock UPCOMING_ITEMS
 
 export default function RadioPlayerPage() {
   const router = useRouter();
+  const { cityName } = useCityStore();
   const { setMode } = useUiStore();
   const { user } = useAuthStore();
   const {
@@ -184,19 +187,7 @@ export default function RadioPlayerPage() {
           </div>
         </header>
 
-        {/* Persisted YouTube Player Space Placeholder */}
-        <div className="my-2 space-y-2">
-          {/* Card Wrapper matching exactly the fixed iframe size coordinates */}
-          <div className="w-full aspect-[16/9] rounded-2xl border border-[#2a2a35] bg-[#111118]/25 flex items-center justify-center select-none">
-            <div className="text-center space-y-2 z-10 pointer-events-none opacity-20">
-              <span className="text-2xl">📺</span>
-              <p className="text-[10px] uppercase font-bold tracking-wider">Syncing Visual Stream</p>
-            </div>
-          </div>
-          <p className="text-[10px] text-center text-gray-600 font-semibold select-none">
-            music licensed via YouTube API • compliant
-          </p>
-        </div>
+
 
         {/* Now Playing Metadata */}
         <div className="space-y-2">
@@ -231,27 +222,9 @@ export default function RadioPlayerPage() {
           </div>
         </div>
 
-        {/* Voiceover Typewriter Transcription Balloon */}
-        <div className="h-[92px] border border-[#2a2a35] bg-[#111118]/70 backdrop-blur rounded-2xl p-4 flex gap-3.5 relative overflow-hidden transition-all duration-300">
-          <div className="w-10 h-10 rounded-full bg-brand-purple/10 border border-brand-purple/35 flex items-center justify-center flex-shrink-0 text-brand-purple">
-            🎙️
-          </div>
-          <div className="space-y-1 overflow-hidden flex-1">
-            <span className="text-[9px] font-extrabold text-brand-purple uppercase tracking-widest block">
-              AI RJ Prameesh · Raipur
-            </span>
-            <div className="text-xs text-gray-300 leading-relaxed overflow-y-auto max-h-[46px] pr-1">
-              {phase === "playing_jocktalk" ? (
-                <span className="after:content-['|'] after:animate-pulse after:text-brand-purple">
-                  {displayedTranscript}
-                </span>
-              ) : (
-                <span className="text-gray-500 italic">
-                  RJ is listening to beats... Microphone auto-activates during scheduled breaks.
-                </span>
-              )}
-            </div>
-          </div>
+        {/* Live Polling Engine */}
+        <div className="my-1">
+          <LivePollingDisplay cityId={cityName} />
         </div>
 
         {/* Progress Bar Scrubber */}

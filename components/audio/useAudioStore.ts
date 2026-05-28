@@ -32,7 +32,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   viewMode: "bubble",
   ytVolume: 80,
   isPlaying: false,
-  hasGesture: false,
+  hasGesture: true,
   setPhase: (phase) => set({ phase }),
   setCurrentBlock: (currentBlock) => set({ currentBlock }),
   setUpcomingBlocks: (upcomingBlocks) => set({ upcomingBlocks }),

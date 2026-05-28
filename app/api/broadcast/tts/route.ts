@@ -71,7 +71,7 @@ export async function GET(request: Request) {
             const statusData = await statusRes.json();
             if (statusData.status === "completed") {
               isComplete = true;
-              outputPath = path.join(process.cwd(), "f5-tts-server", statusData.output_path);
+              outputPath = path.join(process.cwd(), "kokoro-tts-server", statusData.output_path);
               break;
             }
           }
@@ -102,8 +102,8 @@ export async function GET(request: Request) {
     
     // Map Voice IDs to free Microsoft Azure Native Neural Voices
     let edgeVoice = "hi-IN-SwaraNeural"; // Default female (Perfect Hindi pronunciation)
-    if (voiceIdParam === "nPczCjzI2devNBz1zQrb") {
-        edgeVoice = "hi-IN-MadhurNeural"; // Male voice (Maanas)
+    if (voiceIdParam === "nPczCjzI2devNBz1zQrb" || voiceIdParam === "pm") {
+        edgeVoice = "hi-IN-MadhurNeural"; // Male voice (Maanas / Prameesh Fallback)
     } else if (voiceIdParam === "cgSgspJ2msm6clMCkdW9") {
         edgeVoice = "en-US-JennyNeural"; // Global Club US Persona (Female)
     }

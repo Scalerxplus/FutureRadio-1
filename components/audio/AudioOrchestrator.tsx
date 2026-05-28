@@ -77,7 +77,8 @@ export default function AudioOrchestrator() {
     setHasGesture,
   } = useAudioStore();
 
-  const ytPlayerRef = useRef<YTPlayerInstance | null>(null);
+  // HTML5 Media Players
+  const audiusRef = useRef<HTMLAudioElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const jingleRef = useRef<HTMLAudioElement | null>(null);
   const bedRef = useRef<HTMLAudioElement | null>(null);
@@ -96,54 +97,50 @@ export default function AudioOrchestrator() {
     if (!isPlaying) return;
     
     const supabase = createClient();
-    const channel = supabase.channel(`radio_listeners_${cityId}`, {
-      config: { presence: { key: listenerId } }
-    });
+    const channelName = `radio_listeners_${cityId}`;
+    let activeChannel: any;
 
-    channel.on('presence', { event: 'sync' }, () => {
-      console.log("[Presence] Synced listeners.");
-    }).subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
-        channel.track({ status: 'listening', startedAt: Date.now() });
-      }
-    });
+    const setupPresence = async () => {
+      // Clean up any existing strict-mode channels first to prevent "cannot add presence after subscribe" error
+      await supabase.removeAllChannels();
+
+      activeChannel = supabase.channel(channelName, {
+        config: { presence: { key: listenerId } }
+      });
+
+      activeChannel.on('presence', { event: 'sync' }, () => {
+        // Presence synced
+      }).subscribe((status: string) => {
+        if (status === 'SUBSCRIBED') {
+          activeChannel.track({ status: 'listening', startedAt: Date.now() });
+        }
+      });
+    };
+
+    setupPresence();
 
     return () => {
-      channel.untrack().then(() => supabase.removeChannel(channel));
+      if (activeChannel) {
+        activeChannel.untrack().then(() => supabase.removeChannel(activeChannel));
+      } else {
+        supabase.removeAllChannels();
+      }
     };
   }, [isPlaying, cityId, listenerId]);
 
-  // 1. Initialize YouTube Iframe API
+  // 1. Initialize Native Audio Elements
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.YT && window.YT.Player) {
-      initYoutubePlayer();
-    } else {
-      const existingScript = document.getElementById("yt-api-script");
-      if (!existingScript) {
-        const tag = document.createElement("script");
-        tag.id = "yt-api-script";
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName("script")[0];
-        firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
-      }
-      window.onYouTubeIframeAPIReady = () => initYoutubePlayer();
+    if (typeof window !== "undefined" && !audiusRef.current) {
+      audiusRef.current = new Audio();
+      audiusRef.current.crossOrigin = "anonymous";
     }
     return () => {
-      if (ytPlayerRef.current) try { ytPlayerRef.current.destroy(); } catch (e) {}
+      if (audiusRef.current) {
+         audiusRef.current.pause();
+         audiusRef.current.src = "";
+      }
     };
   }, []);
-
-  const initYoutubePlayer = () => {
-    if (!window.YT) return;
-    ytPlayerRef.current = new window.YT.Player("yt-player-container", {
-      height: "100%", width: "100%", videoId: "",
-      playerVars: { autoplay: 0, controls: 0, disablekb: 1, fs: 0, modestbranding: 1, rel: 0, showinfo: 0, origin: window.location.origin },
-      events: {
-        onReady: () => console.log("[Sync Engine] YouTube Player Ready"),
-      },
-    } as unknown as Record<string, unknown>);
-  };
 
   // 2. Fetch Master Clock and Schedule on Mount
   useEffect(() => {
@@ -160,18 +157,32 @@ export default function AudioOrchestrator() {
         setSyncOffsetMs(offset);
         console.log(`[Sync Engine] Clock offset calculated: ${offset}ms`);
 
-        // Fetch Schedule
+        // Fetch Schedule Initial
         const data = await getBroadcastSchedule(cityId);
         if (active) {
           setSchedule(data);
           console.log(`[Sync Engine] Loaded ${data.length} schedule elements`);
         }
+
+        // Live Hot-Reloading: Poll for schedule updates every 30 seconds
+        // This ensures any dashboard injections/edits take effect immediately for active listeners
+        const pollInterval = setInterval(async () => {
+          if (!active) return;
+          try {
+            const freshData = await getBroadcastSchedule(cityId);
+            setSchedule(freshData);
+          } catch(e) {
+            console.warn("[Sync Engine] Background schedule refresh failed", e);
+          }
+        }, 30000);
+
+        return () => clearInterval(pollInterval);
       } catch (err) {
         console.error("[Sync Engine] Initialization failed:", err);
       }
     }
-    initSync();
-    return () => { active = false; };
+    const cleanupPoll = initSync();
+    return () => { active = false; cleanupPoll.then(c => c && c()); };
   }, [hasGesture, cityId]);
 
   // 3. The Global Synchronizer Loop (Runs every 500ms)
@@ -188,10 +199,19 @@ export default function AudioOrchestrator() {
       });
 
       if (activeElementIndex === -1) {
-        setPhase("idle");
-        if (ytPlayerRef.current?.pauseVideo) ytPlayerRef.current.pauseVideo();
-        audioRef.current?.pause();
-        bedRef.current?.pause();
+        if (currentElementIdRef.current !== "FALLBACK") {
+          currentElementIdRef.current = "FALLBACK";
+          setPhase("idle"); // using idle so UI shows "Station Standby" or similar
+          audioRef.current?.pause();
+          bedRef.current?.pause();
+          
+          if (audiusRef.current) {
+            // Ultimate safe fallback
+            audiusRef.current.src = "https://discoveryprovider.audius.co/v1/tracks/l88e8/stream?app_name=FutureRadio";
+            audiusRef.current.play().catch(e => console.error(e));
+            console.log(`[Sync Engine] Undershoot detected! Playing supplement fallback track`);
+          }
+        }
         
         // Auto-generate next hour if schedule has expired
         if (!isGeneratingRef.current && schedule.length > 0) {
@@ -217,14 +237,13 @@ export default function AudioOrchestrator() {
       const remainingSeconds = (new Date(activeElement.end_time).getTime() - serverNow.getTime()) / 1000;
 
       // --- SMART CROSSFADING (FADE OUT) ---
-      if (activeElement.element_type === "song" && ytPlayerRef.current && typeof ytPlayerRef.current.setVolume === "function") {
+      if (activeElement.element_type === "song" && audiusRef.current) {
         if (remainingSeconds <= 4.0 && remainingSeconds > 0) {
-          // Fade volume from 100 down to 0 over the last 4 seconds
-          const fadeVol = Math.max(0, Math.floor((remainingSeconds / 4.0) * 100));
-          ytPlayerRef.current.setVolume(fadeVol);
+          // Fade volume from 1.0 down to 0 over the last 4 seconds
+          const fadeVol = Math.max(0, remainingSeconds / 4.0);
+          audiusRef.current.volume = fadeVol;
         } else {
-          // Keep YouTube video at 100% max resolution volume
-          ytPlayerRef.current.setVolume(100);
+          audiusRef.current.volume = 1.0;
         }
       }
 
@@ -242,6 +261,13 @@ export default function AudioOrchestrator() {
           targetVol = 0.1;
         }
         bedRef.current.volume = Math.max(0, Math.min(1, targetVol));
+      } else if (activeElement.element_type !== "jocktalk" && activeElement.element_type !== "traffic" && bedRef.current && offsetSeconds > 0.5) {
+        // FAILSAFE: Force pause the bed if we are in a song, ad, or jingle.
+        // This prevents the bed from accidentally looping behind songs indefinitely, especially in background tabs.
+        if (!bedRef.current.paused) {
+            bedRef.current.pause();
+            bedRef.current.volume = 0;
+        }
       }
 
       // --- 60s PRE-FETCH QUEUE LOGIC (BUG 2 FIX) ---
@@ -296,14 +322,14 @@ export default function AudioOrchestrator() {
         setUpcomingBlocks(upcomingMockBlocks);
 
         // --- SEAMLESS TIGHT SEGUE ---
-        // Instead of hard-pausing all players instantly causing dead air, we let the YouTube player overlap
+        // Instead of hard-pausing all players instantly causing dead air, we let the Audius player overlap
         // for 2 seconds while the new audio element starts. 
-        if (activeElement.element_type !== "song" && ytPlayerRef.current?.pauseVideo) {
-          const yt = ytPlayerRef.current;
+        if (activeElement.element_type !== "song" && audiusRef.current && !audiusRef.current.paused) {
+          const audius = audiusRef.current;
           if (activeElement.element_type === "sweeper" || activeElement.element_type === "station_id") {
-            yt.pauseVideo();
+            audius.pause();
           } else {
-            setTimeout(() => yt.pauseVideo(), 2000);
+            setTimeout(() => audius.pause(), 2000);
           }
         }
         
@@ -313,34 +339,27 @@ export default function AudioOrchestrator() {
         // We DO NOT pause jingleRef! This allows the Jingle to overlap and 
         // organically "smartfade" into the next song or jocktalk!
 
-        // If transitioning AWAY from a jocktalk, fade out the bed naturally over 1.5 seconds instead of hard cutting
+        // If transitioning AWAY from a jocktalk, hard stop the bed immediately.
+        // Fading with setInterval causes 30+ second overlapping bugs when browser tabs are in the background and JS is throttled.
         if (activeElement.element_type !== "jocktalk" && activeElement.element_type !== "traffic") {
           if (bedRef.current && !bedRef.current.paused) {
-            const bed = bedRef.current;
-            const startVol = bed.volume;
-            let step = 0;
-            const fadeInterval = setInterval(() => {
-              step++;
-              const newVol = startVol - (startVol * (step / 15)); // 15 steps over 1.5s
-              if (newVol <= 0.05 || step >= 15) {
-                bed.pause();
-                bed.volume = 0;
-                clearInterval(fadeInterval);
-              } else {
-                bed.volume = Math.max(0, newVol);
-              }
-            }, 100);
+            bedRef.current.pause();
+            bedRef.current.volume = 0;
           }
         }
 
         // Start new element
         if (activeElement.element_type === "song") {
           setPhase("playing_song");
-          if (ytPlayerRef.current?.loadVideoById) {
-            ytPlayerRef.current.loadVideoById(activeElement.youtube_id);
-            ytPlayerRef.current.seekTo(offsetSeconds, true);
-            ytPlayerRef.current.setVolume(100); // Restored to max 100%
-            ytPlayerRef.current.playVideo();
+          if (audiusRef.current) {
+            if (audiusRef.current.src !== activeElement.youtube_id) {
+               audiusRef.current.src = activeElement.youtube_id; // For Audius, youtube_id actually holds the streamUrl!
+            }
+            if (offsetSeconds > 0.5) {
+               try { audiusRef.current.currentTime = offsetSeconds; } catch(e) {}
+            }
+            audiusRef.current.volume = 1.0;
+            audiusRef.current.play().catch(e => console.error("Audius play error", e));
           }
         } else {
           setPhase(activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic" ? "playing_jocktalk" : "playing_jingle");
@@ -450,7 +469,7 @@ export default function AudioOrchestrator() {
       if (keepAliveRef.current) keepAliveRef.current.play().catch(() => {});
     } else {
       // Pause all active media when user hits Stop
-      if (ytPlayerRef.current?.pauseVideo) ytPlayerRef.current.pauseVideo();
+      if (audiusRef.current) audiusRef.current.pause();
       if (audioRef.current) audioRef.current.pause();
       if (bedRef.current) bedRef.current.pause();
       if (jingleRef.current) jingleRef.current.pause();
@@ -482,34 +501,9 @@ export default function AudioOrchestrator() {
 
   return (
     <>
-      {!hasGesture && (
-        <div 
-          onClick={handleGestureClick}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center cursor-pointer"
-          style={{ backgroundColor: "rgba(10, 10, 15, 0.95)" }}
-        >
-          <div className="text-6xl mb-4">📻</div>
-          <div className="text-white text-xl font-medium">Tap to start Future Radio</div>
-          <div className="text-gray-400 text-sm mt-2">Global Broadcast Feed</div>
-        </div>
-      )}
+      {/* Tap to Start overlay removed globally */}
 
-      <div className="fixed top-0 left-0 bg-black/80 text-cyan-400 p-2 z-[9998] text-xs font-mono border border-cyan-500 rounded-br-lg pointer-events-none">
-        <div>[Global Master Clock Sync]</div>
-        <div>Offset: {syncOffsetMs}ms</div>
-        <div>Schedule: {schedule.length} elements</div>
-      </div>
 
-      <div className={playerStyleClass} data-testid="yt-player-container-parent">
-        <div id="yt-player-container" className="w-full h-full" />
-        
-        {/* TV Channel Broadcast Watermark */}
-        {isRadioMode && (
-          <div className="absolute top-3 right-4 z-50 opacity-60 pointer-events-none drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-            <img src="/logo.png" alt="Broadcast Bug" className="h-12 w-auto object-contain mix-blend-screen" />
-          </div>
-        )}
-      </div>
 
       <audio ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
       <audio ref={audioRef} />
