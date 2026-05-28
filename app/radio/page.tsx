@@ -105,7 +105,7 @@ export default function RadioPlayerPage() {
     const shareData = {
       title: "Future Radio",
       text: "Vibe with GenZ on Future Radio 📻 - 100% Autonomous AI Radio Station. Tune in live!",
-      url: "https://radio.factoricai.com/radio",
+      url: "https://thefutureradio.com",
     };
 
     if (navigator.share) {
