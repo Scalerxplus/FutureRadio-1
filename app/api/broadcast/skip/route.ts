@@ -29,10 +29,17 @@ export async function POST(req: Request) {
        return NextResponse.json({ success: false, error: "Element already finished" });
     }
 
-    // 1. End the current element immediately
+    const body = await req.json().catch(() => ({}));
+    const skipReason = body.reason || "Manual skip via Admin Dashboard";
+
+    // 1. End the current element immediately and mark as skipped
     await supabase
       .from("broadcast_schedule")
-      .update({ end_time: new Date(nowMs).toISOString() })
+      .update({ 
+        end_time: new Date(nowMs).toISOString(),
+        status: "skipped",
+        status_reason: skipReason
+      })
       .eq("id", activeElement.id);
 
     // 2. Fetch all future elements

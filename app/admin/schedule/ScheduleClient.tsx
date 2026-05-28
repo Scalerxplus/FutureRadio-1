@@ -77,9 +77,16 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   };
 
   const handleSkip = async () => {
-    if (!confirm("Are you sure you want to Emergency Skip the currently playing element? This will instantly jump to the next track.")) return;
+    const reason = prompt("Emergency Skip Reason (e.g. Offensive content, Dead air):", "Manual skip via Admin Dashboard");
+    if (reason === null) return;
+    if (!confirm(`Are you sure you want to Emergency Skip the currently playing element?\nReason: ${reason}`)) return;
+    
     try {
-      const res = await fetch("/api/broadcast/skip", { method: "POST" });
+      const res = await fetch("/api/broadcast/skip", { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason })
+      });
       const data = await res.json();
       if (data.success) {
         alert("Skipped! The next track is now live.");
@@ -333,6 +340,8 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                 const endTime = new Date(element.end_time);
                 const isPlayingNow = element.id === activeElementId;
                 const isPast = now >= endTime && !element.isPlaceholder;
+                const isSkipped = element.status === 'skipped';
+                const isPlayed = isPast && !isSkipped;
                 
                 const isPlaceholder = element.isPlaceholder;
                 const isStatic = element.isStatic;
@@ -344,6 +353,7 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                     ref={isPlayingNow ? liveRef : null}
                     className={`grid grid-cols-12 gap-4 p-3 items-center transition-colors ${
                       isPlayingNow ? 'bg-red-900/10 border-l-2 border-red-500' : 
+                      isSkipped ? 'opacity-50 grayscale bg-red-900/5' :
                       isPast ? 'opacity-40 grayscale hover:grayscale-0' : 
                       isPlaceholder ? 'opacity-70 border-l-2 border-dashed border-gray-700 bg-transparent' : 'hover:bg-[#1a1a24]/50'
                     }`}
@@ -365,11 +375,19 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                     </div>
 
                     <div className="col-span-5 flex flex-col justify-center">
-                      <p className={`font-medium truncate text-sm ${isPlayingNow ? 'text-white' : isPlaceholder && !isStatic ? 'text-gray-400 italic' : 'text-gray-200'}`}>
+                      <p className={`font-medium truncate text-sm ${isPlayingNow ? 'text-white' : isSkipped ? 'line-through text-red-400' : isPlaceholder && !isStatic ? 'text-gray-400 italic' : 'text-gray-200'}`}>
                         {element.metadata?.title || element.metadata?.transcript?.substring(0, 50) + "..." || "Station ID"}
                       </p>
                       <p className="text-[10px] text-gray-500 truncate mt-0.5">
-                        {isPlaceholder ? element.metadata?.subtitle : (element.element_type === 'song' ? `YT: ${element.youtube_id}` : element.media_url)}
+                        {isSkipped ? (
+                          <span className="text-red-400 font-bold">Skipped: {element.status_reason}</span>
+                        ) : isPlayed ? (
+                          <span className="text-green-500 font-bold">Played / Expired</span>
+                        ) : isPlaceholder ? (
+                          element.metadata?.subtitle
+                        ) : (
+                          element.element_type === 'song' ? `YT: ${element.youtube_id}` : element.media_url
+                        )}
                       </p>
                     </div>
 

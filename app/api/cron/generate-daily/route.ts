@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 300; // Allow 5 minutes on Vercel Pro
 export const dynamic = "force-dynamic";
@@ -14,6 +15,24 @@ export async function GET(request: Request) {
     }
 
     console.log("[Daily Cron] Starting 24-hour schedule generation...");
+    
+    // Auto-Delete 48h old logs
+    try {
+      const supabase = createClient();
+      const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+      const { error: deleteError } = await supabase
+        .from("broadcast_schedule")
+        .delete()
+        .lt("end_time", fortyEightHoursAgo);
+        
+      if (deleteError) {
+        console.error("[Daily Cron] Failed to delete old logs:", deleteError);
+      } else {
+        console.log(`[Daily Cron] Cleaned up schedule logs older than ${fortyEightHoursAgo}`);
+      }
+    } catch (dbErr) {
+      console.error("[Daily Cron] Database cleanup error:", dbErr);
+    }
     
     const nowUtc = new Date();
     // Add 5.5 hours to get current IST time mapped onto UTC methods
