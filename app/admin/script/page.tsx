@@ -36,8 +36,8 @@ export default function ScriptCMSPage() {
   return (
     <div className="p-8 max-w-5xl">
       <header className="mb-10">
-        <h2 className="text-3xl font-bold text-white mb-2">Human-In-The-Loop CMS</h2>
-        <p className="text-gray-400">Manually feed precise news topics, scripts, or talking points to the AI RJ.</p>
+        <h2 className="text-3xl font-bold text-white mb-2">Programmatic Scripting (HITL)</h2>
+        <p className="text-gray-400">Manually feed precise news topics, scripts, or talking points to the Station Intelligence.</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -106,7 +106,7 @@ export default function ScriptCMSPage() {
             <div className="flex-1 overflow-y-auto space-y-3 pr-2">
               {overrides.length === 0 ? (
                 <div className="text-center py-10 text-gray-500 text-sm italic border border-dashed border-[#2a2a35] rounded-xl">
-                  Queue is empty.<br/><br/>The AI RJ will default to Weather & Song details for the next hour.
+                  Queue is empty.<br/><br/>The Station Intelligence will default to Weather & Song details for the next hour.
                 </div>
               ) : (
                 overrides.map((item) => (

@@ -5,12 +5,12 @@ import ScheduleClient from "./ScheduleClient";
 export const dynamic = "force-dynamic";
 
 const SHOWS = [
-  { id: "morning_zen", name: "Morning Zen", rj: "Prameesh", startHour: 6, endHour: 8, color: "text-blue-400" },
-  { id: "morning_drive", name: "The Morning Drive", rj: "Prameesh", startHour: 8, endHour: 11, color: "text-yellow-400" },
-  { id: "mid_day", name: "Mid-Day Cafe", rj: "Prameesh", startHour: 11, endHour: 16, color: "text-orange-400" },
-  { id: "evening_rush", name: "Evening Rush", rj: "Prameesh", startHour: 16, endHour: 20, color: "text-red-400" },
-  { id: "global_club", name: "The Global Club", rj: "Prameesh", startHour: 20, endHour: 1, color: "text-purple-400" },
-  { id: "night_shift", name: "Night Shift", rj: "Prameesh", startHour: 1, endHour: 6, color: "text-indigo-400" },
+  { id: "morning_zen", name: "Morning Zen", voice: "Core", startHour: 6, endHour: 8, color: "text-blue-400" },
+  { id: "morning_drive", name: "The Morning Drive", voice: "Core", startHour: 8, endHour: 11, color: "text-yellow-400" },
+  { id: "mid_day", name: "Mid-Day Cafe", voice: "Core", startHour: 11, endHour: 16, color: "text-orange-400" },
+  { id: "evening_rush", name: "Evening Rush", voice: "Core", startHour: 16, endHour: 20, color: "text-red-400" },
+  { id: "global_club", name: "The Global Club", voice: "Core", startHour: 20, endHour: 1, color: "text-purple-400" },
+  { id: "night_shift", name: "Night Shift", voice: "Core", startHour: 1, endHour: 6, color: "text-indigo-400" },
 ];
 
 function getShowForHour(hour: number) {
@@ -22,8 +22,13 @@ function getShowForHour(hour: number) {
   return SHOWS[5];  
 }
 
-function generateHotClockPlaceholders(baseDate: Date, hour: number, show: any) {
-  let currentTimeMs = setHours(setMinutes(setSeconds(baseDate, 0), 0), hour).getTime();
+function generateHotClockPlaceholders(hour: number, show: any) {
+  // Compute absolute ms for the start of this hour in IST today
+  const now = new Date();
+  const istTimeMs = now.getTime() + 5.5 * 60 * 60 * 1000;
+  const istDate = new Date(istTimeMs);
+  istDate.setUTCHours(hour, 0, 0, 0);
+  let currentTimeMs = istDate.getTime() - 5.5 * 60 * 60 * 1000;
   const placeholders = [];
   
   const addBlock = (type: string, durationS: number, title: string, subtitle: string, isStatic: boolean) => {
@@ -45,7 +50,7 @@ function generateHotClockPlaceholders(baseDate: Date, hour: number, show: any) {
   
   let jocktalkCount = 0;
   while (jocktalkCount < 5) {
-    addBlock("jocktalk", 40, "Jocktalk Slot (Unscripted)", `AI RJ: ${show.rj} (To be generated)`, false);
+    addBlock("jocktalk", 40, "Station Update (Unscripted)", `Station AI Voice (To be generated)`, false);
     addBlock("song", 210, "Song Slot (AI Selection)", "Music Engine Selection", false);
     addBlock("sweeper", 8, "Radio Sweeper", "Station Branding", true);
     addBlock("song", 210, "Song Slot (AI Selection)", "Music Engine Selection", false);
@@ -71,10 +76,18 @@ function generateHotClockPlaceholders(baseDate: Date, hour: number, show: any) {
 export default async function SchedulePage() {
   const supabase = createClient();
   
-  // Fetch today's schedule from DB
-  const today = new Date();
-  const startOfTodayISO = startOfDay(today).toISOString();
-  const endOfTodayISO = endOfDay(today).toISOString();
+  // Fetch today's schedule from DB using explicit IST boundaries
+  const now = new Date();
+  const istTimeMs = now.getTime() + 5.5 * 60 * 60 * 1000;
+  const istDate = new Date(istTimeMs);
+  
+  const startIST = new Date(istDate);
+  startIST.setUTCHours(0, 0, 0, 0);
+  const startOfTodayISO = new Date(startIST.getTime() - 5.5 * 60 * 60 * 1000).toISOString();
+
+  const endIST = new Date(istDate);
+  endIST.setUTCHours(23, 59, 59, 999);
+  const endOfTodayISO = new Date(endIST.getTime() - 5.5 * 60 * 60 * 1000).toISOString();
 
   const { data: dbSchedule } = await supabase
     .from("broadcast_schedule")
@@ -82,13 +95,16 @@ export default async function SchedulePage() {
     .eq("city_id", "raipur")
     .gte("start_time", startOfTodayISO)
     .lte("start_time", endOfTodayISO)
-    .order("start_time", { ascending: true });
+    .order("start_time", { ascending: true })
+    .limit(5000);
 
   // Group DB items by hour
   const dbItemsByHour: Record<number, any[]> = {};
   if (dbSchedule) {
     dbSchedule.forEach((item) => {
-      const h = new Date(item.start_time).getHours();
+      // Robust IST hour extraction without toLocaleString quirks (which returns 24 instead of 00 at midnight)
+      const dateInIST = new Date(new Date(item.start_time).getTime() + 5.5 * 60 * 60 * 1000);
+      const h = dateInIST.getUTCHours();
       if (!dbItemsByHour[h]) dbItemsByHour[h] = [];
       dbItemsByHour[h].push(item);
     });
@@ -102,7 +118,7 @@ export default async function SchedulePage() {
     let isActive = elements.length > 0;
     
     if (!isActive) {
-      elements = generateHotClockPlaceholders(today, hour, show);
+      elements = generateHotClockPlaceholders(hour, show);
     }
     
     twentyFourHourSchedule.push({

@@ -16,22 +16,79 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   const [editTitle, setEditTitle] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  // Batch Generation State
+  const [isGeneratingBatch, setIsGeneratingBatch] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState(0);
+
+  const handleGenerateTomorrow = async () => {
+    if (!confirm("Are you sure you want to generate the next 24 hours of programming? This will take a few minutes.")) return;
+    
+    setIsGeneratingBatch(true);
+    setGenerationProgress(0);
+    
+    try {
+      const nowUtc = new Date();
+      // Add 5.5 hours to get current IST time mapped onto UTC methods
+      const istTimeMs = nowUtc.getTime() + (5.5 * 60 * 60 * 1000);
+      
+      for (let i = 0; i < 24; i++) {
+        const targetIst = new Date(istTimeMs);
+        // Start from the NEXT full hour (current hour + 1 + i)
+        targetIst.setUTCHours(targetIst.getUTCHours() + 1 + i, 0, 0, 0);
+        
+        const year = targetIst.getUTCFullYear();
+        const month = String(targetIst.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(targetIst.getUTCDate()).padStart(2, '0');
+        const hourStr = String(targetIst.getUTCHours()).padStart(2, '0');
+        
+        const istIsoString = `${year}-${month}-${day}T${hourStr}:00:00+05:30`;
+        
+        await fetch(`/api/broadcast/generate-hour?startTime=${encodeURIComponent(istIsoString)}`, { method: "POST" });
+        setGenerationProgress(i + 1);
+      }
+      alert("Next 24 hours generated successfully! Master clock is now future-proof.");
+      window.location.reload();
+    } catch (err) {
+      alert("Failed to complete batch generation.");
+    } finally {
+      setIsGeneratingBatch(false);
+    }
+  };
+
   // Update 'now' every second to keep 'Live Now' accurate
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-scroll on mount
+  // Auto-scroll on mount with slight delay to ensure DOM is ready
   useEffect(() => {
-    if (liveRef.current) {
-      liveRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+    setTimeout(() => {
+      if (liveRef.current) {
+        liveRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 500);
   }, []);
 
   const scrollToLive = () => {
     if (liveRef.current) {
       liveRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  const handleSkip = async () => {
+    if (!confirm("Are you sure you want to Emergency Skip the currently playing element? This will instantly jump to the next track.")) return;
+    try {
+      const res = await fetch("/api/broadcast/skip", { method: "POST" });
+      const data = await res.json();
+      if (data.success) {
+        alert("Skipped! The next track is now live.");
+        window.location.reload();
+      } else {
+        alert("Skip failed: " + data.error);
+      }
+    } catch (err) {
+      alert("Skip failed.");
     }
   };
 
@@ -75,6 +132,10 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
     }
     setIsSaving(false);
   };
+
+  const flatElements = schedule.flatMap(b => b.elements);
+  const currentActive = flatElements.find(el => new Date(el.end_time) > now && !el.isPlaceholder) || flatElements[0];
+  const activeElementId = currentActive?.id;
 
   return (
     <div className="p-8 pb-24" ref={containerRef}>
@@ -196,12 +257,42 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
             <Target size={18} className="text-red-500" />
             Now Playing
           </button>
-          <button className="flex items-center gap-2 bg-brand-primary hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          <button 
+            onClick={handleGenerateTomorrow}
+            disabled={isGeneratingBatch}
+            className="flex items-center gap-2 bg-purple-900/40 hover:bg-purple-800 text-purple-300 hover:text-white px-4 py-2 rounded-lg font-medium transition-colors border border-purple-500/30 disabled:opacity-50"
+          >
             <PlusCircle size={18} />
-            Inject Element
+            {isGeneratingBatch ? `Generating (${generationProgress}/24)` : "Auto-Generate 24H"}
+          </button>
+          <button 
+            onClick={handleSkip}
+            className="flex items-center gap-2 bg-[#1a1a24] hover:bg-red-900/50 text-red-400 hover:text-white px-4 py-2 rounded-lg font-medium transition-colors border border-red-900/30"
+            title="Instantly skip the currently playing element"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+            Skip Live Element
           </button>
         </div>
       </header>
+
+      {/* Batch Generation Progress Overlay */}
+      {isGeneratingBatch && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center">
+          <div className="bg-[#111118] p-8 rounded-2xl border border-[#2a2a35] flex flex-col items-center max-w-md w-full">
+            <div className="w-12 h-12 border-4 border-brand-purple border-t-transparent rounded-full animate-spin mb-6"></div>
+            <h3 className="text-xl font-bold text-white mb-2">Automating Tomorrow's Schedule</h3>
+            <p className="text-gray-400 mb-6 text-center">Generating AI elements for each hour of the day. Do not close this window.</p>
+            <div className="w-full bg-[#1a1a24] rounded-full h-4 mb-2 overflow-hidden border border-[#2a2a35]">
+              <div 
+                className="bg-gradient-to-r from-brand-purple to-brand-teal h-full transition-all duration-300"
+                style={{ width: `${(generationProgress / 24) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-brand-purple font-bold tracking-widest">{Math.round((generationProgress / 24) * 100)}% COMPLETE ({generationProgress}/24 HOURS)</p>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col gap-8">
         {schedule.map((block) => (
@@ -240,7 +331,7 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
               {block.elements.map((element: any) => {
                 const startTime = new Date(element.start_time);
                 const endTime = new Date(element.end_time);
-                const isPlayingNow = now >= startTime && now < endTime && !element.isPlaceholder;
+                const isPlayingNow = element.id === activeElementId;
                 const isPast = now >= endTime && !element.isPlaceholder;
                 
                 const isPlaceholder = element.isPlaceholder;

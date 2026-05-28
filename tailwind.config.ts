@@ -11,11 +11,25 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        "brand-purple": "#E50914", // Vibrant GenZ Red
-        "brand-teal": "#FFFFFF",   // Pure White
-        "brand-dark": "#000000",   // Deep Black
-        "brand-surface": "#111111",// Charcoal Black
-        "brand-border": "#222222", // Dark Gray Border
+        "brand-purple": "#8b5cf6", // True GenZ Neon Purple (Violet 500)
+        "brand-teal": "#2dd4bf",   // True GenZ Neon Teal (Teal 400)
+        "brand-dark": "#000000",   
+        "brand-surface": "#111111",
+        "brand-border": "#2a2a35", 
+      },
+      fontFamily: {
+        sans: ["var(--font-outfit)", "sans-serif"],
+        display: ["var(--font-space)", "sans-serif"],
+        digital: ["var(--font-digital)", "monospace"],
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        }
+      },
+      animation: {
+        marquee: 'marquee 15s linear infinite',
       },
     },
   },

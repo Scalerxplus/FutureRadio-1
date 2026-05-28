@@ -37,4 +37,6 @@ export interface PlaylistBlock {
   mood: string;
   validFrom: string;
   validUntil: string;
+  rjName?: string;
+  coverArt?: string;
 }

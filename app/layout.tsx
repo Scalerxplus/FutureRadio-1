@@ -5,20 +5,29 @@ import AudioOrchestrator from "@/components/audio/AudioOrchestrator";
 import PlayerBar from "@/components/audio/PlayerBar";
 import RadioBubble from "@/components/ui/RadioBubble";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+import { Outfit, Space_Grotesk, Share_Tech_Mono } from "next/font/google";
+
+const digitalFont = Share_Tech_Mono({
+  subsets: ["latin"],
+  variable: "--font-digital",
+  weight: "400",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  weight: ["300", "400", "500", "600", "700", "900"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Future Radio | Vibe with GenZ",
-  description: "Experience the next generation of sound, AI news, and curated futuristic radio streams. Powered by AI RJ AIRA.",
+  title: "Future Radio | Live Data Stream",
+  description: "Experience the next generation of sound, AI news, and curated futuristic radio streams. Powered by Station Intelligence.",
   icons: {
     icon: "/logo-badge.png",
     apple: "/icons/apple-touch-icon.png",
@@ -40,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0f] text-white min-h-screen selection:bg-brand-purple selection:text-white`}
+        className={`${outfit.variable} ${spaceGrotesk.variable} ${digitalFont.variable} font-sans antialiased bg-[#0a0a0f] text-white min-h-screen selection:bg-brand-purple selection:text-white`}
       >
         {/* Persistent Audio Core Layers */}
         <AudioOrchestrator />

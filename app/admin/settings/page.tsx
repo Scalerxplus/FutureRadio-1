@@ -38,7 +38,7 @@ export default function SettingsPage() {
     <div className="p-8 max-w-4xl">
       <header className="mb-10">
         <h2 className="text-3xl font-bold text-white mb-2">Station Settings</h2>
-        <p className="text-gray-400">Configure core AI RJ behavior, voice, and language for the broadcast.</p>
+        <p className="text-gray-400">Configure core Station AI behavior, voice, and language for the broadcast.</p>
       </header>
 
       <div className="space-y-8">
@@ -69,14 +69,14 @@ export default function SettingsPage() {
               <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
                 <input type="radio" name="voice" value="pm" checked={voiceId === "pm"} onChange={() => setVoiceId("pm")} className="w-4 h-4 accent-brand-primary" />
                 <div>
-                  <div className="text-white font-bold">RJ Prameesh (Male)</div>
+                  <div className="text-white font-bold">Future Radio Core (Male)</div>
                   <div className="text-[10px] text-gray-500">Kokoro-82M Engine • Ultra-Low Latency</div>
                 </div>
               </label>
               <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
                 <input type="radio" name="voice" value="aaira" checked={voiceId === "aaira"} onChange={() => setVoiceId("aaira")} className="w-4 h-4 accent-brand-primary" />
                 <div>
-                  <div className="text-white font-bold">RJ Aaira (Female)</div>
+                  <div className="text-white font-bold">Future Radio Nova (Female)</div>
                   <div className="text-[10px] text-gray-500">F5-TTS Engine • High Expressiveness</div>
                 </div>
               </label>
@@ -89,7 +89,7 @@ export default function SettingsPage() {
               <Languages size={24} />
               <h3 className="text-lg font-bold text-white">Broadcast Language</h3>
             </div>
-            <p className="text-xs text-gray-400">Force the AI RJ to use a specific linguistic constraint during script generation.</p>
+            <p className="text-xs text-gray-400">Force the Station AI to use a specific linguistic constraint during script generation.</p>
             
             <div className="space-y-3">
               <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
@@ -118,7 +118,7 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-300 mb-2">Custom RJ Persona Prompt (Optional)</label>
+            <label className="block text-sm font-bold text-gray-300 mb-2">Custom Station Intelligence Prompt (Optional)</label>
             <p className="text-xs text-gray-500 mb-3">Overrides the default AI instructions. Leave blank to use defaults.</p>
             <textarea 
               value={rjPrompt}

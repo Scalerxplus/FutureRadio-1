@@ -36,29 +36,28 @@ export default function JocktalkOverridePage() {
     <div className="p-8 max-w-4xl">
       <header className="mb-8">
         <h2 className="text-3xl font-bold text-white mb-2">Jocktalk Override (HITL)</h2>
-        <p className="text-gray-400">Inject custom topics or exact scripts for the AI RJ to read on the next break.</p>
+        <p className="text-gray-400">Inject custom topics or exact scripts for the Station Intelligence to read on the next break.</p>
       </header>
 
-      <div className="bg-[#111118] border border-[#1a1a24] rounded-2xl overflow-hidden shadow-xl">
-        <div className="p-6 border-b border-[#1a1a24] flex items-center gap-4 bg-[#0d0d14]">
-          <div className="w-12 h-12 rounded-full bg-purple-600/20 flex items-center justify-center">
-            <Mic2 size={24} className="text-purple-500" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-white">Live Script Override</h3>
-            <p className="text-sm text-gray-400">The autonomous engine will prioritize this script over its LLM hallucination.</p>
-          </div>
-        </div>
+      <div className="bg-[#111118] border border-[#1a1a24] rounded-2xl p-6 relative overflow-hidden">
+        {/* Glow effect */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-brand-primary/10 blur-[100px] pointer-events-none" />
 
-        <div className="p-6">
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            What should RJ AIRA say next?
-          </label>
+        <div className="relative z-10">
+          <div className="flex justify-between items-end mb-6">
+            <div>
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <Mic2 className="text-brand-primary" />
+                What hyper-local update should the Station prioritize next?
+              </h3>
+            </div>
+          </div>
+
           <textarea
             value={topicText}
             onChange={(e) => setTopicText(e.target.value)}
-            placeholder="Type exactly what you want the RJ to say, or give bullet points like:&#10;- Welcome listeners back to Evening Rush&#10;- Mention that India won the cricket match&#10;- Tease the next song (Arijit Singh)"
-            className="w-full h-48 bg-[#1a1a24] border border-[#2a2a34] rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all resize-none"
+            placeholder="Type exactly what you want the Station Intelligence to broadcast, or give bullet points like:&#10;- Welcome listeners back to Evening Rush&#10;- Mention the heavy traffic near VIP Road&#10;- Tease the next song (Arijit Singh)"
+            className="w-full h-48 bg-[#0a0a0f] border border-[#2a2a35] rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-brand-primary transition-colors resize-none mb-6"
           />
 
           <div className="mt-6 flex items-center justify-between">

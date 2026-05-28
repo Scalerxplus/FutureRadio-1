@@ -187,7 +187,7 @@ export default function AudioOrchestrator() {
 
   // 3. The Global Synchronizer Loop (Runs every 500ms)
   useEffect(() => {
-    if (!hasGesture || !isPlaying || schedule.length === 0) return;
+    if (schedule.length === 0) return;
 
     const interval = setInterval(() => {
       const serverNow = new Date(Date.now() + syncOffsetMs);
@@ -300,10 +300,11 @@ export default function AudioOrchestrator() {
           cityId: activeElement.city_id,
           youtubeId: activeElement.youtube_id || "",
           songTitle: activeElement.metadata?.title || "Future Radio Broadcast",
-          songArtist: activeElement.metadata?.artist || "AI RJ AIRA",
+          songArtist: activeElement.metadata?.artist || "Future Radio Intelligence",
           songDurationS: activeElement.duration_ms / 1000,
           rjAudioUrl: "", jingleUrl: "", rjTranscript: activeElement.metadata?.transcript || "",
-          newsHeadlines: [], mood: "Live", validFrom: activeElement.start_time, validUntil: activeElement.end_time
+          newsHeadlines: [], mood: "Live", validFrom: activeElement.start_time, validUntil: activeElement.end_time,
+          coverArt: activeElement.metadata?.coverArt || activeElement.metadata?.artwork_url || ""
         };
         setCurrentBlock(mockBlock);
 
@@ -313,11 +314,12 @@ export default function AudioOrchestrator() {
           blockId: el.id,
           cityId: el.city_id,
           youtubeId: el.youtube_id || "",
-          songTitle: el.metadata?.title || (el.element_type === 'jocktalk' ? 'AI RJ Break' : 'Radio Sweeper'),
-          songArtist: el.metadata?.artist || "AI RJ AIRA",
+          songTitle: el.metadata?.title || (el.element_type === 'jocktalk' ? 'Station Intelligence Break' : 'Radio Sweeper'),
+          songArtist: el.metadata?.artist || "Future Radio Intelligence",
           songDurationS: el.duration_ms / 1000,
           rjAudioUrl: "", jingleUrl: "", rjTranscript: "",
-          newsHeadlines: [], mood: el.element_type, validFrom: el.start_time, validUntil: el.end_time
+          newsHeadlines: [], mood: el.element_type, validFrom: el.start_time, validUntil: el.end_time,
+          coverArt: el.metadata?.coverArt || el.metadata?.artwork_url || ""
         }));
         setUpcomingBlocks(upcomingMockBlocks);
 
@@ -339,7 +341,6 @@ export default function AudioOrchestrator() {
         // We DO NOT pause jingleRef! This allows the Jingle to overlap and 
         // organically "smartfade" into the next song or jocktalk!
 
-        // If transitioning AWAY from a jocktalk, hard stop the bed immediately.
         // Fading with setInterval causes 30+ second overlapping bugs when browser tabs are in the background and JS is throttled.
         if (activeElement.element_type !== "jocktalk" && activeElement.element_type !== "traffic") {
           if (bedRef.current && !bedRef.current.paused) {
@@ -347,6 +348,10 @@ export default function AudioOrchestrator() {
             bedRef.current.volume = 0;
           }
         }
+
+        // If the user hasn't explicitly hit Play, we stop here. 
+        // UI metadata (above) is updated, but no audio will automatically play.
+        if (!hasGesture || !isPlaying) return;
 
         // Start new element
         if (activeElement.element_type === "song") {
@@ -424,6 +429,9 @@ export default function AudioOrchestrator() {
         }
       } else {
         // --- CONTINUOUS SYNC CORRECTION & PLAYBACK RESUMPTION ---
+        // If the player is paused, don't attempt continuous playback resumption
+        if (!hasGesture || !isPlaying) return;
+        
         // If an ad interrupts the YouTube iframe or it buffers heavily, aggressively seek it to the master clock
         if (activeElement.element_type === "song" && ytPlayerRef.current && typeof ytPlayerRef.current.getCurrentTime === "function") {
           const ytTime = ytPlayerRef.current.getCurrentTime();

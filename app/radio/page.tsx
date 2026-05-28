@@ -1,15 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useUiStore, useAuthStore } from "@/lib/store";
 import { useAudioStore } from "@/components/audio/useAudioStore";
 import { toggleLikeSong, getUserLikedSongs } from "@/lib/supabase/playlist";
-import LivePollingDisplay from "@/components/audio/LivePollingDisplay";
+import { formatTime } from "@/lib/utils";
+import TelemetryDisplay from "@/components/audio/TelemetryDisplay";
 import { useCityStore } from "@/lib/store";
-
-// Removed mock UPCOMING_ITEMS
 
 export default function RadioPlayerPage() {
   const router = useRouter();
@@ -140,13 +139,15 @@ export default function RadioPlayerPage() {
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 50, opacity: 0 }}
       transition={{ type: "spring", damping: 25, stiffness: 120 }}
-      className="min-h-screen bg-transparent flex justify-center items-center"
+      className="min-h-screen flex justify-center items-center bg-[#09090e] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-purple/20 via-[#0a0a0f] to-[#0a0a0f] p-4"
     >
       {/* Mobile Shell Container */}
-      <div className="w-full max-w-[430px] min-h-screen bg-[#0a0a0f]/80 backdrop-blur-xl text-white flex flex-col justify-between p-5 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border-x border-[#111118]">
+      <div className="w-full max-w-[400px] h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-[#0a0a0f] md:bg-white/5 backdrop-blur-3xl text-white flex flex-col justify-between p-6 relative overflow-y-auto overflow-x-hidden shadow-[0_0_80px_rgba(127,119,221,0.15)] border border-white/10 md:rounded-[40px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {/* Glow Effects */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[200px] bg-brand-purple/20 blur-[120px] pointer-events-none" />
         
         {/* Top Header */}
-        <header className="flex justify-between items-center h-12">
+        <header className="flex justify-between items-center h-12 relative z-10">
           <button
             onClick={handleBack}
             className="p-1 rounded-full hover:bg-brand-surface border border-transparent hover:border-brand-border transition duration-200"
@@ -163,14 +164,6 @@ export default function RadioPlayerPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
           </button>
-          <div className="flex items-center">
-            <img 
-              src="/logo.png" 
-              alt="Future Radio" 
-              className="h-[58px] object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]" 
-            />
-          </div>
-
           <div className="flex items-center gap-2 bg-[#111118]/50 px-3 py-1.5 rounded-full border border-[#2a2a35]">
             <span className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${isPlaying ? 'text-brand-purple' : 'text-gray-500'}`}>
               {isPlaying ? 'ON' : 'OFF'}
@@ -188,67 +181,54 @@ export default function RadioPlayerPage() {
         </header>
 
 
-
         {/* Now Playing Metadata */}
-        <div className="space-y-2">
-          {/* Active Player State Pill */}
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple text-[10px] font-bold uppercase tracking-wider w-fit">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-              stroke="currentColor"
-              className="w-3 h-3"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"
-              />
-            </svg>
-            <span>
-              {phase === "playing_jocktalk" ? `AI RJ Prameesh · speaking live` : `AI RJ Prameesh · speaking next`}
-            </span>
-          </div>
+        <div className="space-y-1">
 
-          <div className="space-y-0.5">
-            <h2 className="text-xl font-bold text-white tracking-tight line-clamp-1">
-              {currentBlock ? currentBlock.songTitle : "Connecting to Live Broadcast..."}
-            </h2>
-            <p className="text-xs text-gray-400 line-clamp-1">
+
+          <div className="mt-2 mb-1 w-full flex flex-col items-center">
+            {/* Seamless Title Marquee */}
+            <div className="w-full flex items-center overflow-hidden">
+              {React.createElement(
+                'marquee',
+                { scrollamount: "5", className: "text-[26px] font-display font-medium text-white tracking-tight leading-none" },
+                currentBlock ? currentBlock.songTitle : "Connecting to Live Broadcast..."
+              )}
+            </div>
+            
+            {/* Centered Artist Name */}
+            <p className="text-[13px] font-sans font-normal text-white/60 uppercase tracking-[0.2em] text-center mt-2">
               {currentBlock ? currentBlock.songArtist : "Future Radio Sync Engine"}
             </p>
           </div>
         </div>
 
-        {/* Live Polling Engine */}
-        <div className="my-1">
-          <LivePollingDisplay cityId={cityName} />
+        {/* Telemetry Display */}
+        <div className="my-1 mb-2">
+          <TelemetryDisplay />
         </div>
 
         {/* Progress Bar Scrubber */}
-        <div className="space-y-2">
+        <div className="space-y-2 mt-2">
           {/* Custom Track Slider */}
-          <div className="relative w-full h-[3px] bg-brand-border rounded-full overflow-visible">
+          <div className="relative w-full h-[3px] bg-white/10 rounded-full">
             <div
-              className="absolute left-0 top-0 h-full bg-brand-purple rounded-full"
+              className="absolute left-0 top-0 h-full bg-white rounded-full"
               style={{ width: `${(progressS / duration) * 100}%` }}
             />
             <div
-              className="absolute w-2.5 h-2.5 rounded-full bg-white border border-brand-purple -top-1 shadow cursor-pointer transition-transform active:scale-125"
+              className="absolute w-2.5 h-2.5 rounded-full bg-white shadow-sm -top-[3.5px] cursor-pointer transition-transform hover:scale-125"
               style={{ left: `calc(${(progressS / duration) * 100}% - 5px)` }}
             />
           </div>
           {/* Time Codes */}
-          <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 tracking-wider select-none">
+          <div className="flex justify-between items-center text-[10px] font-medium text-white/50 tracking-wider select-none">
             <span>{formatTime(progressS)}</span>
             <span>{formatTime(duration)}</span>
           </div>
         </div>
 
         {/* Interactive Controls Panel */}
-        <div className="flex justify-between items-center px-4">
+        <div className="flex justify-between items-center px-6 mt-3 mb-1">
           
           {/* Share Button */}
           <button
@@ -264,12 +244,12 @@ export default function RadioPlayerPage() {
           {/* Primary Play / Pause Toggle (Now just the logo) */}
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="w-[84px] h-[84px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-200 focus:outline-none"
+            className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 focus:outline-none"
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
             {/* Spinning Logo Background */}
-            <div className={`absolute inset-0 rounded-full overflow-hidden shadow-[0_0_25px_rgba(127,119,221,0.25)] border-[3px] border-[#222] transition-all duration-500 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/logo_app.png" alt="Future Radio" className="w-full h-full object-cover" />
+            <div className={`absolute inset-0 rounded-full overflow-hidden border border-white/10 transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+              <img src="/logo_app.png" alt="Future Radio" className="w-full h-full object-cover opacity-90" />
             </div>
           </button>
 
@@ -284,25 +264,26 @@ export default function RadioPlayerPage() {
         </div>
 
         {/* Badges / Bottom Navigation */}
-        <div className="flex justify-between items-center pt-2">
-          {/* Mood Badge */}
-          <div className="flex items-center gap-1 bg-white/10 border border-white/25 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider select-none">
-            ✨ {currentBlock?.mood || "romantic"}
+        <div className="flex justify-between items-center px-2 pt-2">
+          {/* Live Broadcast Indicator */}
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70 select-none">
+            <span className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]'}`} />
+            LIVE
           </div>
 
           {/* Quick News Trigger */}
           <button
             onClick={handleNavigateNews}
-            className="flex items-center gap-1 bg-brand-teal/15 hover:bg-brand-teal/25 border border-brand-teal/30 text-brand-teal px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-200"
+            className="flex items-center gap-1.5 text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 select-none uppercase tracking-[0.2em]"
           >
-            Whatsup News ↗
+            UPDATES ⚡
           </button>
         </div>
 
         {/* Coming Up Next Section */}
-        <div className="border-t border-[#2a2a35] pt-4 space-y-3">
-          <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-gray-500 block select-none">
-            COMING UP NEXT
+        <div className="border-t border-white/10 pt-5 mt-auto space-y-3">
+          <span className="text-[10px] font-sans font-semibold uppercase tracking-[0.25em] text-brand-purple block select-none">
+            AI QUEUE
           </span>
 
             {upcomingBlocks.map((block, i) => (

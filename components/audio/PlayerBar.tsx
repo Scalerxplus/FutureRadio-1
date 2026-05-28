@@ -1,9 +1,15 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useAudioStore } from "./useAudioStore";
 
 export default function PlayerBar() {
   const { isPlaying, currentBlock, viewMode, setIsPlaying, setViewMode } = useAudioStore();
+  const pathname = usePathname();
+
+  if (pathname === "/radio") {
+    return null;
+  }
 
   const handleShare = async () => {
     const shareData = {

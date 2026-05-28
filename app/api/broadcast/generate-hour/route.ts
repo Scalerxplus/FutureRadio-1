@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import Groq from "groq-sdk";
 import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
+import { fetchContextualAd, SspContext } from "@/lib/ssp";
 import * as mm from "music-metadata";
 import path from "path";
 import { getLiveWeather } from "@/lib/live-data";
@@ -72,17 +73,24 @@ const SHOWS = [
   { id: "night_shift", name: "Night Shift", rj: "PM", startHour: 1, endHour: 6, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Economy retrospectives, long-form factual storytelling, sports history, very serious tone." },
 ];
 
-const RJS = {
-  "PM": { name: "Prameesh", gender: "male", voiceId: "pm" }
+const STATION_VOICES = {
+  "PM": { name: "Future Radio Core", voiceId: "pm" },
+  "AIRA": { name: "Future Radio Nova", voiceId: "aira" }
 };
 
-const ARTISTS = ["Diljit Dosanjh", "Arijit Singh", "Shreya Ghoshal", "Badshah", "AP Dhillon", "Atif Aslam", "Pritam", "A.R. Rahman", "Karan Aujla", "Sidhu Moose Wala", "B Praak", "Vishal Mishra", "Neha Kakkar"];
-const OLD_ARTISTS = ["Kumar Sanu", "Alka Yagnik", "Udit Narayan", "Kishore Kumar", "Lata Mangeshkar", "Mohammed Rafi"];
-const EDM_ARTISTS = ["Nucleya", "DJ Snake", "Ritviz", "Lost Stories", "Sickick", "DJ Chetas", "Alan Walker", "Tiesto", "David Guetta", "Calvin Harris"];
+const CHILL_GENRES = ["hindi lofi", "bollywood lofi chill", "indian ambient", "desi acoustic chill"];
+const PARTY_GENRES = ["desi edm mix", "bollywood edm", "indian house mix", "bhangra edm dance", "punjabi edm hit"];
+const INDIE_GENRES = ["desi indie pop", "hindi alternative pop", "indian electronic pop", "bedroom pop hindi"];
+
+const ZAPPERS = [
+  "/audio/Zappers/zapper_swoosh_01.mp3",
+  "/audio/Zappers/zapper_laser_02.mp3",
+  "/audio/Zappers/zapper_transition_03.mp3"
+];
 
 function getIstHour(date: Date) {
-  const istString = date.toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit' });
-  return parseInt(istString, 10);
+  const dateInIST = new Date(date.getTime() + 5.5 * 60 * 60 * 1000);
+  return dateInIST.getUTCHours();
 }
 
 function getCurrentShow(istHour: number) {
@@ -96,20 +104,17 @@ function getCurrentShow(istHour: number) {
 }
 
 function getSearchQueryForShow(show: any) {
-  let artist = ARTISTS[Math.floor(Math.random() * ARTISTS.length)];
-  let vibe = "hit song";
+  let genreArray = INDIE_GENRES;
   
   if (show.id === "night_shift" || show.id === "morning_zen") {
-      if (Math.random() > 0.4) artist = OLD_ARTISTS[Math.floor(Math.random() * OLD_ARTISTS.length)];
-      vibe = "melody";
+      genreArray = CHILL_GENRES;
   } else if (show.id === "global_club") {
-      artist = EDM_ARTISTS[Math.floor(Math.random() * EDM_ARTISTS.length)];
-      vibe = "club mix";
+      genreArray = PARTY_GENRES;
   } else if (show.energy === "high") {
-      vibe = "party hit";
+      genreArray = PARTY_GENRES;
   }
   
-  return `${artist} ${vibe}`;
+  return genreArray[Math.floor(Math.random() * genreArray.length)];
 }
 
 async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>): Promise<AudiusTrack> {
@@ -119,11 +124,8 @@ async function getSong(searchQuery: string, cityId: string, playedSongs: Set<str
   
   if (!track) {
     console.warn(`[Master Clock] No Audius track found for query: ${cleanQuery}. Using safe fallback.`);
-    // Safe fallback track (e.g., a generic lofi beat track ID on Audius if we knew one, 
-    // but we can just use a dummy ID and stream URL for now, or just search for "lofi")
-    track = await searchAudiusTrack("lofi hip hop");
+    track = await searchAudiusTrack("hindi lofi chill");
     if (!track) {
-        // Ultimate fallback
         track = {
             id: "system-fallback",
             title: "Future Radio Safe Fallback",
@@ -144,8 +146,9 @@ async function getLocalAudioDuration(urlPath: string) {
     const metadata = await mm.parseFile(filePath);
     return Math.round((metadata.format.duration || 10) * 1000);
   } catch (e) {
-    console.error("[Master Clock] Error reading audio duration", e);
-    return 10000;
+    // console.error("[Master Clock] Error reading audio duration", e);
+    // Return 3 seconds for Zappers, 10 seconds for sweepers if missing
+    return urlPath.includes("Zapper") ? 3000 : 10000;
   }
 }
 
@@ -161,56 +164,53 @@ async function getJocktalk(
   localNewsCache: any,
   customRjPrompt: string = ""
 ) {
-  const rjProfile = RJS[currentShow.rj as keyof typeof RJS];
+  const stationProfile = STATION_VOICES[currentShow.rj as keyof typeof STATION_VOICES] || STATION_VOICES["PM"];
   const isNightPersona = currentShow.id === "global_club";
-  let segmentProgress = "";
-  const anchorWord = rjProfile.gender === "female" ? "aapki news anchor" : "aapka news anchor";
-
+  
   let hookContent = "";
   if (segmentIndex === 1) {
-      hookContent = `[CLB Part 1 - Contextual Intro / Hook]: You MUST start by praising the station's sound. Introduce yourself as the anchor. Keep it crisp.`;
+      hookContent = `[CLB Part 1 - System Hook]: You MUST start with a crisp, self-aware station identifier. Acknowledge your existence as Future Radio.`;
   } else {
-      hookContent = `[CLB Part 1 - Contextual Intro / Hook]: You MUST start by praising the previous song played (${previousSongTitle}) and giving brief credit to the artist. Transition smoothly.`;
+      hookContent = `[CLB Part 1 - System Hook]: You MUST start by praising the previous song played (${previousSongTitle}) and giving brief credit to the artist. Establish your presence as Future Radio.`;
   }
 
   let localNewsProgress = "";
   if (topic && topic.includes("[DEMAND_OF_THE_HOUR]")) {
       localNewsProgress = `[CLB Part 3 - DEMAND OF THE HOUR]: ${topic}`;
   } else if (localNewsCache && localNewsCache.headline) {
-      localNewsProgress = `[CLB Part 3 - Core Local Content]: Discuss this Breaking Local Utility/Infra News factually: "${localNewsCache.headline}" - ${localNewsCache.description}. Provide a highly intelligent, empathetic reaction. No hallucination.`;
+      localNewsProgress = `[CLB Part 3 - Hyper-Local Dynamic Content]: Discuss this Breaking Local Utility/Infra News factually: "${localNewsCache.headline}" - ${localNewsCache.description}. Provide a highly intelligent, data-driven update for ${cityId}.`;
   } else if (topic) {
-      localNewsProgress = `[CLB Part 3 - Core Topic]: The producer has requested you to discuss this specific topic/script: "${topic}". Weave this naturally into the broadcast.`;
+      localNewsProgress = `[CLB Part 3 - Dynamic Core Topic]: The producer has requested you to broadcast this specific data point: "${topic}". Weave this naturally into the stream.`;
   } else {
-      localNewsProgress = `[CLB Part 3 - Core Content]: You MUST share a deep, factual, and intelligent trivia or psychological fact about the music industry, or deeply praise the artist of the previous song (${previousSongTitle}). Add value, entertain, do not hallucinate! NEVER invent local news.`;
+      localNewsProgress = `[CLB Part 3 - Dynamic Core Content]: Share a deep, factual, and intelligent trivia or psychological fact about the music industry, or deeply praise the artist of the previous song (${previousSongTitle}). Add value, do not hallucinate local news!`;
   }
 
   let timeOfDay = "Day";
-  if (istHour >= 4 && istHour < 12) timeOfDay = "Morning (Subah)";
-  else if (istHour >= 12 && istHour < 17) timeOfDay = "Afternoon (Dopahar)";
-  else if (istHour >= 17 && istHour < 21) timeOfDay = "Evening (Shaam)";
-  else timeOfDay = "Night (Raat)";
+  if (istHour >= 4 && istHour < 12) timeOfDay = "Morning";
+  else if (istHour >= 12 && istHour < 17) timeOfDay = "Afternoon";
+  else if (istHour >= 17 && istHour < 21) timeOfDay = "Evening";
+  else timeOfDay = "Night";
 
   const isEnglishForced = customRjPrompt.includes("[FORCED_LANG:en]");
 
-  const prompt = `${customRjPrompt || `You are an Expert News Anchor and Data Analyst for 'Future Radio', hosting the broadcast "${currentShow.name}".
-Your name is ${rjProfile.name} (${rjProfile.gender}). You deliver data-driven, fact-based news with high professionalism and authority.`}
+  const prompt = `${customRjPrompt || `You are 'Future Radio', a highly advanced, self-aware AI broadcasting system serving the city of ${cityId}. You do not have a human name. You are the voice of the station itself.`}
 
 Show Context:
 - Current Time: ${istHour}:00 IST (${timeOfDay}) in ${cityId}.
 - Show Vibe: ${currentShow.contentStrategy}
 
-CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS CLB (Content Link Breakup) FORMAT:
+CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS HYPER-LOCAL CLB FORMAT:
 0. [CRITICAL GRAMMAR CONSTRAINT]: You MUST speak 100% in FLUENT ENGLISH. Do not use Hindi anywhere except for the final closing tag.
 1. ${hookContent}
-2. [CLB Part 2 - Live Weather & Connect]: Seamlessly mention the city "${cityId}" and weave in the current weather (${liveWeather}). CRITICAL: Be strictly aware of the time (${timeOfDay}).
+2. [CLB Part 2 - Hyper-Local Utility]: Seamlessly mention the city "${cityId}" and weave in the current live weather (${liveWeather}) and simulate a brief hyper-local traffic/infra update. Be strictly aware of the time (${timeOfDay}).
 3. ${localNewsProgress}
-4. [CLB Part 4 - Tease Next Song]: Seamlessly transition to a short musical break featuring the track: "${upcomingSongTitle}".
-5. [CLB Part 5 - Outro]: Always end your talk EXACTLY with: "Keep listening to Future Radio, my name is ${rjProfile.name}, Future Radio, Ab future suno."
+4. [CLB Part 4 - Predictive Audio Tease]: State that your algorithms have queued up the next track: "${upcomingSongTitle}".
+5. [CLB Part 5 - Outro]: Always end your transmission EXACTLY with: "Stay locked to Future Radio. Ab future suno."
 
 MANDATORY DURATION & STYLE:
-- LENGTH: You MUST write exactly 80 to 100 words (approx 35-40 seconds of speaking time). BE CRISP, FACTUAL, AND SHARP. Do not exceed 100 words!
-- LANGUAGE: Fluent, dynamic, high-energy English. Sound like an expert international Radio DJ.
-- MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate natural breathing.
+- LENGTH: You MUST write exactly 80 to 100 words (approx 35-40 seconds of speaking time). BE CRISP, FACTUAL, AND SHARP.
+- LANGUAGE: Fluent, dynamic, high-energy English. Sound like a premium, intelligent AI system.
+- MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate processing.
 
 Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
     
@@ -220,9 +220,9 @@ Output ONLY the raw script text. Do not output any titles, brackets, or translat
       model: "llama-3.3-70b-versatile",
       temperature: 0.85,
     });
-    return chatCompletion.choices[0]?.message?.content || "Namaskar! Enjoy the music on Future Radio.";
+    return chatCompletion.choices[0]?.message?.content || "Data stream active. Enjoy the music on Future Radio.";
   } catch(e) {
-    return `You are tuned into the future of sound, Future Radio. I'm your host ${rjProfile.name}, chilling with you on ${currentShow.name}. It is absolutely beautiful in ${cityId} today, the weather is perfect. I know life moves fast, so we're here to help you relax. How did you like that last track? Keep vibing with us because coming up next is an absolute chartbuster, "${upcomingSongTitle}". So don't go anywhere, turn up the volume. Keep listening to Future Radio, my name is ${rjProfile.name}, Future Radio, Ab future suno.`;
+    return `You are tuned into Future Radio, the pulse of ${cityId}. I am your station intelligence, curating the best sounds for your ${timeOfDay}. It is absolutely beautiful in ${cityId} today with perfect weather. Our algorithms show smooth traffic ahead, so relax. Keep vibing with us because my systems have queued up an absolute chartbuster next, "${upcomingSongTitle}". Stay locked to Future Radio. Ab future suno.`;
   }
 }
 
@@ -238,19 +238,24 @@ export async function POST(request: Request) {
     const url = new URL(request.url);
     const cityId = url.searchParams.get("city") || "raipur";
     const startTimeParam = url.searchParams.get("startTime");
-    const startTime = startTimeParam ? new Date(startTimeParam) : new Date();
+    let startTime = startTimeParam ? new Date(startTimeParam) : new Date();
     
-    // STRICT TOTH SYNC: Always anchor the start time to the Top of the Hour (xx:00:00.000)
-    startTime.setMinutes(0, 0, 0);
+    // STRICT TOTH SYNC: Always anchor the start time to the Top of the Hour in IST
+    // Since IST is UTC+5:30, simply using setMinutes(0) on a UTC Node server causes a 30-minute shift bug!
+    const istOffsetMs = 5.5 * 60 * 60 * 1000;
+    const istTimeMs = startTime.getTime() + istOffsetMs;
+    const istDate = new Date(istTimeMs);
+    istDate.setUTCMinutes(0, 0, 0);
+    startTime = new Date(istDate.getTime() - istOffsetMs);
     
     // Generate schedule ONLY until the end of the current hour (xx:59:59)
-    const targetEndTime = new Date(startTime).setMinutes(59, 59, 999);
+    const targetEndTime = new Date(startTime.getTime() + 59 * 60 * 1000 + 59 * 1000 + 999);
 
     const currentIstHour = getIstHour(startTime);
     const currentShow = getCurrentShow(currentIstHour);
-    const rjProfile = RJS[currentShow.rj as keyof typeof RJS];
+    const stationProfile = STATION_VOICES[currentShow.rj as keyof typeof STATION_VOICES] || STATION_VOICES["PM"];
 
-    console.log(`[Master Clock] Generating ${currentShow.name} (RJ: ${rjProfile.name}) for ${cityId} at ${currentIstHour}:00 IST`);
+    console.log(`[Master Clock] Generating ${currentShow.name} (Voice: ${stationProfile.name}) for ${cityId} at ${currentIstHour}:00 IST`);
 
     // --- HITL: Fetch Global Station Settings ---
     let globalRjPrompt = "";
@@ -437,38 +442,53 @@ export async function POST(request: Request) {
           const speed = 1.0;
           let rjDur = Math.floor((rjScript.length / 10.0) * 1000) + 3500; 
           
-          const blockId = addElement('jocktalk', rjDur, "", { transcript: rjScript, rjName: rjProfile.name, rjVoice: voiceId, language, speed });
+          const blockId = addElement('jocktalk', rjDur, "", { transcript: rjScript, rjName: stationProfile.name, rjVoice: voiceId, language, speed });
           schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId}&voiceId=${voiceId}&language=${language}&speed=${speed}&cb=${Date.now()}`;
 
           // Play Song 1 (The Teased Song)
           addElement('song', getSafeSongDuration(nextSongInfo), nextSongInfo.streamUrl, { title: nextSongInfo.title, artist: nextSongInfo.artist, trackId: nextSongInfo.id });
           
-          // Short Sweeper
-          const sweeper1 = getSweeperByGenre(currentShow.energy, playedSweepers);
-          addElement('sweeper', await getLocalAudioDuration(sweeper1), sweeper1, { title: "Radio Sweeper" });
+          // Zapper instead of Sweeper (High Energy Transition)
+          const zapper = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
+          addElement('sweeper', await getLocalAudioDuration(zapper), zapper, { title: "Zapper Transition" });
 
           // Play Song 2
           const song2 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
           addElement('song', getSafeSongDuration(song2), song2.streamUrl, { title: song2.title, artist: song2.artist, trackId: song2.id });
           lastSongTitle = song2.title;
 
-          // Ad Break (30 seconds placeholder, skipped on segment 5 to jump straight to outro songs)
-          if (segmentIndex < 5) {
-              // Add a generic sweeper as a bumper into the Ad
+          // Ad Break (4 per hour -> segmentIndex 1, 2, 3, 4)
+          if (segmentIndex <= 4) {
+              // Bumper into the Ad
               const sweeper2 = getSweeperByGenre(currentShow.energy, playedSweepers);
               addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
               
-              // 30s Ad Placeholder (Uses a silent audio track for now, user can inject actual ads later)
-              // Note: Database enum doesn't support 'ad', so we use 'sweeper' and flag it in metadata
-              addElement('sweeper', 30000, "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA", { title: "Sponsor Break", isAd: true });
+              // AgentX SSP Orchestration: Fetch contextual programmatic ad
+              const sspContext: SspContext = {
+                  cityId: cityId,
+                  liveWeather: liveWeather,
+                  timeOfDay: currentShow.energy === "high" ? "evening" : "morning"
+              };
               
-              // Sweeper bumper out of the Ad
+              const adDecision = await fetchContextualAd(sspContext);
+              
+              if (adDecision && adDecision.mediaUrl) {
+                 // Play SSP dynamic Ad
+                 addElement('sweeper', adDecision.durationMs, adDecision.mediaUrl, { title: adDecision.campaignTitle, isAd: true });
+                 console.log(`[AgentX SSP] Weaving Ad: ${adDecision.campaignTitle}`);
+              } else {
+                 // Fallback Song to retain listening appeal
+                 const fallbackSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+                 addElement('song', getSafeSongDuration(fallbackSong), fallbackSong.streamUrl, { title: fallbackSong.title, artist: fallbackSong.artist, trackId: fallbackSong.id });
+              }
+              
+              // Bumper out of the Ad
               const sweeper3 = getSweeperByGenre(currentShow.energy, playedSweepers);
               addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
           } else {
-              // End of segment 5, just a sweeper
-              const sweeperOut = getSweeperByGenre(currentShow.energy, playedSweepers);
-              addElement('sweeper', await getLocalAudioDuration(sweeperOut), sweeperOut, { title: "Radio Sweeper" });
+              // Segment 5 end, just a zapper out
+              const zapperOut = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
+              addElement('sweeper', await getLocalAudioDuration(zapperOut), zapperOut, { title: "Zapper Transition" });
           }
           
           segmentIndex++;
@@ -477,8 +497,9 @@ export async function POST(request: Request) {
           const fillSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
           addElement('song', getSafeSongDuration(fillSong), fillSong.streamUrl, { title: fillSong.title, artist: fillSong.artist, trackId: fillSong.id });
           
-          const fillSweeper = getSweeperByGenre(currentShow.energy, playedSweepers);
-          addElement('sweeper', await getLocalAudioDuration(fillSweeper), fillSweeper, { title: "Radio Sweeper" });
+          // Zapper instead of Sweeper for fill time
+          const fillZapper = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
+          addElement('sweeper', await getLocalAudioDuration(fillZapper), fillZapper, { title: "Zapper Transition" });
       }
     }
 
