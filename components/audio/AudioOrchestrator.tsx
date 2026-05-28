@@ -512,11 +512,11 @@ export default function AudioOrchestrator() {
 
 
 
-      <audio ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
-      <audio ref={audiusRef} crossOrigin="anonymous" />
-      <audio ref={audioRef} />
-      <audio ref={jingleRef} />
-      <audio ref={bedRef} loop />
+      <audio id="keepalive-player" ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
+      <audio id="audius-player" ref={audiusRef} crossOrigin="anonymous" />
+      <audio id="html5-player" ref={audioRef} />
+      <audio id="jingle-player" ref={jingleRef} />
+      <audio id="bed-player" ref={bedRef} loop />
     </>
   );
 }

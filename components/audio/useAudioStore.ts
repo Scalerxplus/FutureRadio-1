@@ -43,3 +43,16 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setCityId: (cityId) => set({ cityId }),
   setHasGesture: (hasGesture) => set({ hasGesture }),
 }));
+
+export function unlockAudio() {
+  if (typeof document === "undefined") return;
+  const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+  const ids = ["audius-player", "html5-player", "jingle-player", "bed-player", "keepalive-player"];
+  ids.forEach(id => {
+    const el = document.getElementById(id) as HTMLAudioElement | null;
+    if (el) {
+      if (!el.src || el.src === window.location.href) el.src = silentSrc;
+      el.play().catch(() => {});
+    }
+  });
+}

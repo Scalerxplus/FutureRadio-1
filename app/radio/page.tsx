@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useUiStore, useAuthStore } from "@/lib/store";
-import { useAudioStore } from "@/components/audio/useAudioStore";
+import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import { toggleLikeSong, getUserLikedSongs } from "@/lib/supabase/playlist";
 import { formatTime } from "@/lib/utils";
 import TelemetryDisplay from "@/components/audio/TelemetryDisplay";
@@ -169,7 +169,10 @@ export default function RadioPlayerPage() {
               {isPlaying ? 'ON' : 'OFF'}
             </span>
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={() => {
+                unlockAudio();
+                setIsPlaying(!isPlaying);
+              }}
               className={`w-10 h-5 rounded-full relative transition-colors duration-300 focus:outline-none ${isPlaying ? 'bg-brand-purple' : 'bg-[#2a2a35]'}`}
               aria-label={isPlaying ? "Turn Radio Off" : "Turn Radio On"}
             >
@@ -243,7 +246,10 @@ export default function RadioPlayerPage() {
           
           {/* Primary Play / Pause Toggle (Now just the logo) */}
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
+            onClick={() => {
+              unlockAudio();
+              setIsPlaying(!isPlaying);
+            }}
             className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 focus:outline-none"
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >

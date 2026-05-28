@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useAudioStore } from "./useAudioStore";
+import { useAudioStore, unlockAudio } from "./useAudioStore";
 
 export default function PlayerBar() {
   const { isPlaying, currentBlock, viewMode, setIsPlaying, setViewMode } = useAudioStore();
@@ -54,7 +54,10 @@ export default function PlayerBar() {
 
         <div className="flex items-center gap-4">
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
+            onClick={() => {
+              unlockAudio();
+              setIsPlaying(!isPlaying);
+            }}
             className="w-10 h-10 rounded-full bg-brand-purple hover:bg-brand-purple/90 text-white flex items-center justify-center hover:scale-105 transition-all"
             aria-label={isPlaying ? "Stop stream" : "Start stream"}
           >
@@ -105,7 +108,10 @@ export default function PlayerBar() {
           <div className="flex justify-center items-center gap-6 pt-6">
             <div className="w-12" /> {/* Spacer for centering */}
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={() => {
+                unlockAudio();
+                setIsPlaying(!isPlaying);
+              }}
               className="w-16 h-16 rounded-full bg-brand-purple hover:bg-brand-purple/90 text-white text-2xl flex items-center justify-center shadow-[0_0_30px_rgba(127,119,221,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none"
               aria-label={isPlaying ? "Stop stream" : "Start stream"}
             >
