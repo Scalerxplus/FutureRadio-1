@@ -5,6 +5,7 @@ import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
 import * as mm from "music-metadata";
 import path from "path";
+import fs from "fs";
 import { getLiveWeather } from "@/lib/live-data";
 
 export const maxDuration = 60;
@@ -150,16 +151,44 @@ async function getSong(searchQuery: string, cityId: string, playedSongs: Set<str
     console.warn(`[Master Clock] No Audius track found for query: ${cleanQuery}. Using safe fallback.`);
     tracks = await searchAudiusTrack("hindi lofi chill");
     if (tracks.length === 0) {
-        // If API is completely down, use a hardcoded safe fallback track so we don't get dead air
-        const track = {
-            id: "system-fallback-" + Math.random().toString(36).substring(7),
-            title: "Future Radio Chill Mix (Backup)",
-            artist: "System",
-            durationSeconds: 339,
-            streamUrl: "https://discoveryprovider.audius.co/v1/tracks/50ENP3g/stream?app_name=FutureRadio"
-        };
-        playedSongs.add(track.id);
-        return track as AudiusTrack;
+        // If API is completely down, check for local fallback tracks
+        const fallbacksDir = path.join(process.cwd(), "public", "audio", "fallbacks");
+        let fallbackTrack: any = null;
+
+        if (fs.existsSync(fallbacksDir)) {
+          const files = fs.readdirSync(fallbacksDir).filter(f => f.endsWith(".mp3") || f.endsWith(".wav"));
+          if (files.length > 0) {
+            const randomFile = files[Math.floor(Math.random() * files.length)];
+            const urlPath = `/audio/fallbacks/${randomFile}`;
+            try {
+              const metadata = await mm.parseFile(path.join(fallbacksDir, randomFile));
+              const durMs = Math.round((metadata.format.duration || 200) * 1000);
+              fallbackTrack = {
+                id: "system-fallback-" + Math.random().toString(36).substring(7),
+                title: randomFile.replace(/\.[^/.]+$/, ""), // Strip extension for title
+                artist: "Future Radio Premium Fallback",
+                durationSeconds: durMs / 1000,
+                streamUrl: urlPath
+              };
+            } catch(e) {
+              console.error("[Master Clock] Error reading fallback audio duration", e);
+            }
+          }
+        }
+        
+        if (!fallbackTrack) {
+          // Ultimate hardcoded fallback if no local files exist
+          fallbackTrack = {
+              id: "system-fallback-" + Math.random().toString(36).substring(7),
+              title: "Future Radio Chill Mix (Backup)",
+              artist: "System",
+              durationSeconds: 339,
+              streamUrl: "https://discoveryprovider.audius.co/v1/tracks/50ENP3g/stream?app_name=FutureRadio"
+          };
+        }
+        
+        playedSongs.add(fallbackTrack.id);
+        return fallbackTrack as AudiusTrack;
     }
   }
 
