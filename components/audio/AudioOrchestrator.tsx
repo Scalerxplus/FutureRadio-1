@@ -70,6 +70,15 @@ let sourcesAttached = false;
 
 function initWebAudioCompressor(elements: (HTMLAudioElement | null)[]) {
   if (typeof window === "undefined" || !(window.AudioContext || (window as any).webkitAudioContext)) return;
+  
+  // BYPASS ON MOBILE: iOS Safari and some Android browsers permanently mute 
+  // MediaElementAudioSourceNodes when dealing with cross-origin HLS/Stream redirects or dynamic src swaps.
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isMobile) {
+    console.log("[Web Audio API] Bypassed Loudness Normalizer on mobile to prevent Safari/Android muting bug.");
+    return;
+  }
+
   if (!globalAudioCtx) {
     globalAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
     globalCompressor = globalAudioCtx.createDynamicsCompressor();
