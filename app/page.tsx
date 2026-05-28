@@ -76,10 +76,10 @@ export default function EntrySplashPage() {
             <img 
               src="/logo.png" 
               alt="Future Radio" 
-              className="h-[58px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]" 
+              className="h-[70px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
             />
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#555] select-none">
-              AB FUTURE SUNO
+            <p className="text-xl font-bold text-white italic underline decoration-brand-purple decoration-[3px] underline-offset-[6px] tracking-wide select-none drop-shadow-lg">
+              अब फ्यूचर सुनो!
             </p>
           </div>
 
