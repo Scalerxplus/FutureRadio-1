@@ -139,10 +139,10 @@ export default function RadioPlayerPage() {
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 50, opacity: 0 }}
       transition={{ type: "spring", damping: 25, stiffness: 120 }}
-      className="min-h-screen flex justify-center items-center bg-[#09090e] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-purple/20 via-[#0a0a0f] to-[#0a0a0f] p-4"
+      className="min-h-screen flex justify-center items-center bg-[#09090e] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-purple/20 via-[#0a0a0f] to-[#0a0a0f] p-0 md:p-4"
     >
       {/* Mobile Shell Container */}
-      <div className="w-full max-w-[400px] h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-[#0a0a0f] md:bg-white/5 backdrop-blur-3xl text-white flex flex-col justify-between p-6 relative overflow-y-auto overflow-x-hidden shadow-[0_0_80px_rgba(127,119,221,0.15)] border border-white/10 md:rounded-[40px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="w-full max-w-full md:max-w-[400px] h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-[#0a0a0f] md:bg-white/5 backdrop-blur-3xl text-white flex flex-col justify-between p-6 relative overflow-y-auto overflow-x-hidden md:shadow-[0_0_80px_rgba(127,119,221,0.15)] border-none md:border md:border-white/10 md:rounded-[40px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {/* Glow Effects */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[200px] bg-brand-purple/20 blur-[120px] pointer-events-none" />
         
