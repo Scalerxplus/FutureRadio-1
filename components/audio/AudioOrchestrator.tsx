@@ -432,20 +432,17 @@ export default function AudioOrchestrator() {
         // If the player is paused, don't attempt continuous playback resumption
         if (!hasGesture || !isPlaying) return;
         
-        // If an ad interrupts the YouTube iframe or it buffers heavily, aggressively seek it to the master clock
-        if (activeElement.element_type === "song" && ytPlayerRef.current && typeof ytPlayerRef.current.getCurrentTime === "function") {
-          const ytTime = ytPlayerRef.current.getCurrentTime();
-          const state = ytPlayerRef.current.getPlayerState(); // 1 = playing, 2 = paused
+        // If the audio buffers heavily, aggressively seek it to the master clock
+        if (activeElement.element_type === "song" && audiusRef.current) {
+          const audioTime = audiusRef.current.currentTime;
           
-          // Force play if it was paused (e.g. user hit play again)
-          if (state === 2 || state === -1) {
-            ytPlayerRef.current.seekTo(offsetSeconds, true);
-            ytPlayerRef.current.playVideo();
-          } else if (Math.abs(ytTime - offsetSeconds) > 3.0 && state !== 3) {
+          if (audiusRef.current.paused) {
+            try { audiusRef.current.currentTime = offsetSeconds; } catch(e) {}
+            audiusRef.current.play().catch(() => {});
+          } else if (Math.abs(audioTime - offsetSeconds) > 3.0) {
             // Drift correction
-            console.warn(`[Sync Engine] Clock Drift Detected (Expected: ${offsetSeconds.toFixed(1)}, Actual: ${ytTime.toFixed(1)}). Seeking to master clock.`);
-            ytPlayerRef.current.seekTo(offsetSeconds, true);
-            ytPlayerRef.current.playVideo(); 
+            console.warn(`[Sync Engine] Clock Drift Detected (Expected: ${offsetSeconds.toFixed(1)}, Actual: ${audioTime.toFixed(1)}). Seeking to master clock.`);
+            try { audiusRef.current.currentTime = offsetSeconds; } catch(e) {}
           }
         } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
           // Resume HTML5 Audio if paused
@@ -486,7 +483,7 @@ export default function AudioOrchestrator() {
 
   const handleGestureClick = () => {
     // Unblock browser autoplay stack
-    if (ytPlayerRef.current?.playVideo) ytPlayerRef.current.playVideo();
+    if (audiusRef.current && audiusRef.current.paused) audiusRef.current.play().catch(() => {});
     
     const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
     if (audioRef.current && !audioRef.current.src) audioRef.current.src = silentSrc;
@@ -514,6 +511,7 @@ export default function AudioOrchestrator() {
 
 
       <audio ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
+      <audio ref={audiusRef} crossOrigin="anonymous" />
       <audio ref={audioRef} />
       <audio ref={jingleRef} />
       <audio ref={bedRef} loop />
