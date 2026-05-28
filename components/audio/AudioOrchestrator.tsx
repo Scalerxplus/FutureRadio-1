@@ -463,6 +463,23 @@ export default function AudioOrchestrator() {
         // --- CONTINUOUS SYNC CORRECTION & PLAYBACK RESUMPTION ---
         // If the player is paused, don't attempt continuous playback resumption
         if (!hasGesture || !isPlaying) return;
+
+        // --- HARDCODE EXCLUSIVITY RULE (MUTEX) ---
+        // Prevents two elements from playing together due to browser background throttling/glitches
+        if (activeElement.element_type === "song") {
+           if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
+           if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
+           if (bedRef.current && !bedRef.current.paused) bedRef.current.pause();
+        } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+           if (audiusRef.current && !audiusRef.current.paused) audiusRef.current.pause();
+           if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
+           // Music bed is allowed to mix with jocktalk
+        } else {
+           // Sweepers, Jingles, Zappers
+           if (audiusRef.current && !audiusRef.current.paused) audiusRef.current.pause();
+           if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
+           if (bedRef.current && !bedRef.current.paused) bedRef.current.pause();
+        }
         
         // If the audio buffers heavily, aggressively seek it to the master clock
         if (activeElement.element_type === "song" && audiusRef.current) {
