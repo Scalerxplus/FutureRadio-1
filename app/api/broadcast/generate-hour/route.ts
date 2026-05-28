@@ -80,18 +80,18 @@ const STATION_VOICES = {
 
 const PREMIUM_GENRES = {
   chill: {
-    punjabi: ["punjabi acoustic chill", "punjabi sufi lofi", "punjabi slow jam", "punjabi chillout", "acoustic punjabi hit"],
-    hindi: ["bollywood lofi chill", "desi acoustic chill", "hindi chillwave", "hindi instrumental chill", "sufi chill"],
+    punjabi: ["punjabi acoustic chill", "punjabi sufi lofi", "punjabi slow jam", "punjabi chillout", "acoustic punjabi hit", "punjabi unplugged", "punjabi folk chill", "punjabi romantic chill", "punjabi sad lofi", "punjabi ghazal"],
+    hindi: ["bollywood lofi chill", "desi acoustic chill", "hindi chillwave", "hindi instrumental chill", "sufi chill", "ghazal lofi", "bollywood sad romance chill", "hindi unplugged acoustic", "indian classical fusion", "coke studio chill", "bollywood 90s lofi", "sufi rock acoustic"],
     intl: ["chillout lounge", "lofi beats", "ambient electronic", "chill r&b pop", "night drive lo-fi"]
   },
   party: {
-    punjabi: ["bhangra edm dance", "punjabi tech house", "punjabi club mix", "punjabi dj remix", "desi punjabi hit bass"],
-    hindi: ["bollywood edm", "desi bass house", "mumbai dance club", "hindi party anthems", "bollywood house mix"],
+    punjabi: ["bhangra edm dance", "punjabi tech house", "punjabi club mix", "punjabi dj remix", "desi punjabi hit bass", "punjabi hip hop", "punjabi trap bass", "bhangra mashup dj", "punjabi wedding mix", "punjabi drill"],
+    hindi: ["bollywood edm", "desi bass house", "mumbai dance club", "hindi party anthems", "bollywood house mix", "bollywood remix dj", "desi hip hop party", "hindi trap mix", "bollywood mashup", "hindi item song mix", "desi dhol bass"],
     intl: ["festival tech house", "global party anthems", "electronic dance", "trance energy", "bass boost edm"]
   },
   indie: {
-    punjabi: ["punjabi indie pop", "punjabi folk alternative", "urban punjabi chill", "desi punjabi bedroom pop"],
-    hindi: ["desi indie pop", "hindi alternative pop", "indian folk pop", "hindi synthwave", "mumbai indie"],
+    punjabi: ["punjabi indie pop", "punjabi folk alternative", "urban punjabi chill", "desi punjabi bedroom pop", "punjabi rap indie", "punjabi R&B", "punjabi lofi hip hop", "urban punjabi pop"],
+    hindi: ["desi indie pop", "hindi alternative pop", "indian folk pop", "hindi synthwave", "mumbai indie", "indian lo-fi hip hop", "desi rap", "hindi bedroom pop", "indian shoegaze", "mumbai underground"],
     intl: ["indie electronic", "synth pop", "alternative r&b", "indie rock pop", "bedroom pop"]
   }
 };
