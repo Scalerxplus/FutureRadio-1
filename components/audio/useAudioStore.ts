@@ -44,7 +44,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setHasGesture: (hasGesture) => set({ hasGesture }),
 }));
 
-export function unlockAudio() {
+export function unlockAudio(playStinger: boolean = false) {
   if (typeof document === "undefined") return;
   const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
   const stingerSrc = "/audio/jingles/Station_Jingle_EDM.mp3";
@@ -53,8 +53,8 @@ export function unlockAudio() {
   ids.forEach(id => {
     const el = document.getElementById(id) as HTMLAudioElement | null;
     if (el) {
-      if (!el.src || el.src === window.location.href) {
-        el.src = id === "jingle-player" ? stingerSrc : silentSrc;
+      if (!el.src || el.src === window.location.href || el.src === silentSrc) {
+        el.src = (id === "jingle-player" && playStinger) ? stingerSrc : silentSrc;
       }
       el.play().catch(() => {});
     }

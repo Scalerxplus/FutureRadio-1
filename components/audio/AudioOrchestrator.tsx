@@ -147,7 +147,7 @@ export default function AudioOrchestrator() {
     if (hasGesture) return;
     
     const unlockFn = () => {
-      unlockAudio();
+      unlockAudio(true);
       setHasGesture(true);
       if (!isPlaying) setIsPlaying(true);
     };
@@ -328,6 +328,15 @@ export default function AudioOrchestrator() {
           coverArt: activeElement.metadata?.coverArt || activeElement.metadata?.artwork_url || ""
         };
         setCurrentBlock(mockBlock);
+
+        if ('mediaSession' in navigator) {
+          const displayTitle = activeElement.element_type === 'jocktalk' ? 'Station Intelligence Break' : (activeElement.element_type === 'sweeper' ? 'Radio Sweeper' : mockBlock.songTitle);
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: `Future Radio - ${displayTitle}`,
+            artist: mockBlock.songArtist,
+            album: "Live 24/7"
+          });
+        }
 
         // Map upcoming 2 blocks
         const nextElements = schedule.slice(activeElementIndex + 1, activeElementIndex + 3);
