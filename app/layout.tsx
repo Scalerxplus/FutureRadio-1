@@ -4,6 +4,7 @@ import "./globals.css";
 import AudioOrchestrator from "@/components/audio/AudioOrchestrator";
 import PlayerBar from "@/components/audio/PlayerBar";
 import RadioBubble from "@/components/ui/RadioBubble";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Outfit, Space_Grotesk, Share_Tech_Mono } from "next/font/google";
 
@@ -62,6 +63,7 @@ export default function RootLayout({
         </div>
         
         {children}
+        <Analytics />
       </body>
     </html>
   );

@@ -12,6 +12,7 @@
     "@ducanh2912/next-pwa": "^10.2.9",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
+    "@vercel/analytics": "^2.0.1",
     "@xstate/react": "^5.0.5",
     "cheerio": "^1.2.0",
     "date-fns": "^4.3.0",
