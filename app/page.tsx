@@ -71,14 +71,14 @@ export default function EntrySplashPage() {
         </div>
 
         {/* Top Branding Section */}
-        <div className="text-center pt-8 space-y-4 flex flex-col items-center">
-          <div className="space-y-2">
+        <div className="text-center pt-10 space-y-5 flex flex-col items-center relative z-10">
+          <div className="space-y-1.5">
             <img 
               src="/logo.png" 
               alt="Future Radio" 
               className="h-[70px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
             />
-            <p className="text-xl font-bold text-white italic underline decoration-brand-purple decoration-[3px] underline-offset-[6px] tracking-wide select-none drop-shadow-lg">
+            <p className="text-xl font-bold text-white italic underline decoration-red-500 decoration-1 underline-offset-4 tracking-wide select-none drop-shadow-lg">
               अब फ्यूचर सुनो!
             </p>
           </div>
@@ -109,7 +109,7 @@ export default function EntrySplashPage() {
           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-          className="mt-10 mb-2 w-full flex items-center justify-center relative select-none pointer-events-none"
+          className="my-auto w-full flex items-center justify-center relative select-none pointer-events-none py-8"
         >
           {/* Deep Cinematic Ambient Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-24 bg-gradient-to-r from-transparent via-brand-purple/40 to-transparent rounded-full blur-3xl opacity-80" />
@@ -120,7 +120,7 @@ export default function EntrySplashPage() {
         </motion.div>
 
         {/* Experience Cards Section */}
-        <div className="flex-1 flex flex-col justify-center py-8">
+        <div className="flex flex-col justify-end pb-2 pt-4">
           <div className="text-center mb-6">
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 select-none">
               CHOOSE YOUR EXPERIENCE
