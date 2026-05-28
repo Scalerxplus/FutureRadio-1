@@ -13,56 +13,61 @@ export const maxDuration = 60;
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" });
 const ytCache = new Map<string, { video: any; expiresAt: number }>();
 
-const STATION_IDS: Record<string, string[]> = {
-  high: ["/audio/jingles/Station_Jingle_EDM.mp3"],
-  mid: ["/audio/jingles/Station_Jingle_Mid.mp3"],
-  low: ["/audio/jingles/Station_Jingle_LoFi.mp3"],
-};
+const globalPlayedSweepers = new Set<string>();
+const globalPlayedJingles = new Set<string>();
 
-const BUMPERS = [
-  "/audio/Sweepers/RJ_Bumper_AIRA_High_Energy.mp3",
-];
-
-const HIGH_ENERGY_SWEEPERS = [
-  "/audio/Sweepers/Future_Sweeper_High_Energy.mp3",
-  "/audio/Sweepers/Future_Sweeper_High_Energy_Fun.mp3",
-  "/audio/Sweepers/Future_Sweeper_High_Energy_India.mp3",
-  "/audio/Sweepers/Sweeper_Desi_High_Energy_01.mp3",
-  "/audio/Sweepers/Sweeper_EDM_High_Energy_05.mp3",
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_01.mp3",
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_02.mp3",
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_03.mp3",
-  "/audio/Sweepers/Sweeper_Edm_High_Energy_04.mp3",
-];
-
-const MID_ENERGY_SWEEPERS = [
-  "/audio/Sweepers/Future_Sweeper_Mid_Energy_.mp3",
-  "/audio/Sweepers/Sweeper_MidEnergy_01.mp3",
-  "/audio/Sweepers/Sweeper_MidEnergy_02.mp3",
-];
-
-const LOW_ENERGY_SWEEPERS = [
-  "/audio/Sweepers/Sweeper_LoFi_01.mp3",
-  "/audio/Sweepers/Sweeper_LoFi_02.mp3",
-  "/audio/Sweepers/Sweeper_LoFi_03.mp3",
-  "/audio/Sweepers/Sweeper_LoFi_04.mp3",
-];
-
-function getSweeperByGenre(energy: string, playedSweepers: Set<string>) {
-  let list = MID_ENERGY_SWEEPERS;
-  if (energy === "high") list = HIGH_ENERGY_SWEEPERS;
-  if (energy === "low") list = LOW_ENERGY_SWEEPERS;
-  
-  let available = list.filter(s => !playedSweepers.has(s));
-  if (available.length === 0) {
-      // If all sweepers for this energy level are exhausted in a single hour, reset
-      available = list;
-      playedSweepers.clear();
+function getSweeperByGenre(energy: string) {
+  try {
+    const sweepersDir = path.join(process.cwd(), "public", "audio", "Sweepers");
+    const allSweepers = fs.readdirSync(sweepersDir)
+      .filter(f => f.endsWith('.mp3') || f.endsWith('.wav'))
+      .map(f => `/audio/Sweepers/${f}`);
+      
+    let list = allSweepers.filter(s => !s.toLowerCase().includes("high") && !s.toLowerCase().includes("lofi") && !s.toLowerCase().includes("low"));
+    if (energy === "high") list = allSweepers.filter(s => s.toLowerCase().includes("high"));
+    if (energy === "low") list = allSweepers.filter(s => s.toLowerCase().includes("lofi") || s.toLowerCase().includes("low"));
+    
+    if (list.length === 0) list = allSweepers;
+    
+    let available = list.filter(s => !globalPlayedSweepers.has(s));
+    if (available.length === 0) {
+        available = list;
+        list.forEach(s => globalPlayedSweepers.delete(s)); // Reset only this category
+    }
+    
+    const picked = available[Math.floor(Math.random() * available.length)];
+    globalPlayedSweepers.add(picked);
+    return picked;
+  } catch (e) {
+    return "/audio/Sweepers/Sweeper_Desi_High_Energy_01.mp3";
   }
-  
-  const picked = available[Math.floor(Math.random() * available.length)];
-  playedSweepers.add(picked);
-  return picked;
+}
+
+function getJingleByGenre(energy: string) {
+  try {
+    const jinglesDir = path.join(process.cwd(), "public", "audio", "jingles");
+    const allJingles = fs.readdirSync(jinglesDir)
+      .filter(f => (f.endsWith('.mp3') || f.endsWith('.wav')) && (f.toLowerCase().includes('jingle') || f.toLowerCase().includes('id')))
+      .map(f => `/audio/jingles/${f}`);
+      
+    let list = allJingles.filter(s => !s.toLowerCase().includes("edm") && !s.toLowerCase().includes("high") && !s.toLowerCase().includes("lofi") && !s.toLowerCase().includes("low"));
+    if (energy === "high") list = allJingles.filter(s => s.toLowerCase().includes("edm") || s.toLowerCase().includes("high"));
+    if (energy === "low") list = allJingles.filter(s => s.toLowerCase().includes("lofi") || s.toLowerCase().includes("low"));
+    
+    if (list.length === 0) list = allJingles;
+    
+    let available = list.filter(s => !globalPlayedJingles.has(s));
+    if (available.length === 0) {
+        available = list;
+        list.forEach(s => globalPlayedJingles.delete(s));
+    }
+    
+    const picked = available[Math.floor(Math.random() * available.length)];
+    globalPlayedJingles.add(picked);
+    return picked;
+  } catch (e) {
+    return "/audio/jingles/Station_Jingle_EDM.mp3";
+  }
 }
 
 const SHOWS = [
@@ -448,7 +453,6 @@ export async function POST(request: Request) {
     let segmentIndex = 1;
     let lastSongTitle = "nothing";
     const playedSongs = new Set<string>();
-    const playedSweepers = new Set<string>();
 
     // Preflight Check: Is the Audius API down?
     const preflightSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
@@ -471,8 +475,7 @@ export async function POST(request: Request) {
 
       // 1. TOTH Station ID (Only once per hour at segment 1)
       if (segmentIndex === 1) {
-        const jingleList = STATION_IDS[currentShow.energy] || STATION_IDS.mid;
-        const stationId = jingleList[Math.floor(Math.random() * jingleList.length)];
+        const stationId = getJingleByGenre(currentShow.energy);
         addElement('station_id', await getLocalAudioDuration(stationId), stationId, { title: "Station ID" });
       }
 
@@ -559,7 +562,7 @@ export async function POST(request: Request) {
           // Ad Break (4 per hour -> segmentIndex 1, 2, 3, 4)
           if (segmentIndex <= 4) {
               // Bumper into the Ad
-              const sweeper2 = getSweeperByGenre(currentShow.energy, playedSweepers);
+              const sweeper2 = getSweeperByGenre(currentShow.energy);
               addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
               
               // AgentX SSP Orchestration: Fetch contextual programmatic ad
@@ -582,7 +585,7 @@ export async function POST(request: Request) {
               }
               
               // Bumper out of the Ad
-              const sweeper3 = getSweeperByGenre(currentShow.energy, playedSweepers);
+              const sweeper3 = getSweeperByGenre(currentShow.energy);
               addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
           } else {
               // Segment 5 end, just a zapper out
