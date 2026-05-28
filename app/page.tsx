@@ -104,6 +104,32 @@ export default function EntrySplashPage() {
           </button>
         </div>
 
+        {/* Radio Reborn Banner */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mt-6 w-full rounded-2xl bg-gradient-to-br from-brand-purple/15 via-[#111118] to-brand-teal/10 border border-[#2a2a35] p-4 relative overflow-hidden group flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+        >
+          {/* Subtle animated background glow */}
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-brand-purple/20 rounded-full blur-2xl group-hover:bg-brand-purple/30 transition duration-500" />
+          <div className="absolute -left-8 -bottom-8 w-24 h-24 bg-brand-teal/10 rounded-full blur-2xl group-hover:bg-brand-teal/20 transition duration-500" />
+          
+          <div className="flex items-center gap-3.5 relative z-10 w-full">
+            <div className="w-11 h-11 shrink-0 rounded-full bg-black border border-brand-purple/40 flex items-center justify-center p-2 shadow-[0_0_15px_rgba(127,119,221,0.25)]">
+              <img src="/logo-badge.png" alt="Future Radio Icon" className="w-full h-full object-contain" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[9px] text-brand-teal font-bold tracking-[0.25em] uppercase leading-tight mb-0.5">
+                The Independence
+              </span>
+              <h1 className="text-[22px] font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 drop-shadow-md leading-none">
+                RADIO REBORN<span className="text-brand-purple">.</span>
+              </h1>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Experience Cards Section */}
         <div className="flex-1 flex flex-col justify-center py-8">
           <div className="text-center mb-6">
