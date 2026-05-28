@@ -89,20 +89,40 @@ export default async function SchedulePage() {
   endIST.setUTCHours(23, 59, 59, 999);
   const endOfTodayISO = new Date(endIST.getTime() - 5.5 * 60 * 60 * 1000).toISOString();
 
-  const { data: dbSchedule } = await supabase
-    .from("broadcast_schedule")
-    .select("*")
-    .eq("city_id", "raipur")
-    .gte("start_time", startOfTodayISO)
-    .lte("start_time", endOfTodayISO)
-    .order("start_time", { ascending: true })
-    .limit(5000);
+  let allDbSchedule: any[] = [];
+  let hasMore = true;
+  let offset = 0;
+  const BATCH_SIZE = 1000;
+
+  while (hasMore) {
+    const { data: dbSchedule, error } = await supabase
+      .from("broadcast_schedule")
+      .select("*")
+      .eq("city_id", "raipur")
+      .gte("start_time", startOfTodayISO)
+      .lte("start_time", endOfTodayISO)
+      .order("start_time", { ascending: true })
+      .range(offset, offset + BATCH_SIZE - 1);
+
+    if (error) {
+      console.error("Error fetching schedule:", error);
+      break;
+    }
+
+    if (dbSchedule && dbSchedule.length > 0) {
+      allDbSchedule = [...allDbSchedule, ...dbSchedule];
+      offset += BATCH_SIZE;
+      if (dbSchedule.length < BATCH_SIZE) hasMore = false;
+    } else {
+      hasMore = false;
+    }
+  }
 
   // Group DB items by hour
   const dbItemsByHour: Record<number, any[]> = {};
-  if (dbSchedule) {
-    dbSchedule.forEach((item) => {
-      // Robust IST hour extraction without toLocaleString quirks (which returns 24 instead of 00 at midnight)
+  if (allDbSchedule.length > 0) {
+    allDbSchedule.forEach((item) => {
+      // Robust IST hour extraction without toLocaleString quirks
       const dateInIST = new Date(new Date(item.start_time).getTime() + 5.5 * 60 * 60 * 1000);
       const h = dateInIST.getUTCHours();
       if (!dbItemsByHour[h]) dbItemsByHour[h] = [];
