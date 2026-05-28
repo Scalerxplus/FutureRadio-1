@@ -11,8 +11,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        "brand-purple": "#8b5cf6", // True GenZ Neon Purple (Violet 500)
-        "brand-teal": "#2dd4bf",   // True GenZ Neon Teal (Teal 400)
+        "brand-red": "#e60000",    // Aggressive Radio Reborn Red
         "brand-dark": "#000000",   
         "brand-surface": "#111111",
         "brand-border": "#2a2a35", 

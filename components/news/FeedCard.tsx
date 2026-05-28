@@ -54,7 +54,7 @@ export default function FeedCard({
   const badgeColor = () => {
     switch (type) {
       case "local":
-        return "bg-brand-teal/15 text-brand-teal border-brand-teal/20";
+        return "bg-white/15 text-white border-white/20";
       case "national":
         return "bg-blue-500/15 text-blue-400 border-blue-500/20";
       case "official":
@@ -82,7 +82,7 @@ export default function FeedCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {/* Avatar Circle */}
-            <div className="w-8 h-8 rounded-full bg-brand-purple/10 border border-brand-purple/35 flex items-center justify-center text-[10px] font-bold text-brand-purple">
+            <div className="w-8 h-8 rounded-full bg-brand-red/10 border border-brand-red/35 flex items-center justify-center text-[10px] font-bold text-brand-red">
               {initials}
             </div>
             <div>
@@ -98,7 +98,7 @@ export default function FeedCard({
 
         {/* Headline & Snippet */}
         <div className="space-y-1.5">
-          <h3 className="text-[15px] font-semibold text-white leading-normal hover:text-brand-purple transition duration-200">
+          <h3 className="text-[15px] font-semibold text-white leading-normal hover:text-brand-red transition duration-200">
             <Link href={`/news/article/${id}`}>{headline}</Link>
           </h3>
           <p className="text-xs text-gray-400 leading-relaxed line-clamp-2 select-none">
@@ -115,7 +115,7 @@ export default function FeedCard({
             <span>❤️</span>
             <span>{likes}</span>
           </button>
-          <button className="flex items-center gap-1 hover:text-brand-purple transition">
+          <button className="flex items-center gap-1 hover:text-brand-red transition">
             <span>💬</span>
             <span>{comments}</span>
           </button>
@@ -127,7 +127,7 @@ export default function FeedCard({
         {/* Full Link Trigger */}
         <Link
           href={`/news/article/${id}`}
-          className="text-xs font-bold text-brand-teal hover:underline flex items-center gap-0.5"
+          className="text-xs font-bold text-white hover:underline flex items-center gap-0.5"
         >
           Read full ↗
         </Link>

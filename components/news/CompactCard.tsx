@@ -40,7 +40,7 @@ export default function CompactCard({
   const badgeColor = () => {
     switch (type) {
       case "local":
-        return "bg-brand-teal/10 text-brand-teal border-brand-teal/15";
+        return "bg-white/10 text-white border-white/15";
       case "national":
         return "bg-blue-500/10 text-blue-400 border-blue-500/15";
       case "official":
@@ -70,7 +70,7 @@ export default function CompactCard({
         </div>
 
         {/* Headline (2-Line Clamp) */}
-        <h4 className="text-xs font-semibold text-white leading-normal line-clamp-2 hover:text-brand-teal transition duration-150">
+        <h4 className="text-xs font-semibold text-white leading-normal line-clamp-2 hover:text-white transition duration-150">
           <Link href={`/news/article/${id}`}>{headline}</Link>
         </h4>
 

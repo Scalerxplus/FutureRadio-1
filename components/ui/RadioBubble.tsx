@@ -29,7 +29,7 @@ export default function RadioBubble() {
           exit={{ y: 50, opacity: 0, x: "-50%" }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
           onClick={handleTap}
-          className="fixed bottom-[88px] left-1/2 z-40 w-[calc(100%-40px)] max-w-[390px] rounded-full border border-brand-border bg-[#111118]/95 backdrop-blur-md px-4 py-2.5 flex items-center justify-between shadow-2xl cursor-pointer hover:border-brand-purple/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+          className="fixed bottom-[88px] left-1/2 z-40 w-[calc(100%-40px)] max-w-[390px] rounded-full border border-brand-border bg-[#111118]/95 backdrop-blur-md px-4 py-2.5 flex items-center justify-between shadow-2xl cursor-pointer hover:border-brand-red/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
         >
           {/* Left: Badge Logo */}
           <div className="flex-shrink-0 mr-1 relative">
@@ -40,15 +40,15 @@ export default function RadioBubble() {
             />
             {isPlaying && (
               <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-purple opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-purple"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-red"></span>
               </span>
             )}
           </div>
 
           {/* Center: Song Info */}
           <div className="flex-1 px-3 text-left overflow-hidden select-none">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-purple">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-red">
               Future Radio
             </p>
             <h4 className="text-xs font-semibold text-gray-300 truncate leading-snug">
@@ -57,7 +57,7 @@ export default function RadioBubble() {
           </div>
 
           {/* Right: Up-Arrow Circle Icon */}
-          <div className="flex-shrink-0 text-brand-purple hover:text-brand-purple/80">
+          <div className="flex-shrink-0 text-brand-red hover:text-brand-red/80">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

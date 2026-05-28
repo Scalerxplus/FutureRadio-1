@@ -115,12 +115,12 @@ export default function LivePollingDisplay({ cityId }: { cityId: string }) {
       <button 
         onClick={() => handleVote(num)}
         disabled={hasVoted || isVoting}
-        className={`relative w-full overflow-hidden rounded-lg transition-all duration-300 ${hasVoted ? 'bg-[#2a2a35] border border-[#3a3a45] cursor-default' : 'bg-[#1c1c24] border border-brand-purple/40 hover:border-brand-purple hover:bg-[#252530]'}`}
+        className={`relative w-full overflow-hidden rounded-lg transition-all duration-300 ${hasVoted ? 'bg-[#2a2a35] border border-[#3a3a45] cursor-default' : 'bg-[#1c1c24] border border-brand-red/40 hover:border-brand-red hover:bg-[#252530]'}`}
       >
         {/* Progress Bar Background */}
         {hasVoted && (
            <div 
-             className="absolute left-0 top-0 h-full bg-brand-purple/20 transition-all duration-1000 ease-out"
+             className="absolute left-0 top-0 h-full bg-brand-red/20 transition-all duration-1000 ease-out"
              style={{ width: `${percent}%` }}
            />
         )}
@@ -131,7 +131,7 @@ export default function LivePollingDisplay({ cityId }: { cityId: string }) {
              <div className="text-[10px] text-gray-400">{artist}</div>
            </div>
            {hasVoted && (
-             <div className="text-sm font-bold text-brand-purple ml-2">{percent}%</div>
+             <div className="text-sm font-bold text-brand-red ml-2">{percent}%</div>
            )}
         </div>
       </button>
@@ -144,7 +144,7 @@ export default function LivePollingDisplay({ cityId }: { cityId: string }) {
         <h3 className="text-xs font-bold text-white uppercase tracking-wider">
           Tomorrow's Opening Track
         </h3>
-        {hasVoted && <span className="text-[10px] text-brand-teal font-bold uppercase tracking-widest bg-brand-teal/10 px-2 py-0.5 rounded-full">Voted</span>}
+        {hasVoted && <span className="text-[10px] text-white font-bold uppercase tracking-widest bg-white/10 px-2 py-0.5 rounded-full">Voted</span>}
       </div>
       
       <p className="text-[10px] text-gray-400 mb-4 font-medium">

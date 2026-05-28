@@ -50,9 +50,9 @@ export default function EntrySplashPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex justify-center items-center">
+    <div className="min-h-screen bg-transparent flex justify-center items-center">
       {/* Centered Mobile viewport shell */}
-      <main className="w-full max-w-[430px] min-h-screen bg-[#0a0a0f] text-white flex flex-col justify-between px-6 py-10 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border-x border-[#111118]">
+      <main className="w-full max-w-[430px] min-h-screen bg-black/40 backdrop-blur-sm text-white flex flex-col justify-between px-6 py-10 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border-x border-white/5">
         
         {/* Auth / Profile Sticky Header Layer */}
         <div className="absolute top-6 right-6 z-20">
@@ -61,8 +61,8 @@ export default function EntrySplashPage() {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-wider transition duration-300 ${
               user
                 ? isYtPremium
-                  ? "bg-[#1d9e75]/15 border-[#1d9e75]/30 text-brand-teal"
-                  : "bg-brand-purple/15 border-brand-purple/30 text-brand-purple"
+                  ? "bg-[#ffffff]/15 border-[#ffffff]/30 text-white"
+                  : "bg-brand-red/15 border-brand-red/30 text-brand-red"
                 : "bg-[#111118] border-brand-border text-gray-400 hover:text-white"
             }`}
           >
@@ -86,10 +86,10 @@ export default function EntrySplashPage() {
           {/* City Selector Pill */}
           <button
             onClick={() => setIsBottomSheetOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111118] border border-[#2a2a35] hover:border-brand-purple/40 hover:bg-[#111118]/80 transition duration-300"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111118] border border-[#2a2a35] hover:border-brand-red/40 hover:bg-[#111118]/80 transition duration-300"
             aria-label="Change city context"
           >
-            <span className="w-2 h-2 rounded-full bg-[#1D9E75] animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[#ffffff] animate-pulse" />
             <span className="text-xs font-semibold text-gray-300">{cityName}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -112,9 +112,9 @@ export default function EntrySplashPage() {
           className="my-auto w-full flex items-center justify-center relative select-none pointer-events-none py-8"
         >
           {/* Deep Cinematic Ambient Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-24 bg-gradient-to-r from-transparent via-brand-purple/40 to-transparent rounded-full blur-3xl opacity-80" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-24 bg-gradient-to-r from-transparent via-brand-red/40 to-transparent rounded-full blur-3xl opacity-80" />
           
-          <h1 className="text-[34px] font-black uppercase tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#f0f0f0] to-[#7f77dd] drop-shadow-[0_0_35px_rgba(127,119,221,0.6)] relative z-10 text-center leading-none" style={{ fontFamily: "var(--font-outfit)" }}>
+          <h1 className="text-[34px] font-black uppercase tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#f0f0f0] to-[#e60000] drop-shadow-[0_0_35px_rgba(230,0,0,0.6)] relative z-10 text-center leading-none" style={{ fontFamily: "var(--font-outfit)" }}>
             RADIO <br /> REBORN
           </h1>
         </motion.div>
@@ -138,7 +138,7 @@ export default function EntrySplashPage() {
               variants={cardVariants}
               whileTap={{ scale: 0.97 }}
               onClick={() => handleCardClick("radio", "/radio")}
-              className="h-[160px] rounded-2xl bg-[#111118] border border-[#2a2a35] p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:border-brand-purple/40 hover:shadow-[0_0_20px_rgba(127,119,221,0.05)] transition-colors duration-300"
+              className="h-[160px] rounded-2xl bg-[#111118] border border-[#2a2a35] p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:border-brand-red/40 hover:shadow-[0_0_20px_rgba(230,0,0,0.05)] transition-colors duration-300"
             >
               {/* Decorative Radio Background Icon (Very Low Opacity) */}
               <div className="absolute top-4 right-4 text-white/[0.02] group-hover:text-white/[0.04] transition duration-300 select-none pointer-events-none">
@@ -160,7 +160,7 @@ export default function EntrySplashPage() {
 
               {/* Card Meta Content */}
               <div className="space-y-1">
-                <span className="text-[10px] font-bold tracking-[0.15em] text-brand-purple uppercase">
+                <span className="text-[10px] font-bold tracking-[0.15em] text-brand-red uppercase">
                   LIVE RADIO
                 </span>
                 <h2 className="text-[22px] font-bold text-white tracking-tight">
@@ -172,7 +172,7 @@ export default function EntrySplashPage() {
               </div>
 
               {/* Card Bottom Tag Pill */}
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple text-[10px] font-semibold uppercase tracking-wider w-fit">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-red/10 border border-brand-red/20 text-brand-red text-[10px] font-semibold uppercase tracking-wider w-fit">
                 {/* Antenna Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -197,7 +197,7 @@ export default function EntrySplashPage() {
               variants={cardVariants}
               whileTap={{ scale: 0.97 }}
               onClick={() => handleCardClick("news", "/news")}
-              className="h-[160px] rounded-2xl bg-[#111118] border border-[#2a2a35] p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:border-brand-teal/40 hover:shadow-[0_0_20px_rgba(29,158,117,0.05)] transition-colors duration-300"
+              className="h-[160px] rounded-2xl bg-[#111118] border border-[#2a2a35] p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-colors duration-300"
             >
               {/* Decorative Newspaper Background Icon (Very Low Opacity) */}
               <div className="absolute top-4 right-4 text-white/[0.02] group-hover:text-white/[0.04] transition duration-300 select-none pointer-events-none">
@@ -219,7 +219,7 @@ export default function EntrySplashPage() {
 
               {/* Card Meta Content */}
               <div className="space-y-1">
-                <span className="text-[10px] font-bold tracking-[0.15em] text-brand-teal uppercase">
+                <span className="text-[10px] font-bold tracking-[0.15em] text-white uppercase">
                   NEWS FEED
                 </span>
                 <h2 className="text-[22px] font-bold text-white tracking-tight">
@@ -231,7 +231,7 @@ export default function EntrySplashPage() {
               </div>
 
               {/* Card Bottom Tag Pill */}
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-teal/10 border border-brand-teal/20 text-brand-teal text-[10px] font-semibold uppercase tracking-wider w-fit">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-semibold uppercase tracking-wider w-fit">
                 {/* Sparkles Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -300,7 +300,7 @@ export default function EntrySplashPage() {
                         onClick={() => handleSelectCity(city.id, city.name)}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left text-sm font-semibold transition ${
                           isSelected
-                            ? "bg-brand-purple/15 text-brand-purple border border-brand-purple/20"
+                            ? "bg-brand-red/15 text-brand-red border border-brand-red/20"
                             : "text-gray-300 hover:bg-[#1c1c28] border border-transparent"
                         }`}
                       >
@@ -312,7 +312,7 @@ export default function EntrySplashPage() {
                             viewBox="0 0 24 24"
                             strokeWidth={3}
                             stroke="currentColor"
-                            className="w-4 h-4 text-brand-purple"
+                            className="w-4 h-4 text-brand-red"
                           >
                             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                           </svg>

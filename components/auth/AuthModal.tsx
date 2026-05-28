@@ -63,12 +63,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             className="relative w-full max-w-[390px] rounded-3xl border border-[#2a2a35] bg-[#111118]/90 backdrop-blur-xl p-6 shadow-2xl space-y-6 overflow-hidden select-none"
           >
             {/* Ambient Background Glowing Orb */}
-            <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-brand-purple/20 blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-12 -left-12 w-32 h-32 rounded-full bg-brand-teal/15 blur-2xl pointer-events-none" />
+            <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-brand-red/20 blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 w-32 h-32 rounded-full bg-white/15 blur-2xl pointer-events-none" />
 
             {/* Header */}
             <div className="text-center relative">
-              <span className="text-[10px] font-bold text-brand-purple uppercase tracking-[0.2em]">
+              <span className="text-[10px] font-bold text-brand-red uppercase tracking-[0.2em]">
                 Secure Sync Node
               </span>
               <h3 className="text-xl font-extrabold text-white mt-1">
@@ -95,7 +95,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               // Logged In State
               <div className="space-y-4 relative">
                 <div className="bg-[#1c1c28] border border-brand-border rounded-xl p-4 flex items-center gap-3.5">
-                  <div className="w-11 h-11 rounded-full bg-brand-purple/15 border border-brand-purple/35 flex items-center justify-center text-xl">
+                  <div className="w-11 h-11 rounded-full bg-brand-red/15 border border-brand-red/35 flex items-center justify-center text-xl">
                     {user.avatar as string || "👤"}
                   </div>
                   <div>
@@ -107,8 +107,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 {/* Subscription Status Card */}
                 <div className={`p-4 rounded-xl border ${
                   isYtPremium 
-                    ? "bg-[#1d9e75]/10 border-[#1d9e75]/20 text-brand-teal" 
-                    : "bg-brand-purple/10 border-brand-purple/20 text-brand-purple"
+                    ? "bg-[#ffffff]/10 border-[#ffffff]/20 text-white" 
+                    : "bg-brand-red/10 border-brand-red/20 text-brand-red"
                 }`}>
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{isYtPremium ? "🎟️" : "📡"}</span>
@@ -143,7 +143,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   className="w-full flex items-center justify-center gap-3 py-3.5 px-4 rounded-xl bg-white text-gray-900 hover:bg-gray-150 font-semibold text-xs transition duration-300 transform active:scale-[0.98] disabled:opacity-50"
                 >
                   {loading ? (
-                    <span className="w-4 h-4 rounded-full border-2 border-brand-purple border-t-transparent animate-spin" />
+                    <span className="w-4 h-4 rounded-full border-2 border-brand-red border-t-transparent animate-spin" />
                   ) : (
                     // Google Vector Icon
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -177,7 +177,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       exit={{ opacity: 0, y: 10 }}
                       className={`p-4 rounded-xl border text-center ${
                         premiumStatus === "premium" 
-                          ? "bg-[#1d9e75]/10 border-[#1d9e75]/25 text-brand-teal" 
+                          ? "bg-[#ffffff]/10 border-[#ffffff]/25 text-white" 
                           : "bg-amber-500/10 border-amber-500/25 text-amber-400"
                       }`}
                     >

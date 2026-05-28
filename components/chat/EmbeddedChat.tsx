@@ -72,7 +72,7 @@ export default function EmbeddedChat({ currentSong, cityId = 'raipur', userName 
       
       {/* Header Badge */}
       <div className="flex items-center gap-2 mb-2 px-1">
-        <div className="w-2 h-2 rounded-full bg-brand-purple animate-pulse"></div>
+        <div className="w-2 h-2 rounded-full bg-brand-red animate-pulse"></div>
         <span className="text-[9px] font-extrabold text-gray-400 uppercase tracking-widest">
           Live Chat · AI RJ Prameesh
         </span>
@@ -84,18 +84,18 @@ export default function EmbeddedChat({ currentSong, cityId = 'raipur', userName 
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] rounded-xl px-3 py-1.5 text-[11px] leading-relaxed ${
               msg.role === 'user' 
-                ? 'bg-brand-purple/20 text-white border border-brand-purple/30 rounded-br-sm' 
-                : 'bg-transparent text-gray-300 border-l-2 border-brand-purple pl-2'
+                ? 'bg-brand-red/20 text-white border border-brand-red/30 rounded-br-sm' 
+                : 'bg-transparent text-gray-300 border-l-2 border-brand-red pl-2'
             }`}>
-              {msg.role === 'rj' && <span className="font-bold text-brand-purple mr-1">RJ:</span>}
+              {msg.role === 'rj' && <span className="font-bold text-brand-red mr-1">RJ:</span>}
               {msg.text}
             </div>
           </div>
         ))}
         {isTyping && (
           <div className="flex justify-start">
-            <div className="bg-transparent border-l-2 border-brand-purple pl-2 px-3 py-1.5 flex gap-1">
-              <span className="font-bold text-brand-purple text-[11px] mr-1">RJ:</span>
+            <div className="bg-transparent border-l-2 border-brand-red pl-2 px-3 py-1.5 flex gap-1">
+              <span className="font-bold text-brand-red text-[11px] mr-1">RJ:</span>
               <div className="flex gap-1 items-center">
                 <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></div>
                 <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -115,12 +115,12 @@ export default function EmbeddedChat({ currentSong, cityId = 'raipur', userName 
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           placeholder="Request a song..."
-          className="w-full bg-[#1a1a24] text-white text-[11px] rounded-lg pl-3 pr-10 py-2 border border-[#2a2a35] focus:outline-none focus:border-brand-purple transition-colors"
+          className="w-full bg-[#1a1a24] text-white text-[11px] rounded-lg pl-3 pr-10 py-2 border border-[#2a2a35] focus:outline-none focus:border-brand-red transition-colors"
         />
         <button 
           onClick={handleSend}
           disabled={!inputValue.trim() || isTyping}
-          className="absolute right-1 top-1 w-6 h-6 rounded flex items-center justify-center text-gray-400 hover:text-brand-purple disabled:opacity-50 transition-colors"
+          className="absolute right-1 top-1 w-6 h-6 rounded flex items-center justify-center text-gray-400 hover:text-brand-red disabled:opacity-50 transition-colors"
         >
           <Send size={12} />
         </button>

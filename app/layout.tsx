@@ -74,7 +74,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${outfit.variable} ${spaceGrotesk.variable} ${digitalFont.variable} font-sans antialiased bg-[#0a0a0f] text-white min-h-screen selection:bg-brand-purple selection:text-white`}
+        className={`${outfit.variable} ${spaceGrotesk.variable} ${digitalFont.variable} font-sans antialiased text-white min-h-screen selection:bg-brand-red selection:text-white`}
       >
         {/* Persistent Audio Core Layers */}
         <AudioOrchestrator />
