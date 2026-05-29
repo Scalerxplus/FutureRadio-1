@@ -484,58 +484,9 @@ export async function POST(request: Request) {
           // Jocktalk Segment
           const newsItem = localNewsItems.length >= segmentIndex ? localNewsItems[segmentIndex-1] : null;
           
-          // Get next song details for tease (and inject Poll Winner logic)
-          let nextSongInfo;
-          let isPollWinner = false;
-          let pollWinningPercentage = 0;
-
-          if (segmentIndex === 3) {
-             const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-             
-             const { data: pastPolls } = await supabase
-               .from('daily_polls')
-               .select('*')
-               .eq('city_id', cityId)
-               .eq('poll_date', yesterday)
-               .eq('status', 'active') // It remains active until fulfilled by the Master Clock
-               .limit(1);
-               
-             if (pastPolls && pastPolls.length > 0) {
-                const poll = pastPolls[0];
-                
-                // Determine Winner
-                const v1 = poll.song1_votes || 0;
-                const v2 = poll.song2_votes || 0;
-                const v3 = poll.song3_votes || 0;
-                const totalVotes = v1 + v2 + v3;
-                
-                if (totalVotes > 0) {
-                  let winnerTitle = poll.song1_title;
-                  let winnerVotes = v1;
-                  if (v2 > winnerVotes) { winnerTitle = poll.song2_title; winnerVotes = v2; }
-                  if (v3 > winnerVotes) { winnerTitle = poll.song3_title; winnerVotes = v3; }
-                  
-                  pollWinningPercentage = Math.round((winnerVotes / totalVotes) * 100);
-                  
-                  nextSongInfo = await getSong(winnerTitle, cityId, playedSongs);
-                  isPollWinner = true;
-                  
-                  console.log(`[Master Clock] Found Poll Winner: ${winnerTitle} with ${pollWinningPercentage}% votes`);
-                  
-                  // Mark as fulfilled so it doesn't get played every hour
-                  await supabase.from('daily_polls').update({ status: 'fulfilled' }).eq('id', poll.id);
-                }
-             }
-          }
-
-          if (!isPollWinner) {
-              nextSongInfo = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
-          }
-
+          // Get next song details for tease
+          let nextSongInfo = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
           let segmentTopic = selectedHourlyTopic;
-          if (isPollWinner) {
-              segmentTopic = `[POLL_WINNER] The next song is exactly what the audience voted for yesterday. Announce it loudly as the 'Community Poll Winner'! YOU MUST explicitly mention that it won with exactly ${pollWinningPercentage}% of the votes.`;
-          }
           
           const rjScript = await getJocktalk(cityId, currentIstHour, currentShow, segmentTopic, segmentIndex, lastSongTitle, nextSongInfo.title, liveWeather, newsItem, globalRjPrompt);
           
