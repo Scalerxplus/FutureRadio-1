@@ -195,7 +195,7 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   return (
     <div className="h-full flex relative overflow-hidden bg-[#050505]">
       {/* Left Column: Live Schedule */}
-      <div className="flex-1 flex flex-col relative h-full overflow-y-auto px-8 pb-24" ref={containerRef}>
+      <div className="flex-1 flex flex-col relative h-full overflow-hidden">
       {/* --- HITL EDIT MODAL --- */}
       {editingElement && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
@@ -300,7 +300,9 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
         </div>
       )}
 
-      <header className="mb-8 flex justify-between items-end sticky top-0 bg-[#0a0a0f]/90 backdrop-blur-md z-10 py-4 border-b border-[#1a1a24] -mx-8 px-8">
+      {/* Pinned Top Area: Header & Mixing Console */}
+      <div className="shrink-0 px-8 pt-6 pb-2 border-b border-[#1a1a24] bg-[#0a0a0f]/95 backdrop-blur-md z-20">
+        <header className="mb-6 flex justify-between items-end">
         <div>
           <h2 className="text-3xl font-bold text-white mb-2">24-Hour Master Playlist</h2>
           <p className="text-gray-400">Complete bird's-eye view of today's Hot Clock programming.</p>
@@ -339,30 +341,32 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
             Skip Live Element
           </button>
         </div>
-      </header>
+        </header>
 
-      {/* Batch Generation Progress Overlay */}
-      {isGeneratingBatch && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center">
-          <div className="bg-[#111118] p-8 rounded-2xl border border-[#2a2a35] flex flex-col items-center max-w-md w-full">
-            <div className="w-12 h-12 border-4 border-brand-red border-t-transparent rounded-full animate-spin mb-6"></div>
-            <h3 className="text-xl font-bold text-white mb-2">Automating Tomorrow's Schedule</h3>
-            <p className="text-gray-400 mb-6 text-center">Generating AI elements for each hour of the day. Do not close this window.</p>
-            <div className="w-full bg-[#1a1a24] rounded-full h-4 mb-2 overflow-hidden border border-[#2a2a35]">
-              <div 
-                className="bg-gradient-to-r from-brand-red to-white h-full transition-all duration-300"
-                style={{ width: `${(generationProgress / 24) * 100}%` }}
-              ></div>
+        {/* --- LIVE MIXING CONSOLE --- */}
+        <MixingConsole schedule={schedule} now={now} />
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-8 pb-24 pt-6" ref={containerRef}>
+        {/* Batch Generation Progress Overlay */}
+        {isGeneratingBatch && (
+          <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center">
+            <div className="bg-[#111118] p-8 rounded-2xl border border-[#2a2a35] flex flex-col items-center max-w-md w-full">
+              <div className="w-12 h-12 border-4 border-brand-red border-t-transparent rounded-full animate-spin mb-6"></div>
+              <h3 className="text-xl font-bold text-white mb-2">Automating Tomorrow's Schedule</h3>
+              <p className="text-gray-400 mb-6 text-center">Generating AI elements for each hour of the day. Do not close this window.</p>
+              <div className="w-full bg-[#1a1a24] rounded-full h-4 mb-2 overflow-hidden border border-[#2a2a35]">
+                <div 
+                  className="bg-gradient-to-r from-brand-red to-white h-full transition-all duration-300"
+                  style={{ width: `${(generationProgress / 24) * 100}%` }}
+                ></div>
+              </div>
+              <p className="text-xs text-brand-red font-bold tracking-widest">{Math.round((generationProgress / 24) * 100)}% COMPLETE ({generationProgress}/24 HOURS)</p>
             </div>
-            <p className="text-xs text-brand-red font-bold tracking-widest">{Math.round((generationProgress / 24) * 100)}% COMPLETE ({generationProgress}/24 HOURS)</p>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* --- LIVE MIXING CONSOLE --- */}
-      <MixingConsole schedule={schedule} now={now} />
-
-      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8">
         {schedule.map((block) => (
           <div key={`hour-${block.hour}`} className="bg-[#111118] border border-[#1a1a24] rounded-2xl overflow-hidden">
             {/* Hour Header */}
@@ -505,6 +509,7 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
             </div>
           </div>
         ))}
+      </div>
       </div>
       </div>
       
