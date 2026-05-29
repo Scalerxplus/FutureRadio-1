@@ -96,6 +96,42 @@ export default function AudioOrchestrator() {
   const prefetchedUrlsRef = useRef<Set<string>>(new Set());
   const [listenerId] = useState(() => typeof window !== "undefined" ? crypto.randomUUID() : "anon");
 
+  // --- SMART AUTO-HEAL: 5-Channel Silence Detection ---
+  const handleMediaError = (deckType: "songA" | "songB" | "jocktalk" | "jingle" | "bed") => {
+    let targetRef: React.MutableRefObject<HTMLAudioElement | null> | null = null;
+    let fallbackSrc = "";
+
+    switch(deckType) {
+      case "songA":
+        targetRef = audiusRef;
+        fallbackSrc = "/audio/fallbacks/Future Radio (2).mp3"; // Or randomly pick one
+        break;
+      case "songB":
+        targetRef = audiusRefB;
+        fallbackSrc = "/audio/fallbacks/Future Radio (8).mp3";
+        break;
+      case "jocktalk":
+        targetRef = audioRef;
+        fallbackSrc = "/audio/fallbacks/Future Radio Tuned (1).mp3";
+        break;
+      case "jingle":
+        targetRef = jingleRef;
+        fallbackSrc = "/audio/fallbacks/Generic_Sponsor_Break.mp3";
+        break;
+      case "bed":
+        targetRef = bedRef;
+        fallbackSrc = "/audio/jingles/lofi-bed.mp3";
+        break;
+    }
+
+    if (targetRef && targetRef.current && targetRef.current.src && !targetRef.current.src.includes(fallbackSrc)) {
+      console.warn(`[Auto-Heal] Silence/Error detected on ${deckType}. Injecting fallback audio!`);
+      targetRef.current.src = fallbackSrc;
+      targetRef.current.loop = (deckType === "songA" || deckType === "songB"); // Loop songs to fill the clock time
+      targetRef.current.play().catch(() => {});
+    }
+  };
+
   // Realtime Presence Tracker for Live Listeners Count
   useEffect(() => {
     if (!isPlaying) return;
@@ -407,13 +443,16 @@ export default function AudioOrchestrator() {
                try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
             }
             primaryAudius.volume = 1.0;
-            primaryAudius.play().catch(e => console.error("Audius play error", e));
+            primaryAudius.play().catch(e => {
+              console.error("Audius play error", e);
+              handleMediaError(activeDeckRef.current === "A" ? "songA" : "songB");
+            });
           }
         } else {
-          setPhase(activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic" ? "playing_jocktalk" : "playing_jingle");
-          
+          // --- AUDIO ELEMENTS (Jocktalk / Traffic) ---
           if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
-            if (audioRef.current) {
+            setPhase("playing_jocktalk");
+            if (audioRef.current && audioRef.current.src !== activeElement.media_url) {
               audioRef.current.src = activeElement.media_url;
               audioRef.current.volume = 1.0;
               audioRef.current.onloadedmetadata = () => {
@@ -423,21 +462,23 @@ export default function AudioOrchestrator() {
               };
               audioRef.current.play().catch(e => {
                 console.error("Audio block failed:", e);
-                // FAILSAFE (BUG 2 FIX): Play local station ID if TTS fetch fails
-                if (audioRef.current) {
-                  audioRef.current.src = "/audio/jingles/lofi-bed.mp3";
-                  audioRef.current.play().catch(() => {});
-                }
+                handleMediaError("jocktalk");
               });
-              
-              // CLEAR BUFFER (BUG 1 FIX)
-              audioRef.current.onended = () => {
-                if (audioRef.current) audioRef.current.src = "";
-              };
             }
-          } else {
-            // It's a Station ID or Sweeper! Use the dedicated overlapping Jingle player
-            if (jingleRef.current) {
+
+            // Always play bed during talk
+            const targetBedSrc = "/audio/jingles/lofi-bed.mp3";
+            if (bedRef.current && bedRef.current.src && !bedRef.current.src.includes("lofi-bed")) {
+              bedRef.current.src = targetBedSrc;
+              bedRef.current.volume = 0.4; // Starts normalized at 40%, ducking logic will push it down to 10%
+              bedRef.current.play().catch(() => handleMediaError("bed"));
+            }
+          } 
+          
+          // --- JINGLE ELEMENTS (Branding / Sponsor) ---
+          else if (activeElement.element_type === "station_id" || activeElement.element_type === "sweeper" || activeElement.element_type === "ad") {
+            setPhase("playing_jingle");
+            if (jingleRef.current && jingleRef.current.src !== activeElement.media_url) {
               jingleRef.current.src = activeElement.media_url;
               jingleRef.current.volume = 1.0;
               jingleRef.current.onloadedmetadata = () => {
@@ -445,13 +486,15 @@ export default function AudioOrchestrator() {
                   try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
                 }
               };
-              jingleRef.current.play().catch(e => console.error("Jingle block failed:", e));
+              jingleRef.current.play().catch(e => {
+                console.error("Jingle block failed:", e);
+                handleMediaError("jingle");
+              });
             }
           }
 
           // Start ambient bed
           if ((activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") && bedRef.current) {
-            
             // Dynamic Day-Part News Bed Mapping
             const hour = serverNow.getHours();
             let bedFile = "news-bed-deep.mp3"; // Default for Night/Morning Zen (analytical/deep economy)
@@ -592,11 +635,11 @@ export default function AudioOrchestrator() {
 
 
       <audio id="keepalive-player" ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
-      <audio id="audius-player-a" ref={audiusRef} crossOrigin="anonymous" />
-      <audio id="audius-player-b" ref={audiusRefB} crossOrigin="anonymous" />
-      <audio id="html5-player" ref={audioRef} />
-      <audio id="jingle-player" ref={jingleRef} />
-      <audio id="bed-player" ref={bedRef} loop />
+      <audio id="audius-player-a" ref={audiusRef} crossOrigin="anonymous" onError={() => handleMediaError("songA")} />
+      <audio id="audius-player-b" ref={audiusRefB} crossOrigin="anonymous" onError={() => handleMediaError("songB")} />
+      <audio id="html5-player" ref={audioRef} onError={() => handleMediaError("jocktalk")} />
+      <audio id="jingle-player" ref={jingleRef} onError={() => handleMediaError("jingle")} />
+      <audio id="bed-player" ref={bedRef} loop onError={() => handleMediaError("bed")} />
     </>
   );
 }
