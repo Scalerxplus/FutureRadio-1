@@ -265,13 +265,23 @@ export default function AudioOrchestrator() {
     const interval = setInterval(() => {
       const serverNow = new Date(Date.now() + syncOffsetMs);
       
-      const activeElementIndex = schedule.findIndex(el => {
-        const start = new Date(el.start_time);
-        const end = new Date(el.end_time);
-        return serverNow >= start && serverNow < end;
-      });
+      let currentIndex = activeQueueIndexRef.current;
+      
+      // Initial Sync (Hard Wall-Clock Sync) or out-of-bounds reset
+      if (currentIndex === null || currentIndex >= schedule.length || currentIndex === -1) {
+         currentIndex = schedule.findIndex(el => {
+           const start = new Date(el.start_time).getTime();
+           const end = new Date(el.end_time).getTime();
+           return serverNow.getTime() >= start && serverNow.getTime() < end;
+         });
+         
+         if (currentIndex !== -1) {
+             activeQueueIndexRef.current = currentIndex;
+             transitionTimeRef.current = Date.now() - (serverNow.getTime() - new Date(schedule[currentIndex].start_time).getTime());
+         }
+      }
 
-      if (activeElementIndex === -1) {
+      if (currentIndex === -1) {
         if (currentElementIdRef.current !== "FALLBACK") {
           currentElementIdRef.current = "FALLBACK";
           setPhase("idle"); // using idle so UI shows "Station Standby" or similar
@@ -295,6 +305,7 @@ export default function AudioOrchestrator() {
             .then((newData) => {
               setSchedule(newData);
               isGeneratingRef.current = false;
+              activeQueueIndexRef.current = null; // Force reset on new schedule
             })
             .catch((err) => {
               console.error("[Sync Engine] Auto-generation failed:", err);
@@ -304,17 +315,50 @@ export default function AudioOrchestrator() {
         return;
       }
 
-      const activeElement = schedule[activeElementIndex];
+      const activeElement = schedule[currentIndex];
 
-      const offsetSeconds = (serverNow.getTime() - new Date(activeElement.start_time).getTime()) / 1000;
-      const remainingSeconds = (new Date(activeElement.end_time).getTime() - serverNow.getTime()) / 1000;
+      // Identify Active Deck
+      let activeDeck: HTMLAudioElement | null = null;
+      if (activeElement.element_type === "song") {
+         activeDeck = activeDeckRef.current === "A" ? audiusRef.current : audiusRefB.current;
+      } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+         activeDeck = audioRef.current;
+      } else {
+         activeDeck = jingleRef.current;
+      }
 
+      // Calculate pseudo offset & remaining based on relative transition time
+      let offsetSeconds = (Date.now() - transitionTimeRef.current) / 1000;
+      let pseudoRemainingSeconds = (activeElement.duration_ms / 1000) - offsetSeconds;
+      
+      if (activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
+          pseudoRemainingSeconds = activeDeck.duration - activeDeck.currentTime;
+      }
 
+      // --- END-TRIGGERED QUEUE LOGIC (SMART SEQUENCER) ---
+      // Only advance the queue if the user has unlocked audio and the deck is actively playing/ending
+      if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
+         const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
+         
+         if (remainingTimeOnDeck <= 3.5 && remainingTimeOnDeck > 0) {
+            console.log(`[Smart Sequencer] ${activeElement.element_type} has ${remainingTimeOnDeck.toFixed(1)}s left. Queueing NEXT!`);
+            activeQueueIndexRef.current = currentIndex + 1;
+            currentIndex = activeQueueIndexRef.current;
+            if (currentIndex < schedule.length) {
+               transitionTimeRef.current = Date.now();
+               offsetSeconds = 0.0;
+               pseudoRemainingSeconds = schedule[currentIndex].duration_ms / 1000;
+            }
+         }
+      }
+
+      if (currentIndex >= schedule.length) return; // Wait for generation
+      const currentElementToPlay = schedule[currentIndex];
 
       // --- AUDIO DUCKING LOGIC FOR RJ BED ---
-      if ((activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") && bedRef.current) {
+      if ((currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "traffic") && bedRef.current) {
         const elapsed = offsetSeconds;
-        const remain = remainingSeconds;
+        const remain = pseudoRemainingSeconds;
 
         let targetVol = 0.1;
         if (elapsed < 2.0) {
@@ -325,7 +369,7 @@ export default function AudioOrchestrator() {
           targetVol = 0.1;
         }
         bedRef.current.volume = Math.max(0, Math.min(1, targetVol));
-      } else if (activeElement.element_type !== "jocktalk" && activeElement.element_type !== "traffic" && bedRef.current && offsetSeconds > 0.5) {
+      } else if (currentElementToPlay.element_type !== "jocktalk" && currentElementToPlay.element_type !== "traffic" && bedRef.current && offsetSeconds > 0.5) {
         // FAILSAFE: Force pause the bed if we are in a song, ad, or jingle.
         // This prevents the bed from accidentally looping behind songs indefinitely, especially in background tabs.
         if (!bedRef.current.paused) {
@@ -336,9 +380,9 @@ export default function AudioOrchestrator() {
 
       // --- 60s PRE-FETCH QUEUE LOGIC (BUG 2 FIX) ---
       // Triggers LLM + TTS generation 60s early so it's fully cached before the break
-      const nextElement = schedule[activeElementIndex + 1];
+      const nextElement = schedule[currentIndex + 1];
       if (nextElement && (nextElement.element_type === "jocktalk" || nextElement.element_type === "traffic")) {
-        if (remainingSeconds <= 60 && remainingSeconds > 0 && !prefetchedUrlsRef.current.has(nextElement.id)) {
+        if (pseudoRemainingSeconds <= 60 && pseudoRemainingSeconds > 0 && !prefetchedUrlsRef.current.has(nextElement.id)) {
           console.log(`[Sync Engine] Pre-fetching TTS (60s early) for upcoming block: ${nextElement.id}`);
           prefetchedUrlsRef.current.add(nextElement.id);
           fetch(nextElement.media_url, { cache: "force-cache" }).catch(e => console.error("Prefetch failed", e));
@@ -346,39 +390,39 @@ export default function AudioOrchestrator() {
       }
 
       // --- MAGIC 1.5s ZAPPER CROSSFADE SEGUE ---
-      if (remainingSeconds <= 1.5 && remainingSeconds > 0 && !zapperFiredRef.current) {
+      if (pseudoRemainingSeconds <= 1.5 && pseudoRemainingSeconds > 0 && !zapperFiredRef.current) {
         console.log(`[Sync Engine] Firing Zapper crossfade (1.5s remaining)`);
         playRadioZapper();
         zapperFiredRef.current = true;
       }
 
       // --- STATE TRANSITION DETECTED ---
-      if (currentElementIdRef.current !== activeElement.id) {
-        console.log(`[Sync Engine] Transitioning to ${activeElement.element_type} (Offset: ${offsetSeconds.toFixed(1)}s)`);
-        currentElementIdRef.current = activeElement.id;
+      if (currentElementIdRef.current !== currentElementToPlay.id) {
+        console.log(`[Sync Engine] Transitioning to ${currentElementToPlay.element_type} (Offset: ${offsetSeconds.toFixed(1)}s)`);
+        currentElementIdRef.current = currentElementToPlay.id;
         zapperFiredRef.current = false; // Reset for the next transition
 
         // Toggle Dual-Deck for back-to-back songs
-        if (activeElement.element_type === "song") {
+        if (currentElementToPlay.element_type === "song") {
           activeDeckRef.current = activeDeckRef.current === "A" ? "B" : "A";
         }
 
         // Map to mock PlaylistBlock for the UI
         const mockBlock: PlaylistBlock = {
-          blockId: activeElement.id,
-          cityId: activeElement.city_id,
-          youtubeId: activeElement.youtube_id || "",
-          songTitle: activeElement.metadata?.title || "Future Radio Broadcast",
-          songArtist: activeElement.metadata?.artist || "Future Radio Intelligence",
-          songDurationS: activeElement.duration_ms / 1000,
-          rjAudioUrl: "", jingleUrl: "", rjTranscript: activeElement.metadata?.transcript || "",
-          newsHeadlines: [], mood: "Live", validFrom: activeElement.start_time, validUntil: activeElement.end_time,
-          coverArt: activeElement.metadata?.coverArt || activeElement.metadata?.artwork_url || ""
+          blockId: currentElementToPlay.id,
+          cityId: currentElementToPlay.city_id,
+          youtubeId: currentElementToPlay.youtube_id || "",
+          songTitle: currentElementToPlay.metadata?.title || "Future Radio Broadcast",
+          songArtist: currentElementToPlay.metadata?.artist || "Future Radio Intelligence",
+          songDurationS: currentElementToPlay.duration_ms / 1000,
+          rjAudioUrl: "", jingleUrl: "", rjTranscript: currentElementToPlay.metadata?.transcript || "",
+          newsHeadlines: [], mood: "Live", validFrom: currentElementToPlay.start_time, validUntil: currentElementToPlay.end_time,
+          coverArt: currentElementToPlay.metadata?.coverArt || currentElementToPlay.metadata?.artwork_url || ""
         };
         setCurrentBlock(mockBlock);
 
         if ('mediaSession' in navigator) {
-          const displayTitle = activeElement.element_type === 'jocktalk' ? 'Station Intelligence Break' : (activeElement.element_type === 'sweeper' ? 'Radio Sweeper' : mockBlock.songTitle);
+          const displayTitle = currentElementToPlay.element_type === 'jocktalk' ? 'Station Intelligence Break' : (currentElementToPlay.element_type === 'sweeper' ? 'Radio Sweeper' : mockBlock.songTitle);
           navigator.mediaSession.metadata = new MediaMetadata({
             title: `Future Radio - ${displayTitle}`,
             artist: mockBlock.songArtist,
@@ -387,7 +431,7 @@ export default function AudioOrchestrator() {
         }
 
         // Map upcoming 2 blocks
-        const nextElements = schedule.slice(activeElementIndex + 1, activeElementIndex + 3);
+        const nextElements = schedule.slice(currentIndex + 1, currentIndex + 3);
         const upcomingMockBlocks = nextElements.map((el) => ({
           blockId: el.id,
           cityId: el.city_id,
@@ -420,7 +464,7 @@ export default function AudioOrchestrator() {
         // organically "smartfade" into the next song or jocktalk!
 
         // Fading with setInterval causes 30+ second overlapping bugs when browser tabs are in the background and JS is throttled.
-        if (activeElement.element_type !== "jocktalk" && activeElement.element_type !== "traffic") {
+        if (currentElementToPlay.element_type !== "jocktalk" && currentElementToPlay.element_type !== "traffic") {
           if (bedRef.current && !bedRef.current.paused) {
             bedRef.current.pause();
             bedRef.current.volume = 0;
@@ -435,11 +479,11 @@ export default function AudioOrchestrator() {
         const secondaryAudius = activeDeckRef.current === "A" ? audiusRefB.current : audiusRef.current;
 
         // Start new element
-        if (activeElement.element_type === "song") {
+        if (currentElementToPlay.element_type === "song") {
           setPhase("playing_song");
           if (primaryAudius) {
-            if (primaryAudius.src !== activeElement.youtube_id) {
-               primaryAudius.src = activeElement.youtube_id; // For Audius, youtube_id actually holds the streamUrl!
+            if (primaryAudius.src !== currentElementToPlay.youtube_id) {
+               primaryAudius.src = currentElementToPlay.youtube_id; // For Audius, youtube_id actually holds the streamUrl!
             }
             if (offsetSeconds > 0.5) {
                try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
@@ -452,72 +496,81 @@ export default function AudioOrchestrator() {
           }
         } else {
           // --- AUDIO ELEMENTS (Jocktalk / Traffic) ---
-          if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+          if (currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "traffic") {
             setPhase("playing_jocktalk");
-            if (audioRef.current && audioRef.current.src !== activeElement.media_url) {
-              audioRef.current.src = activeElement.media_url;
+            if (audioRef.current && audioRef.current.src !== currentElementToPlay.media_url) {
+              audioRef.current.src = currentElementToPlay.media_url;
               audioRef.current.volume = 1.0;
               audioRef.current.onloadedmetadata = () => {
-                if (audioRef.current && offsetSeconds > 0.5 && offsetSeconds < (activeElement.duration_ms / 1000)) {
+                if (audioRef.current && offsetSeconds > 0.5 && offsetSeconds < (currentElementToPlay.duration_ms / 1000)) {
                   try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
                 }
               };
               audioRef.current.play().catch(e => {
-                console.error("Audio block failed:", e);
+                console.error("Jocktalk play error", e);
                 handleMediaError("jocktalk");
               });
-            }
-
-            // Always play bed during talk
-            const targetBedSrc = "/audio/jingles/lofi-bed.mp3";
-            if (bedRef.current && bedRef.current.src && !bedRef.current.src.includes("lofi-bed")) {
-              bedRef.current.src = targetBedSrc;
-              bedRef.current.volume = 0.4; // Starts normalized at 40%, ducking logic will push it down to 10%
-              bedRef.current.play().catch(() => handleMediaError("bed"));
+            } else if (audioRef.current && audioRef.current.paused) {
+              audioRef.current.volume = 1.0;
+              if (offsetSeconds > 0.5) {
+                 try { audioRef.current.currentTime = offsetSeconds; } catch(e) {}
+              }
+              audioRef.current.play().catch(() => handleMediaError("jocktalk"));
             }
           } 
           
           // --- JINGLE ELEMENTS (Branding / Sponsor) ---
-          else if (activeElement.element_type === "station_id" || activeElement.element_type === "sweeper" || activeElement.element_type === "ad") {
+          else if (currentElementToPlay.element_type === "station_id" || currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "ad") {
             setPhase("playing_jingle");
-            if (jingleRef.current && jingleRef.current.src !== activeElement.media_url) {
-              jingleRef.current.src = activeElement.media_url;
+            if (jingleRef.current && jingleRef.current.src !== currentElementToPlay.media_url) {
+              jingleRef.current.src = currentElementToPlay.media_url;
               jingleRef.current.volume = 1.0;
               jingleRef.current.onloadedmetadata = () => {
-                if (jingleRef.current && offsetSeconds > 0.5 && offsetSeconds < (activeElement.duration_ms / 1000)) {
+                if (jingleRef.current && offsetSeconds > 0.5 && offsetSeconds < (currentElementToPlay.duration_ms / 1000)) {
                   try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
                 }
               };
               jingleRef.current.play().catch(e => {
-                console.error("Jingle block failed:", e);
+                console.error("Jingle play error", e);
                 handleMediaError("jingle");
               });
+            } else if (jingleRef.current && jingleRef.current.paused) {
+              jingleRef.current.volume = 1.0;
+              if (offsetSeconds > 0.5) {
+                 try { jingleRef.current.currentTime = offsetSeconds; } catch(e) {}
+              }
+              jingleRef.current.play().catch(() => handleMediaError("jingle"));
             }
           }
 
           // Start ambient bed
-          if ((activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") && bedRef.current) {
+          if ((currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "traffic") && bedRef.current) {
             // Dynamic Day-Part News Bed Mapping
             const hour = serverNow.getHours();
             let bedFile = "news-bed-deep.mp3"; // Default for Night/Morning Zen (analytical/deep economy)
-            if (hour >= 8 && hour < 11) bedFile = "news-bed-urgent.mp3"; // Morning Drive (fast-paced opening bell)
-            else if (hour >= 11 && hour < 16) bedFile = "news-bed-analytical.mp3"; // Mid-Day (market insights)
-            else if (hour >= 16 && hour < 21) bedFile = "news-bed-urgent.mp3"; // Evening Rush (breaking news / closing bell)
-            else if (hour >= 21 || hour < 1) bedFile = "news-bed-global.mp3"; // Global Club (international markets)
             
-            const targetBedSrc = `/audio/jingles/${bedFile}`;
-
-            // Only restart bed if it's not already playing the correct track
-            if (bedRef.current.paused || !bedRef.current.src.includes(bedFile)) {
+            if (hour >= 7 && hour < 10) {
+              bedFile = "news-bed-fast.mp3"; // Morning Drive (upbeat, fast-paced)
+            } else if (hour >= 10 && hour < 17) {
+              bedFile = "news-bed-mid.mp3"; // Midday (professional, steady)
+            } else if (hour >= 17 && hour < 20) {
+              bedFile = "news-bed-fast.mp3"; // Evening Drive (high energy)
+            }
+            
+            // Always play bed during talk
+            const targetBedSrc = "/audio/jingles/" + bedFile;
+            if (bedRef.current && bedRef.current.src && !bedRef.current.src.includes(bedFile)) {
               bedRef.current.src = targetBedSrc;
               bedRef.current.volume = 0.4; // Starts normalized at 40%, ducking logic will push it down to 10%
-              bedRef.current.play().catch(() => {});
+              bedRef.current.play().catch(() => handleMediaError("bed"));
+            } else if (bedRef.current && bedRef.current.paused) {
+              bedRef.current.volume = 0.4;
+              bedRef.current.play().catch(() => handleMediaError("bed"));
             }
           }
         }
       } else {
-        // --- CONTINUOUS SYNC CORRECTION & PLAYBACK RESUMPTION ---
-        // If the player is paused, don't attempt continuous playback resumption
+        // We are already inside the block
         if (!hasGesture || !isPlaying) return;
 
         const primaryAudius = activeDeckRef.current === "A" ? audiusRef.current : audiusRefB.current;
@@ -527,12 +580,12 @@ export default function AudioOrchestrator() {
         // Prevents two elements from playing together indefinitely, but allows a 3.5s organic crossfade overlap.
         const CROSSFADE_GRACE_PERIOD = 3.5;
         if (offsetSeconds > CROSSFADE_GRACE_PERIOD) {
-          if (activeElement.element_type === "song") {
+          if (currentElementToPlay.element_type === "song") {
              if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
              if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
              if (bedRef.current && !bedRef.current.paused) bedRef.current.pause();
              if (secondaryAudius && !secondaryAudius.paused) secondaryAudius.pause();
-          } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+          } else if (currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "traffic") {
              if (primaryAudius && !primaryAudius.paused) primaryAudius.pause();
              if (secondaryAudius && !secondaryAudius.paused) secondaryAudius.pause();
              if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
@@ -553,7 +606,7 @@ export default function AudioOrchestrator() {
         }
         
         // If the audio buffers heavily, aggressively seek it to the master clock
-        if (activeElement.element_type === "song" && primaryAudius) {
+        if (currentElementToPlay.element_type === "song" && primaryAudius) {
           const audioTime = primaryAudius.currentTime;
           const isFallback = primaryAudius.src.includes("/audio/fallbacks/");
           
@@ -562,12 +615,8 @@ export default function AudioOrchestrator() {
               try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
             }
             primaryAudius.play().catch(() => {});
-          } else if (!isFallback && Math.abs(audioTime - offsetSeconds) > 3.0) {
-            // Drift correction (Disabled for Fallbacks to prevent duration out-of-bounds stutter looping)
-            console.warn(`[Sync Engine] Clock Drift Detected (Expected: ${offsetSeconds.toFixed(1)}, Actual: ${audioTime.toFixed(1)}). Seeking to master clock.`);
-            try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
-          }
-        } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+          } 
+        } else if (currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "traffic") {
           // Resume HTML5 Audio if paused
           if (audioRef.current && audioRef.current.paused && !audioRef.current.ended) {
             const isFallback = audioRef.current.src.includes("/audio/fallbacks/");
