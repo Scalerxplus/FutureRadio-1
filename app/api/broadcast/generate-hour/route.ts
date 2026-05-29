@@ -87,18 +87,18 @@ const STATION_VOICES = {
 const PREMIUM_GENRES = {
   chill: {
     punjabi: ["punjabi lofi", "punjabi chill", "punjabi acoustic", "punjabi slow", "desi chill", "punjabi r&b chill"],
-    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill", "hindi dream pop"],
-    intl: ["lofi beats", "chillout", "ambient electronic", "chillhop", "night drive lo-fi"]
+    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill", "hindi dream pop", "pakistani lofi", "urdu lofi chill"],
+    intl: ["lofi beats", "chillout", "ambient electronic", "chillhop", "night drive lo-fi", "afro chill", "progressive chillout"]
   },
   party: {
     punjabi: ["punjabi trap", "punjabi edm", "bhangra bass", "desi trap", "punjabi dj", "uk punjabi drill", "punjabi hip hop bass"],
-    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm", "hindi club mix"],
-    intl: ["tech house", "festival bass", "electronic dance", "house mix", "bass boost"]
+    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm", "hindi club mix", "urdu edm"],
+    intl: ["tech house", "festival bass", "electronic dance", "house mix", "bass boost", "progressive house", "progressive trance", "edm trance", "afrobeats", "afro house"]
   },
   indie: {
     punjabi: ["punjabi pop", "punjabi hip hop", "desi hip hop", "punjabi rap", "punjabi indie", "punjabi underground", "punjabi alternative", "punjabi r&b", "desi r&b", "punjabi fusion"],
-    hindi: ["desi indie", "hindi pop", "indian lofi hip hop", "desi rap", "hindi synth", "hindi indie rock", "hindi alternative", "mumbai indie", "delhi indie", "indian synthpop", "hindi bedroom pop", "urdu indie", "hindi r&b"],
-    intl: ["synth pop", "indie electronic", "alternative pop", "bedroom pop"]
+    hindi: ["desi indie", "hindi pop", "indian lofi hip hop", "desi rap", "hindi synth", "hindi indie rock", "hindi alternative", "mumbai indie", "delhi indie", "indian synthpop", "hindi bedroom pop", "urdu indie", "hindi r&b", "pakistani indie", "pakistani underground", "karachi indie", "lahore underground", "urdu alternative"],
+    intl: ["synth pop", "indie electronic", "alternative pop", "bedroom pop", "afro indie"]
   }
 };
 
