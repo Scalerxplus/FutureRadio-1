@@ -75,20 +75,26 @@ export default function EntrySplashPage() {
           </button>
         </div>
 
-        {/* Top Branding Section */}
-        <div className="text-center pt-10 space-y-5 flex flex-col items-center relative z-10">
-          <div className="space-y-1.5">
+        {/* Main Branding Section (Aggressive & Cool) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="text-center space-y-6 flex flex-col items-center relative z-10 my-auto py-8"
+        >
+          {/* Deep Cinematic Ambient Glow Behind Logo */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180%] h-[200px] bg-gradient-to-r from-transparent via-brand-red/30 to-transparent rounded-[100%] blur-[60px] opacity-80 pointer-events-none" />
+
+          <div className="space-y-4 relative z-10">
             <img 
               src="/logo.png" 
               alt="Future Radio" 
-              className="h-[114px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
+              className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_35px_rgba(255,255,255,0.25)] transition-transform duration-700 hover:scale-105" 
             />
-            <p className="text-xl font-normal text-white italic underline decoration-red-500 decoration-1 underline-offset-[8px] tracking-wide select-none drop-shadow-lg">
-              अब "<strong className="font-black">फ्यूचर</strong>" सुनो!
+            <p className="text-3xl md:text-4xl font-normal text-white italic underline decoration-brand-red decoration-2 underline-offset-[12px] tracking-wider select-none drop-shadow-[0_0_20px_rgba(230,0,0,0.8)]">
+              अब "<strong className="font-black text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] to-brand-red">फ्यूचर</strong>" सुनो!
             </p>
           </div>
-
-          {/* City Selector Pill */}
           <button
             onClick={() => setIsBottomSheetOpen(true)}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111118] border border-[#2a2a35] hover:border-brand-red/40 hover:bg-[#111118]/80 transition duration-300"
@@ -107,21 +113,6 @@ export default function EntrySplashPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
           </button>
-        </div>
-
-        {/* Cinematic Radio Reborn Hook */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-          className="my-auto w-full flex items-center justify-center relative select-none pointer-events-none py-8"
-        >
-          {/* Deep Cinematic Ambient Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-24 bg-gradient-to-r from-transparent via-brand-red/40 to-transparent rounded-full blur-3xl opacity-80" />
-          
-          <h1 className="text-[34px] font-black uppercase tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#f0f0f0] to-[#e60000] drop-shadow-[0_0_35px_rgba(230,0,0,0.6)] relative z-10 text-center leading-none" style={{ fontFamily: "var(--font-outfit)" }}>
-            RADIO <br /> REBORN
-          </h1>
         </motion.div>
 
         {/* Experience Cards Section */}
