@@ -94,6 +94,8 @@ export default function AudioOrchestrator() {
   const isGeneratingRef = useRef<boolean>(false);
   const zapperFiredRef = useRef<boolean>(false);
   const prefetchedUrlsRef = useRef<Set<string>>(new Set());
+  const activeQueueIndexRef = useRef<number | null>(null);
+  const transitionTimeRef = useRef<number>(0);
   const [listenerId] = useState(() => typeof window !== "undefined" ? crypto.randomUUID() : "anon");
 
   // --- SMART AUTO-HEAL: 5-Channel Silence Detection ---
@@ -555,7 +557,7 @@ export default function AudioOrchestrator() {
           const audioTime = primaryAudius.currentTime;
           const isFallback = primaryAudius.src.includes("/audio/fallbacks/");
           
-          if (primaryAudius.paused) {
+          if (primaryAudius.paused && !primaryAudius.ended) {
             if (!isFallback) {
               try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
             }
@@ -567,20 +569,20 @@ export default function AudioOrchestrator() {
           }
         } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
           // Resume HTML5 Audio if paused
-          if (audioRef.current && audioRef.current.paused) {
+          if (audioRef.current && audioRef.current.paused && !audioRef.current.ended) {
             const isFallback = audioRef.current.src.includes("/audio/fallbacks/");
             if (!isFallback) {
               try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
             }
             audioRef.current.play().catch(() => {});
           }
-          if (bedRef.current && bedRef.current.paused) {
+          if (bedRef.current && bedRef.current.paused && !bedRef.current.ended) {
             try { bedRef.current.currentTime = offsetSeconds; } catch(e) {}
             bedRef.current.play().catch(() => {});
           }
         } else {
           // Resume Jingle if paused
-          if (jingleRef.current && jingleRef.current.paused) {
+          if (jingleRef.current && jingleRef.current.paused && !jingleRef.current.ended) {
             const isFallback = jingleRef.current.src.includes("/audio/fallbacks/");
             if (!isFallback) {
               try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
