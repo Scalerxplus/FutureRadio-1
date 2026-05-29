@@ -86,18 +86,18 @@ const STATION_VOICES = {
 
 const PREMIUM_GENRES = {
   chill: {
-    punjabi: ["punjabi lofi", "punjabi chill", "punjabi acoustic", "punjabi slow", "desi chill"],
-    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill"],
+    punjabi: ["punjabi lofi", "punjabi chill", "punjabi acoustic", "punjabi slow", "desi chill", "punjabi r&b chill"],
+    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill", "hindi dream pop"],
     intl: ["lofi beats", "chillout", "ambient electronic", "chillhop", "night drive lo-fi"]
   },
   party: {
-    punjabi: ["punjabi trap", "punjabi edm", "bhangra bass", "desi trap", "punjabi dj"],
-    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm"],
+    punjabi: ["punjabi trap", "punjabi edm", "bhangra bass", "desi trap", "punjabi dj", "uk punjabi drill", "punjabi hip hop bass"],
+    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm", "hindi club mix"],
     intl: ["tech house", "festival bass", "electronic dance", "house mix", "bass boost"]
   },
   indie: {
-    punjabi: ["punjabi pop", "punjabi hip hop", "desi hip hop", "punjabi rap"],
-    hindi: ["desi indie", "hindi pop", "indian lofi hip hop", "desi rap", "hindi synth"],
+    punjabi: ["punjabi pop", "punjabi hip hop", "desi hip hop", "punjabi rap", "punjabi indie", "punjabi underground", "punjabi alternative", "punjabi r&b", "desi r&b", "punjabi fusion"],
+    hindi: ["desi indie", "hindi pop", "indian lofi hip hop", "desi rap", "hindi synth", "hindi indie rock", "hindi alternative", "mumbai indie", "delhi indie", "indian synthpop", "hindi bedroom pop", "urdu indie", "hindi r&b"],
     intl: ["synth pop", "indie electronic", "alternative pop", "bedroom pop"]
   }
 };
