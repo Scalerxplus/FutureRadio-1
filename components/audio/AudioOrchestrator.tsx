@@ -553,19 +553,25 @@ export default function AudioOrchestrator() {
         // If the audio buffers heavily, aggressively seek it to the master clock
         if (activeElement.element_type === "song" && primaryAudius) {
           const audioTime = primaryAudius.currentTime;
+          const isFallback = primaryAudius.src.includes("/audio/fallbacks/");
           
           if (primaryAudius.paused) {
-            try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
+            if (!isFallback) {
+              try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
+            }
             primaryAudius.play().catch(() => {});
-          } else if (Math.abs(audioTime - offsetSeconds) > 3.0) {
-            // Drift correction
+          } else if (!isFallback && Math.abs(audioTime - offsetSeconds) > 3.0) {
+            // Drift correction (Disabled for Fallbacks to prevent duration out-of-bounds stutter looping)
             console.warn(`[Sync Engine] Clock Drift Detected (Expected: ${offsetSeconds.toFixed(1)}, Actual: ${audioTime.toFixed(1)}). Seeking to master clock.`);
             try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
           }
         } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
           // Resume HTML5 Audio if paused
           if (audioRef.current && audioRef.current.paused) {
-            try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
+            const isFallback = audioRef.current.src.includes("/audio/fallbacks/");
+            if (!isFallback) {
+              try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
+            }
             audioRef.current.play().catch(() => {});
           }
           if (bedRef.current && bedRef.current.paused) {
@@ -575,7 +581,10 @@ export default function AudioOrchestrator() {
         } else {
           // Resume Jingle if paused
           if (jingleRef.current && jingleRef.current.paused) {
-            try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
+            const isFallback = jingleRef.current.src.includes("/audio/fallbacks/");
+            if (!isFallback) {
+              try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
+            }
             jingleRef.current.play().catch(() => {});
           }
         }
