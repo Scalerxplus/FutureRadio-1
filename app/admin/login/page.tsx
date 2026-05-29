@@ -25,9 +25,9 @@ export default function AdminLogin() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        // Redirect to admin dashboard
-        router.push("/admin");
-        router.refresh();
+        // Force a hard redirect to ensure the browser sends the new cookie
+        // and the layout re-mounts properly without the login page conditional
+        window.location.href = "/admin";
       } else {
         setError(data.message || "Invalid credentials");
         setLoading(false);
