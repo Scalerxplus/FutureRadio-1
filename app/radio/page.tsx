@@ -318,11 +318,16 @@ export default function RadioPlayerPage() {
             ))}
         </div>
 
-        {/* Disclaimer Footer */}
-        <div className="mt-8 text-center pb-4">
+        {/* Disclaimer & Copyright Footer */}
+        <div className="mt-8 text-center pb-4 flex flex-col gap-1.5">
           <p className="text-[9px] text-gray-500/60 leading-relaxed max-w-[280px] mx-auto select-none">
             Disclaimer: Streaming via decentralized protocols, content belongs to original artists.
           </p>
+          <div className="flex items-center justify-center gap-1.5 mt-1.5 text-[8px] text-gray-500/80 font-medium tracking-widest uppercase select-none">
+            <span>&copy; {new Date().getFullYear()}</span>
+            <span className="w-1 h-1 rounded-full bg-gray-500/50"></span>
+            <span>Future Radio & Media Mafias</span>
+          </div>
         </div>
 
       </div>

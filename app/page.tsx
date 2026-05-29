@@ -259,13 +259,18 @@ export default function EntrySplashPage() {
         </div>
 
         {/* Footer/Sticker Caption */}
-        <footer className="text-center pt-4 pb-8 px-4 flex flex-col gap-2">
+        <footer className="text-center pt-4 pb-8 px-4 flex flex-col gap-1.5">
           <p className="text-[10px] text-gray-500 leading-relaxed max-w-[280px] mx-auto select-none">
             You can use both at once. Radio keeps playing while you browse news.
           </p>
           <p className="text-[9px] text-gray-500/60 leading-relaxed max-w-[280px] mx-auto select-none mt-2">
             Disclaimer: Streaming via decentralized protocols, content belongs to original artists.
           </p>
+          <div className="flex items-center justify-center gap-1.5 mt-1.5 text-[8px] text-gray-600/80 font-medium tracking-widest uppercase select-none">
+            <span>&copy; {new Date().getFullYear()}</span>
+            <span className="w-1 h-1 rounded-full bg-gray-600/50"></span>
+            <span>Future Radio & Media Mafias</span>
+          </div>
         </footer>
 
         {/* City Selector Bottom Sheet Modal */}
