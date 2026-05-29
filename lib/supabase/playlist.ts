@@ -95,12 +95,14 @@ export async function getPlaylistBlocks(cityId: string): Promise<PlaylistBlock[]
 
 export async function getBroadcastSchedule(cityId: string) {
   try {
-    const supabase = createClient();
+    // Offset by -15 minutes to prevent dropping the active block if the user's clock is skewed
+    const fetchThreshold = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    
     const { data, error } = await supabase
       .from("broadcast_schedule")
       .select("*")
       .eq("city_id", cityId)
-      .gte("end_time", new Date().toISOString())
+      .gte("end_time", fetchThreshold)
       .order("start_time", { ascending: true })
       .limit(500);
     
