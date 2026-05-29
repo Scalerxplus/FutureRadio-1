@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Music, Mic2, AlertCircle, Trash2, Edit3, PlusCircle, Clock, Volume2, Target, X, Check, Lock } from "lucide-react";
+import { Music, Mic2, AlertCircle, Trash2, Edit3, PlusCircle, Clock, Volume2, Target, X, Check, Lock, UploadCloud } from "lucide-react";
 import { updateScheduleElement } from "./actions";
 import LibraryPane from "@/components/admin/LibraryPane";
 import MixingConsole from "@/components/admin/MixingConsole";
@@ -31,6 +31,45 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Upload Jocktalk State
+  const [isUploading, setIsUploading] = useState<string | null>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, element: any) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.includes("audio")) {
+      alert("Please upload a valid audio file (mp3, wav, etc.)");
+      return;
+    }
+
+    setIsUploading(element.id);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("start_time", element.start_time);
+      formData.append("end_time", element.end_time);
+      formData.append("city_id", element.city_id || "raipur");
+
+      const res = await fetch("/api/admin/upload-jocktalk", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("Jocktalk uploaded and scheduled successfully!");
+        window.location.reload(); // Re-sync the master clock schedule to show the real block
+      } else {
+        alert("Upload failed: " + data.error);
+      }
+    } catch (err) {
+      alert("An error occurred during upload.");
+    } finally {
+      setIsUploading(null);
+    }
+  };
 
   // Edit Modal State
   const [editingElement, setEditingElement] = useState<any>(null);
@@ -493,14 +532,35 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                     </div>
 
                     <div className="col-span-2 flex justify-end gap-1">
-                      <button 
-                        onClick={() => handleEditClick(element)}
-                        className="p-1.5 rounded hover:bg-[#222230] text-gray-500 hover:text-white transition-colors disabled:opacity-20" 
-                        disabled={!canEdit}
-                        title={canEdit ? "Replace Element" : "Cannot edit past/placeholder elements"}
-                      >
-                        <Edit3 size={14} />
-                      </button>
+                      {isDropTarget ? (
+                        <div className="relative group flex items-center justify-center">
+                          <input 
+                            type="file" 
+                            accept="audio/*"
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-10"
+                            disabled={isLocked || isUploading === element.id}
+                            title={isLocked ? "1-Hour Lock: Cannot upload too close to broadcast" : "Upload Audio (MP3/WAV)"}
+                            onChange={(e) => handleFileUpload(e, element)}
+                          />
+                          <button 
+                            className={`p-1.5 rounded transition-colors ${isLocked ? 'text-gray-600 bg-gray-900/50 cursor-not-allowed' : 'text-purple-400 bg-purple-900/20 group-hover:bg-purple-900/40 shadow-[0_0_8px_rgba(168,85,247,0.3)]'} disabled:opacity-20`}
+                            disabled={isLocked || isUploading === element.id}
+                            title={isLocked ? "1-Hour Lock Active" : "Upload Custom Voiceover"}
+                          >
+                            {isUploading === element.id ? <div className="w-3.5 h-3.5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" /> : <UploadCloud size={14} />}
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={() => handleEditClick(element)}
+                          className="p-1.5 rounded hover:bg-[#222230] text-gray-500 hover:text-white transition-colors disabled:opacity-20" 
+                          disabled={!canEdit}
+                          title={canEdit ? "Replace Element" : "Cannot edit past/placeholder elements"}
+                        >
+                          <Edit3 size={14} />
+                        </button>
+                      )}
+                      
                       <button className="p-1.5 rounded hover:bg-red-900/30 text-gray-500 hover:text-red-400 transition-colors disabled:opacity-20" disabled={isPast || isPlayingNow || isPlaceholder}>
                         <Trash2 size={14} />
                       </button>
