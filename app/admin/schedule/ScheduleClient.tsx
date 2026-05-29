@@ -167,6 +167,8 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   const currentActive = flatElements.find(el => new Date(el.end_time) > now && !el.isPlaceholder) || flatElements[0];
   const activeElementId = currentActive?.id;
 
+  let currentDeckTracker = "A";
+
   return (
     <div className="p-8 pb-24" ref={containerRef}>
       
@@ -379,6 +381,12 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                 const isStatic = element.isStatic;
                 const canEdit = !isPast && !isPlaceholder && (element.element_type === 'song' || element.element_type === 'sweeper' || element.element_type === 'station_id');
 
+                let elementDeck = null;
+                if (element.element_type === 'song' && !element.isPlaceholder) {
+                  currentDeckTracker = currentDeckTracker === "A" ? "B" : "A";
+                  elementDeck = currentDeckTracker;
+                }
+
                 return (
                   <div 
                     key={element.id} 
@@ -402,8 +410,15 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                       )}
                     </div>
                     
-                    <div className="col-span-2 flex items-center gap-2">
+                    <div className="col-span-2 flex flex-col items-start justify-center gap-1">
                       <TypeBadge type={element.element_type} isStatic={isStatic} />
+                      {elementDeck && (
+                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold tracking-wider ${
+                          elementDeck === 'A' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20'
+                        }`}>
+                          DECK {elementDeck}
+                        </span>
+                      )}
                     </div>
 
                     <div className="col-span-5 flex flex-col justify-center">
