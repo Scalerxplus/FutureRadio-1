@@ -7,7 +7,7 @@ export default function PlayerBar() {
   const { isPlaying, currentBlock, viewMode, setIsPlaying, setViewMode } = useAudioStore();
   const pathname = usePathname();
 
-  if (pathname === "/radio") {
+  if (pathname === "/radio" || pathname.startsWith("/admin")) {
     return null;
   }
 

@@ -17,8 +17,8 @@ export default function RadioBubble() {
     router.push("/radio");
   };
 
-  // Only display the bubble when minimized or in bubble mode, and NEVER on the fullscreen radio page
-  const showBubble = (viewMode === "bubble" || viewMode === "minimized") && pathname !== "/radio";
+  // Only display the bubble when minimized or in bubble mode, and NEVER on the fullscreen radio page or admin pages
+  const showBubble = (viewMode === "bubble" || viewMode === "minimized") && pathname !== "/radio" && !pathname.startsWith("/admin");
 
   return (
     <AnimatePresence>

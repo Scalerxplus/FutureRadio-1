@@ -8,6 +8,8 @@ import {
   UploadCloud
 } from "lucide-react";
 
+import AdminAudioMonitor from "@/components/admin/AdminAudioMonitor";
+
 export default function AdminLayout({
   children,
 }: {
@@ -59,7 +61,9 @@ export default function AdminLayout({
           </nav>
         </div>
 
-        <div className="p-6 border-t border-[#1a1a24]">
+        <div className="p-6 border-t border-[#1a1a24] space-y-3">
+          <AdminAudioMonitor />
+          
           <button className="flex items-center gap-3 px-4 py-3 w-full rounded-xl hover:bg-red-900/30 text-gray-400 hover:text-red-400 transition-all">
             <LogOut size={18} />
             <span className="text-sm font-medium">Log Out</span>
