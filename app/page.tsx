@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore, useUiStore, useAuthStore } from "@/lib/store";
 import AuthModal from "@/components/auth/AuthModal";
+import CinematicSplash from "@/components/ui/CinematicSplash";
 
 const CITIES = [
   { id: "raipur", name: "Raipur, CG" },
@@ -22,6 +23,7 @@ export default function EntrySplashPage() {
   
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [splashComplete, setSplashComplete] = useState(false);
 
   const handleCardClick = (mode: "radio" | "news", destination: string) => {
     setMode(mode);
@@ -50,8 +52,11 @@ export default function EntrySplashPage() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent flex justify-center items-center">
-      {/* Centered Mobile viewport shell */}
+    <>
+      {!splashComplete && <CinematicSplash onComplete={() => setSplashComplete(true)} />}
+      
+      <div className={`min-h-screen bg-transparent flex justify-center items-center transition-opacity duration-1000 ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Centered Mobile viewport shell */}
       <main className="w-full max-w-[430px] min-h-screen bg-black/40 backdrop-blur-sm text-white flex flex-col justify-between px-6 py-10 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border-x border-white/5">
         
         {/* Auth / Profile Sticky Header Layer */}
@@ -342,5 +347,6 @@ export default function EntrySplashPage() {
 
       </main>
     </div>
+    </>
   );
 }

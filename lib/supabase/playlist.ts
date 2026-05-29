@@ -95,6 +95,7 @@ export async function getPlaylistBlocks(cityId: string): Promise<PlaylistBlock[]
 
 export async function getBroadcastSchedule(cityId: string) {
   try {
+    const supabase = createClient();
     // Offset by -15 minutes to prevent dropping the active block if the user's clock is skewed
     const fetchThreshold = new Date(Date.now() - 15 * 60 * 1000).toISOString();
     
