@@ -94,7 +94,7 @@ export default function AudioOrchestrator() {
   const isGeneratingRef = useRef<boolean>(false);
   const zapperFiredRef = useRef<boolean>(false);
   const prefetchedUrlsRef = useRef<Set<string>>(new Set());
-  const activeQueueIndexRef = useRef<number | null>(null);
+  const activeBlockIdRef = useRef<string | null>(null);
   const transitionTimeRef = useRef<number>(0);
   const [listenerId] = useState(() => typeof window !== "undefined" ? crypto.randomUUID() : "anon");
 
@@ -265,10 +265,14 @@ export default function AudioOrchestrator() {
     const interval = setInterval(() => {
       const serverNow = new Date(Date.now() + syncOffsetMs);
       
-      let currentIndex = activeQueueIndexRef.current;
+      let currentIndex = -1;
       
-      // Initial Sync (Hard Wall-Clock Sync) or out-of-bounds reset
-      if (currentIndex === null || currentIndex >= schedule.length || currentIndex === -1) {
+      if (activeBlockIdRef.current) {
+         currentIndex = schedule.findIndex(el => el.id === activeBlockIdRef.current);
+      }
+      
+      // Initial Sync (Hard Wall-Clock Sync) or out-of-bounds reset (if block disappeared from schedule)
+      if (currentIndex === -1) {
          currentIndex = schedule.findIndex(el => {
            const start = new Date(el.start_time).getTime();
            const end = new Date(el.end_time).getTime();
@@ -276,7 +280,7 @@ export default function AudioOrchestrator() {
          });
          
          if (currentIndex !== -1) {
-             activeQueueIndexRef.current = currentIndex;
+             activeBlockIdRef.current = schedule[currentIndex].id;
              transitionTimeRef.current = Date.now() - (serverNow.getTime() - new Date(schedule[currentIndex].start_time).getTime());
          }
       }
@@ -305,7 +309,7 @@ export default function AudioOrchestrator() {
             .then((newData) => {
               setSchedule(newData);
               isGeneratingRef.current = false;
-              activeQueueIndexRef.current = null; // Force reset on new schedule
+              activeBlockIdRef.current = null; // Force reset on new schedule
             })
             .catch((err) => {
               console.error("[Sync Engine] Auto-generation failed:", err);
@@ -340,14 +344,17 @@ export default function AudioOrchestrator() {
       if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
          const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
          
-         if (remainingTimeOnDeck <= 3.5 && remainingTimeOnDeck > 0) {
-            console.log(`[Smart Sequencer] ${activeElement.element_type} has ${remainingTimeOnDeck.toFixed(1)}s left. Queueing NEXT!`);
-            activeQueueIndexRef.current = currentIndex + 1;
-            currentIndex = activeQueueIndexRef.current;
-            if (currentIndex < schedule.length) {
+         if ((remainingTimeOnDeck <= 3.5 && remainingTimeOnDeck > 0) || activeDeck.ended) {
+            console.log(`[Smart Sequencer] ${activeElement.element_type} is ending. Queueing NEXT!`);
+            if (currentIndex + 1 < schedule.length) {
+               activeBlockIdRef.current = schedule[currentIndex + 1].id;
+               currentIndex = currentIndex + 1;
                transitionTimeRef.current = Date.now();
                offsetSeconds = 0.0;
                pseudoRemainingSeconds = schedule[currentIndex].duration_ms / 1000;
+            } else {
+               // End of current fetched schedule
+               currentIndex = currentIndex + 1;
             }
          }
       }
