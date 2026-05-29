@@ -339,23 +339,38 @@ export default function AudioOrchestrator() {
           pseudoRemainingSeconds = activeDeck.duration - activeDeck.currentTime;
       }
 
-      // --- END-TRIGGERED QUEUE LOGIC (SMART SEQUENCER) ---
-      // Only advance the queue if the user has unlocked audio and the deck is actively playing/ending
+      // --- END-TRIGGERED QUEUE LOGIC (SMART SEQUENCER & CLOCK FAILSAFE) ---
+      const activeElementEndTime = new Date(activeElement.end_time).getTime();
+      const isExpiredByClock = serverNow.getTime() >= (activeElementEndTime - 3500); // 3.5s before end time
+      
+      let shouldAdvance = false;
+      let advanceReason = "";
+
       if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
          const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
-         
          if ((remainingTimeOnDeck <= 3.5 && remainingTimeOnDeck > 0) || activeDeck.ended) {
-            console.log(`[Smart Sequencer] ${activeElement.element_type} is ending. Queueing NEXT!`);
-            if (currentIndex + 1 < schedule.length) {
-               activeBlockIdRef.current = schedule[currentIndex + 1].id;
-               currentIndex = currentIndex + 1;
-               transitionTimeRef.current = Date.now();
-               offsetSeconds = 0.0;
-               pseudoRemainingSeconds = schedule[currentIndex].duration_ms / 1000;
-            } else {
-               // End of current fetched schedule
-               currentIndex = currentIndex + 1;
-            }
+            shouldAdvance = true;
+            advanceReason = "Audio Track Ending";
+         }
+      }
+
+      // Ultimate Failsafe: If the audio buffered/stalled or is a looping fallback, force advance via Master Clock!
+      if (!shouldAdvance && isExpiredByClock) {
+         shouldAdvance = true;
+         advanceReason = "Master Clock Sync";
+      }
+
+      if (shouldAdvance) {
+         console.log(`[Smart Sequencer] Advancing ${activeElement.element_type}. Reason: ${advanceReason}`);
+         if (currentIndex + 1 < schedule.length) {
+            activeBlockIdRef.current = schedule[currentIndex + 1].id;
+            currentIndex = currentIndex + 1;
+            transitionTimeRef.current = Date.now();
+            offsetSeconds = 0.0;
+            pseudoRemainingSeconds = schedule[currentIndex].duration_ms / 1000;
+         } else {
+            // End of current fetched schedule
+            currentIndex = currentIndex + 1;
          }
       }
 
@@ -612,39 +627,34 @@ export default function AudioOrchestrator() {
            secondaryAudius.volume = fadeVol;
         }
         
-        // If the audio buffers heavily, aggressively seek it to the master clock
-        if (currentElementToPlay.element_type === "song" && primaryAudius) {
-          const audioTime = primaryAudius.currentTime;
-          const isFallback = primaryAudius.src.includes("/audio/fallbacks/");
+        // Buffer-Aware Anti-Stall Seeking
+        const syncAudioElement = (audioEl: HTMLAudioElement | null) => {
+          if (!audioEl || audioEl.ended) return;
+          const isFallback = audioEl.src.includes("/audio/fallbacks/");
           
-          if (primaryAudius.paused && !primaryAudius.ended) {
-            if (!isFallback) {
-              try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
+          // 1. If paused, try to play
+          if (audioEl.paused) {
+            if (!isFallback && audioEl.readyState >= 1) { // HAVE_METADATA or better
+               try { audioEl.currentTime = offsetSeconds; } catch(e) {}
             }
-            primaryAudius.play().catch(() => {});
+            audioEl.play().catch(() => {});
           } 
+          // 2. If playing but severely out of sync (> 3s drift), seek ONLY if we have enough buffer!
+          else if (!isFallback && audioEl.readyState >= 3) { // HAVE_FUTURE_DATA
+             if (Math.abs(audioEl.currentTime - offsetSeconds) > 3.0) {
+                 console.log(`[Sync Engine] Correcting drift. Drift: ${Math.abs(audioEl.currentTime - offsetSeconds).toFixed(1)}s`);
+                 try { audioEl.currentTime = offsetSeconds; } catch(e) {}
+             }
+          }
+        };
+
+        if (currentElementToPlay.element_type === "song") {
+           syncAudioElement(primaryAudius);
         } else if (currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "traffic") {
-          // Resume HTML5 Audio if paused
-          if (audioRef.current && audioRef.current.paused && !audioRef.current.ended) {
-            const isFallback = audioRef.current.src.includes("/audio/fallbacks/");
-            if (!isFallback) {
-              try { audioRef.current.currentTime = offsetSeconds; } catch (e) {}
-            }
-            audioRef.current.play().catch(() => {});
-          }
-          if (bedRef.current && bedRef.current.paused && !bedRef.current.ended) {
-            try { bedRef.current.currentTime = offsetSeconds; } catch(e) {}
-            bedRef.current.play().catch(() => {});
-          }
+           syncAudioElement(audioRef.current);
+           syncAudioElement(bedRef.current);
         } else {
-          // Resume Jingle if paused
-          if (jingleRef.current && jingleRef.current.paused && !jingleRef.current.ended) {
-            const isFallback = jingleRef.current.src.includes("/audio/fallbacks/");
-            if (!isFallback) {
-              try { jingleRef.current.currentTime = offsetSeconds; } catch (e) {}
-            }
-            jingleRef.current.play().catch(() => {});
-          }
+           syncAudioElement(jingleRef.current);
         }
       }
 
