@@ -61,3 +61,25 @@ body {
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
 }
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d14; 
+  border-left: 1px solid #1a1a24;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a35; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ef4444; /* brand-red */
+}
+
+/* Writing mode utilities */
+.writing-vertical-lr {
+  writing-mode: vertical-lr;
+}

@@ -425,16 +425,19 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                         alert("1-Hour Lock: You cannot modify elements scheduled to play within the next hour.");
                       }
                     }}
-                    className={`grid grid-cols-12 gap-4 p-3 items-center transition-all ${
-                      isPlayingNow ? 'bg-red-900/10 border-l-2 border-red-500' : 
-                      isSkipped ? 'opacity-50 grayscale bg-red-900/5' :
-                      isPast ? 'opacity-40 grayscale hover:grayscale-0' : 
-                      isDropTarget && !isLocked ? 'opacity-90 border-l-2 border-dashed border-brand-red bg-brand-red/5 hover:bg-brand-red/10' :
-                      isDropTarget && isLocked ? 'opacity-60 border-l-2 border-dashed border-gray-600 bg-gray-900/30 cursor-not-allowed' :
-                      isPlaceholder ? 'opacity-70 border-l-2 border-dashed border-gray-700 bg-transparent' : 'hover:bg-[#1a1a24]/50'
+                    className={`grid grid-cols-12 gap-4 p-3 items-center transition-all rounded-lg my-1 ${
+                      isPlayingNow ? 'bg-red-900/10 border border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)] relative z-10' : 
+                      isSkipped ? 'opacity-50 grayscale bg-red-900/5 border border-transparent' :
+                      isPast ? 'opacity-40 grayscale hover:grayscale-0 border border-transparent' : 
+                      isDropTarget && !isLocked ? 'opacity-90 border-2 border-dashed border-brand-red bg-brand-red/5 hover:bg-brand-red/10' :
+                      isDropTarget && isLocked ? 'opacity-60 border-2 border-dashed border-gray-600 bg-gray-900/30 cursor-not-allowed' :
+                      isPlaceholder ? 'opacity-70 border border-dashed border-[#2a2a35] bg-transparent' : 'border border-transparent hover:bg-[#1a1a24]/50 hover:border-[#2a2a35]'
                     }`}
                   >
-                    <div className="col-span-2 flex flex-col">
+                    {isPlayingNow && (
+                      <div className="absolute inset-0 rounded-lg ring-1 ring-red-500/50 animate-pulse pointer-events-none"></div>
+                    )}
+                    <div className="col-span-2 flex flex-col pl-2">
                       <span className={`font-mono text-xs ${isPlayingNow ? 'text-red-400 font-bold' : isPlaceholder ? 'text-gray-500' : 'text-gray-300'}`}>
                         {startTime.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                       </span>
@@ -457,10 +460,20 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                       )}
                     </div>
 
-                    <div className="col-span-5 flex flex-col justify-center">
-                      <p className={`font-medium truncate text-sm ${isPlayingNow ? 'text-white' : isSkipped ? 'line-through text-red-400' : isPlaceholder && !isStatic ? 'text-gray-400 italic' : 'text-gray-200'}`}>
-                        {element.metadata?.title || element.metadata?.transcript?.substring(0, 50) + "..." || "Station ID"}
-                      </p>
+                    <div className="col-span-5 flex items-center gap-3">
+                      {/* Album Art / Icon Thumbnail */}
+                      <div className={`w-10 h-10 rounded shrink-0 flex items-center justify-center border shadow-inner ${
+                        element.element_type === 'song' ? 'bg-[#1a1a24] border-[#2a2a35] text-blue-400' :
+                        element.element_type === 'jocktalk' ? 'bg-purple-900/20 border-purple-500/20 text-purple-400' :
+                        'bg-orange-900/20 border-orange-500/20 text-orange-400'
+                      }`}>
+                        {element.element_type === 'song' ? <Music size={16} /> : element.element_type === 'jocktalk' ? <Mic2 size={16} /> : <Target size={16} />}
+                      </div>
+
+                      <div className="flex flex-col justify-center min-w-0">
+                        <p className={`font-medium truncate text-sm ${isPlayingNow ? 'text-white' : isSkipped ? 'line-through text-red-400' : isPlaceholder && !isStatic ? 'text-gray-400 italic' : 'text-gray-200'}`}>
+                          {element.metadata?.title || element.metadata?.transcript?.substring(0, 50) + "..." || "Station ID"}
+                        </p>
                       <p className="text-[10px] text-gray-500 truncate mt-0.5">
                         {isSkipped ? (
                           <span className="text-red-400 font-bold">Skipped: {element.status_reason}</span>
@@ -472,6 +485,7 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                           element.element_type === 'song' ? `YT: ${element.youtube_id}` : element.media_url
                         )}
                       </p>
+                    </div>
                     </div>
 
                     <div className="col-span-1 text-right text-xs text-gray-400 font-mono">
@@ -529,10 +543,10 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
         <div className="p-4 space-y-3 shrink-0">
           <button 
             onClick={scrollToLive}
-            className="w-full flex justify-between items-center bg-[#1a1a24] hover:bg-[#2a2a35] text-gray-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-[#2a2a35]"
+            className="w-full flex justify-between items-center bg-gradient-to-b from-[#2a2a35] to-[#1a1a24] hover:from-[#3a3a45] hover:to-[#2a2a35] text-gray-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-[#111] active:translate-y-[1px] active:shadow-none"
           >
             <span className="flex items-center gap-2">
-              <Target size={18} className="text-red-500" />
+              <Target size={18} className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
               Now Playing
             </span>
           </button>
@@ -540,10 +554,10 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           <button 
             onClick={handleRunDiagnostics}
             disabled={isRunningDiagnostics}
-            className="w-full flex justify-between items-center bg-blue-900/20 hover:bg-blue-900/40 text-blue-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-blue-500/20 disabled:opacity-50"
+            className="w-full flex justify-between items-center bg-gradient-to-b from-blue-900/40 to-blue-950/40 hover:from-blue-800/50 hover:to-blue-900/50 text-blue-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-blue-900/50 disabled:opacity-50 active:translate-y-[1px] active:shadow-none"
           >
             <span className="flex items-center gap-2">
-              <AlertCircle size={18} />
+              <AlertCircle size={18} className="drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
               {isRunningDiagnostics ? "Scanning..." : "Diagnostics"}
             </span>
           </button>
@@ -551,17 +565,17 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           <button 
             onClick={handleGenerateTomorrow}
             disabled={isGeneratingBatch}
-            className="w-full flex justify-between items-center bg-purple-900/20 hover:bg-purple-900/40 text-purple-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-purple-500/20 disabled:opacity-50"
+            className="w-full flex justify-between items-center bg-gradient-to-b from-purple-900/40 to-purple-950/40 hover:from-purple-800/50 hover:to-purple-900/50 text-purple-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-purple-900/50 disabled:opacity-50 active:translate-y-[1px] active:shadow-none"
           >
             <span className="flex items-center gap-2">
-              <PlusCircle size={18} />
+              <PlusCircle size={18} className="drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
               {isGeneratingBatch ? `Gen (${generationProgress}/24)` : "Auto-Gen 24H"}
             </span>
           </button>
           
           <button 
             onClick={handleSkip}
-            className="w-full flex justify-between items-center bg-[#1a1a24] hover:bg-red-900/30 text-red-400 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-red-900/30"
+            className="w-full flex justify-between items-center bg-gradient-to-b from-red-900/30 to-[#1a1a24] hover:from-red-900/50 hover:to-[#2a2a35] text-red-400 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-red-900/50 active:translate-y-[1px] active:shadow-none"
           >
             <span className="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>

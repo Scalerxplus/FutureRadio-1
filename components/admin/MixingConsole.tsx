@@ -125,25 +125,51 @@ function ChannelStrip({ label, icon, level, isActive, color, trackName }: { labe
       <span className={`text-[10px] font-bold tracking-widest uppercase text-center mb-1 ${isActive ? 'text-white' : 'text-gray-500'}`}>{label}</span>
       <span className="text-[9px] text-gray-500 text-center truncate w-full px-1 mb-4 h-3">{trackName}</span>
       
-      {/* Fader Track */}
-      <div className="w-8 h-32 bg-black rounded-full relative flex justify-center border border-[#222]">
-        {/* VU Meter Effect */}
-        <div 
-          className={`absolute bottom-0 w-full rounded-full transition-all duration-[2000ms] ease-out opacity-80 ${color}`}
-          style={{ height: `${level}%` }}
-        ></div>
-        {/* Fader Cap */}
-        <div 
-          className="absolute w-12 h-4 bg-gray-300 rounded shadow-lg border-2 border-white transition-all duration-[2000ms] ease-out flex items-center justify-center"
-          style={{ bottom: `max(0%, calc(${level}% - 8px))` }}
-        >
-          <div className="w-8 h-[2px] bg-gray-500"></div>
+      {/* Fader Track & Markers */}
+      <div className="flex gap-2 items-center">
+        {/* dB Markers Left */}
+        <div className="flex flex-col justify-between h-32 text-[7px] text-gray-600 font-mono py-1">
+          <span>+6</span>
+          <span> 0</span>
+          <span>-6</span>
+          <span>-12</span>
+          <span>-24</span>
+          <span>-∞</span>
+        </div>
+
+        {/* The Fader */}
+        <div className="w-8 h-32 bg-black rounded-lg relative flex justify-center border border-[#222] shadow-inner">
+          {/* LED VU Meter Effect */}
+          <div className="absolute bottom-0 w-full rounded-lg overflow-hidden flex flex-col justify-end">
+            <div 
+              className="w-full bg-gradient-to-t from-green-500 via-yellow-400 to-red-600 transition-all duration-[2000ms] ease-out opacity-90"
+              style={{ height: `${level}%` }}
+            ></div>
+          </div>
+          
+          {/* Fader Cap */}
+          <div 
+            className="absolute w-12 h-6 bg-gradient-to-b from-gray-300 to-gray-400 rounded shadow-[0_4px_6px_rgba(0,0,0,0.5)] border-t border-b-2 border-white/50 border-b-black/50 transition-all duration-[2000ms] ease-out flex items-center justify-center cursor-pointer"
+            style={{ bottom: `max(0%, calc(${level}% - 12px))` }}
+          >
+            <div className="w-8 h-[2px] bg-red-600 shadow-[0_0_4px_rgba(255,0,0,0.5)]"></div>
+          </div>
+        </div>
+
+        {/* dB Markers Right */}
+        <div className="flex flex-col justify-between h-32 text-[7px] text-gray-600 font-mono py-1">
+          <span>-</span>
+          <span>-</span>
+          <span>-</span>
+          <span>-</span>
+          <span>-</span>
+          <span>-</span>
         </div>
       </div>
       
       {/* dB readout */}
-      <div className="mt-4 text-[9px] font-mono text-gray-600 bg-black px-2 py-0.5 rounded border border-[#222]">
-        {level > 0 ? `-${Math.round((100 - level) / 4)}dB` : "-INF"}
+      <div className="mt-4 text-[9px] font-mono text-brand-red bg-black/50 px-2 py-0.5 rounded border border-[#222] shadow-inner">
+        {level > 0 ? (level === 100 ? "0.0dB" : `-${Math.round((100 - level) / 4)}dB`) : "-INF"}
       </div>
     </div>
   );

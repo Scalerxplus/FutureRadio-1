@@ -37,10 +37,7 @@ export default function LibraryPane() {
   return (
     <div className="w-full border-[#1a1a24] bg-[#0d0d14] flex flex-col h-full shrink-0">
       <div className="p-4 border-b border-[#1a1a24] space-y-4 bg-[#111118]">
-        <h2 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
-          <FileAudio size={16} className="text-brand-red" />
-          Asset Library
-        </h2>
+
         <div className="relative">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input 
