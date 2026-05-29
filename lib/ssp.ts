@@ -32,7 +32,7 @@ export async function fetchContextualAd(context: SspContext): Promise<SspAdDecis
   return new Promise((resolve) => {
     setTimeout(() => {
       // Determine ad creative based on context
-      let adAudioUrl = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+      let adAudioUrl = "/audio/fallbacks/Generic_Sponsor_Break.mp3";
       let campaignTitle = "Generic Sponsor Break";
       
       if (context.liveWeather.toLowerCase().includes("rain")) {
