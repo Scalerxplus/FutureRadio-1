@@ -12,6 +12,26 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   const liveRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Layout UI States
+  const [isMixerOpen, setIsMixerOpen] = useState(true);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(true);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input field (like search or edit modals)
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      
+      if (e.key.toLowerCase() === 'm') {
+        setIsMixerOpen(prev => !prev);
+      } else if (e.key.toLowerCase() === 'l') {
+        setIsRightPanelOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Edit Modal State
   const [editingElement, setEditingElement] = useState<any>(null);
   const [editValue, setEditValue] = useState("");
@@ -303,48 +323,16 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
       {/* Pinned Top Area: Header & Mixing Console */}
       <div className="shrink-0 px-8 pt-6 pb-2 border-b border-[#1a1a24] bg-[#0a0a0f]/95 backdrop-blur-md z-20">
         <header className="mb-6 flex justify-between items-end">
-        <div>
-          <h2 className="text-3xl font-bold text-white mb-2">24-Hour Master Playlist</h2>
-          <p className="text-gray-400">Complete bird's-eye view of today's Hot Clock programming.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={scrollToLive}
-            className="flex items-center gap-2 bg-[#1a1a24] hover:bg-[#2a2a35] text-gray-300 hover:text-white px-4 py-2 rounded-lg font-medium transition-colors border border-[#2a2a35]"
-          >
-            <Target size={18} className="text-red-500" />
-            Now Playing
-          </button>
-          <button 
-            onClick={handleRunDiagnostics}
-            disabled={isRunningDiagnostics}
-            className="flex items-center gap-2 bg-blue-900/40 hover:bg-blue-800 text-blue-300 hover:text-white px-4 py-2 rounded-lg font-medium transition-colors border border-blue-500/30 disabled:opacity-50"
-            title="Scan for missing or overlapping hours and self-heal"
-          >
-            <AlertCircle size={18} />
-            {isRunningDiagnostics ? "Scanning..." : "Run Diagnostics"}
-          </button>
-          <button 
-            onClick={handleGenerateTomorrow}
-            disabled={isGeneratingBatch}
-            className="flex items-center gap-2 bg-purple-900/40 hover:bg-purple-800 text-purple-300 hover:text-white px-4 py-2 rounded-lg font-medium transition-colors border border-purple-500/30 disabled:opacity-50"
-          >
-            <PlusCircle size={18} />
-            {isGeneratingBatch ? `Generating (${generationProgress}/24)` : "Auto-Generate 24H"}
-          </button>
-          <button 
-            onClick={handleSkip}
-            className="flex items-center gap-2 bg-[#1a1a24] hover:bg-red-900/50 text-red-400 hover:text-white px-4 py-2 rounded-lg font-medium transition-colors border border-red-900/30"
-            title="Instantly skip the currently playing element"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
-            Skip Live Element
-          </button>
-        </div>
+          <div>
+            <h2 className="text-3xl font-bold text-white mb-2">24-Hour Master Playlist</h2>
+            <p className="text-gray-400">Complete bird's-eye view of today's Hot Clock programming.</p>
+          </div>
         </header>
 
         {/* --- LIVE MIXING CONSOLE --- */}
-        <MixingConsole schedule={schedule} now={now} />
+        <div className={`transition-all duration-500 origin-top overflow-hidden ${isMixerOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 mb-0'}`}>
+          <MixingConsole schedule={schedule} now={now} />
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-8 pb-24 pt-6" ref={containerRef}>
@@ -513,8 +501,106 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
       </div>
       </div>
       
-      {/* Right Column: Library Pane */}
-      <LibraryPane />
+      {/* Right Column: Control Panel */}
+      <div className={`transition-all duration-300 border-l border-[#1a1a24] bg-[#0d0d14] flex flex-col h-full shrink-0 overflow-hidden ${isRightPanelOpen ? "w-80" : "w-0 border-l-0"}`}>
+        
+        {/* Right Panel Header - Toggle & Mixer Hotkey */}
+        <div className="p-4 border-b border-[#1a1a24] bg-[#111118] flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setIsMixerOpen(!isMixerOpen)}
+              className={`p-2 rounded-lg transition-colors border ${isMixerOpen ? 'bg-brand-red/20 text-brand-red border-brand-red/30' : 'bg-[#1a1a24] text-gray-400 hover:text-white border-[#2a2a35]'}`}
+              title="Toggle Live Mixing Console (Hotkey: M)"
+            >
+              <Volume2 size={16} />
+            </button>
+            <span className="text-xs font-bold text-gray-400">MIXER (M)</span>
+          </div>
+          <button 
+            onClick={() => setIsRightPanelOpen(false)}
+            className="p-1 rounded text-gray-500 hover:text-white transition-colors"
+            title="Close Panel (Hotkey: L)"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="p-4 space-y-3 shrink-0">
+          <button 
+            onClick={scrollToLive}
+            className="w-full flex justify-between items-center bg-[#1a1a24] hover:bg-[#2a2a35] text-gray-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-[#2a2a35]"
+          >
+            <span className="flex items-center gap-2">
+              <Target size={18} className="text-red-500" />
+              Now Playing
+            </span>
+          </button>
+          
+          <button 
+            onClick={handleRunDiagnostics}
+            disabled={isRunningDiagnostics}
+            className="w-full flex justify-between items-center bg-blue-900/20 hover:bg-blue-900/40 text-blue-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-blue-500/20 disabled:opacity-50"
+          >
+            <span className="flex items-center gap-2">
+              <AlertCircle size={18} />
+              {isRunningDiagnostics ? "Scanning..." : "Diagnostics"}
+            </span>
+          </button>
+          
+          <button 
+            onClick={handleGenerateTomorrow}
+            disabled={isGeneratingBatch}
+            className="w-full flex justify-between items-center bg-purple-900/20 hover:bg-purple-900/40 text-purple-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-purple-500/20 disabled:opacity-50"
+          >
+            <span className="flex items-center gap-2">
+              <PlusCircle size={18} />
+              {isGeneratingBatch ? `Gen (${generationProgress}/24)` : "Auto-Gen 24H"}
+            </span>
+          </button>
+          
+          <button 
+            onClick={handleSkip}
+            className="w-full flex justify-between items-center bg-[#1a1a24] hover:bg-red-900/30 text-red-400 hover:text-white px-4 py-3 rounded-xl font-medium transition-colors border border-red-900/30"
+          >
+            <span className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+              Skip Live
+            </span>
+          </button>
+        </div>
+
+        {/* Collapsible Asset Library */}
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+          <button 
+            onClick={() => setIsLibraryOpen(!isLibraryOpen)}
+            className="px-4 py-3 bg-[#111118] border-y border-[#1a1a24] flex items-center justify-between text-sm font-bold text-gray-300 hover:text-white transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              <Music size={16} className="text-brand-red" />
+              Asset Library
+            </span>
+            <span className="text-xs text-gray-500">{isLibraryOpen ? 'Hide' : 'Show'}</span>
+          </button>
+          <div className={`flex-1 overflow-hidden transition-all duration-300 ${isLibraryOpen ? 'opacity-100' : 'max-h-0 opacity-0'}`}>
+            <LibraryPane />
+          </div>
+        </div>
+      </div>
+      
+      {/* Floating Toggle if panel is closed */}
+      {!isRightPanelOpen && (
+        <button 
+          onClick={() => setIsRightPanelOpen(true)}
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#111118] border border-r-0 border-[#2a2a35] text-gray-400 hover:text-white p-2 rounded-l-xl shadow-2xl z-50 transition-colors"
+          title="Open Control Panel (Hotkey: L)"
+        >
+          <div className="flex flex-col gap-4 items-center">
+             <span className="text-[10px] uppercase font-bold writing-vertical-lr rotate-180 tracking-widest text-brand-red">Controls</span>
+          </div>
+        </button>
+      )}
+
     </div>
   );
 }
