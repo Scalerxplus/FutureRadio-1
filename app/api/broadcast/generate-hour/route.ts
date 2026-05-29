@@ -479,24 +479,20 @@ export async function POST(request: Request) {
         addElement('station_id', await getLocalAudioDuration(stationId), stationId, { title: "Station ID" });
       }
 
-      // We only allow EXACTLY 5 Jocktalk segments per hour (Hot Clock strict format)
-      if (segmentIndex <= 5) {
-          // Jocktalk Segment
-          const newsItem = localNewsItems.length >= segmentIndex ? localNewsItems[segmentIndex-1] : null;
-          
-          // Get next song details for tease
+      // Generate up to 12 Jocktalk Placeholders per hour
+      if (segmentIndex <= 12) {
+          // Get next song details
           let nextSongInfo = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
-          let segmentTopic = selectedHourlyTopic;
-          
-          const rjScript = await getJocktalk(cityId, currentIstHour, currentShow, segmentTopic, segmentIndex, lastSongTitle, nextSongInfo.title, liveWeather, newsItem, globalRjPrompt);
-          
-          const voiceId = forceVoiceId;
-          const language = "en";
-          const speed = 1.0;
-          let rjDur = Math.floor((rjScript.length / 10.0) * 1000) + 3500; 
-          
-          const blockId = addElement('jocktalk', rjDur, "", { transcript: rjScript, rjName: stationProfile.name, rjVoice: voiceId, language, speed });
-          schedule[schedule.length-1].media_url = `/api/broadcast/tts?blockId=${blockId}&voiceId=${voiceId}&language=${language}&speed=${speed}&cb=${Date.now()}`;
+
+          // Jocktalk Placeholder (JT1 - JT12)
+          // The admin will manually drag and drop audio files into these empty slots via the Master Clock UI
+          const rjDur = 30000; // Default 30s placeholder duration
+          const blockId = addElement('jocktalk', rjDur, "", { 
+            title: `JT${segmentIndex}`, 
+            transcript: "EMPTY SLOT - Awaiting Manual Jocktalk Upload from RCS Library",
+            rjName: stationProfile.name,
+            isEmptyPlaceholder: true 
+          });
 
           // Play Song 1 (The Teased Song)
           addElement('song', getSafeSongDuration(nextSongInfo), nextSongInfo.streamUrl, { title: nextSongInfo.title, artist: nextSongInfo.artist, trackId: nextSongInfo.id });

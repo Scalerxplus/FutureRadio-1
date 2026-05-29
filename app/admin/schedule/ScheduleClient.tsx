@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Music, Mic2, AlertCircle, Trash2, Edit3, PlusCircle, Clock, Volume2, Target, X, Check } from "lucide-react";
+import { Music, Mic2, AlertCircle, Trash2, Edit3, PlusCircle, Clock, Volume2, Target, X, Check, Lock } from "lucide-react";
 import { updateScheduleElement } from "./actions";
+import LibraryPane from "@/components/admin/LibraryPane";
 
 export default function ScheduleClient({ initialSchedule }: { initialSchedule: any[] }) {
   const [schedule, setSchedule] = useState(initialSchedule);
@@ -133,6 +134,27 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
     }
   };
 
+  const handleDropAsset = async (e: React.DragEvent, elementId: string) => {
+    e.preventDefault();
+    const dataString = e.dataTransfer.getData("application/json");
+    if (!dataString) return;
+
+    try {
+      const data = JSON.parse(dataString);
+      if (data.type === "library_asset") {
+        await updateScheduleElement(elementId, {
+          media_url: data.url,
+          "metadata->isEmptyPlaceholder": false,
+          "metadata->title": data.name
+        });
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error("Drop failed:", err);
+      alert("Failed to assign Jocktalk to this slot.");
+    }
+  };
+
   const handleSaveEdit = async () => {
     if (!editingElement) return;
     setIsSaving(true);
@@ -170,8 +192,9 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   let currentDeckTracker = "A";
 
   return (
-    <div className="p-8 pb-24" ref={containerRef}>
-      
+    <div className="h-full flex relative overflow-hidden bg-[#050505]">
+      {/* Left Column: Live Schedule */}
+      <div className="flex-1 flex flex-col relative h-full overflow-y-auto px-8 pb-24" ref={containerRef}>
       {/* --- HITL EDIT MODAL --- */}
       {editingElement && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
@@ -377,9 +400,12 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                 const isSkipped = element.status === 'skipped';
                 const isPlayed = isPast && !isSkipped;
                 
-                const isPlaceholder = element.isPlaceholder;
+                const isPlaceholder = element.isPlaceholder || element.metadata?.isEmptyPlaceholder;
                 const isStatic = element.isStatic;
-                const canEdit = !isPast && !isPlaceholder && (element.element_type === 'song' || element.element_type === 'sweeper' || element.element_type === 'station_id');
+                const timeDiffMs = new Date(element.start_time).getTime() - now.getTime();
+                const isLocked = timeDiffMs < 60 * 60 * 1000; // 1-Hour Lock
+                const canEdit = !isPast && !isPlaceholder && !isLocked && (element.element_type === 'song' || element.element_type === 'sweeper' || element.element_type === 'station_id');
+                const isDropTarget = isPlaceholder && element.element_type === 'jocktalk' && !isPast;
 
                 let elementDeck = null;
                 if (element.element_type === 'song' && !element.isPlaceholder) {
@@ -391,10 +417,24 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
                   <div 
                     key={element.id} 
                     ref={isPlayingNow ? liveRef : null}
-                    className={`grid grid-cols-12 gap-4 p-3 items-center transition-colors ${
+                    onDragOver={(e) => {
+                      if (isDropTarget && !isLocked) {
+                        e.preventDefault(); // allow drop
+                      }
+                    }}
+                    onDrop={(e) => {
+                      if (isDropTarget && !isLocked) {
+                        handleDropAsset(e, element.id);
+                      } else if (isDropTarget && isLocked) {
+                        alert("1-Hour Lock: You cannot modify elements scheduled to play within the next hour.");
+                      }
+                    }}
+                    className={`grid grid-cols-12 gap-4 p-3 items-center transition-all ${
                       isPlayingNow ? 'bg-red-900/10 border-l-2 border-red-500' : 
                       isSkipped ? 'opacity-50 grayscale bg-red-900/5' :
                       isPast ? 'opacity-40 grayscale hover:grayscale-0' : 
+                      isDropTarget && !isLocked ? 'opacity-90 border-l-2 border-dashed border-brand-red bg-brand-red/5 hover:bg-brand-red/10' :
+                      isDropTarget && isLocked ? 'opacity-60 border-l-2 border-dashed border-gray-600 bg-gray-900/30 cursor-not-allowed' :
                       isPlaceholder ? 'opacity-70 border-l-2 border-dashed border-gray-700 bg-transparent' : 'hover:bg-[#1a1a24]/50'
                     }`}
                   >
@@ -462,6 +502,10 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           </div>
         ))}
       </div>
+      </div>
+      
+      {/* Right Column: Library Pane */}
+      <LibraryPane />
     </div>
   );
 }
