@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Music, Mic2, AlertCircle, Trash2, Edit3, PlusCircle, Clock, Volume2, Target, X, Check, Lock } from "lucide-react";
 import { updateScheduleElement } from "./actions";
 import LibraryPane from "@/components/admin/LibraryPane";
+import MixingConsole from "@/components/admin/MixingConsole";
 
 export default function ScheduleClient({ initialSchedule }: { initialSchedule: any[] }) {
   const [schedule, setSchedule] = useState(initialSchedule);
@@ -357,6 +358,9 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           </div>
         </div>
       )}
+
+      {/* --- LIVE MIXING CONSOLE --- */}
+      <MixingConsole schedule={schedule} now={now} />
 
       <div className="flex flex-col gap-8">
         {schedule.map((block) => (
