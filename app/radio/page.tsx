@@ -318,6 +318,13 @@ export default function RadioPlayerPage() {
             ))}
         </div>
 
+        {/* Disclaimer Footer */}
+        <div className="mt-8 text-center pb-4">
+          <p className="text-[9px] text-gray-500/60 leading-relaxed max-w-[280px] mx-auto select-none">
+            Disclaimer: Streaming via decentralized protocols, content belongs to original artists.
+          </p>
+        </div>
+
       </div>
     </motion.div>
   );

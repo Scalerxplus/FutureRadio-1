@@ -254,9 +254,12 @@ export default function EntrySplashPage() {
         </div>
 
         {/* Footer/Sticker Caption */}
-        <footer className="text-center pt-4 pb-2 px-4">
+        <footer className="text-center pt-4 pb-8 px-4 flex flex-col gap-2">
           <p className="text-[10px] text-gray-500 leading-relaxed max-w-[280px] mx-auto select-none">
             You can use both at once. Radio keeps playing while you browse news.
+          </p>
+          <p className="text-[9px] text-gray-500/60 leading-relaxed max-w-[280px] mx-auto select-none mt-2">
+            Disclaimer: Streaming via decentralized protocols, content belongs to original artists.
           </p>
         </footer>
 
