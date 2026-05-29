@@ -104,15 +104,15 @@ export default function AudioOrchestrator() {
     switch(deckType) {
       case "songA":
         targetRef = audiusRef;
-        fallbackSrc = "/audio/fallbacks/Future Radio (2).mp3"; // Or randomly pick one
+        fallbackSrc = "/audio/fallbacks/Future_Radio_2.mp3"; // Or randomly pick one
         break;
       case "songB":
         targetRef = audiusRefB;
-        fallbackSrc = "/audio/fallbacks/Future Radio (8).mp3";
+        fallbackSrc = "/audio/fallbacks/Future_Radio_8.mp3";
         break;
       case "jocktalk":
         targetRef = audioRef;
-        fallbackSrc = "/audio/fallbacks/Future Radio Tuned (1).mp3";
+        fallbackSrc = "/audio/fallbacks/Future_Radio_Tuned_1.mp3";
         break;
       case "jingle":
         targetRef = jingleRef;
