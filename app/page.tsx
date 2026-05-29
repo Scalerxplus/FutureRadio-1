@@ -76,7 +76,7 @@ export default function EntrySplashPage() {
             <img 
               src="/logo.png" 
               alt="Future Radio" 
-              className="h-[95px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
+              className="h-[114px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
             />
             <p className="text-xl font-normal text-white italic underline decoration-red-500 decoration-1 underline-offset-[8px] tracking-wide select-none drop-shadow-lg">
               अब "<strong className="font-black">फ्यूचर</strong>" सुनो!
