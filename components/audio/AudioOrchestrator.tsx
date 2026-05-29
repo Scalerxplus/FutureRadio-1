@@ -81,6 +81,8 @@ export default function AudioOrchestrator() {
 
   // HTML5 Media Players
   const audiusRef = useRef<HTMLAudioElement | null>(null);
+  const audiusRefB = useRef<HTMLAudioElement | null>(null);
+  const activeDeckRef = useRef<"A" | "B">("A");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const jingleRef = useRef<HTMLAudioElement | null>(null);
   const bedRef = useRef<HTMLAudioElement | null>(null);
@@ -132,14 +134,24 @@ export default function AudioOrchestrator() {
 
   // 1. Initialize Native Audio Elements
   useEffect(() => {
-    if (typeof window !== "undefined" && !audiusRef.current) {
-      audiusRef.current = new Audio();
-      audiusRef.current.crossOrigin = "anonymous";
+    if (typeof window !== "undefined") {
+      if (!audiusRef.current) {
+        audiusRef.current = new Audio();
+        audiusRef.current.crossOrigin = "anonymous";
+      }
+      if (!audiusRefB.current) {
+        audiusRefB.current = new Audio();
+        audiusRefB.current.crossOrigin = "anonymous";
+      }
     }
     return () => {
       if (audiusRef.current) {
          audiusRef.current.pause();
          audiusRef.current.src = "";
+      }
+      if (audiusRefB.current) {
+         audiusRefB.current.pause();
+         audiusRefB.current.src = "";
       }
     };
   }, []);
@@ -317,6 +329,11 @@ export default function AudioOrchestrator() {
         currentElementIdRef.current = activeElement.id;
         zapperFiredRef.current = false; // Reset for the next transition
 
+        // Toggle Dual-Deck for back-to-back songs
+        if (activeElement.element_type === "song") {
+          activeDeckRef.current = activeDeckRef.current === "A" ? "B" : "A";
+        }
+
         // Map to mock PlaylistBlock for the UI
         const mockBlock: PlaylistBlock = {
           blockId: activeElement.id,
@@ -385,18 +402,21 @@ export default function AudioOrchestrator() {
         // UI metadata (above) is updated, but no audio will automatically play.
         if (!hasGesture || !isPlaying) return;
 
+        const primaryAudius = activeDeckRef.current === "A" ? audiusRef.current : audiusRefB.current;
+        const secondaryAudius = activeDeckRef.current === "A" ? audiusRefB.current : audiusRef.current;
+
         // Start new element
         if (activeElement.element_type === "song") {
           setPhase("playing_song");
-          if (audiusRef.current) {
-            if (audiusRef.current.src !== activeElement.youtube_id) {
-               audiusRef.current.src = activeElement.youtube_id; // For Audius, youtube_id actually holds the streamUrl!
+          if (primaryAudius) {
+            if (primaryAudius.src !== activeElement.youtube_id) {
+               primaryAudius.src = activeElement.youtube_id; // For Audius, youtube_id actually holds the streamUrl!
             }
             if (offsetSeconds > 0.5) {
-               try { audiusRef.current.currentTime = offsetSeconds; } catch(e) {}
+               try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
             }
-            audiusRef.current.volume = 1.0;
-            audiusRef.current.play().catch(e => console.error("Audius play error", e));
+            primaryAudius.volume = 1.0;
+            primaryAudius.play().catch(e => console.error("Audius play error", e));
           }
         } else {
           setPhase(activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic" ? "playing_jocktalk" : "playing_jingle");
@@ -464,34 +484,49 @@ export default function AudioOrchestrator() {
         // If the player is paused, don't attempt continuous playback resumption
         if (!hasGesture || !isPlaying) return;
 
-        // --- HARDCODE EXCLUSIVITY RULE (MUTEX) ---
-        // Prevents two elements from playing together due to browser background throttling/glitches
-        if (activeElement.element_type === "song") {
-           if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
-           if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
-           if (bedRef.current && !bedRef.current.paused) bedRef.current.pause();
-        } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
-           if (audiusRef.current && !audiusRef.current.paused) audiusRef.current.pause();
-           if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
-           // Music bed is allowed to mix with jocktalk
-        } else {
-           // Sweepers, Jingles, Zappers
-           if (audiusRef.current && !audiusRef.current.paused) audiusRef.current.pause();
-           if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
-           if (bedRef.current && !bedRef.current.paused) bedRef.current.pause();
+        const primaryAudius = activeDeckRef.current === "A" ? audiusRef.current : audiusRefB.current;
+        const secondaryAudius = activeDeckRef.current === "A" ? audiusRefB.current : audiusRef.current;
+
+        // --- HARDCODE EXCLUSIVITY RULE (MUTEX) WITH 3.5s CROSSFADE GRACE PERIOD ---
+        // Prevents two elements from playing together indefinitely, but allows a 3.5s organic crossfade overlap.
+        const CROSSFADE_GRACE_PERIOD = 3.5;
+        if (offsetSeconds > CROSSFADE_GRACE_PERIOD) {
+          if (activeElement.element_type === "song") {
+             if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
+             if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
+             if (bedRef.current && !bedRef.current.paused) bedRef.current.pause();
+             if (secondaryAudius && !secondaryAudius.paused) secondaryAudius.pause();
+          } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
+             if (primaryAudius && !primaryAudius.paused) primaryAudius.pause();
+             if (secondaryAudius && !secondaryAudius.paused) secondaryAudius.pause();
+             if (jingleRef.current && !jingleRef.current.paused) jingleRef.current.pause();
+             // Music bed is allowed to mix with jocktalk
+          } else {
+             // Sweepers, Jingles, Zappers
+             if (primaryAudius && !primaryAudius.paused) primaryAudius.pause();
+             if (secondaryAudius && !secondaryAudius.paused) secondaryAudius.pause();
+             if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
+             if (bedRef.current && !bedRef.current.paused) bedRef.current.pause();
+          }
+        }
+
+        // --- DUAL DECK CROSSFADE (FADE OUT OUTGOING SONG) ---
+        if (secondaryAudius && !secondaryAudius.paused && offsetSeconds <= CROSSFADE_GRACE_PERIOD) {
+           const fadeVol = Math.max(0, (CROSSFADE_GRACE_PERIOD - offsetSeconds) / CROSSFADE_GRACE_PERIOD);
+           secondaryAudius.volume = fadeVol;
         }
         
         // If the audio buffers heavily, aggressively seek it to the master clock
-        if (activeElement.element_type === "song" && audiusRef.current) {
-          const audioTime = audiusRef.current.currentTime;
+        if (activeElement.element_type === "song" && primaryAudius) {
+          const audioTime = primaryAudius.currentTime;
           
-          if (audiusRef.current.paused) {
-            try { audiusRef.current.currentTime = offsetSeconds; } catch(e) {}
-            audiusRef.current.play().catch(() => {});
+          if (primaryAudius.paused) {
+            try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
+            primaryAudius.play().catch(() => {});
           } else if (Math.abs(audioTime - offsetSeconds) > 3.0) {
             // Drift correction
             console.warn(`[Sync Engine] Clock Drift Detected (Expected: ${offsetSeconds.toFixed(1)}, Actual: ${audioTime.toFixed(1)}). Seeking to master clock.`);
-            try { audiusRef.current.currentTime = offsetSeconds; } catch(e) {}
+            try { primaryAudius.currentTime = offsetSeconds; } catch(e) {}
           }
         } else if (activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") {
           // Resume HTML5 Audio if paused
@@ -524,6 +559,7 @@ export default function AudioOrchestrator() {
     } else {
       // Pause all active media when user hits Stop
       if (audiusRef.current) audiusRef.current.pause();
+      if (audiusRefB.current) audiusRefB.current.pause();
       if (audioRef.current) audioRef.current.pause();
       if (bedRef.current) bedRef.current.pause();
       if (jingleRef.current) jingleRef.current.pause();
@@ -533,14 +569,17 @@ export default function AudioOrchestrator() {
   const handleGestureClick = () => {
     // Unblock browser autoplay stack
     if (audiusRef.current && audiusRef.current.paused) audiusRef.current.play().catch(() => {});
+    if (audiusRefB.current && audiusRefB.current.paused) audiusRefB.current.play().catch(() => {});
     
     const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
     if (audiusRef.current && !audiusRef.current.src) audiusRef.current.src = silentSrc;
+    if (audiusRefB.current && !audiusRefB.current.src) audiusRefB.current.src = silentSrc;
     if (audioRef.current && !audioRef.current.src) audioRef.current.src = silentSrc;
     if (bedRef.current && !bedRef.current.src) bedRef.current.src = silentSrc;
     if (jingleRef.current && !jingleRef.current.src) jingleRef.current.src = silentSrc;
 
     audiusRef.current?.play().catch(() => {});
+    audiusRefB.current?.play().catch(() => {});
     audioRef.current?.play().catch(() => {});
     bedRef.current?.play().catch(() => {});
     jingleRef.current?.play().catch(() => {});
@@ -562,7 +601,8 @@ export default function AudioOrchestrator() {
 
 
       <audio id="keepalive-player" ref={keepAliveRef} src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" loop preload="auto" />
-      <audio id="audius-player" ref={audiusRef} crossOrigin="anonymous" />
+      <audio id="audius-player-a" ref={audiusRef} crossOrigin="anonymous" />
+      <audio id="audius-player-b" ref={audiusRefB} crossOrigin="anonymous" />
       <audio id="html5-player" ref={audioRef} />
       <audio id="jingle-player" ref={jingleRef} />
       <audio id="bed-player" ref={bedRef} loop />
