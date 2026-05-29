@@ -271,16 +271,7 @@ export default function AudioOrchestrator() {
       const offsetSeconds = (serverNow.getTime() - new Date(activeElement.start_time).getTime()) / 1000;
       const remainingSeconds = (new Date(activeElement.end_time).getTime() - serverNow.getTime()) / 1000;
 
-      // --- SMART CROSSFADING (FADE OUT) ---
-      if (activeElement.element_type === "song" && audiusRef.current) {
-        if (remainingSeconds <= 4.0 && remainingSeconds > 0) {
-          // Fade volume from 1.0 down to 0 over the last 4 seconds
-          const fadeVol = Math.max(0, remainingSeconds / 4.0);
-          audiusRef.current.volume = fadeVol;
-        } else {
-          audiusRef.current.volume = 1.0;
-        }
-      }
+
 
       // --- AUDIO DUCKING LOGIC FOR RJ BED ---
       if ((activeElement.element_type === "jocktalk" || activeElement.element_type === "traffic") && bedRef.current) {

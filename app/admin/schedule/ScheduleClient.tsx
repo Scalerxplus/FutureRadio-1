@@ -181,7 +181,7 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
               <X size={20} />
             </button>
             <h3 className="text-xl font-bold text-white mb-2">Replace Master Element</h3>
-            <p className="text-xs text-gray-400 mb-6">Changes will take effect instantly for all live listeners if this element is > 60s away.</p>
+            <p className="text-xs text-gray-400 mb-6">Changes will take effect instantly for all live listeners if this element is &gt; 60s away.</p>
             
             <div className="space-y-4">
               <div>
