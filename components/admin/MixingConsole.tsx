@@ -8,41 +8,43 @@ export default function MixingConsole({ schedule, now }: { schedule: any[], now:
   const flatElements = schedule.flatMap(s => s.elements);
   const activeElement = flatElements.find(el => new Date(el.end_time) > now && !el.isPlaceholder) || flatElements[0];
   const activeIndex = flatElements.findIndex(el => el.id === activeElement?.id);
-  const nextElement = flatElements[activeIndex + 1];
 
-  // Derive which deck is active based on position
-  const songElementsBefore = flatElements.slice(0, activeIndex + 1).filter(el => el.element_type === 'song');
-  const isDeckAActive = songElementsBefore.length % 2 !== 0;
+  // Derive which deck is active based on continuous 3-deck A/B/C rotation
+  const mainElementsBefore = flatElements.slice(0, activeIndex + 1).filter(el => el.element_type !== 'sweeper' && el.element_type !== 'station_id');
+  const activeDeckIndex = Math.max(0, (mainElementsBefore.length - 1) % 3); // 0 = A, 1 = B, 2 = C
+  
+  const isSweeper = activeElement?.element_type === 'sweeper' || activeElement?.element_type === 'station_id';
 
   // Deck State Variables
   const [faders, setFaders] = useState({
     deckA: 0,
     deckB: 0,
+    deckC: 0,
     sweeper: 0,
-    voice: 0,
-    bed: 0
   });
 
   useEffect(() => {
     if (!activeElement) return;
     
     // Simulate Fader Automation based on Element Type
-    let targetFaders = { deckA: 0, deckB: 0, sweeper: 0, voice: 0, bed: 0 };
+    let targetFaders = { deckA: 0, deckB: 0, deckC: 0, sweeper: 0 };
     
-    if (activeElement.element_type === 'song') {
-      targetFaders = isDeckAActive 
-        ? { deckA: 100, deckB: 0, sweeper: 0, voice: 0, bed: 0 } 
-        : { deckA: 0, deckB: 100, sweeper: 0, voice: 0, bed: 0 };
-    } else if (activeElement.element_type === 'sweeper' || activeElement.element_type === 'station_id') {
-      targetFaders = { deckA: 0, deckB: 0, sweeper: 100, voice: 0, bed: 0 };
-    } else if (activeElement.element_type === 'jocktalk') {
-      targetFaders = { deckA: 0, deckB: 0, sweeper: 0, voice: 100, bed: 30 }; // Bed is ducked
+    if (isSweeper) {
+      targetFaders = { deckA: 0, deckB: 0, deckC: 0, sweeper: 100 };
+      // Keep the previous main deck slightly active in UI to represent ducking
+      if (activeDeckIndex === 0) targetFaders.deckA = 30;
+      if (activeDeckIndex === 1) targetFaders.deckB = 30;
+      if (activeDeckIndex === 2) targetFaders.deckC = 30;
+    } else {
+      if (activeDeckIndex === 0) targetFaders.deckA = 100;
+      if (activeDeckIndex === 1) targetFaders.deckB = 100;
+      if (activeDeckIndex === 2) targetFaders.deckC = 100;
     }
 
     // Apply crossfade smoothing
     setFaders(targetFaders);
 
-  }, [activeElement, isDeckAActive]);
+  }, [activeElement, activeDeckIndex, isSweeper]);
 
   return (
     <div className="bg-[#111118] border border-[#1a1a24] rounded-2xl p-6 mb-8 flex flex-col relative overflow-hidden">
@@ -53,7 +55,7 @@ export default function MixingConsole({ schedule, now }: { schedule: any[], now:
       <div className="flex justify-between items-end mb-6 z-10">
         <div>
           <h2 className="text-xl font-bold text-white mb-1">Live Mixing Console</h2>
-          <p className="text-xs text-gray-400">Monitoring internal client-side audio crossfades.</p>
+          <p className="text-xs text-gray-400">Monitoring 3-Deck Continuous Playout Architecture.</p>
         </div>
         <div className="flex items-center gap-2 px-3 py-1 bg-red-900/20 border border-red-500/30 rounded-full">
           <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
@@ -67,9 +69,9 @@ export default function MixingConsole({ schedule, now }: { schedule: any[], now:
           label="DECK A" 
           icon={<Music size={14} />} 
           level={faders.deckA} 
-          isActive={isDeckAActive && activeElement?.element_type === 'song'}
+          isActive={activeDeckIndex === 0 || (isSweeper && activeDeckIndex === 0)}
           color="bg-blue-500"
-          trackName={isDeckAActive && activeElement?.element_type === 'song' ? activeElement.metadata?.title : (isDeckAActive ? "Queued" : "Loading...")}
+          trackName={activeDeckIndex === 0 ? activeElement?.metadata?.title : "Loading..."}
         />
         
         {/* CH 2: DECK B */}
@@ -77,39 +79,29 @@ export default function MixingConsole({ schedule, now }: { schedule: any[], now:
           label="DECK B" 
           icon={<Music size={14} />} 
           level={faders.deckB} 
-          isActive={!isDeckAActive && activeElement?.element_type === 'song'}
+          isActive={activeDeckIndex === 1 || (isSweeper && activeDeckIndex === 1)}
           color="bg-fuchsia-500"
-          trackName={!isDeckAActive && activeElement?.element_type === 'song' ? activeElement.metadata?.title : (!isDeckAActive ? "Queued" : "Loading...")}
+          trackName={activeDeckIndex === 1 ? activeElement?.metadata?.title : "Loading..."}
         />
 
-        {/* CH 3: SWEEPER */}
+        {/* CH 3: DECK C */}
         <ChannelStrip 
-          label="SFX / SWEEPER" 
+          label="DECK C" 
+          icon={<Music size={14} />} 
+          level={faders.deckC} 
+          isActive={activeDeckIndex === 2 || (isSweeper && activeDeckIndex === 2)}
+          color="bg-emerald-500"
+          trackName={activeDeckIndex === 2 ? activeElement?.metadata?.title : "Loading..."}
+        />
+
+        {/* CH 4: SWEEPER (Overdub Layer) */}
+        <ChannelStrip 
+          label="OVERDUB LAYER" 
           icon={<Target size={14} />} 
           level={faders.sweeper} 
-          isActive={activeElement?.element_type === 'sweeper' || activeElement?.element_type === 'station_id'}
+          isActive={isSweeper}
           color="bg-yellow-500"
-          trackName={activeElement?.element_type === 'sweeper' ? activeElement.metadata?.title : "Idle"}
-        />
-
-        {/* CH 4: VOICE */}
-        <ChannelStrip 
-          label="JOCKTALK" 
-          icon={<Mic2 size={14} />} 
-          level={faders.voice} 
-          isActive={activeElement?.element_type === 'jocktalk'}
-          color="bg-purple-500"
-          trackName={activeElement?.element_type === 'jocktalk' ? "RJ Channel Active" : "Idle"}
-        />
-
-        {/* CH 5: MUSIC BED */}
-        <ChannelStrip 
-          label="MUSIC BED" 
-          icon={<Music size={14} />} 
-          level={faders.bed} 
-          isActive={faders.bed > 0}
-          color="bg-orange-500"
-          trackName={faders.bed > 0 ? "BGM Loop" : "Muted"}
+          trackName={isSweeper ? activeElement.metadata?.title : "Idle"}
         />
       </div>
     </div>
