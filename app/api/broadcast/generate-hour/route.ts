@@ -17,17 +17,36 @@ const globalPlayedSweepers = new Set<string>();
 const globalPlayedJingles = new Set<string>();
 
 function getSweeperByGenre(genre: string) {
+  try {
+    const sweepersDir = path.join(process.cwd(), "public", "audio", "Sweepers");
+    if (fs.existsSync(sweepersDir)) {
+      const files = fs.readdirSync(sweepersDir).filter(f => f.toLowerCase().includes(`sweeper_${genre.toLowerCase()}`) && f.endsWith(".mp3"));
+      if (files.length > 0) {
+        return `/audio/Sweepers/${files[Math.floor(Math.random() * files.length)]}`;
+      }
+    }
+  } catch (e) {}
+  
   const sweepers = [
     `/audio/Sweepers/Sweeper_${genre}_01.mp3`,
     `/audio/Sweepers/Sweeper_${genre}_02.mp3`,
     `/audio/Sweepers/Sweeper_${genre}_03.mp3`,
     `/audio/Sweepers/Sweeper_${genre}_04.mp3`,
   ];
-  const picked = sweepers[Math.floor(Math.random() * sweepers.length)];
-  return picked;
+  return sweepers[Math.floor(Math.random() * sweepers.length)];
 }
 
 function getJingleByGenre(genre: string) {
+  try {
+    const jinglesDir = path.join(process.cwd(), "public", "audio", "jingles");
+    if (fs.existsSync(jinglesDir)) {
+      const files = fs.readdirSync(jinglesDir).filter(f => f.toLowerCase().includes(`station_jingle_${genre.toLowerCase()}`) && f.endsWith(".mp3"));
+      if (files.length > 0) {
+        return `/audio/jingles/${files[Math.floor(Math.random() * files.length)]}`;
+      }
+    }
+  } catch (e) {}
+  
   return `/audio/jingles/Station_Jingle_${genre}.mp3`;
 }
 
@@ -434,9 +453,9 @@ export async function POST(request: Request) {
           // Play Song 1 (The Teased Song)
           addElement('song', getSafeSongDuration(nextSongInfo), nextSongInfo.streamUrl, { title: nextSongInfo.title, artist: nextSongInfo.artist, trackId: nextSongInfo.id });
           
-          // Zapper instead of Sweeper (High Energy Transition)
-          const zapper = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
-          addElement('sweeper', await getLocalAudioDuration(zapper), zapper, { title: "Zapper Transition" });
+          // Genre Sweeper instead of Zapper between songs
+          const songSweeper = getSweeperByGenre(cityId);
+          addElement('sweeper', await getLocalAudioDuration(songSweeper), songSweeper, { title: "Radio Sweeper" });
 
           // Play Song 2
           const song2 = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
@@ -468,13 +487,11 @@ export async function POST(request: Request) {
                  addElement('song', getSafeSongDuration(fallbackSong), fallbackSong.streamUrl, { title: fallbackSong.title, artist: fallbackSong.artist, trackId: fallbackSong.id });
               }
               
-              // Bumper out of the Ad
-              const sweeper3 = getSweeperByGenre(cityId);
-              addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
+              // Note: No sweeper after the Ad. It directly flows into the next segment (Song/Jocktalk).
           } else {
-              // Segment 5 end, just a zapper out
-              const zapperOut = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
-              addElement('sweeper', await getLocalAudioDuration(zapperOut), zapperOut, { title: "Zapper Transition" });
+              // Segment 5 end, sweeper out
+              const sweeperOut = getSweeperByGenre(cityId);
+              addElement('sweeper', await getLocalAudioDuration(sweeperOut), sweeperOut, { title: "Radio Sweeper" });
           }
           
           segmentIndex++;
@@ -483,9 +500,9 @@ export async function POST(request: Request) {
           const fillSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
           addElement('song', getSafeSongDuration(fillSong), fillSong.streamUrl, { title: fillSong.title, artist: fillSong.artist, trackId: fillSong.id });
           
-          // Zapper instead of Sweeper for fill time
-          const fillZapper = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
-          addElement('sweeper', await getLocalAudioDuration(fillZapper), fillZapper, { title: "Zapper Transition" });
+          // Sweeper instead of Zapper for fill time
+          const fillSweeper = getSweeperByGenre(cityId);
+          addElement('sweeper', await getLocalAudioDuration(fillSweeper), fillSweeper, { title: "Radio Sweeper" });
       }
     }
 
