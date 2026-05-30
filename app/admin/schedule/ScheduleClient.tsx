@@ -585,10 +585,10 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setIsMixerOpen(!isMixerOpen)}
-              className={`p-2 rounded-lg transition-colors border ${isMixerOpen ? 'bg-brand-red/20 text-brand-red border-brand-red/30' : 'bg-[#1a1a24] text-gray-400 hover:text-white border-[#2a2a35]'}`}
+              className={`p-2 rounded-lg transition-all duration-300 border active:scale-90 ${isMixerOpen ? 'bg-gradient-to-t from-red-600 to-red-500 text-white border-red-400 shadow-[0_0_15px_rgba(239,68,68,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)]' : 'bg-[#1a1a24] text-gray-400 hover:text-white border-[#2a2a35] hover:border-gray-500 hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]'}`}
               title="Toggle Live Mixing Console (Hotkey: M)"
             >
-              <Volume2 size={16} />
+              <Volume2 size={16} className={isMixerOpen ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : ''} />
             </button>
             <span className="text-xs font-bold text-gray-400">MIXER (M)</span>
           </div>
@@ -601,48 +601,40 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           </button>
         </div>
 
-        {/* Action Buttons */}
-        <div className="p-4 space-y-3 shrink-0">
+        {/* Action Buttons (2x2 Grid) */}
+        <div className="p-4 grid grid-cols-2 gap-3 shrink-0">
           <button 
             onClick={scrollToLive}
-            className="w-full flex justify-between items-center bg-gradient-to-b from-[#2a2a35] to-[#1a1a24] hover:from-[#3a3a45] hover:to-[#2a2a35] text-gray-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-[#111] active:translate-y-[1px] active:shadow-none"
+            className="group flex flex-col justify-center items-center gap-2 bg-[#1a1a24] hover:bg-[#20202c] text-gray-400 hover:text-white aspect-square rounded-[24px] font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] border border-[#2a2a35] hover:border-red-500/50 active:scale-95 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]"
           >
-            <span className="flex items-center gap-2">
-              <Target size={18} className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
-              Now Playing
-            </span>
+            <Target size={28} className="text-red-500 group-hover:drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] transition-all" />
+            <span className="text-[10px] uppercase tracking-wider font-bold">Now Playing</span>
           </button>
           
           <button 
             onClick={handleRunDiagnostics}
             disabled={isRunningDiagnostics}
-            className="w-full flex justify-between items-center bg-gradient-to-b from-blue-900/40 to-blue-950/40 hover:from-blue-800/50 hover:to-blue-900/50 text-blue-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-blue-900/50 disabled:opacity-50 active:translate-y-[1px] active:shadow-none"
+            className="group flex flex-col justify-center items-center gap-2 bg-[#1a1a24] hover:bg-[#20202c] text-gray-400 hover:text-white aspect-square rounded-[24px] font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] border border-[#2a2a35] hover:border-blue-500/50 active:scale-95 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] disabled:opacity-50"
           >
-            <span className="flex items-center gap-2">
-              <AlertCircle size={18} className="drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
-              {isRunningDiagnostics ? "Scanning..." : "Diagnostics"}
-            </span>
+            <AlertCircle size={28} className="text-blue-500 group-hover:drop-shadow-[0_0_12px_rgba(59,130,246,0.8)] transition-all" />
+            <span className="text-[10px] uppercase tracking-wider font-bold text-center px-1 leading-tight">{isRunningDiagnostics ? "Scanning" : "Diagnostics"}</span>
           </button>
           
           <button 
             onClick={handleGenerateTomorrow}
             disabled={isGeneratingBatch}
-            className="w-full flex justify-between items-center bg-gradient-to-b from-purple-900/40 to-purple-950/40 hover:from-purple-800/50 hover:to-purple-900/50 text-purple-300 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-purple-900/50 disabled:opacity-50 active:translate-y-[1px] active:shadow-none"
+            className="group flex flex-col justify-center items-center gap-2 bg-[#1a1a24] hover:bg-[#20202c] text-gray-400 hover:text-white aspect-square rounded-[24px] font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] border border-[#2a2a35] hover:border-purple-500/50 active:scale-95 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] disabled:opacity-50"
           >
-            <span className="flex items-center gap-2">
-              <PlusCircle size={18} className="drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
-              {isGeneratingBatch ? `Gen (${generationProgress}/24)` : "Auto-Gen 24H"}
-            </span>
+            <PlusCircle size={28} className="text-purple-500 group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.8)] transition-all" />
+            <span className="text-[10px] uppercase tracking-wider font-bold text-center px-1 leading-tight">{isGeneratingBatch ? `Gen ${generationProgress}/24` : "Auto-Gen"}</span>
           </button>
           
           <button 
             onClick={handleSkip}
-            className="w-full flex justify-between items-center bg-gradient-to-b from-red-900/30 to-[#1a1a24] hover:from-red-900/50 hover:to-[#2a2a35] text-red-400 hover:text-white px-4 py-3 rounded-xl font-medium transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5)] border border-red-900/50 active:translate-y-[1px] active:shadow-none"
+            className="group flex flex-col justify-center items-center gap-2 bg-[#1a1a24] hover:bg-[#20202c] text-gray-400 hover:text-white aspect-square rounded-[24px] font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)] border border-[#2a2a35] hover:border-orange-500/50 active:scale-95 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]"
           >
-            <span className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
-              Skip Live
-            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-500 group-hover:drop-shadow-[0_0_12px_rgba(249,115,22,0.8)] transition-all"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+            <span className="text-[10px] uppercase tracking-wider font-bold">Skip Live</span>
           </button>
         </div>
 
