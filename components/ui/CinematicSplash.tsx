@@ -66,9 +66,9 @@ export default function CinematicSplash({ onComplete }: { onComplete: () => void
             />
             
             <img 
-              src="/logo-transparent.png" 
+              src="/logo-dark-theme.png" 
               alt="Future Radio" 
-              className="w-auto h-[120px] md:h-[150px] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] filter invert brightness-200" 
+              className="w-auto h-[120px] md:h-[150px] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]" 
             />
           </motion.div>
         </motion.div>

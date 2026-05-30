@@ -261,9 +261,8 @@ export default function RadioPlayerPage() {
             className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 focus:outline-none"
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            {/* Spinning Logo Background */}
             <div className={`absolute inset-0 rounded-full overflow-hidden border border-white/10 transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/vinyl-icon.png" alt="Future Radio" className="w-full h-full object-cover mix-blend-multiply filter contrast-[1.2]" />
+              <img src="/vinyl-icon.png" alt="Future Radio" className="w-full h-full object-cover filter invert brightness-200 opacity-90" />
             </div>
           </button>
 

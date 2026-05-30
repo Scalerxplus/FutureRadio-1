@@ -66,7 +66,7 @@ export default function AdminLogin() {
         className="relative z-10 w-full max-w-md bg-[#111118]/80 backdrop-blur-xl border border-[#2a2a35] rounded-3xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.8)]"
       >
         <div className="text-center">
-          <img src="/logo-transparent.png" alt="Future Radio" className="h-16 mx-auto mb-4 object-contain filter invert brightness-200" />
+          <img src="/logo-dark-theme.png" alt="Future Radio" className="h-16 mx-auto mb-4 object-contain" />
           <h2 className="text-2xl font-bold tracking-tight text-white">
             Future Radio Admin
           </h2>
