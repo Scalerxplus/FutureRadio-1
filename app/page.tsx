@@ -85,7 +85,7 @@ export default function EntrySplashPage() {
 
           <div className="space-y-4 relative z-10 flex flex-col items-center">
             <img 
-              src="/logo.png" 
+              src="/logo-horizontal.png" 
               alt="Future Radio" 
               className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
             />
@@ -245,7 +245,7 @@ export default function EntrySplashPage() {
             Future Radio is a decentralized global audio platform empowering independent artists and creators.
           </p>
           <div className="text-[9px] text-brand-dark font-digital font-bold tracking-widest uppercase select-none mt-2">
-            &copy; {new Date().getFullYear()} FUTURE RADIO CORP.
+            &copy; {new Date().getFullYear()} FUTURE RADIO & MEDIA MAFIAS
           </div>
         </footer>
 

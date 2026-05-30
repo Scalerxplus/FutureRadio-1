@@ -65,13 +65,17 @@ export default function AdminLogin() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10 w-full max-w-md bg-[#111118]/80 backdrop-blur-xl border border-[#2a2a35] rounded-3xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.8)]"
       >
-        <div className="text-center mb-8">
-          <img src="/logo.png" alt="Future Radio" className="h-16 mx-auto mb-4 object-contain opacity-90" />
-          <h1 className="text-xl font-black text-white tracking-widest uppercase">Admin Terminal</h1>
-          <p className="text-xs text-gray-400 mt-1">Enter Master Password to access grid operations</p>
+        <div className="text-center">
+          <img src="/logo-horizontal.png" alt="Future Radio" className="h-16 mx-auto mb-4 object-contain opacity-90" />
+          <h2 className="text-2xl font-bold tracking-tight text-white">
+            Future Radio Admin
+          </h2>
+          <p className="text-sm text-gray-400 mt-1">
+            System Authentication Required
+          </p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6 mt-8">
           <div>
             <input
               type="password"
