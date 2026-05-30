@@ -301,7 +301,7 @@ export default function AudioOrchestrator() {
       let shouldAdvance = false;
       if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
          const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
-         if ((remainingTimeOnDeck <= 3.5 && remainingTimeOnDeck > 0) || activeDeck.ended) {
+         if ((remainingTimeOnDeck <= 1.0 && remainingTimeOnDeck > 0) || activeDeck.ended) {
             shouldAdvance = true;
          }
       }
@@ -331,6 +331,19 @@ export default function AudioOrchestrator() {
           prefetchedUrlsRef.current.add(nextElement.id);
           fetch(nextElement.media_url, { cache: "force-cache" }).catch(e => console.error("Prefetch failed", e));
         }
+      }
+
+      // --- NEXT DECK AHEAD-OF-TIME (AOT) HTML5 PRELOADING ---
+      if (nextElement && nextElement.element_type !== "sweeper" && nextElement.element_type !== "station_id") {
+          const nextDeckName = activeDeckRef.current === "A" ? "B" : (activeDeckRef.current === "B" ? "C" : "A");
+          const nextDeck = nextDeckName === "A" ? mediaRefA.current : (nextDeckName === "B" ? mediaRefB.current : mediaRefC.current);
+          const nextTargetUrl = nextElement.element_type === "song" ? nextElement.youtube_id : nextElement.media_url;
+          
+          if (nextDeck && nextDeck.src !== nextTargetUrl && nextTargetUrl) {
+              nextDeck.src = nextTargetUrl;
+              nextDeck.preload = "auto";
+              console.log(`[Smart Preload] Loading upcoming track into Deck ${nextDeckName} early.`);
+          }
       }
 
       // --- MAGIC 1.5s ZAPPER CROSSFADE SEGUE ---
@@ -421,8 +434,8 @@ export default function AudioOrchestrator() {
       } else {
         if (!hasGesture || !isPlaying) return;
 
-        // --- HARDCODE EXCLUSIVITY RULE (MUTEX) WITH 3.5s CROSSFADE GRACE PERIOD ---
-        const CROSSFADE_GRACE_PERIOD = 3.5;
+        // --- HARDCODE EXCLUSIVITY RULE (MUTEX) WITH 1.5s CROSSFADE GRACE PERIOD ---
+        const CROSSFADE_GRACE_PERIOD = 1.5;
         if (offsetSeconds > CROSSFADE_GRACE_PERIOD) {
            // Ensure only active deck and sweeper are playing, hard-pause others
            [mediaRefA, mediaRefB, mediaRefC].forEach((ref, index) => {
