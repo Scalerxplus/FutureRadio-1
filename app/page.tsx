@@ -7,12 +7,12 @@ import { useCityStore, useUiStore, useAuthStore } from "@/lib/store";
 import AuthModal from "@/components/auth/AuthModal";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 
-const CITIES = [
-  { id: "raipur", name: "Raipur, CG" },
-  { id: "indore", name: "Indore, MP" },
-  { id: "bhopal", name: "Bhopal, MP" },
-  { id: "nagpur", name: "Nagpur, MH" },
-  { id: "surat", name: "Surat, GJ" },
+const GENRES = [
+  { id: "drive", name: "Drive & Commute 🚗" },
+  { id: "chill", name: "Chill & Lofi ☕" },
+  { id: "party", name: "Party & EDM 🪩" },
+  { id: "romance", name: "Late Night Romance 🌙" },
+  { id: "news", name: "News & Podcasts 🎙️" },
 ];
 
 export default function EntrySplashPage() {
@@ -102,10 +102,10 @@ export default function EntrySplashPage() {
           <button
             onClick={() => setIsBottomSheetOpen(true)}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-none bg-white border-brutal border-black hover:bg-gray-100 shadow-brutal-sm transition duration-300 active:translate-y-1 active:translate-x-1 active:shadow-none"
-            aria-label="Change city context"
+            aria-label="Change genre context"
           >
             <span className="w-2 h-2 rounded-full bg-brand-red border border-black animate-pulse" />
-            <span className="text-xs font-bold text-brand-dark uppercase font-sans">{cityName}</span>
+            <span className="text-xs font-bold text-brand-dark uppercase font-sans">{cityName === "Raipur, CG" ? "INDIE MIX ⚡" : cityName}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -192,64 +192,48 @@ export default function EntrySplashPage() {
               </div>
             </motion.div>
 
-            {/* Card 2: Whatsup News */}
-            <motion.div
-              variants={cardVariants}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => handleCardClick("news", "/news")}
-              className="h-[160px] rounded-none bg-white border-brutal border-black p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer shadow-brutal hover:-translate-y-1 hover:-translate-x-1 hover:shadow-brutal-hover active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-300"
-            >
-              {/* Decorative Newspaper Background Icon (Very Low Opacity) */}
-              <div className="absolute top-4 right-4 text-black/[0.03] group-hover:text-black/[0.06] transition duration-300 select-none pointer-events-none">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1}
-                  stroke="currentColor"
-                  className="w-24 h-24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"
-                  />
-                </svg>
-              </div>
+            {/* Grid for Cards 2 & 3 */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Card 2: Global Charts & Voting */}
+              <motion.div
+                variants={cardVariants}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => alert("Voting & Charts feature coming soon in V1.5!")}
+                className="aspect-square rounded-none bg-[#FFDB58] border-brutal border-black p-4 flex flex-col justify-between relative overflow-hidden group cursor-pointer shadow-brutal hover:-translate-y-1 hover:-translate-x-1 hover:shadow-brutal-hover active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-300"
+              >
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold tracking-[0.1em] text-black uppercase">CHARTS</span>
+                  <h2 className="text-xl font-black text-black tracking-tight uppercase leading-tight">
+                    Top 50<br/>Indie
+                  </h2>
+                </div>
+                <div className="flex items-center justify-center w-8 h-8 bg-black rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
+                    <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </motion.div>
 
-              {/* Card Meta Content */}
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold tracking-[0.15em] text-brand-dark uppercase">
-                  NEWS FEED
-                </span>
-                <h2 className="text-[22px] font-black text-brand-dark tracking-tight uppercase">
-                  Whatsup News
-                </h2>
-                <p className="text-xs text-gray-600 font-medium max-w-[280px] leading-relaxed">
-                  Hyper-local {cityName} + national stories that matter to you
-                </p>
-              </div>
-
-              {/* Card Bottom Tag Pill */}
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-none bg-black border-2 border-black text-white text-[10px] font-bold uppercase tracking-wider w-fit font-sans">
-                {/* Sparkles Icon */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2.5}
-                  stroke="currentColor"
-                  className="w-3.5 h-3.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9.813 15.904 9 21l-.813-5.096L3 15l5.187-.813L9 9l.813 5.187L15 15l-5.187.813ZM18.257 5.75 17.5 9l-.757-3.25L13.5 5l3.243-.75L17.5 1l.757 3.25L21.5 5l-3.243.75Z"
-                  />
-                </svg>
-                <span>47 new stories today</span>
-              </div>
-            </motion.div>
+              {/* Card 3: Artist Portal */}
+              <motion.div
+                variants={cardVariants}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => alert("Artist submission portal coming soon in V1.5!")}
+                className="aspect-square rounded-none bg-brand-dark border-brutal border-black p-4 flex flex-col justify-between relative overflow-hidden group cursor-pointer shadow-brutal hover:-translate-y-1 hover:-translate-x-1 hover:shadow-brutal-hover active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-300"
+              >
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold tracking-[0.1em] text-brand-red uppercase">CREATORS</span>
+                  <h2 className="text-xl font-black text-white tracking-tight uppercase leading-tight">
+                    Artist<br/>Portal
+                  </h2>
+                </div>
+                <div className="flex items-center justify-center w-8 h-8 bg-white rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-black">
+                    <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
 
@@ -294,25 +278,25 @@ export default function EntrySplashPage() {
 
                 {/* Header */}
                 <div className="text-center">
-                  <h3 className="text-base font-bold text-white">Select City</h3>
-                  <p className="text-xs text-gray-500 mt-1">Updates localized radio voiceovers and news</p>
+                  <h3 className="text-base font-bold text-white">Select Vibe / Genre</h3>
+                  <p className="text-xs text-gray-500 mt-1">Updates the live radio playlist mood</p>
                 </div>
 
-                {/* City Options List */}
+                {/* Genre Options List */}
                 <div className="space-y-1.5">
-                  {CITIES.map((city) => {
-                    const isSelected = city.name === cityName;
+                  {GENRES.map((genre) => {
+                    const isSelected = genre.name === cityName || (cityName === "Raipur, CG" && genre.id === "drive"); // Fallback for old default state
                     return (
                       <button
-                        key={city.id}
-                        onClick={() => handleSelectCity(city.id, city.name)}
+                        key={genre.id}
+                        onClick={() => handleSelectCity(genre.id, genre.name)}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left text-sm font-semibold transition ${
                           isSelected
                             ? "bg-brand-red/15 text-brand-red border border-brand-red/20"
                             : "text-gray-300 hover:bg-[#1c1c28] border border-transparent"
                         }`}
                       >
-                        <span>{city.name}</span>
+                        <span>{genre.name}</span>
                         {isSelected && (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
