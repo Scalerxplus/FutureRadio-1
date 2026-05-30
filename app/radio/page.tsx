@@ -268,7 +268,9 @@ export default function RadioPlayerPage() {
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
             <div className={`absolute inset-0 rounded-full overflow-hidden border-2 border-brand-red/20 shadow-[0_0_15px_rgba(255,46,46,0.2)] transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/red-o-icon.png" alt="Future Radio" className="w-full h-full object-cover p-3" />
+              <div className="w-full h-full p-2.5">
+                <img src="/logo-horizontal.png" alt="Future Radio" className="w-full h-full object-cover object-[100%_50%]" />
+              </div>
             </div>
           </button>
 
