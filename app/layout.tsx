@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     images: ["/logo-horizontal.png"],
   },
   icons: {
-    icon: "/logo-badge.png",
+    icon: "/favicon.png",
     apple: "/icons/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",

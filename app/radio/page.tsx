@@ -263,7 +263,7 @@ export default function RadioPlayerPage() {
           >
             {/* Spinning Logo Background */}
             <div className={`absolute inset-0 rounded-full overflow-hidden border border-white/10 transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/logo_app.png" alt="Future Radio" className="w-full h-full object-cover opacity-90" />
+              <img src="/vinyl-icon.png" alt="Future Radio" className="w-full h-full object-cover mix-blend-multiply filter contrast-[1.2]" />
             </div>
           </button>
 
