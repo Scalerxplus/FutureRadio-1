@@ -96,7 +96,42 @@ export default function AudioOrchestrator() {
   const prefetchedUrlsRef = useRef<Set<string>>(new Set());
   const activeBlockIdRef = useRef<string | null>(null);
   const transitionTimeRef = useRef<number>(0);
+  const webAudioInitializedRef = useRef<boolean>(false);
   const [listenerId] = useState(() => typeof window !== "undefined" ? crypto.randomUUID() : "anon");
+
+  // --- LOUDNORM: Inject Web Audio API Compressor ---
+  useEffect(() => {
+    if (hasGesture && !webAudioInitializedRef.current) {
+      webAudioInitializedRef.current = true;
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) return;
+        const ctx = new AudioContextClass();
+
+        // The magic compressor! Acts like an FM Radio multiband limiter
+        const compressor = ctx.createDynamicsCompressor();
+        compressor.threshold.setValueAtTime(-24, ctx.currentTime); // Start compressing anything above -24dB
+        compressor.knee.setValueAtTime(30, ctx.currentTime);       // Smooth compression curve
+        compressor.ratio.setValueAtTime(12, ctx.currentTime);      // Heavy limiting
+        compressor.attack.setValueAtTime(0.003, ctx.currentTime);  // Fast attack to catch peaks
+        compressor.release.setValueAtTime(0.25, ctx.currentTime);  // Natural release
+        
+        compressor.connect(ctx.destination);
+
+        const refs = [audiusRef, audiusRefB, audioRef, jingleRef, bedRef];
+        refs.forEach(r => {
+          if (r.current) {
+            const source = ctx.createMediaElementSource(r.current);
+            source.connect(compressor);
+          }
+        });
+        
+        console.log("[AudioOrchestrator] Web Audio API Loudness Normalizer (Compressor) injected!");
+      } catch (e) {
+        console.error("[AudioOrchestrator] Failed to inject Compressor (CORS/State Error)", e);
+      }
+    }
+  }, [hasGesture]);
 
   // --- SMART AUTO-HEAL: 5-Channel Silence Detection ---
   const handleMediaError = (deckType: "songA" | "songB" | "jocktalk" | "jingle" | "bed") => {
