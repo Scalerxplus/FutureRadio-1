@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { useUiStore, useAuthStore } from "@/lib/store";
 import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import { toggleLikeSong, getUserLikedSongs } from "@/lib/supabase/playlist";
-import { formatTime } from "@/lib/utils";
 import TelemetryDisplay from "@/components/audio/TelemetryDisplay";
 import { useCityStore } from "@/lib/store";
 

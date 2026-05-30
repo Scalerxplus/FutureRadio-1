@@ -416,15 +416,15 @@ export async function POST(request: Request) {
 
     const liveWeather = await getLiveWeather(cityId);
 
-    const schedule = [];
+    const schedule: any[] = [];
     let currentTimeMs = startTime.getTime();
 
     const addElement = (type: any, durationMs: number, urlOrId: string, metadata: any = {}) => {
       let finalDurationMs = durationMs;
       
       // HARD STOP: Never overshoot the 60-minute hot clock boundary (xx:59:59)
-      if (currentTimeMs + finalDurationMs > targetEndTime) {
-         finalDurationMs = targetEndTime - currentTimeMs;
+      if (currentTimeMs + finalDurationMs > targetEndTime.getTime()) {
+         finalDurationMs = targetEndTime.getTime() - currentTimeMs;
          metadata.isCapped = true; // Mark as capped so the frontend knows to cut it off gracefully
       }
 
@@ -463,7 +463,7 @@ export async function POST(request: Request) {
         console.warn("[Master Clock] Preflight failed. Engaging STRICT FALLBACK MODE for this hour.");
     }
 
-    while (currentTimeMs < targetEndTime) {
+    while (currentTimeMs < targetEndTime.getTime()) {
       if (isFallbackMode) {
           const fallbackTrack = await getSong("fallback", cityId, playedSongs);
           addElement('song', getSafeSongDuration(fallbackTrack), fallbackTrack.streamUrl, { title: fallbackTrack.title, artist: fallbackTrack.artist, trackId: fallbackTrack.id });

@@ -56,7 +56,7 @@ export async function GET(request: Request) {
 
     for (const el of (schedule || [])) {
       // Find which hour block it belongs to
-      for (const [hourIso] of elementsByHour.entries()) {
+      for (const [hourIso] of Array.from(elementsByHour.entries())) {
         const hStart = new Date(hourIso).getTime();
         const hEnd = hStart + 60 * 60 * 1000;
         const elStart = new Date(el.start_time).getTime();
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
     // Analyze each hour
-    for (const [hourIso, elements] of elementsByHour.entries()) {
+    for (const [hourIso, elements] of Array.from(elementsByHour.entries())) {
       let hasError = false;
       let reason = "";
 

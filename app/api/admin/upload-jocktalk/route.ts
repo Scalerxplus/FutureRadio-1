@@ -20,25 +20,30 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // 1. Process and Save the Audio File
+    // 1. Process and Save the Audio File to Supabase Storage
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
 
-    // Sanitize the filename and ensure the uploads directory exists
     const extension = file.name.split('.').pop() || 'mp3';
     const safeFilename = `Jocktalk_${cityId}_${Date.now()}.${extension}`;
-    const uploadDir = join(process.cwd(), "public", "audio", "uploads");
     
-    try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (e) {
-      // Directory might already exist
+    // Attempt to create the bucket if it doesn't exist (fails silently if it does)
+    await supabase.storage.createBucket('audio-uploads', { public: true });
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("audio-uploads")
+      .upload(safeFilename, bytes, {
+        contentType: file.type,
+        upsert: true
+      });
+
+    if (uploadError) {
+      console.error("[Upload Jocktalk] Storage upload failed:", uploadError);
+      return NextResponse.json({ error: "Storage upload failed" }, { status: 500 });
     }
 
-    const filePath = join(uploadDir, safeFilename);
-    await writeFile(filePath, buffer);
-
-    const publicUrl = `/audio/uploads/${safeFilename}`;
+    const { data: { publicUrl } } = supabase.storage
+      .from("audio-uploads")
+      .getPublicUrl(safeFilename);
 
     // Calculate exact duration
     const start = new Date(startTimeStr).getTime();
@@ -47,7 +52,7 @@ export async function POST(req: Request) {
 
     // 2. Insert into Supabase Schedule Table
     const newBlockId = crypto.randomUUID();
-    const { error: insertError } = await supabase.from("schedule").insert([
+    const { error: insertError } = await supabase.from("broadcast_schedule").insert([
       {
         id: newBlockId,
         city_id: cityId,

@@ -29,7 +29,7 @@ function generateHotClockPlaceholders(hour: number, show: any) {
   const istDate = new Date(istTimeMs);
   istDate.setUTCHours(hour, 0, 0, 0);
   let currentTimeMs = istDate.getTime() - 5.5 * 60 * 60 * 1000;
-  const placeholders = [];
+  const placeholders: any[] = [];
   
   const addBlock = (type: string, durationS: number, title: string, subtitle: string, isStatic: boolean) => {
     placeholders.push({
