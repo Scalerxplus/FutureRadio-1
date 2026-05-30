@@ -246,7 +246,9 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
   };
 
   const flatElements = schedule.flatMap(b => b.elements);
-  const currentActive = flatElements.find(el => new Date(el.end_time) > now && !el.isPlaceholder) || flatElements[0];
+  const currentActive = flatElements.find(el => new Date(el.end_time) > now && !el.isPlaceholder) 
+                     || flatElements.find(el => new Date(el.end_time) > now) 
+                     || flatElements[0];
   const activeElementId = currentActive?.id;
 
   let currentDeckTracker = "A";

@@ -260,9 +260,23 @@ export default function AudioOrchestrator() {
 
   // 3. The Global Synchronizer Loop (Runs every 500ms)
   useEffect(() => {
-    if (schedule.length === 0) return;
-
     const interval = setInterval(() => {
+      // If schedule is empty, engage strict fallback immediately
+      if (schedule.length === 0) {
+        if (currentElementIdRef.current !== "FALLBACK") {
+          currentElementIdRef.current = "FALLBACK";
+          setPhase("idle");
+          audioRef.current?.pause();
+          bedRef.current?.pause();
+          if (audiusRef.current) {
+            audiusRef.current.src = "https://discoveryprovider.audius.co/v1/tracks/l88e8/stream?app_name=FutureRadio";
+            audiusRef.current.play().catch(e => console.error(e));
+            console.log(`[Sync Engine] Schedule empty! Engaging ultimate fallback track`);
+          }
+        }
+        return;
+      }
+
       const serverNow = new Date(Date.now() + syncOffsetMs);
       
       let currentIndex = -1;
