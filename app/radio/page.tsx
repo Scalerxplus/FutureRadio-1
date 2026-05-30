@@ -188,6 +188,15 @@ export default function RadioPlayerPage() {
 
 
           <div className="mt-2 mb-1 w-full flex flex-col items-center">
+            
+            {/* Indie Supporter Badge */}
+            <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500/10 to-brand-red/10 border border-orange-500/20 backdrop-blur-md shadow-[0_0_15px_rgba(255,51,102,0.15)] hover:scale-105 transition-transform cursor-pointer">
+              <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+              <span className="text-[9px] font-bold tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-brand-red uppercase">
+                Powered By Indie Creators
+              </span>
+            </div>
+
             {/* Seamless Title Marquee */}
             <div className="w-full flex items-center overflow-hidden">
               {React.createElement(
