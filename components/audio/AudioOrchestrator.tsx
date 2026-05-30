@@ -199,7 +199,7 @@ export default function AudioOrchestrator() {
     if (hasGesture) return;
     
     const unlockFn = () => {
-      unlockAudio(true);
+      unlockAudio();
       setHasGesture(true);
       if (!isPlaying) setIsPlaying(true);
     };
