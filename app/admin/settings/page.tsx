@@ -57,31 +57,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* AI Voice Engine */}
-          <div className="bg-[#111118] border border-[#1a1a24] p-6 rounded-2xl space-y-4">
-            <div className="flex items-center gap-3 text-brand-primary">
-              <Mic2 size={24} />
-              <h3 className="text-lg font-bold text-white">AI Voice Engine</h3>
-            </div>
-            <p className="text-xs text-gray-400">Select the TTS synthesis engine. Changes take effect on the next hourly generation.</p>
-            
-            <div className="space-y-3">
-              <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
-                <input type="radio" name="voice" value="pm" checked={voiceId === "pm"} onChange={() => setVoiceId("pm")} className="w-4 h-4 accent-brand-primary" />
-                <div>
-                  <div className="text-white font-bold">Future Radio Core (Male)</div>
-                  <div className="text-[10px] text-gray-500">Kokoro-82M Engine • Ultra-Low Latency</div>
-                </div>
-              </label>
-              <label className="flex items-center gap-3 p-4 border border-[#2a2a35] rounded-xl cursor-pointer hover:bg-[#1a1a24] transition-colors">
-                <input type="radio" name="voice" value="aaira" checked={voiceId === "aaira"} onChange={() => setVoiceId("aaira")} className="w-4 h-4 accent-brand-primary" />
-                <div>
-                  <div className="text-white font-bold">Future Radio Nova (Female)</div>
-                  <div className="text-[10px] text-gray-500">F5-TTS Engine • High Expressiveness</div>
-                </div>
-              </label>
-            </div>
-          </div>
+
 
           {/* Broadcast Language */}
           <div className="bg-[#111118] border border-[#1a1a24] p-6 rounded-2xl space-y-4">

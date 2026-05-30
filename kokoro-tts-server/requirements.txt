@@ -1,7 +1,0 @@
-fastapi
-uvicorn
-kokoro-onnx
-soundfile
-pydub
-numpy
-requests
