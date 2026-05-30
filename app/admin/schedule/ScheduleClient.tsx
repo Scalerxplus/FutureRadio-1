@@ -117,8 +117,8 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
       
       for (let i = 0; i < 24; i++) {
         const targetIst = new Date(istTimeMs);
-        // Start from the NEXT full hour (current hour + 1 + i)
-        targetIst.setUTCHours(targetIst.getUTCHours() + 1 + i, 0, 0, 0);
+        // Start from the CURRENT full hour (current hour + i)
+        targetIst.setUTCHours(targetIst.getUTCHours() + i, 0, 0, 0);
         
         const year = targetIst.getUTCFullYear();
         const month = String(targetIst.getUTCMonth() + 1).padStart(2, '0');
