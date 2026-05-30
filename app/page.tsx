@@ -87,7 +87,7 @@ export default function EntrySplashPage() {
             <img 
               src="/logo.png" 
               alt="Future Radio" 
-              className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105 filter invert" 
+              className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
             />
             
             {/* The Neo-Brutalist Sticker Badge */}
@@ -121,11 +121,6 @@ export default function EntrySplashPage() {
 
         {/* Experience Cards Section */}
         <div className="flex flex-col justify-end pb-2 pt-4">
-          <div className="text-center mb-6">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 select-none">
-              CHOOSE YOUR EXPERIENCE
-            </span>
-          </div>
 
           <motion.div
             variants={containerVariants}
@@ -237,18 +232,20 @@ export default function EntrySplashPage() {
           </motion.div>
         </div>
 
-        {/* Footer/Sticker Caption */}
-        <footer className="text-center pt-4 pb-8 px-4 flex flex-col gap-1.5">
-          <p className="text-[10px] text-gray-500 leading-relaxed max-w-[280px] mx-auto select-none">
-            You can use both at once. Radio keeps playing while you browse news.
+        {/* Top-Tier Corporate Footer */}
+        <footer className="w-full text-center pb-8 pt-6 px-6 flex flex-col gap-4 mt-auto">
+          <div className="flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+            <a href="#" className="hover:underline hover:text-black">Terms</a>
+            <span className="w-1 h-1 rounded-full bg-black/30"></span>
+            <a href="#" className="hover:underline hover:text-black">Privacy</a>
+            <span className="w-1 h-1 rounded-full bg-black/30"></span>
+            <a href="#" className="hover:underline hover:text-black">Creators</a>
+          </div>
+          <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[320px] mx-auto select-none font-medium">
+            Future Radio is a decentralized global audio platform empowering independent artists and creators.
           </p>
-          <p className="text-[9px] text-gray-500/60 leading-relaxed max-w-[280px] mx-auto select-none mt-2">
-            Disclaimer: Streaming via decentralized protocols, content belongs to original artists.
-          </p>
-          <div className="flex items-center justify-center gap-1.5 mt-1.5 text-[8px] text-gray-600/80 font-medium tracking-widest uppercase select-none">
-            <span>&copy; {new Date().getFullYear()}</span>
-            <span className="w-1 h-1 rounded-full bg-gray-600/50"></span>
-            <span>Future Radio & Media Mafias</span>
+          <div className="text-[9px] text-brand-dark font-digital font-bold tracking-widest uppercase select-none mt-2">
+            &copy; {new Date().getFullYear()} FUTURE RADIO CORP.
           </div>
         </footer>
 
