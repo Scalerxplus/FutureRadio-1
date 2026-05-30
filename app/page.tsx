@@ -90,7 +90,7 @@ export default function EntrySplashPage() {
             </div>
 
             <p className="text-4xl md:text-5xl font-display font-extrabold text-brand-dark tracking-wider select-none mt-6 uppercase">
-              अब "फ्यूचर" सुनो!
+              अब <span className="text-white">"फ्यूचर"</span> सुनो!
             </p>
           </div>
           <button
