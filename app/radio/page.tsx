@@ -8,6 +8,7 @@ import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import { toggleLikeSong, getUserLikedSongs } from "@/lib/supabase/playlist";
 import TelemetryDisplay from "@/components/audio/TelemetryDisplay";
 import { useCityStore } from "@/lib/store";
+import VibeSelectorSheet from "@/components/ui/VibeSelectorSheet";
 
 export default function RadioPlayerPage() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function RadioPlayerPage() {
   } = useAudioStore();
 
   const [isLiked, setIsLiked] = useState(false);
+  const [isVibeSheetOpen, setIsVibeSheetOpen] = useState(false);
 
   // Synchronize active song liked states from Supabase
   useEffect(() => {
@@ -55,11 +57,9 @@ export default function RadioPlayerPage() {
     router.push("/");
   };
 
-  // Navigate to News and toggle bubble player mode
-  const handleNavigateNews = () => {
-    setViewMode("bubble");
-    setMode("news");
-    router.push("/news");
+  // Toggle Vibe Sheet
+  const handleOpenVibeSheet = () => {
+    setIsVibeSheetOpen(true);
   };
 
   // Tracks song elapsed progress every second
@@ -218,6 +218,12 @@ export default function RadioPlayerPage() {
           <TelemetryDisplay />
         </div>
 
+        {/* Vibe Selector Bottom Sheet */}
+        <VibeSelectorSheet 
+          isOpen={isVibeSheetOpen} 
+          onClose={() => setIsVibeSheetOpen(false)} 
+        />
+
         {/* Progress Bar Scrubber */}
         <div className="space-y-2 mt-2">
           {/* Custom Track Slider */}
@@ -284,12 +290,12 @@ export default function RadioPlayerPage() {
             LIVE
           </div>
 
-          {/* Quick News Trigger */}
+          {/* Select Vibe / Genre Trigger */}
           <button
-            onClick={handleNavigateNews}
+            onClick={handleOpenVibeSheet}
             className="flex items-center gap-1.5 text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 select-none uppercase tracking-[0.2em]"
           >
-            UPDATES ⚡
+            SELECT VIBE 🎧
           </button>
         </div>
 
