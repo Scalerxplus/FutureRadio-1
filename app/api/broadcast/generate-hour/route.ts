@@ -16,68 +16,20 @@ const ytCache = new Map<string, { video: any; expiresAt: number }>();
 const globalPlayedSweepers = new Set<string>();
 const globalPlayedJingles = new Set<string>();
 
-function getSweeperByGenre(energy: string) {
-  try {
-    const sweepersDir = path.join(process.cwd(), "public", "audio", "Sweepers");
-    const allSweepers = fs.readdirSync(sweepersDir)
-      .filter(f => f.endsWith('.mp3') || f.endsWith('.wav'))
-      .map(f => `/audio/Sweepers/${f}`);
-      
-    let list = allSweepers.filter(s => !s.toLowerCase().includes("high") && !s.toLowerCase().includes("lofi") && !s.toLowerCase().includes("low"));
-    if (energy === "high") list = allSweepers.filter(s => s.toLowerCase().includes("high"));
-    if (energy === "low") list = allSweepers.filter(s => s.toLowerCase().includes("lofi") || s.toLowerCase().includes("low"));
-    
-    if (list.length === 0) list = allSweepers;
-    
-    let available = list.filter(s => !globalPlayedSweepers.has(s));
-    if (available.length === 0) {
-        available = list;
-        list.forEach(s => globalPlayedSweepers.delete(s)); // Reset only this category
-    }
-    
-    const picked = available[Math.floor(Math.random() * available.length)];
-    globalPlayedSweepers.add(picked);
-    return picked;
-  } catch (e) {
-    return "/audio/Sweepers/Sweeper_Desi_High_Energy_01.mp3";
-  }
+function getSweeperByGenre(genre: string) {
+  const sweepers = [
+    `/audio/Sweepers/Sweeper_${genre}_01.mp3`,
+    `/audio/Sweepers/Sweeper_${genre}_02.mp3`,
+    `/audio/Sweepers/Sweeper_${genre}_03.mp3`,
+    `/audio/Sweepers/Sweeper_${genre}_04.mp3`,
+  ];
+  const picked = sweepers[Math.floor(Math.random() * sweepers.length)];
+  return picked;
 }
 
-function getJingleByGenre(energy: string) {
-  try {
-    const jinglesDir = path.join(process.cwd(), "public", "audio", "jingles");
-    const allJingles = fs.readdirSync(jinglesDir)
-      .filter(f => (f.endsWith('.mp3') || f.endsWith('.wav')) && (f.toLowerCase().includes('jingle') || f.toLowerCase().includes('id')))
-      .map(f => `/audio/jingles/${f}`);
-      
-    let list = allJingles.filter(s => !s.toLowerCase().includes("edm") && !s.toLowerCase().includes("high") && !s.toLowerCase().includes("lofi") && !s.toLowerCase().includes("low"));
-    if (energy === "high") list = allJingles.filter(s => s.toLowerCase().includes("edm") || s.toLowerCase().includes("high"));
-    if (energy === "low") list = allJingles.filter(s => s.toLowerCase().includes("lofi") || s.toLowerCase().includes("low"));
-    
-    if (list.length === 0) list = allJingles;
-    
-    let available = list.filter(s => !globalPlayedJingles.has(s));
-    if (available.length === 0) {
-        available = list;
-        list.forEach(s => globalPlayedJingles.delete(s));
-    }
-    
-    const picked = available[Math.floor(Math.random() * available.length)];
-    globalPlayedJingles.add(picked);
-    return picked;
-  } catch (e) {
-    return "/audio/jingles/Station_Jingle_EDM.mp3";
-  }
+function getJingleByGenre(genre: string) {
+  return `/audio/jingles/Station_Jingle_${genre}.mp3`;
 }
-
-const SHOWS = [
-  { id: "morning_zen", name: "Morning Zen", rj: "PM", startHour: 6, endHour: 8, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Morning business news, pre-market analysis, global economy summaries, very factual." },
-  { id: "morning_drive", name: "The Morning Drive", rj: "PM", startHour: 8, endHour: 11, energy: "high", musicQuery: "High energy latest bollywood punjabi trending highest played songs", contentStrategy: "Opening bell insights, corporate news, Indian tycoons, fast-paced financial data." },
-  { id: "mid_day", name: "Mid-Day Cafe", rj: "PM", startHour: 11, endHour: 16, energy: "mid", musicQuery: "Easy listening latest hit songs", contentStrategy: "Mid-day market updates, sports scores, economy deep dives, intellectual analysis." },
-  { id: "evening_rush", name: "Evening Rush", rj: "PM", startHour: 16, endHour: 20, energy: "high", musicQuery: "High energy bollywood punjabi trending hit songs", contentStrategy: "Market closing bells, GDP stats, major sports/cricket news, celebrity business ventures." },
-  { id: "global_club", name: "The Global Club", rj: "PM", startHour: 20, endHour: 1, energy: "high", musicQuery: "EDM globally trending dj mixes dance music songs", contentStrategy: "Global markets, international business, late-night breaking news, fast-paced reports." },
-  { id: "night_shift", name: "Night Shift", rj: "PM", startHour: 1, endHour: 6, energy: "low", musicQuery: "Easy listening bollywood hit songs", contentStrategy: "Economy retrospectives, long-form factual storytelling, sports history, very serious tone." },
-];
 
 const STATION_VOICES = {
   "PM": { name: "Future Radio Core", voiceId: "pm" },
@@ -85,20 +37,31 @@ const STATION_VOICES = {
 };
 
 const PREMIUM_GENRES = {
+  drive: {
+    punjabi: ["punjabi pop", "punjabi hip hop", "desi hip hop", "punjabi rap", "upbeat punjabi"],
+    hindi: ["bollywood hits", "desi indie", "hindi pop", "mumbai pop", "hindi upbeat", "bollywood dance"],
+    intl: ["pop hits", "top 40", "indie pop", "upbeat indie", "commercial pop", "synth pop"]
+  },
   chill: {
-    punjabi: ["punjabi lofi", "punjabi chill", "punjabi acoustic", "punjabi slow", "desi chill", "punjabi r&b chill"],
-    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill", "hindi dream pop", "pakistani lofi", "urdu lofi chill"],
-    intl: ["lofi beats", "chillout", "ambient electronic", "chillhop", "night drive lo-fi", "afro chill", "progressive chillout"]
+    punjabi: ["punjabi lofi", "punjabi chill", "punjabi acoustic", "punjabi slow", "desi chill"],
+    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill"],
+    intl: ["lofi beats", "chillout", "ambient electronic", "chillhop", "night drive lo-fi"]
   },
   party: {
-    punjabi: ["punjabi trap", "punjabi edm", "bhangra bass", "desi trap", "punjabi dj", "uk punjabi drill", "punjabi hip hop bass"],
-    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm", "hindi club mix", "urdu edm"],
-    intl: ["tech house", "festival bass", "electronic dance", "house mix", "bass boost", "progressive house", "progressive trance", "edm trance", "afrobeats", "afro house"]
+    punjabi: ["punjabi trap", "punjabi edm", "bhangra bass", "desi trap", "punjabi dj"],
+    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm", "hindi club mix"],
+    intl: ["tech house", "festival bass", "electronic dance", "house mix", "progressive house", "edm"]
   },
-  indie: {
-    punjabi: ["punjabi pop", "punjabi hip hop", "desi hip hop", "punjabi rap", "punjabi indie", "punjabi underground", "punjabi alternative", "punjabi r&b", "desi r&b", "punjabi fusion"],
-    hindi: ["desi indie", "hindi pop", "indian lofi hip hop", "desi rap", "hindi synth", "hindi indie rock", "hindi alternative", "mumbai indie", "delhi indie", "indian synthpop", "hindi bedroom pop", "urdu indie", "hindi r&b", "pakistani indie", "pakistani underground", "karachi indie", "lahore underground", "urdu alternative"],
-    intl: ["synth pop", "indie electronic", "alternative pop", "bedroom pop", "afro indie"]
+  romance: {
+    punjabi: ["punjabi romantic", "punjabi sad song", "punjabi acoustic romance", "sufi romantic"],
+    hindi: ["bollywood romantic", "hindi love songs", "urdu romantic", "desi soul", "hindi acoustic"],
+    intl: ["r&b romance", "slow jams", "acoustic love", "soulful pop", "indie folk romance"]
+  },
+  news: {
+    // For news we still play instrumental or very light music in the background or fallback tracks
+    punjabi: ["punjabi instrumental", "desi background score"],
+    hindi: ["indian classical chill", "hindi instrumental", "news background music"],
+    intl: ["corporate background", "light electronic", "ambient background", "documentary music"]
   }
 };
 
@@ -108,28 +71,10 @@ const ZAPPERS = [
   "/audio/Zappers/zapper_transition_03.mp3"
 ];
 
-function getIstHour(date: Date) {
-  const dateInIST = new Date(date.getTime() + 5.5 * 60 * 60 * 1000);
-  return dateInIST.getUTCHours();
-}
-
-function getCurrentShow(istHour: number) {
-  if (istHour >= 6 && istHour < 8) return SHOWS[0];
-  if (istHour >= 8 && istHour < 11) return SHOWS[1];
-  if (istHour >= 11 && istHour < 16) return SHOWS[2];
-  if (istHour >= 16 && istHour < 20) return SHOWS[3];
-  if (istHour >= 20 || istHour < 1) return SHOWS[4]; 
-  if (istHour >= 1 && istHour < 6) return SHOWS[5];  
-  return SHOWS[1]; 
-}
-
-function getSearchQueryForShow(show: any) {
-  let vibe = "indie";
-  
-  if (show.id === "night_shift" || show.id === "morning_zen") {
-      vibe = "chill";
-  } else if (show.id === "global_club" || show.energy === "high") {
-      vibe = "party";
+function getSearchQueryForGenre(genre: string) {
+  let vibe = genre.toLowerCase();
+  if (!PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES]) {
+      vibe = "drive"; // fallback
   }
 
   // 35% Punjabi, 35% Hindi, 30% International
@@ -337,11 +282,9 @@ export async function POST(request: Request) {
     // Generate schedule ONLY until the end of the current hour (xx:59:59)
     const targetEndTime = new Date(startTime.getTime() + 59 * 60 * 1000 + 59 * 1000 + 999);
 
-    const currentIstHour = getIstHour(startTime);
-    const currentShow = getCurrentShow(currentIstHour);
-    const stationProfile = STATION_VOICES[currentShow.rj as keyof typeof STATION_VOICES] || STATION_VOICES["PM"];
+    const stationProfile = STATION_VOICES["PM"]; // Default voice profile for UI
 
-    console.log(`[Master Clock] Generating ${currentShow.name} (Voice: ${stationProfile.name}) for ${cityId} at ${currentIstHour}:00 IST`);
+    console.log(`[Master Clock] Generating channel playlist for Genre: ${cityId} at ${startTime.toISOString()}`);
 
     // --- HITL: Fetch Global Station Settings ---
     let globalRjPrompt = "";
@@ -356,10 +299,6 @@ export async function POST(request: Request) {
 
     if (settingsData && settingsData.length > 0) {
       if (settingsData[0].rj_prompt) globalRjPrompt = settingsData[0].rj_prompt;
-      if (settingsData[0].playlist_mood) {
-         currentShow.contentStrategy = settingsData[0].playlist_mood;
-         currentShow.energy = settingsData[0].playlist_mood;
-      }
       if (settingsData[0].language) forceLanguage = settingsData[0].language;
       if (settingsData[0].voice_id) forceVoiceId = settingsData[0].voice_id;
 
@@ -388,8 +327,6 @@ export async function POST(request: Request) {
         .from("jocktalk_overrides")
         .update({ status: "used" })
         .eq("id", overrideData[0].id);
-    } else {
-      selectedHourlyTopic = await getTrendingHourlyTopic(cityId, currentShow);
     }
 
     // --- FETCH HYPER-LOCAL NEWS CACHE ---
@@ -455,7 +392,7 @@ export async function POST(request: Request) {
     const playedSongs = new Set<string>();
 
     // Preflight Check: Is the Audius API down?
-    const preflightSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+    const preflightSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
     const isFallbackMode = preflightSong.id.startsWith("system-fallback");
     if (!isFallbackMode) {
         playedSongs.delete(preflightSong.id);
@@ -475,14 +412,14 @@ export async function POST(request: Request) {
 
       // 1. TOTH Station ID (Only once per hour at segment 1)
       if (segmentIndex === 1) {
-        const stationId = getJingleByGenre(currentShow.energy);
+        const stationId = getJingleByGenre(cityId);
         addElement('station_id', await getLocalAudioDuration(stationId), stationId, { title: "Station ID" });
       }
 
       // Generate up to 12 Jocktalk Placeholders per hour
       if (segmentIndex <= 12) {
           // Get next song details
-          let nextSongInfo = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+          let nextSongInfo = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
 
           // Jocktalk Placeholder (JT1 - JT12)
           // The admin will manually drag and drop audio files into these empty slots via the Master Clock UI
@@ -502,21 +439,21 @@ export async function POST(request: Request) {
           addElement('sweeper', await getLocalAudioDuration(zapper), zapper, { title: "Zapper Transition" });
 
           // Play Song 2
-          const song2 = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+          const song2 = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
           addElement('song', getSafeSongDuration(song2), song2.streamUrl, { title: song2.title, artist: song2.artist, trackId: song2.id });
           lastSongTitle = song2.title;
 
           // Ad Break (4 per hour -> segmentIndex 1, 2, 3, 4)
           if (segmentIndex <= 4) {
               // Bumper into the Ad
-              const sweeper2 = getSweeperByGenre(currentShow.energy);
+              const sweeper2 = getSweeperByGenre(cityId);
               addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
               
               // AgentX SSP Orchestration: Fetch contextual programmatic ad
               const sspContext: SspContext = {
                   cityId: cityId,
                   liveWeather: liveWeather,
-                  timeOfDay: currentShow.energy === "high" ? "evening" : "morning"
+                  timeOfDay: "evening" // generic
               };
               
               const adDecision = await fetchContextualAd(sspContext);
@@ -527,12 +464,12 @@ export async function POST(request: Request) {
                  console.log(`[AgentX SSP] Weaving Ad: ${adDecision.campaignTitle}`);
               } else {
                  // Fallback Song to retain listening appeal
-                 const fallbackSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+                 const fallbackSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
                  addElement('song', getSafeSongDuration(fallbackSong), fallbackSong.streamUrl, { title: fallbackSong.title, artist: fallbackSong.artist, trackId: fallbackSong.id });
               }
               
               // Bumper out of the Ad
-              const sweeper3 = getSweeperByGenre(currentShow.energy);
+              const sweeper3 = getSweeperByGenre(cityId);
               addElement('sweeper', await getLocalAudioDuration(sweeper3), sweeper3, { title: "Radio Sweeper" });
           } else {
               // Segment 5 end, just a zapper out
@@ -543,7 +480,7 @@ export async function POST(request: Request) {
           segmentIndex++;
       } else {
           // Fill the remaining time in the hour (52-minute music budget) without any more RJ talks
-          const fillSong = await getSong(getSearchQueryForShow(currentShow), cityId, playedSongs);
+          const fillSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
           addElement('song', getSafeSongDuration(fillSong), fillSong.streamUrl, { title: fillSong.title, artist: fillSong.artist, trackId: fillSong.id });
           
           // Zapper instead of Sweeper for fill time
@@ -569,7 +506,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: `Generated ${schedule.length} elements for ${currentShow.name}.`,
+      message: `Generated ${schedule.length} elements for channel ${cityId}.`,
       schedule
     });
 

@@ -229,6 +229,17 @@ export default function AudioOrchestrator() {
             mediaRefA.current.play().catch(e => console.error(e));
           }
         }
+        if (!isGeneratingRef.current) {
+          isGeneratingRef.current = true;
+          fetch(`/api/broadcast/generate-hour?city=${cityId}`, { method: "POST" })
+            .then(() => getBroadcastSchedule(cityId))
+            .then((newData) => {
+              setSchedule(newData);
+              isGeneratingRef.current = false;
+              activeBlockIdRef.current = null;
+            })
+            .catch(() => { isGeneratingRef.current = false; });
+        }
         return;
       }
 
@@ -264,9 +275,9 @@ export default function AudioOrchestrator() {
           }
         }
         
-        if (!isGeneratingRef.current && schedule.length > 0) {
+        if (!isGeneratingRef.current) {
           isGeneratingRef.current = true;
-          fetch("/api/broadcast/generate-hour", { method: "POST" })
+          fetch(`/api/broadcast/generate-hour?city=${cityId}`, { method: "POST" })
             .then(() => getBroadcastSchedule(cityId))
             .then((newData) => {
               setSchedule(newData);
