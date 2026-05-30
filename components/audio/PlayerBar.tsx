@@ -74,61 +74,6 @@ export default function PlayerBar() {
     );
   }
 
-  // Fullscreen deck
-  return (
-    <div className="fixed inset-0 z-50 bg-brand-dark flex flex-col items-center justify-center p-6 animate-fade-in">
-      <button
-        onClick={() => setViewMode("minimized")}
-        className="absolute top-6 right-6 text-gray-400 hover:text-white text-sm border border-brand-border px-3 py-1 rounded"
-      >
-        Minimize
-      </button>
-
-      <div className="max-w-md w-full text-center space-y-8">
-        <div className="relative w-64 h-64 mx-auto flex items-center justify-center group">
-          {/* Spinning Logo Background (Unobstructed) */}
-          <div className={`absolute inset-0 rounded-full overflow-hidden shadow-[0_0_50px_rgba(230,0,0,0.3)] border-4 border-[#222] ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`}>
-            <img src="/logo_app.png" alt="Future Radio" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        <div className="space-y-3 mt-8">
-          <div className="space-y-1">
-            <span className="text-xs font-bold tracking-widest text-white uppercase">
-              {isPlaying ? "Currently Tuned" : "Radio Deck"}
-            </span>
-            <h2 className="text-2xl font-extrabold text-white line-clamp-2 leading-tight">
-              {currentBlock ? currentBlock.songTitle : "Future Radio"}
-            </h2>
-            <p className="text-sm text-gray-400 truncate px-4">
-              {currentBlock ? `by ${currentBlock.songArtist}` : "Local Voiceovers & Ambient Synth Beats"}
-            </p>
-          </div>
-
-          <div className="flex justify-center items-center gap-6 pt-6">
-            <div className="w-12" /> {/* Spacer for centering */}
-            <button
-              onClick={() => {
-                unlockAudio();
-                setIsPlaying(!isPlaying);
-              }}
-              className="w-16 h-16 rounded-full bg-brand-red hover:bg-brand-red/90 text-white text-2xl flex items-center justify-center shadow-[0_0_30px_rgba(230,0,0,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none"
-              aria-label={isPlaying ? "Stop stream" : "Start stream"}
-            >
-              <span className={isPlaying ? "" : "ml-1"}>{isPlaying ? "⏹" : "▶"}</span>
-            </button>
-            <button
-              onClick={handleShare}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-[#111118]/50 border border-[#2a2a35] text-gray-400 hover:text-white hover:bg-[#2a2a35] transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none"
-              aria-label="Share Future Radio"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  // The fullscreen player is now handled by the /radio page route.
+  return null;
 }
