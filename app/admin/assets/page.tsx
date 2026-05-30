@@ -12,7 +12,7 @@ const supabase = createClient(
 
 export default function AssetManagerPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [bucket, setBucket] = useState<"jingles" | "sweepers" | "jocktalks">("sweepers");
+  const [bucket, setBucket] = useState<"jingles" | "sweepers" | "jocktalks" | "commercials">("sweepers");
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -95,6 +95,12 @@ export default function AssetManagerPage() {
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${bucket === 'jocktalks' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
             >
               Jocktalks
+            </button>
+            <button 
+              onClick={() => setBucket("commercials")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${bucket === 'commercials' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+            >
+              Commercials
             </button>
           </div>
         </div>
