@@ -34,7 +34,6 @@ async function processLogo() {
     const outTransparent = Buffer.alloc(w * h * 4);
     const outDarkTheme = Buffer.alloc(w * h * 4);
     const outCustom = Buffer.alloc(w * h * 4);
-    const outOIcon = Buffer.alloc(w * h * 4); // We'll crop this later
 
     // Bounding box for O Icon
     let oMinX = w, oMaxX = 0, oMinY = h, oMaxY = 0;
@@ -45,7 +44,6 @@ async function processLogo() {
         const r = data[idx], g = data[idx+1], b = data[idx+2];
         
         // --- STEP 1: Perfect Background Removal ---
-        // Calculate "whiteness"
         const w_val = Math.min(r, g, b);
         let a = 1.0 - (w_val / 255.0);
         
@@ -58,13 +56,21 @@ async function processLogo() {
           a = 0; // Pure white background
         }
         
+        // Restore white vinyl details (they get lost because they are white like the bg)
+        if (a < 0.01) {
+           const dist = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+           if (dist < radius * 0.95 && r > 240 && g > 240 && b > 240) {
+               fr = 255; fg = 255; fb = 255; a = 1.0; 
+           }
+        }
+        
         // Write base transparent logo
         outTransparent[idx] = fr;
         outTransparent[idx+1] = fg;
         outTransparent[idx+2] = fb;
         outTransparent[idx+3] = Math.round(a * 255);
 
-        // Track O Icon bounds (it's the red part on the right)
+        // Track O Icon bounds (red part on the right)
         const isRed = fr > 150 && fg < 100 && fb < 100;
         if (a > 0.1 && isRed && x > centerX + radius * 2) {
             if (x < oMinX) oMinX = x;
@@ -74,25 +80,14 @@ async function processLogo() {
         }
 
         // --- STEP 2: Dark Theme Logo ---
-        // White text, Red O, White Vinyl elements
-        let dr = fr, dg = fg, db = fb;
-        if (a > 0.01) {
+        // Vinyl area: Unchanged (Black disc, red/white details).
+        // Text area: Convert black text to white.
+        let dr = fr, dg = fg, db = fb, da = a;
+        if (da > 0.01 && x > centerX + radius * 1.1) {
             const isDark = fr < 100 && fg < 100 && fb < 100;
             if (isDark) {
-                // Convert black to white
                 dr = 255; dg = 255; db = 255;
             }
-            // If it's a white detail inside the black vinyl, it was lost during background removal!
-            // Wait! The inner white lines of the vinyl were lost because a=0 (pure white).
-            // Let's restore them if they are inside the vinyl radius!
-        }
-        
-        let da = a;
-        if (a < 0.01) {
-           const dist = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
-           if (dist < radius * 0.95 && r > 240 && g > 240 && b > 240) {
-               dr = 255; dg = 255; db = 255; da = 1.0; // Restore white vinyl details
-           }
         }
         
         outDarkTheme[idx] = dr;
@@ -101,29 +96,21 @@ async function processLogo() {
         outDarkTheme[idx+3] = Math.round(da * 255);
 
         // --- STEP 3: Custom Logo (Splash Screen) ---
+        // Vinyl area: Unchanged (Black disc, red/white details).
+        // Text area: "FUTURE" -> White, "RADI" -> Black, "O/waves" -> White
         let cr = fr, cg = fg, cb = fb, ca = a;
         
-        if (a < 0.01) {
-           const dist = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
-           if (dist < radius * 0.95 && r > 240 && g > 240 && b > 240) {
-               cr = 255; cg = 255; cb = 255; ca = 1.0; // Restore white vinyl details
-           }
-        } else {
-           if (x < centerX + radius * 1.1) {
-              // Vinyl area -> Keep Black
-              cr = 0; cg = 0; cb = 0;
-           } else if (isRed) {
+        if (ca > 0.01 && x > centerX + radius * 1.1) {
+           if (isRed) {
               // O and waves -> White
               cr = 255; cg = 255; cb = 255;
            } else {
-              // Text area
-              if (y < centerY) {
+              const isDark = fr < 100 && fg < 100 && fb < 100;
+              if (isDark && y < centerY) {
                  // FUTURE -> White
                  cr = 255; cg = 255; cb = 255;
-              } else {
-                 // RADI -> Black
-                 cr = 0; cg = 0; cb = 0;
               }
+              // RADI is already black, keep it black
            }
         }
         
@@ -140,7 +127,6 @@ async function processLogo() {
     await sharp(outCustom, { raw: { width: w, height: h, channels: 4 } }).png().toFile('public/logo-custom.png');
     
     // Create red-o-icon by cropping outTransparent
-    // Add some padding
     const pad = 10;
     const cropX = Math.max(0, oMinX - pad);
     const cropY = Math.max(0, oMinY - pad);
@@ -152,7 +138,7 @@ async function processLogo() {
         .png()
         .toFile('public/red-o-icon.png');
 
-    console.log('Successfully generated perfect anti-aliased logos!');
+    console.log('Successfully generated perfect anti-aliased logos with correct vinyl colors!');
   } catch (e) {
     console.error(e);
   }
