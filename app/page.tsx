@@ -55,9 +55,9 @@ export default function EntrySplashPage() {
     <>
       {!splashComplete && <CinematicSplash onComplete={() => setSplashComplete(true)} />}
       
-      <div className={`min-h-screen bg-transparent flex justify-center items-center transition-opacity duration-1000 ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`min-h-screen bg-brand-red flex justify-center items-center transition-opacity duration-1000 ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
         {/* Centered Mobile viewport shell */}
-      <main className="w-full max-w-[430px] min-h-screen bg-black/40 backdrop-blur-sm text-white flex flex-col justify-between px-6 py-10 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border-x border-white/5">
+      <main className="w-full max-w-[430px] min-h-screen bg-brand-red text-brand-dark flex flex-col justify-between px-6 py-10 relative overflow-hidden shadow-none border-x-brutal border-black">
         
         {/* Auth / Profile Sticky Header Layer */}
         <div className="absolute top-6 right-6 z-20">
@@ -82,33 +82,37 @@ export default function EntrySplashPage() {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="text-center space-y-6 flex flex-col items-center relative z-10 my-auto py-8"
         >
-          {/* Deep Cinematic Ambient Glow Behind Logo */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180%] h-[200px] bg-gradient-to-r from-transparent via-brand-red/30 to-transparent rounded-[100%] blur-[60px] opacity-80 pointer-events-none" />
 
-          <div className="space-y-4 relative z-10">
+          <div className="space-y-4 relative z-10 flex flex-col items-center">
             <img 
               src="/logo.png" 
               alt="Future Radio" 
-              className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-[0_0_35px_rgba(255,255,255,0.25)] transition-transform duration-700 hover:scale-105" 
+              className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105 filter invert" 
             />
-            <p className="text-3xl md:text-4xl font-normal text-white italic underline decoration-brand-red decoration-2 underline-offset-[12px] tracking-wider select-none drop-shadow-[0_0_20px_rgba(230,0,0,0.8)]">
-              अब "<strong className="font-black text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] to-brand-red">फ्यूचर</strong>" सुनो!
+            
+            {/* The Neo-Brutalist Sticker Badge */}
+            <div className="mt-4 -rotate-2 bg-yellow-300 text-black border-brutal border-black px-4 py-2 font-display font-bold uppercase tracking-widest text-sm shadow-brutal hover:-translate-y-1 hover:shadow-brutal-hover transition-all cursor-pointer">
+              Powered By Indie Creators
+            </div>
+
+            <p className="text-4xl md:text-5xl font-display font-extrabold text-brand-dark tracking-wider select-none mt-6 uppercase">
+              अब "फ्यूचर" सुनो!
             </p>
           </div>
           <button
             onClick={() => setIsBottomSheetOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111118] border border-[#2a2a35] hover:border-brand-red/40 hover:bg-[#111118]/80 transition duration-300"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-none bg-white border-brutal border-black hover:bg-gray-100 shadow-brutal-sm transition duration-300 active:translate-y-1 active:translate-x-1 active:shadow-none"
             aria-label="Change city context"
           >
-            <span className="w-2 h-2 rounded-full bg-[#ffffff] animate-pulse" />
-            <span className="text-xs font-semibold text-gray-300">{cityName}</span>
+            <span className="w-2 h-2 rounded-full bg-brand-red border border-black animate-pulse" />
+            <span className="text-xs font-bold text-brand-dark uppercase font-sans">{cityName}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={2.5}
+              strokeWidth={3}
               stroke="currentColor"
-              className="w-3.5 h-3.5 text-gray-400"
+              className="w-4 h-4 text-brand-dark"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
@@ -134,10 +138,10 @@ export default function EntrySplashPage() {
               variants={cardVariants}
               whileTap={{ scale: 0.97 }}
               onClick={() => handleCardClick("radio", "/radio")}
-              className="h-[160px] rounded-2xl bg-[#111118] border border-[#2a2a35] p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:border-brand-red/40 hover:shadow-[0_0_20px_rgba(230,0,0,0.05)] transition-colors duration-300"
+              className="h-[160px] rounded-none bg-white border-brutal border-black p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer shadow-brutal hover:-translate-y-1 hover:-translate-x-1 hover:shadow-brutal-hover active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-300"
             >
               {/* Decorative Radio Background Icon (Very Low Opacity) */}
-              <div className="absolute top-4 right-4 text-white/[0.02] group-hover:text-white/[0.04] transition duration-300 select-none pointer-events-none">
+              <div className="absolute top-4 right-4 text-black/[0.03] group-hover:text-black/[0.06] transition duration-300 select-none pointer-events-none">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -159,16 +163,16 @@ export default function EntrySplashPage() {
                 <span className="text-[10px] font-bold tracking-[0.15em] text-brand-red uppercase">
                   LIVE RADIO
                 </span>
-                <h2 className="text-[22px] font-bold text-white tracking-tight">
+                <h2 className="text-[22px] font-black text-brand-dark tracking-tight uppercase">
                   Listen to Future
                 </h2>
-                <p className="text-xs text-gray-400 max-w-[280px] leading-relaxed">
-                  AI RJ, local vibes, non-stop music curated for {cityName}
+                <p className="text-xs text-gray-600 font-medium max-w-[280px] leading-relaxed">
+                  Discover fresh tracks from independent artists, hosted by AI.
                 </p>
               </div>
 
               {/* Card Bottom Tag Pill */}
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-red/10 border border-brand-red/20 text-brand-red text-[10px] font-semibold uppercase tracking-wider w-fit">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-none bg-black border-2 border-black text-white text-[10px] font-bold uppercase tracking-wider w-fit font-sans">
                 {/* Antenna Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -193,10 +197,10 @@ export default function EntrySplashPage() {
               variants={cardVariants}
               whileTap={{ scale: 0.97 }}
               onClick={() => handleCardClick("news", "/news")}
-              className="h-[160px] rounded-2xl bg-[#111118] border border-[#2a2a35] p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-colors duration-300"
+              className="h-[160px] rounded-none bg-white border-brutal border-black p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer shadow-brutal hover:-translate-y-1 hover:-translate-x-1 hover:shadow-brutal-hover active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-300"
             >
               {/* Decorative Newspaper Background Icon (Very Low Opacity) */}
-              <div className="absolute top-4 right-4 text-white/[0.02] group-hover:text-white/[0.04] transition duration-300 select-none pointer-events-none">
+              <div className="absolute top-4 right-4 text-black/[0.03] group-hover:text-black/[0.06] transition duration-300 select-none pointer-events-none">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -215,19 +219,19 @@ export default function EntrySplashPage() {
 
               {/* Card Meta Content */}
               <div className="space-y-1">
-                <span className="text-[10px] font-bold tracking-[0.15em] text-white uppercase">
+                <span className="text-[10px] font-bold tracking-[0.15em] text-brand-dark uppercase">
                   NEWS FEED
                 </span>
-                <h2 className="text-[22px] font-bold text-white tracking-tight">
+                <h2 className="text-[22px] font-black text-brand-dark tracking-tight uppercase">
                   Whatsup News
                 </h2>
-                <p className="text-xs text-gray-400 max-w-[280px] leading-relaxed">
+                <p className="text-xs text-gray-600 font-medium max-w-[280px] leading-relaxed">
                   Hyper-local {cityName} + national stories that matter to you
                 </p>
               </div>
 
               {/* Card Bottom Tag Pill */}
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-semibold uppercase tracking-wider w-fit">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-none bg-black border-2 border-black text-white text-[10px] font-bold uppercase tracking-wider w-fit font-sans">
                 {/* Sparkles Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -6,23 +6,23 @@ import PlayerBar from "@/components/audio/PlayerBar";
 import RadioBubble from "@/components/ui/RadioBubble";
 import { Analytics } from "@vercel/analytics/react";
 
-import { Outfit, Space_Grotesk, Share_Tech_Mono } from "next/font/google";
+import { Baloo_2, Space_Grotesk, Space_Mono } from "next/font/google";
 
-const digitalFont = Share_Tech_Mono({
+const digitalFont = Space_Mono({
   subsets: ["latin"],
   variable: "--font-digital",
-  weight: "400",
+  weight: ["400", "700"],
 });
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  weight: ["300", "400", "500", "600", "700", "900"],
+const balooFont = Baloo_2({
+  subsets: ["devanagari", "latin"],
+  variable: "--font-baloo",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-space",
+  variable: "--font-space-grotesk",
   weight: ["300", "400", "500", "600", "700"],
 });
 
@@ -74,7 +74,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${outfit.variable} ${spaceGrotesk.variable} ${digitalFont.variable} font-sans antialiased text-white min-h-screen selection:bg-brand-red selection:text-white`}
+        className={`${balooFont.variable} ${spaceGrotesk.variable} ${digitalFont.variable} font-sans antialiased text-white min-h-screen selection:bg-brand-red selection:text-white`}
       >
         {/* Persistent Audio Core Layers */}
         <AudioOrchestrator />

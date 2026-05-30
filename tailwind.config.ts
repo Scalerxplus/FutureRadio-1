@@ -11,14 +11,22 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        "brand-red": "#e60000",    // Aggressive Radio Reborn Red
-        "brand-dark": "#000000",   
-        "brand-surface": "#111111",
-        "brand-border": "#2a2a35", 
+        "brand-red": "#FF2E2E",    // Neo-Brutalist Red
+        "brand-dark": "#0A0D14",   // Deep Navy / Dark Charcoal
+        "brand-surface": "#111118",
+        "brand-border": "#000000", 
+      },
+      boxShadow: {
+        'brutal': '4px 4px 0px 0px rgba(0,0,0,1)',
+        'brutal-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+        'brutal-hover': '6px 6px 0px 0px rgba(0,0,0,1)',
+      },
+      borderWidth: {
+        'brutal': '4px',
       },
       fontFamily: {
-        sans: ["var(--font-outfit)", "sans-serif"],
-        display: ["var(--font-space)", "sans-serif"],
+        sans: ["var(--font-space-grotesk)", "sans-serif"],
+        display: ["var(--font-baloo)", "sans-serif"],
         digital: ["var(--font-digital)", "monospace"],
       },
       keyframes: {

@@ -110,17 +110,17 @@ export default function MixingConsole({ schedule, now }: { schedule: any[], now:
 
 function ChannelStrip({ label, icon, level, isActive, color, trackName }: { label: string, icon: any, level: number, isActive: boolean, color: string, trackName?: string }) {
   return (
-    <div className={`flex-1 flex flex-col items-center p-3 rounded-xl border transition-colors ${isActive ? 'bg-[#1a1a24] border-[#2a2a34]' : 'bg-[#0d0d14] border-[#15151e]'}`}>
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${isActive ? color + ' text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'bg-[#1a1a24] text-gray-600'}`}>
+    <div className={`flex-1 flex flex-col items-center p-3 rounded-none border-brutal border-black transition-colors ${isActive ? 'bg-white shadow-brutal' : 'bg-gray-100 shadow-brutal-sm'}`}>
+      <div className={`w-8 h-8 rounded-none border-2 border-black flex items-center justify-center mb-2 ${isActive ? color + ' text-white' : 'bg-gray-200 text-gray-500'}`}>
         {icon}
       </div>
-      <span className={`text-[10px] font-bold tracking-widest uppercase text-center mb-1 ${isActive ? 'text-white' : 'text-gray-500'}`}>{label}</span>
-      <span className="text-[9px] text-gray-500 text-center truncate w-full px-1 mb-4 h-3">{trackName}</span>
+      <span className={`text-[10px] font-bold tracking-widest uppercase text-center mb-1 ${isActive ? 'text-brand-dark' : 'text-gray-500'}`}>{label}</span>
+      <span className={`text-[9px] text-center truncate w-full px-1 mb-4 h-3 ${isActive ? 'text-gray-600 font-bold' : 'text-gray-400'}`}>{trackName}</span>
       
       {/* Fader Track & Markers */}
       <div className="flex gap-2 items-center">
         {/* dB Markers Left */}
-        <div className="flex flex-col justify-between h-32 text-[7px] text-gray-600 font-mono py-1">
+        <div className="flex flex-col justify-between h-32 text-[7px] text-brand-dark font-digital py-1 font-bold">
           <span>+6</span>
           <span> 0</span>
           <span>-6</span>
@@ -130,26 +130,26 @@ function ChannelStrip({ label, icon, level, isActive, color, trackName }: { labe
         </div>
 
         {/* The Fader */}
-        <div className="w-8 h-32 bg-black rounded-lg relative flex justify-center border border-[#222] shadow-inner">
+        <div className="w-8 h-32 bg-gray-200 rounded-none relative flex justify-center border-brutal border-black shadow-none">
           {/* LED VU Meter Effect */}
-          <div className="absolute bottom-0 w-full rounded-lg overflow-hidden flex flex-col justify-end">
+          <div className="absolute bottom-0 w-full rounded-none overflow-hidden flex flex-col justify-end">
             <div 
-              className="w-full bg-gradient-to-t from-green-500 via-yellow-400 to-red-600 transition-all duration-[2000ms] ease-out opacity-90"
+              className={`w-full transition-all duration-[2000ms] ease-out ${isActive ? 'bg-brand-red' : 'bg-gray-300'}`}
               style={{ height: `${level}%` }}
             ></div>
           </div>
           
           {/* Fader Cap */}
           <div 
-            className="absolute w-12 h-6 bg-gradient-to-b from-gray-300 to-gray-400 rounded shadow-[0_4px_6px_rgba(0,0,0,0.5)] border-t border-b-2 border-white/50 border-b-black/50 transition-all duration-[2000ms] ease-out flex items-center justify-center cursor-pointer"
+            className="absolute w-12 h-6 bg-brand-dark rounded-none border-2 border-black transition-all duration-[2000ms] ease-out flex items-center justify-center cursor-pointer shadow-brutal-sm"
             style={{ bottom: `max(0%, calc(${level}% - 12px))` }}
           >
-            <div className="w-8 h-[2px] bg-red-600 shadow-[0_0_4px_rgba(255,0,0,0.5)]"></div>
+            <div className="w-8 h-[2px] bg-white"></div>
           </div>
         </div>
 
         {/* dB Markers Right */}
-        <div className="flex flex-col justify-between h-32 text-[7px] text-gray-600 font-mono py-1">
+        <div className="flex flex-col justify-between h-32 text-[7px] text-brand-dark font-digital py-1 font-bold">
           <span>-</span>
           <span>-</span>
           <span>-</span>
@@ -160,7 +160,7 @@ function ChannelStrip({ label, icon, level, isActive, color, trackName }: { labe
       </div>
       
       {/* dB readout */}
-      <div className="mt-4 text-[9px] font-mono text-brand-red bg-black/50 px-2 py-0.5 rounded border border-[#222] shadow-inner">
+      <div className="mt-4 text-[9px] font-digital font-bold text-white bg-brand-dark px-2 py-0.5 rounded-none border-2 border-black shadow-brutal-sm">
         {level > 0 ? (level === 100 ? "0.0dB" : `-${Math.round((100 - level) / 4)}dB`) : "-INF"}
       </div>
     </div>
