@@ -48,7 +48,7 @@ export function unlockAudio() {
   if (typeof document === "undefined") return;
   const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
   
-  const ids = ["audius-player", "html5-player", "jingle-player", "bed-player", "keepalive-player"];
+  const ids = ["media-player-a", "media-player-b", "media-player-c", "sweeper-player", "keepalive-player"];
   ids.forEach(id => {
     const el = document.getElementById(id) as HTMLAudioElement | null;
     if (el) {
