@@ -79,9 +79,9 @@ export default function EntrySplashPage() {
 
           <div className="space-y-4 relative z-10 flex flex-col items-center">
             <img 
-              src="/logo-custom.png" 
+              src="/logo-horizontal.png" 
               alt="Future Radio" 
-              className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
+              className="h-[180px] md:h-[220px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105 filter grayscale invert contrast-200 mix-blend-screen" 
             />
             
             {/* The Neo-Brutalist Sticker Badge */}

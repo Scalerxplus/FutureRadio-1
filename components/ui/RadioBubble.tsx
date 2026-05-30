@@ -31,9 +31,9 @@ export default function RadioBubble() {
           className="fixed bottom-24 right-6 z-40 w-16 h-16 rounded-full bg-[#111118]/90 backdrop-blur-md border border-brand-red/30 shadow-[0_0_25px_rgba(255,46,46,0.3)] flex items-center justify-center cursor-pointer hover:border-brand-red hover:scale-110 active:scale-95 transition-all"
         >
           <img 
-            src="/red-o-icon.png" 
+            src="/logo-horizontal.png" 
             alt="FR" 
-            className={`w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(255,46,46,0.6)] ${isPlaying ? "animate-pulse" : ""}`} 
+            className={`w-10 h-10 object-cover object-[100%_50%] filter invert hue-rotate-180 mix-blend-screen drop-shadow-[0_0_10px_rgba(255,46,46,0.6)] ${isPlaying ? "animate-pulse" : ""}`} 
           />
           {isPlaying && (
             <span className="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
