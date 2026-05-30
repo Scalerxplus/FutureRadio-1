@@ -261,8 +261,8 @@ export default function RadioPlayerPage() {
             className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 focus:outline-none"
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            <div className={`absolute inset-0 rounded-full overflow-hidden border border-white/10 transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/vinyl-icon.png" alt="Future Radio" className="w-full h-full object-cover filter invert brightness-200 opacity-90" />
+            <div className={`absolute inset-0 rounded-full overflow-hidden border-2 border-brand-red/20 shadow-[0_0_15px_rgba(255,46,46,0.2)] transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+              <img src="/red-o-icon.png" alt="Future Radio" className="w-full h-full object-cover p-3" />
             </div>
           </button>
 
