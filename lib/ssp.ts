@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 /**
  * AgentX Programmatic SSP (Supply-Side Platform) Engine
  * Orchestrates dynamic ad-insertion based on real-time contexts like weather.
@@ -25,26 +28,29 @@ export interface SspContext {
 export async function fetchContextualAd(context: SspContext): Promise<SspAdDecision> {
   console.log(`[AgentX SSP] Requesting programmatic Ad for context: ${context.liveWeather} in ${context.cityId}`);
   
-  // Real implementation would send a VAST request here.
-  // Example VAST Tag: `https://pubads.g.doubleclick.net/gampad/ads?env=vp&gdfp_req=1&output=vast&cust_params=weather%3D${context.liveWeather}`
-
-  // Simulating <100ms VAST resolution
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Determine ad creative based on context
       let adAudioUrl = "/audio/fallbacks/Generic_Sponsor_Break.mp3";
       let campaignTitle = "Generic Sponsor Break";
       
-      if (context.liveWeather.toLowerCase().includes("rain")) {
-        campaignTitle = "Monsoon Special Offer - Hot Coffee Delivery";
-      } else if (context.timeOfDay === "evening") {
-        campaignTitle = "Evening Commute Car Insurance";
+      try {
+        const commercialsDir = path.join(process.cwd(), "public", "audio", "Commercials");
+        if (fs.existsSync(commercialsDir)) {
+          const files = fs.readdirSync(commercialsDir).filter(f => f.endsWith(".mp3"));
+          if (files.length > 0) {
+            const randomFile = files[Math.floor(Math.random() * files.length)];
+            adAudioUrl = `/audio/Commercials/${randomFile}`;
+            campaignTitle = randomFile.replace(".mp3", "");
+          }
+        }
+      } catch (e) {
+        console.error("[AgentX SSP] Error reading commercials directory", e);
       }
 
       resolve({
         adId: `ad_${Math.random().toString(36).substr(2, 9)}`,
         mediaUrl: adAudioUrl,
-        durationMs: 30000,
+        durationMs: 30000, // Duration will be calculated properly by getLocalAudioDuration in generate-hour route
         campaignTitle: campaignTitle,
         impressionTrackingUrl: "https://tracking.ssp.local/impression?id=123"
       });
