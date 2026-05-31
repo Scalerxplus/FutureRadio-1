@@ -84,21 +84,61 @@ const PREMIUM_GENRES = {
   }
 };
 
-const ZAPPERS = [
-  "/audio/Zappers/zapper_swoosh_01.mp3",
-  "/audio/Zappers/zapper_laser_02.mp3",
-  "/audio/Zappers/zapper_transition_03.mp3"
-];
 
-function getSearchQueryForGenre(genre: string) {
+let globalEnergyToggle = false;
+
+function getSearchQueryForGenre(genre: string, targetTimeIso?: string): { query: string, derivedVibe: string } {
   let vibe = genre.toLowerCase();
-  if (!PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES]) {
-      vibe = "drive"; // fallback
+  
+  if (vibe === "global" && targetTimeIso) {
+    try {
+      const timePart = targetTimeIso.split('T')[1];
+      const hour = parseInt(timePart.split(':')[0], 10);
+      
+      if (hour >= 7 && hour < 12) {
+        // Morning: mid to high energy indie
+        globalEnergyToggle = !globalEnergyToggle;
+        vibe = globalEnergyToggle ? "drive" : "chill"; // drive for high, chill for mid
+      } else if (hour >= 12 && hour < 17) {
+        // Afternoon: mid to low
+        vibe = "chill";
+      } else if (hour >= 17 && hour < 21) {
+        // Evening: punjabi/intl high energy
+        vibe = "party"; // we will force punjabi/intl in the query roll
+      } else {
+        // Night: edm, house, trap
+        vibe = "party";
+      }
+    } catch(e) {
+      vibe = "drive";
+    }
   }
 
-  // 35% Punjabi, 35% Hindi, 30% International
+  if (!PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES]) {
+      vibe = "drive";
+  }
+
   const roll = Math.random() * 100;
   let categoryArray = [];
+  
+  // Custom force for global evening
+  if (genre.toLowerCase() === "global" && targetTimeIso) {
+    const hour = parseInt(targetTimeIso.split('T')[1].split(':')[0], 10);
+    if (hour >= 17 && hour < 21) {
+      // Evening: punjabi and international indie music, high energy
+      categoryArray = roll < 50 ? PREMIUM_GENRES["party"].punjabi : PREMIUM_GENRES["party"].intl;
+      return { query: categoryArray[Math.floor(Math.random() * categoryArray.length)], derivedVibe: "party" };
+    }
+    if (hour >= 21 || hour < 7) {
+      // Night: indie trance, house, trap, edm mixes
+      const nightGenres = ["indie trance", "house mix", "trap edm", "festival bass", "progressive house"];
+      return { query: nightGenres[Math.floor(Math.random() * nightGenres.length)], derivedVibe: "party" };
+    }
+    if (hour >= 7 && hour < 12) {
+      const morningGenres = globalEnergyToggle ? ["upbeat indie", "hindi pop", "commercial pop"] : ["desi indie", "indie pop"];
+      return { query: morningGenres[Math.floor(Math.random() * morningGenres.length)], derivedVibe: globalEnergyToggle ? "drive" : "chill" };
+    }
+  }
 
   if (roll < 35) {
       categoryArray = PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES].punjabi;
@@ -108,13 +148,16 @@ function getSearchQueryForGenre(genre: string) {
       categoryArray = PREMIUM_GENRES[vibe as keyof typeof PREMIUM_GENRES].intl;
   }
   
-  return categoryArray[Math.floor(Math.random() * categoryArray.length)];
+  return { query: categoryArray[Math.floor(Math.random() * categoryArray.length)], derivedVibe: vibe };
 }
 
 async function getSong(searchQuery: string, cityId: string, playedSongs: Set<string>): Promise<AudiusTrack> {
   const cleanQuery = searchQuery.replace(/official audio|official video/gi, "").trim();
   
-  let tracks = await searchAudiusTrack(cleanQuery);
+  let allTracks = await searchAudiusTrack(cleanQuery);
+  // Enforce 7-minute limit (420 seconds)
+  let tracks = allTracks.filter(t => t.durationSeconds && t.durationSeconds <= 420);
+
   
   if (tracks.length === 0) {
     console.warn(`[Master Clock] No Audius track found for query: ${cleanQuery}. Using safe fallback.`);
@@ -198,7 +241,7 @@ async function getLocalAudioDuration(urlPath: string) {
   } catch (e) {
     // console.error("[Master Clock] Error reading audio duration", e);
     // Return 3 seconds for Zappers, 10 seconds for sweepers if missing
-    return urlPath.includes("Zapper") ? 3000 : 10000;
+    return 10000;
   }
 }
 
@@ -411,7 +454,7 @@ export async function POST(request: Request) {
     const playedSongs = new Set<string>();
 
     // Preflight Check: Is the Audius API down?
-    const preflightSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+    const preflightSong = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
     const isFallbackMode = preflightSong.id.startsWith("system-fallback");
     if (!isFallbackMode) {
         playedSongs.delete(preflightSong.id);
@@ -424,8 +467,8 @@ export async function POST(request: Request) {
           const fallbackTrack = await getSong("fallback", cityId, playedSongs);
           addElement('song', getSafeSongDuration(fallbackTrack), fallbackTrack.streamUrl, { title: fallbackTrack.title, artist: fallbackTrack.artist, trackId: fallbackTrack.id });
           
-          const zapper = ZAPPERS[Math.floor(Math.random() * ZAPPERS.length)];
-          addElement('sweeper', await getLocalAudioDuration(zapper), zapper, { title: "Zapper Transition" });
+          const genreSweeper = getSweeperByGenre(cityId);
+          addElement('sweeper', await getLocalAudioDuration(genreSweeper), genreSweeper, { title: "Genre Sweeper" });
           continue;
       }
 
@@ -438,7 +481,7 @@ export async function POST(request: Request) {
       // Generate up to 12 Jocktalk Placeholders per hour
       if (segmentIndex <= 12) {
           // Get next song details
-          let nextSongInfo = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+          let nextSongInfo = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
 
           // Jocktalk Placeholder (JT1 - JT12)
           // The admin will manually drag and drop audio files into these empty slots via the Master Clock UI
@@ -458,7 +501,7 @@ export async function POST(request: Request) {
           addElement('sweeper', await getLocalAudioDuration(songSweeper), songSweeper, { title: "Radio Sweeper" });
 
           // Play Song 2
-          const song2 = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+          const song2 = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
           addElement('song', getSafeSongDuration(song2), song2.streamUrl, { title: song2.title, artist: song2.artist, trackId: song2.id });
           lastSongTitle = song2.title;
 
@@ -483,7 +526,7 @@ export async function POST(request: Request) {
                  console.log(`[AgentX SSP] Weaving Ad: ${adDecision.campaignTitle}`);
               } else {
                  // Fallback Song to retain listening appeal
-                 const fallbackSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+                 const fallbackSong = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
                  addElement('song', getSafeSongDuration(fallbackSong), fallbackSong.streamUrl, { title: fallbackSong.title, artist: fallbackSong.artist, trackId: fallbackSong.id });
               }
               
@@ -497,7 +540,7 @@ export async function POST(request: Request) {
           segmentIndex++;
       } else {
           // Fill the remaining time in the hour (52-minute music budget) without any more RJ talks
-          const fillSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+          const fillSong = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
           addElement('song', getSafeSongDuration(fillSong), fillSong.streamUrl, { title: fillSong.title, artist: fillSong.artist, trackId: fillSong.id });
           
           // Sweeper instead of Zapper for fill time

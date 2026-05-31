@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     console.warn("Cron job unauthorized attempt");
   }
 
-  const genres = ["chill", "drive", "party", "romance", "news"];
+  const genres = ["global", "chill", "drive", "party", "romance", "news"];
   const results = [];
 
   // Calculate the target time for the NEXT hour

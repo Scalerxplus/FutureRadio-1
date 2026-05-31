@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 
 export const GENRES = [
+  { id: "global", name: "Future Global 🌍" },
   { id: "drive", name: "Drive & Commute 🚗" },
   { id: "chill", name: "Chill & Lofi ☕" },
   { id: "party", name: "Party & EDM 🪩" },

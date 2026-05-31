@@ -7,35 +7,7 @@ import { getBroadcastSchedule } from "@/lib/supabase/playlist";
 import { createClient } from "@/lib/supabase/client";
 import { PlaylistBlock } from "@/lib/types";
 
-// Native Web Audio API Radio Zap/Swoosh
-function playRadioZapper() {
-  try {
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-    const bufferSize = ctx.sampleRate * 3.0;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-    
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(200, ctx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(7000, ctx.currentTime + 1.5);
-    
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.26, ctx.currentTime + 1.5);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2.8);
 
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-    noise.start();
-  } catch (e) {}
-}
 
 export default function AudioOrchestrator() {
   const { mode } = useUiStore();
@@ -62,7 +34,6 @@ export default function AudioOrchestrator() {
   const [syncOffsetMs, setSyncOffsetMs] = useState<number>(0);
   const currentElementIdRef = useRef<string | null>(null);
   const isGeneratingRef = useRef<boolean>(false);
-  const zapperFiredRef = useRef<boolean>(false);
   const prefetchedUrlsRef = useRef<Set<string>>(new Set());
   const activeBlockIdRef = useRef<string | null>(null);
   const transitionTimeRef = useRef<number>(0);
@@ -357,16 +328,11 @@ export default function AudioOrchestrator() {
           }
       }
 
-      // --- MAGIC 1.5s ZAPPER CROSSFADE SEGUE ---
-      if (pseudoRemainingSeconds <= 1.5 && pseudoRemainingSeconds > 0 && !zapperFiredRef.current) {
-        playRadioZapper();
-        zapperFiredRef.current = true;
-      }
+
 
       // --- STATE TRANSITION DETECTED ---
       if (currentElementIdRef.current !== currentElementToPlay.id) {
         currentElementIdRef.current = currentElementToPlay.id;
-        zapperFiredRef.current = false;
 
         // Toggle 3-Deck Rotation for main media (not sweepers)
         if (currentElementToPlay.element_type !== "sweeper" && currentElementToPlay.element_type !== "station_id") {
