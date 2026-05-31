@@ -336,8 +336,11 @@ export default function AudioOrchestrator() {
       let shouldAdvance = false;
       if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
          const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
-         // Strict wait for non-songs: wait until < 0.2s remaining
-         const advanceThreshold = activeElement.element_type !== "song" ? 0.2 : 1.0;
+         // Dynamic advance threshold based on element type
+         let advanceThreshold = 3.0; // 3s for songs
+         if (activeElement.element_type === "sweeper" || activeElement.element_type === "station_id") advanceThreshold = 1.0;
+         if (activeElement.element_type === "jocktalk") advanceThreshold = 0.2;
+         
          if ((remainingTimeOnDeck <= advanceThreshold && remainingTimeOnDeck > 0) || activeDeck.ended) {
             shouldAdvance = true;
          }
@@ -435,25 +438,32 @@ export default function AudioOrchestrator() {
 
         const prevElement = currentIndex > 0 ? schedule[currentIndex - 1] : null;
 
-        // --- SEAMLESS TIGHT SEGUE & STRICT EXCLUSIVITY ---
+        // --- HYBRID CROSSFADE & EXCLUSIVITY ENGINE ---
         [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
            const deckName = ["A", "B", "C", "sweeper"][index];
            if ((deckName !== activeDeckRef.current && deckName !== "sweeper") || (deckName === "sweeper" && currentElementToPlay.element_type !== "sweeper" && currentElementToPlay.element_type !== "station_id")) {
                if (ref.current && !ref.current.paused) {
                    const player = ref.current;
-                   const isEnteringNonSong = currentElementToPlay.element_type !== "song";
-                   const isExitingNonSong = prevElement && prevElement.element_type !== "song";
+                   const isEnteringJock = currentElementToPlay.element_type === "jocktalk";
+                   const isExitingJock = prevElement && prevElement.element_type === "jocktalk";
                    
-                   if (isEnteringNonSong || isExitingNonSong || deckName === "sweeper") {
-                       // Strict exclusivity: zero overlap for jocktalks, ads, sweepers, station ids
+                   if (isEnteringJock || isExitingJock) {
+                       // Strict exclusivity: zero overlap for jocktalks
                        player.pause();
                        player.volume = 1;
                        try { player.currentTime = 0; } catch(e) {}
                    } else {
-                       // 2-second crossfade ONLY for Song-to-Song transitions
+                       // Determine fade out duration
+                       const isExitingSweeper = prevElement && (prevElement.element_type === "sweeper" || prevElement.element_type === "station_id");
+                       const isEnteringSweeper = currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id";
+                       const fadeOutTimeMs = (isExitingSweeper || isEnteringSweeper) ? 1000 : 3000;
+                       const steps = 20;
+                       const stepTime = fadeOutTimeMs / steps;
+                       const volDrop = 1.0 / steps;
+                       
                        let vol = player.volume;
                        const fade = setInterval(() => {
-                           vol -= 0.1;
+                           vol -= volDrop;
                            if (vol <= 0) {
                                player.pause();
                                player.volume = 1;
@@ -461,7 +471,7 @@ export default function AudioOrchestrator() {
                            } else {
                                player.volume = vol;
                            }
-                       }, 200);
+                       }, stepTime);
                    }
                }
            }
@@ -471,12 +481,37 @@ export default function AudioOrchestrator() {
 
         const primaryDeck = activeDeckRef.current === "A" ? mediaRefA.current : (activeDeckRef.current === "B" ? mediaRefB.current : mediaRefC.current);
 
+        // Helper to apply Fade-In
+        const applyFadeIn = (player: HTMLAudioElement, elementType: string) => {
+            if (elementType === "jocktalk") {
+                player.volume = 1.0; // Instant 100% for jocktalks
+                return;
+            }
+            player.volume = 0.0;
+            const isSweeper = elementType === "sweeper" || elementType === "station_id";
+            const fadeInTimeMs = isSweeper ? 1000 : 3000;
+            const steps = 20;
+            const stepTime = fadeInTimeMs / steps;
+            const volRise = 1.0 / steps;
+            
+            let volIn = 0.0;
+            const fadeIn = setInterval(() => {
+                volIn += volRise;
+                if (volIn >= 1.0) {
+                    player.volume = 1.0;
+                    clearInterval(fadeIn);
+                } else {
+                    player.volume = volIn;
+                }
+            }, stepTime);
+        };
+
         if (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id") {
            setPhase("playing_jingle");
            const player = sweeperRef.current;
            if (player) {
               if (player.src !== currentElementToPlay.media_url) player.src = currentElementToPlay.media_url;
-              player.volume = 1.0;
+              applyFadeIn(player, currentElementToPlay.element_type);
               if (offsetSeconds > 0.5) try { player.currentTime = offsetSeconds; } catch(e) {}
               // HARD STOP transition audio for Master Clock Sweepers to prevent parallel clashing
               if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
@@ -491,7 +526,7 @@ export default function AudioOrchestrator() {
            const targetUrl = currentElementToPlay.element_type === "song" ? currentElementToPlay.youtube_id : currentElementToPlay.media_url;
            if (primaryDeck) {
               if (primaryDeck.src !== targetUrl) primaryDeck.src = targetUrl;
-              primaryDeck.volume = 1.0;
+              applyFadeIn(primaryDeck, currentElementToPlay.element_type);
               if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
               // Fade out transition audio ONLY if it's a song, otherwise hard stop for jocktalk
               if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
