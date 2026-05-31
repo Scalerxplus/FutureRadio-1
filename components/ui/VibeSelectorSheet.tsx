@@ -39,15 +39,15 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 20, stiffness: 200 }}
-            className="absolute bottom-0 left-0 right-0 z-50 bg-[#111118] border-t border-[#2a2a35] rounded-t-2xl px-6 pb-8 pt-4 space-y-6 shadow-2xl"
+            className="absolute bottom-0 left-0 right-0 z-50 bg-brand-dark border-t-[6px] border-brand-red rounded-none px-6 pb-8 pt-6 space-y-6 shadow-[0_-10px_0_0_rgba(239,68,68,0.2)]"
           >
-            {/* Drag / Handle Indicator */}
-            <div className="w-12 h-1 bg-[#2a2a35] rounded-full mx-auto" />
+            {/* Brutalist Top Accent */}
+            <div className="absolute top-0 left-0 w-1/3 h-1 bg-white" />
 
             {/* Header */}
-            <div className="text-center">
-              <h3 className="text-base font-bold text-white uppercase tracking-widest">CHANNELS</h3>
-              <p className="text-xs text-gray-500 mt-1">Updates the live radio playlist mood</p>
+            <div className="text-left border-b-2 border-white/10 pb-4">
+              <h3 className="text-2xl font-black text-white uppercase tracking-widest font-sans">CHANNELS</h3>
+              <p className="text-[10px] font-bold text-brand-red uppercase tracking-widest mt-1">Updates live radio playlist mood</p>
             </div>
 
             {/* Genre Options List */}
@@ -58,10 +58,10 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
                   <button
                     key={genre.id}
                     onClick={() => handleSelectCity(genre.id, genre.name)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left text-sm font-semibold transition ${
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-none text-left font-black uppercase tracking-wider transition-all duration-200 border-2 ${
                       isSelected
-                        ? "bg-brand-red/15 text-brand-red border border-brand-red/20"
-                        : "text-gray-300 hover:bg-[#1c1c28] border border-transparent"
+                        ? "bg-brand-red text-black border-brand-red translate-x-2 shadow-[-8px_0_0_0_rgba(255,255,255,1)]"
+                        : "bg-transparent text-white border-white/10 hover:border-white hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
                     }`}
                   >
                     <span>{genre.name}</span>
@@ -70,9 +70,9 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        strokeWidth={3}
+                        strokeWidth={4}
                         stroke="currentColor"
-                        className="w-4 h-4 text-brand-red"
+                        className="w-5 h-5 text-black"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                       </svg>
@@ -83,10 +83,10 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
             </div>
 
             {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="w-full py-3 rounded-lg bg-[#2a2a35] hover:bg-[#343444] text-white text-xs font-bold uppercase tracking-wider transition"
-            >
+              <button
+                onClick={onClose}
+                className="w-full py-3.5 rounded-none bg-white text-black text-xs font-black uppercase tracking-widest border-2 border-black hover:bg-gray-200 active:translate-y-1 active:translate-x-1 transition-all duration-200"
+              >
               Cancel
             </button>
           </motion.div>

@@ -141,7 +141,7 @@ export default function RadioPlayerPage() {
       className="min-h-screen flex justify-center items-center bg-transparent p-0 md:p-4"
     >
       {/* Mobile Shell Container */}
-      <div className="w-full max-w-full md:max-w-[400px] h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-black/40 md:bg-black/60 backdrop-blur-md text-white flex flex-col justify-between p-6 relative overflow-y-auto overflow-x-hidden md:shadow-[0_0_80px_rgba(230,0,0,0.15)] border-none md:border md:border-white/10 md:rounded-[40px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="w-full max-w-full md:max-w-[400px] h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-black/40 md:bg-[#111118] backdrop-blur-md text-white flex flex-col justify-between p-6 relative overflow-y-auto overflow-x-hidden md:border-[6px] md:border-brand-red md:rounded-none md:shadow-[16px_16px_0_0_rgba(255,255,255,1)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {/* Glow Effects */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[200px] bg-brand-red/20 blur-[120px] pointer-events-none" />
         
@@ -201,13 +201,13 @@ export default function RadioPlayerPage() {
             <div className="w-full flex items-center overflow-hidden">
               {React.createElement(
                 'marquee',
-                { scrollamount: "5", className: "text-[26px] font-display font-medium text-white tracking-tight leading-none" },
+                { scrollamount: "5", className: "text-[34px] font-black font-sans uppercase text-white tracking-widest leading-none border-b-4 border-brand-red pb-2" },
                 currentBlock ? currentBlock.songTitle : "Connecting to Live Broadcast..."
               )}
             </div>
             
             {/* Centered Artist Name */}
-            <p className="text-[13px] font-sans font-normal text-white/60 uppercase tracking-[0.2em] text-center mt-2">
+            <p className="text-[14px] font-bold text-brand-red uppercase tracking-[0.3em] text-center mt-4">
               {currentBlock ? currentBlock.songArtist : "Future Radio Sync Engine"}
             </p>
           </div>
@@ -267,7 +267,7 @@ export default function RadioPlayerPage() {
             className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 focus:outline-none"
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            <div className={`absolute inset-0 rounded-full overflow-hidden border-2 border-brand-red/20 shadow-[0_0_15px_rgba(255,46,46,0.2)] transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+            <div className={`absolute inset-0 rounded-none overflow-hidden border-4 border-white shadow-[6px_6px_0_0_rgba(239,68,68,1)] bg-brand-dark transition-all duration-700 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
               <img src="/red-o-icon.png" alt="Future Radio" className="w-full h-full object-cover p-3" />
             </div>
           </button>

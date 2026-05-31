@@ -28,6 +28,7 @@ export default function AudioOrchestrator() {
   const mediaRefC = useRef<HTMLAudioElement | null>(null);
   const activeDeckRef = useRef<"A" | "B" | "C">("A");
   const sweeperRef = useRef<HTMLAudioElement | null>(null);
+  const transitionAudioRef = useRef<HTMLAudioElement | null>(null);
   const keepAliveRef = useRef<HTMLAudioElement | null>(null);
 
   const [schedule, setSchedule] = useState<any[]>([]);
@@ -128,11 +129,15 @@ export default function AudioOrchestrator() {
       if (!mediaRefA.current) { mediaRefA.current = new Audio(); mediaRefA.current.crossOrigin = "anonymous"; }
       if (!mediaRefB.current) { mediaRefB.current = new Audio(); mediaRefB.current.crossOrigin = "anonymous"; }
       if (!mediaRefC.current) { mediaRefC.current = new Audio(); mediaRefC.current.crossOrigin = "anonymous"; }
+      if (!sweeperRef.current) { sweeperRef.current = new Audio(); sweeperRef.current.crossOrigin = "anonymous"; }
+      if (!transitionAudioRef.current) { transitionAudioRef.current = new Audio(); transitionAudioRef.current.crossOrigin = "anonymous"; }
     }
     return () => {
       if (mediaRefA.current) { mediaRefA.current.pause(); mediaRefA.current.src = ""; }
       if (mediaRefB.current) { mediaRefB.current.pause(); mediaRefB.current.src = ""; }
       if (mediaRefC.current) { mediaRefC.current.pause(); mediaRefC.current.src = ""; }
+      if (sweeperRef.current) { sweeperRef.current.pause(); sweeperRef.current.src = ""; }
+      if (transitionAudioRef.current) { transitionAudioRef.current.pause(); transitionAudioRef.current.src = ""; }
     };
   }, []);
 
@@ -185,6 +190,24 @@ export default function AudioOrchestrator() {
     const cleanupPoll = initSync();
     return () => { active = false; cleanupPoll.then(c => c && c()); };
   }, [hasGesture, cityId]);
+
+  
+  // 2.5 Instant Transition Sweeper on Channel Change
+  useEffect(() => {
+    if (!hasGesture || !transitionAudioRef.current) return;
+    
+    // Reset volume and play sweeper
+    transitionAudioRef.current.volume = 1.0;
+    transitionAudioRef.current.src = `/audio/jingles/Station_ID_${cityId.charAt(0).toUpperCase() + cityId.slice(1)}.mp3`;
+    
+    // Fallback if the specific sweeper doesn't exist
+    transitionAudioRef.current.onerror = () => {
+       transitionAudioRef.current!.src = "/audio/jingles/Generic_Sponsor_Break.mp3";
+    };
+    
+    transitionAudioRef.current.play().catch(e => console.warn("Transition sweeper blocked:", e));
+    
+  }, [cityId, hasGesture]);
 
   // 3. The Global Synchronizer Loop (Runs every 500ms)
   useEffect(() => {
