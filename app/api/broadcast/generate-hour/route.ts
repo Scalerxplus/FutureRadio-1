@@ -164,8 +164,8 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
       // --- HYBRID QUALITY-WEIGHTED ROUTER ---
       const routerRoll = Math.random();
       
-      // Attempt Source 1: The Premium Hub (Supabase Curated) - 60% probability OR if fallback from lower tiers
-      if (routerRoll <= 0.60) {
+      // Attempt Source 1: The Premium Hub (Supabase Curated) - 30% probability OR if fallback from lower tiers
+      if (routerRoll <= 0.30) {
           const supabase = createClient();
           let query = supabase.from('curated_tracks').select('*').eq('bot_flag', false);
           
