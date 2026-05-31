@@ -1,8 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/cron/generate-daily",
-      "schedule": "30 12 * * *"
+      "path": "/api/cron/generate-next-hour",
+      "schedule": "55 * * * *"
     }
   ]
 }

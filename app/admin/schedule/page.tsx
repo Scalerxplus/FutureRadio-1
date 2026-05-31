@@ -4,22 +4,15 @@ import ScheduleClient from "./ScheduleClient";
 
 export const dynamic = "force-dynamic";
 
-const SHOWS = [
-  { id: "morning_zen", name: "Morning Zen", voice: "Core", startHour: 6, endHour: 8, color: "text-blue-400" },
-  { id: "morning_drive", name: "The Morning Drive", voice: "Core", startHour: 8, endHour: 11, color: "text-yellow-400" },
-  { id: "mid_day", name: "Mid-Day Cafe", voice: "Core", startHour: 11, endHour: 16, color: "text-orange-400" },
-  { id: "evening_rush", name: "Evening Rush", voice: "Core", startHour: 16, endHour: 20, color: "text-red-400" },
-  { id: "global_club", name: "The Global Club", voice: "Core", startHour: 20, endHour: 1, color: "text-purple-400" },
-  { id: "night_shift", name: "Night Shift", voice: "Core", startHour: 1, endHour: 6, color: "text-indigo-400" },
-];
-
-function getShowForHour(hour: number) {
-  if (hour >= 6 && hour < 8) return SHOWS[0];
-  if (hour >= 8 && hour < 11) return SHOWS[1];
-  if (hour >= 11 && hour < 16) return SHOWS[2];
-  if (hour >= 16 && hour < 20) return SHOWS[3];
-  if (hour >= 20 || hour < 1) return SHOWS[4]; 
-  return SHOWS[5];  
+function getShowForHour(hour: number, currentChannel: string) {
+  return { 
+    name: currentChannel === "news" ? "Future Radio News" :
+          currentChannel === "drive" ? "The Morning Drive" :
+          currentChannel === "party" ? "The Global Club" :
+          currentChannel === "romance" ? "Midnight Romance" :
+          "Future Radio Chill", 
+    color: "text-brand-red" 
+  };
 }
 
 function generateHotClockPlaceholders(hour: number, show: any) {
@@ -73,7 +66,12 @@ function generateHotClockPlaceholders(hour: number, show: any) {
   return placeholders;
 }
 
-export default async function SchedulePage() {
+export default async function SchedulePage({
+  searchParams,
+}: {
+  searchParams: { channel?: string };
+}) {
+  const currentChannel = searchParams.channel || "chill";
   const supabase = createClient();
   
   // Fetch today's schedule from DB using explicit IST boundaries
@@ -98,7 +96,7 @@ export default async function SchedulePage() {
     const { data: dbSchedule, error } = await supabase
       .from("broadcast_schedule")
       .select("*")
-      .eq("city_id", "raipur")
+      .eq("city_id", currentChannel)
       .gte("start_time", startOfTodayISO)
       .lte("start_time", endOfTodayISO)
       .order("start_time", { ascending: true })
@@ -133,7 +131,7 @@ export default async function SchedulePage() {
   // Construct full 24-hour loop
   const twentyFourHourSchedule = [];
   for (let hour = 0; hour < 24; hour++) {
-    const show = getShowForHour(hour);
+    const show = getShowForHour(hour, currentChannel);
     let elements = dbItemsByHour[hour] || [];
     let isActive = elements.length > 0;
     
@@ -149,5 +147,5 @@ export default async function SchedulePage() {
     });
   }
 
-  return <ScheduleClient initialSchedule={twentyFourHourSchedule} />;
+  return <ScheduleClient initialSchedule={twentyFourHourSchedule} currentChannel={currentChannel} />;
 }

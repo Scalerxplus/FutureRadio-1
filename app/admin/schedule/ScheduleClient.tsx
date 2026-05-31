@@ -6,7 +6,7 @@ import { updateScheduleElement } from "./actions";
 import LibraryPane from "@/components/admin/LibraryPane";
 import MixingConsole from "@/components/admin/MixingConsole";
 
-export default function ScheduleClient({ initialSchedule }: { initialSchedule: any[] }) {
+export default function ScheduleClient({ initialSchedule, currentChannel }: { initialSchedule: any[], currentChannel: string }) {
   const [schedule, setSchedule] = useState(initialSchedule);
   const [now, setNow] = useState(new Date());
   const liveRef = useRef<HTMLDivElement>(null);
@@ -50,7 +50,7 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
       formData.append("file", file);
       formData.append("start_time", element.start_time);
       formData.append("end_time", element.end_time);
-      formData.append("city_id", element.city_id || "raipur");
+      formData.append("city_id", element.city_id || currentChannel);
 
       const res = await fetch("/api/admin/upload-jocktalk", {
         method: "POST",
@@ -367,6 +367,19 @@ export default function ScheduleClient({ initialSchedule }: { initialSchedule: a
           <div>
             <h2 className="text-3xl font-bold text-white mb-2">24-Hour Master Playlist</h2>
             <p className="text-gray-400">Complete bird's-eye view of today's Hot Clock programming.</p>
+          </div>
+          <div>
+            <select 
+              value={currentChannel}
+              onChange={(e) => window.location.href = `/admin/schedule?channel=${e.target.value}`}
+              className="bg-[#111118] border border-[#2a2a35] text-white rounded-lg px-4 py-2 text-sm font-bold shadow-lg"
+            >
+              <option value="chill">Chill Station</option>
+              <option value="drive">Drive Station</option>
+              <option value="party">Party Station</option>
+              <option value="romance">Romance Station</option>
+              <option value="news">News Station</option>
+            </select>
           </div>
         </header>
 
