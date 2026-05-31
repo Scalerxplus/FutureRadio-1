@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",`n    "ingest": "npx ts-node --compilerOptions {\\\"module\\\":\\\"commonjs\\\"} workers/ingestion_engine.ts",
+    "build": "next build",
+    "ingest": "npx ts-node --compilerOptions {\\\"module\\\":\\\"commonjs\\\"} workers/ingestion_engine.ts",
     "start": "next start",
     "lint": "next lint"
   },
