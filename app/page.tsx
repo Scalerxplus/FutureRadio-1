@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -238,11 +240,11 @@ export default function EntrySplashPage() {
         {/* Top-Tier Corporate Footer */}
         <footer className="w-full text-center pb-8 pt-6 px-6 flex flex-col gap-4 mt-auto">
           <div className="flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
-            <a href="#" className="hover:underline hover:text-black">Terms</a>
+            <Link href="/terms" className="hover:underline hover:text-black">Terms</Link>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
-            <a href="#" className="hover:underline hover:text-black">Privacy</a>
+            <Link href="/privacy" className="hover:underline hover:text-black">Privacy</Link>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
-            <a href="#" className="hover:underline hover:text-black">Creators</a>
+            <Link href="/creators" className="hover:underline hover:text-black">Creators</Link>
           </div>
           <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[320px] mx-auto select-none font-medium">
             Future Radio is a decentralized global audio platform empowering independent artists and creators.
