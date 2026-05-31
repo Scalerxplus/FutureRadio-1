@@ -290,13 +290,18 @@ export default function RadioPlayerPage() {
             LIVE
           </div>
 
-          {/* Select Vibe / Genre Trigger */}
-          <button
-            onClick={handleOpenVibeSheet}
-            className="flex items-center gap-1.5 text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 select-none uppercase tracking-[0.2em]"
-          >
-            SELECT VIBE 🎧
-          </button>
+          <div className="flex items-center gap-4">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-brand-red select-none">
+              {cityName}
+            </div>
+            {/* Select Vibe / Genre Trigger */}
+            <button
+              onClick={handleOpenVibeSheet}
+              className="flex items-center gap-1.5 text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 select-none uppercase tracking-[0.2em]"
+            >
+              CHANNELS 🎧
+            </button>
+          </div>
         </div>
 
         {/* Coming Up Next Section */}

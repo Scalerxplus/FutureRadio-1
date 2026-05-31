@@ -8,7 +8,7 @@ interface CityStore {
 
 export const useCityStore = create<CityStore>((set) => ({
   cityId: "global",
-  cityName: "Future Global 🌍",
+  cityName: "Global 🌍",
   setCityId: (cityId, cityName) => set({ cityId, cityName }),
 }));
 

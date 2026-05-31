@@ -99,7 +99,7 @@ export default function EntrySplashPage() {
             aria-label="Change genre context"
           >
             <span className="w-2 h-2 rounded-full bg-brand-red border border-black animate-pulse" />
-            <span className="text-xs font-bold text-brand-dark uppercase font-sans">{cityName === "Future Global 🌍" ? "FUTURE GLOBAL ⚡" : cityName}</span>
+            <span className="text-xs font-bold text-brand-dark uppercase font-sans">{cityName === "Global 🌍" ? "GLOBAL ⚡" : cityName}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

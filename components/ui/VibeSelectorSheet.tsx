@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 
 export const GENRES = [
-  { id: "global", name: "Future Global 🌍" },
-  { id: "drive", name: "Drive & Commute 🚗" },
-  { id: "chill", name: "Chill & Lofi ☕" },
-  { id: "party", name: "Party & EDM 🪩" },
-  { id: "romance", name: "Late Night Romance 🌙" },
-  { id: "news", name: "News & Podcasts 🎙️" },
+  { id: "global", name: "Global 🌍" },
+  { id: "drive", name: "Drive 🚗" },
+  { id: "chill", name: "Chill ☕" },
+  { id: "party", name: "Party 🪩" },
+  { id: "romance", name: "Love 🌙" },
+  { id: "news", name: "Talk 🎙️" },
 ];
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -46,7 +46,7 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
 
             {/* Header */}
             <div className="text-center">
-              <h3 className="text-base font-bold text-white">Select Vibe / Genre</h3>
+              <h3 className="text-base font-bold text-white uppercase tracking-widest">CHANNELS</h3>
               <p className="text-xs text-gray-500 mt-1">Updates the live radio playlist mood</p>
             </div>
 

@@ -374,7 +374,7 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
               onChange={(e) => window.location.href = `/admin/schedule?channel=${e.target.value}`}
               className="bg-[#111118] border border-[#2a2a35] text-white rounded-lg px-4 py-2 text-sm font-bold shadow-lg"
             >
-              <option value="global">Future Global</option>
+              <option value="global">Global</option>
               <option value="chill">Chill Station</option>
               <option value="drive">Drive Station</option>
               <option value="party">Party Station</option>
