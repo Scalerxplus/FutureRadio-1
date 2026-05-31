@@ -478,6 +478,24 @@ export async function POST(request: Request) {
     let lastSongTitle = "nothing";
     const playedSongs = new Set<string>();
 
+    // --- GLOBAL CROSS-STATION ANTI-REPETITION COOLDOWN (6 HOURS) ---
+    try {
+        const sixHoursAgo = new Date(Date.now() - 6 * 3600 * 1000).toISOString();
+        const { data: recentHistory, error: historyErr } = await supabase
+            .from("broadcast_schedule")
+            .select("youtube_id")
+            .eq("element_type", "song")
+            .gte("start_time", sixHoursAgo);
+            
+        if (!historyErr && recentHistory) {
+            recentHistory.forEach(row => {
+                if (row.youtube_id) playedSongs.add(row.youtube_id);
+            });
+            console.log(`[Master Clock] Pre-seeded ${playedSongs.size} tracks into global cooldown memory (Last 6 Hours).`);
+        }
+    } catch(e) {
+        console.error("[Master Clock] Failed to fetch global cooldown memory:", e);
+    }
     // Preflight Check: Is the Audius API down?
     const preflightSong = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
     const isFallbackMode = preflightSong.id.startsWith("system-fallback");
