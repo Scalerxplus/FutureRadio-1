@@ -336,11 +336,15 @@ export default function AudioOrchestrator() {
       let shouldAdvance = false;
       if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
          const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
-         if ((remainingTimeOnDeck <= 1.0 && remainingTimeOnDeck > 0) || activeDeck.ended) {
+         // Strict wait for non-songs: wait until < 0.2s remaining
+         const advanceThreshold = activeElement.element_type !== "song" ? 0.2 : 1.0;
+         if ((remainingTimeOnDeck <= advanceThreshold && remainingTimeOnDeck > 0) || activeDeck.ended) {
             shouldAdvance = true;
          }
       }
-      if (!shouldAdvance && isExpiredByClock) {
+      
+      // Do not allow early clock expiration to clip non-song elements
+      if (!shouldAdvance && isExpiredByClock && activeElement.element_type === "song") {
          shouldAdvance = true;
       }
 
@@ -429,25 +433,36 @@ export default function AudioOrchestrator() {
         }));
         setUpcomingBlocks(upcomingMockBlocks);
 
-        // --- SEAMLESS TIGHT SEGUE (2-second overlapping crossfade) ---
-        // Pause previous decks gracefully instead of instantly
+        const prevElement = currentIndex > 0 ? schedule[currentIndex - 1] : null;
+
+        // --- SEAMLESS TIGHT SEGUE & STRICT EXCLUSIVITY ---
         [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
            const deckName = ["A", "B", "C", "sweeper"][index];
-           // If it's a media deck and not active, or if it's the sweeper and we are moving to a song
            if ((deckName !== activeDeckRef.current && deckName !== "sweeper") || (deckName === "sweeper" && currentElementToPlay.element_type !== "sweeper" && currentElementToPlay.element_type !== "station_id")) {
                if (ref.current && !ref.current.paused) {
                    const player = ref.current;
-                   let vol = player.volume;
-                   const fade = setInterval(() => {
-                       vol -= 0.1;
-                       if (vol <= 0) {
-                           player.pause();
-                           player.volume = 1;
-                           clearInterval(fade);
-                       } else {
-                           player.volume = vol;
-                       }
-                   }, 200); // Fades out over 2 seconds
+                   const isEnteringNonSong = currentElementToPlay.element_type !== "song";
+                   const isExitingNonSong = prevElement && prevElement.element_type !== "song";
+                   
+                   if (isEnteringNonSong || isExitingNonSong || deckName === "sweeper") {
+                       // Strict exclusivity: zero overlap for jocktalks, ads, sweepers, station ids
+                       player.pause();
+                       player.volume = 1;
+                       try { player.currentTime = 0; } catch(e) {}
+                   } else {
+                       // 2-second crossfade ONLY for Song-to-Song transitions
+                       let vol = player.volume;
+                       const fade = setInterval(() => {
+                           vol -= 0.1;
+                           if (vol <= 0) {
+                               player.pause();
+                               player.volume = 1;
+                               clearInterval(fade);
+                           } else {
+                               player.volume = vol;
+                           }
+                       }, 200);
+                   }
                }
            }
         });
