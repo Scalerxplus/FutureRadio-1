@@ -28,7 +28,7 @@ export default function RadioBubble() {
           exit={{ y: 50, opacity: 0, scale: 0.8 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
           onClick={handleTap}
-          className="fixed bottom-24 right-6 z-40 w-16 h-16 rounded-full bg-[#111118]/90 backdrop-blur-md border border-brand-red/30 shadow-[0_0_25px_rgba(255,46,46,0.3)] flex items-center justify-center cursor-pointer hover:border-brand-red hover:scale-110 active:scale-95 transition-all"
+          className="fixed bottom-24 right-6 z-40 w-16 h-16 rounded-full bg-white backdrop-blur-md border border-white/50 shadow-[0_0_25px_rgba(255,255,255,0.3)] flex items-center justify-center cursor-pointer hover:border-brand-red hover:scale-110 active:scale-95 transition-all"
         >
           <img 
             src="/red-o-icon.png" 
