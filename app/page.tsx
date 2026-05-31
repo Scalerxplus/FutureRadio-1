@@ -129,14 +129,14 @@ export default function EntrySplashPage() {
               onClick={() => handleCardClick("radio", "/radio")}
               className="h-[160px] rounded-none bg-white border-brutal border-black p-5 flex flex-col justify-between relative overflow-hidden group cursor-pointer shadow-brutal hover:-translate-y-1 hover:-translate-x-1 hover:shadow-brutal-hover active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-300"
             >
-              {/* Decorative Dot Matrix Radio Icon */}
-              <div className="absolute top-1/2 -translate-y-1/2 right-2 text-black/15 group-hover:text-black/30 transition duration-500 select-none pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={0.75} stroke="currentColor" strokeDasharray="0 3" strokeLinecap="round" className="w-28 h-28">
-                  <rect x="3" y="8" width="18" height="12" rx="2" />
-                  <path d="M7 14h.01M17 14h.01M12 14h.01M7 17h.01M17 17h.01M12 17h.01" strokeWidth="3" strokeDasharray="none" />
-                  <path d="M12 8V4m-4 0l4 4" />
-                </svg>
-              </div>
+              {/* Decorative Dot Matrix Background */}
+              <div 
+                className="absolute inset-0 pointer-events-none text-brand-red opacity-15 group-hover:opacity-30 transition-opacity duration-500"
+                style={{ 
+                  backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', 
+                  backgroundSize: '8px 8px' 
+                }} 
+              />
 
               {/* Card Meta Content */}
               <div className="space-y-1">
@@ -188,14 +188,14 @@ export default function EntrySplashPage() {
                   </h2>
                 </div>
                 
-                {/* Decorative Dot Matrix Headphone Icon */}
-                <div className="absolute top-1/2 -translate-y-1/2 -right-4 text-black/15 group-hover:text-black/30 transition duration-500 select-none pointer-events-none">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={0.75} stroke="currentColor" strokeDasharray="0 3" strokeLinecap="round" className="w-24 h-24">
-                    <path d="M3 14c0-4.97 4.03-9 9-9s9 4.03 9 9v3h-3v-5c0-3.31-2.69-6-6-6s-6 2.69-6 6v5H3v-3z" />
-                    <rect x="2" y="14" width="4" height="6" rx="1" />
-                    <rect x="18" y="14" width="4" height="6" rx="1" />
-                  </svg>
-                </div>
+                {/* Decorative Dot Matrix Background */}
+                <div 
+                  className="absolute inset-0 pointer-events-none text-black opacity-15 group-hover:opacity-30 transition-opacity duration-500"
+                  style={{ 
+                    backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', 
+                    backgroundSize: '8px 8px' 
+                  }} 
+                />
                 <div className="flex items-center justify-center w-8 h-8 bg-black rounded-full">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
                     <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
@@ -217,14 +217,14 @@ export default function EntrySplashPage() {
                   </h2>
                 </div>
 
-                {/* Decorative Dot Matrix Guitar Icon */}
-                <div className="absolute top-1/2 -translate-y-1/2 -right-2 text-white/15 group-hover:text-white/30 transition duration-500 select-none pointer-events-none transform -rotate-12">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={0.75} stroke="currentColor" strokeDasharray="0 3" strokeLinecap="round" className="w-24 h-24">
-                    <path d="M9 19c-3.31 0-6-2.69-6-6 0-2.48 1.5-4.6 3.7-5.5L14 3l7 7-4.5 7.3C15.6 19.5 13.48 21 11 21h-2z" />
-                    <circle cx="9" cy="13" r="2" strokeDasharray="none" />
-                    <path d="M14 3l-5 10" />
-                  </svg>
-                </div>
+                {/* Decorative Dot Matrix Background */}
+                <div 
+                  className="absolute inset-0 pointer-events-none text-[#FFDB58] opacity-15 group-hover:opacity-30 transition-opacity duration-500"
+                  style={{ 
+                    backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', 
+                    backgroundSize: '8px 8px' 
+                  }} 
+                />
                 <div className="flex items-center justify-center w-8 h-8 bg-white rounded-full">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-black">
                     <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />

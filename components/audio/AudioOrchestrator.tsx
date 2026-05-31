@@ -196,16 +196,24 @@ export default function AudioOrchestrator() {
   useEffect(() => {
     if (!hasGesture || !transitionAudioRef.current) return;
     
-    // Reset volume and play sweeper
-    transitionAudioRef.current.volume = 1.0;
-    transitionAudioRef.current.src = `/audio/jingles/Station_ID_${cityId.charAt(0).toUpperCase() + cityId.slice(1)}.mp3`;
+    const JINGLES = [
+      "/audio/jingles/Station_Jingle_chill.mp3",
+      "/audio/jingles/Station_Jingle_drive.mp3",
+      "/audio/jingles/Station_Jingle_news.mp3",
+      "/audio/jingles/Station_Jingle_party.mp3",
+      "/audio/jingles/Station_Jingle_romance.mp3"
+    ];
     
-    // Fallback if the specific sweeper doesn't exist
+    // Reset volume and play jingle
+    transitionAudioRef.current.volume = 1.0;
+    transitionAudioRef.current.src = JINGLES[Math.floor(Math.random() * JINGLES.length)];
+    
+    // Fallback if the specific jingle doesn't exist
     transitionAudioRef.current.onerror = () => {
-       transitionAudioRef.current!.src = "/audio/jingles/Generic_Sponsor_Break.mp3";
+       transitionAudioRef.current!.src = "/audio/fallbacks/Future_Radio_1.mp3";
     };
     
-    transitionAudioRef.current.play().catch(e => console.warn("Transition sweeper blocked:", e));
+    transitionAudioRef.current.play().catch(e => console.warn("Transition jingle blocked:", e));
     
   }, [cityId, hasGesture]);
 

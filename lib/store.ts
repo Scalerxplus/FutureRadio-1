@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface CityStore {
   cityId: string;
@@ -6,11 +7,18 @@ interface CityStore {
   setCityId: (cityId: string, cityName: string) => void;
 }
 
-export const useCityStore = create<CityStore>((set) => ({
-  cityId: "global",
-  cityName: "Global 🌍",
-  setCityId: (cityId, cityName) => set({ cityId, cityName }),
-}));
+export const useCityStore = create<CityStore>()(
+  persist(
+    (set) => ({
+      cityId: "global",
+      cityName: "Global 🌍",
+      setCityId: (cityId, cityName) => set({ cityId, cityName }),
+    }),
+    {
+      name: "future-radio-station-storage",
+    }
+  )
+);
 
 interface UiStore {
   mode: "radio" | "news" | null;

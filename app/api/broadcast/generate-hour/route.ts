@@ -20,7 +20,10 @@ function getSweeperByGenre(genre: string) {
   try {
     const sweepersDir = path.join(process.cwd(), "public", "audio", "Sweepers");
     if (fs.existsSync(sweepersDir)) {
-      const files = fs.readdirSync(sweepersDir).filter(f => f.toLowerCase().includes(`sweeper_${genre.toLowerCase()}`) && f.endsWith(".mp3"));
+      let files = fs.readdirSync(sweepersDir).filter(f => f.endsWith(".mp3"));
+      if (genre.toLowerCase() !== "global") {
+        files = files.filter(f => f.toLowerCase().includes(`sweeper_${genre.toLowerCase()}`));
+      }
       if (files.length > 0) {
         return `/audio/Sweepers/${files[Math.floor(Math.random() * files.length)]}`;
       }
@@ -40,14 +43,14 @@ function getJingleByGenre(genre: string) {
   try {
     const jinglesDir = path.join(process.cwd(), "public", "audio", "jingles");
     if (fs.existsSync(jinglesDir)) {
-      const files = fs.readdirSync(jinglesDir).filter(f => f.toLowerCase().includes(`station_jingle_${genre.toLowerCase()}`) && f.endsWith(".mp3"));
+      const files = fs.readdirSync(jinglesDir).filter(f => f.toLowerCase().includes(`station_jingle_`) && f.endsWith(".mp3"));
       if (files.length > 0) {
         return `/audio/jingles/${files[Math.floor(Math.random() * files.length)]}`;
       }
     }
   } catch (e) {}
   
-  return `/audio/jingles/Station_Jingle_${genre}.mp3`;
+  return `/audio/jingles/Station_Jingle_chill.mp3`;
 }
 
 const STATION_VOICES = {
