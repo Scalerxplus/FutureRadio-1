@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 // This cron job is intended to run at minute 55 of every hour
 export async function GET(request: Request) {
   // Simple auth to prevent abuse

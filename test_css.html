@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { padding: 50px; font-family: sans-serif; display: flex; gap: 50px; flex-wrap: wrap; }
+  
+  .dark-bg { background: #111; padding: 20px; border-radius: 10px; width: 300px; text-align: center; }
+  .red-bg { background: #ef4444; padding: 20px; border-radius: 10px; width: 300px; text-align: center; }
+  
+  /* Cinematic Splash (Dark theme) */
+  .dark-theme-logo {
+    width: 100%;
+    filter: invert(1) hue-rotate(180deg);
+    mix-blend-mode: screen;
+  }
+  
+  /* Red Splash Screen (White Logo) */
+  .white-logo {
+    width: 100%;
+    filter: grayscale(1) invert(1) contrast(200%);
+    mix-blend-mode: screen;
+  }
+  
+  /* O Icon Crop */
+  .o-crop {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    object-position: 100% 50%;
+    filter: invert(1) hue-rotate(180deg);
+    mix-blend-mode: screen;
+    margin: 0 auto;
+    display: block;
+    background: transparent;
+  }
+</style>
+</head>
+<body>
+
+  <div class="dark-bg">
+    <h3 style="color:white">Cinematic Splash</h3>
+    <img src="public/logo-horizontal.png" class="dark-theme-logo" />
+  </div>
+
+  <div class="red-bg">
+    <h3 style="color:white">Home Splash</h3>
+    <img src="public/logo-horizontal.png" class="white-logo" />
+  </div>
+
+  <div class="dark-bg">
+    <h3 style="color:white">Radio Bubble</h3>
+    <img src="public/logo-horizontal.png" class="o-crop" />
+  </div>
+
+</body>
+</html>
