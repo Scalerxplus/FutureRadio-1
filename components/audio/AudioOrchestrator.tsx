@@ -515,11 +515,17 @@ export default function AudioOrchestrator() {
         const CROSSFADE_GRACE_PERIOD = 1.5;
         if (offsetSeconds > CROSSFADE_GRACE_PERIOD) {
            // Ensure only active deck and active element are playing, hard-pause others
+           const isSweeperActive = (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id");
+           
            [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
               const deckName = ["A", "B", "C", "sweeper"][index];
-              const isActiveSweeper = (deckName === "sweeper" && (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id"));
-              if (deckName !== activeDeckRef.current && !isActiveSweeper && ref.current && !ref.current.paused) {
+              const isThisDeckSupposedToPlay = isSweeperActive 
+                  ? deckName === "sweeper" 
+                  : deckName === activeDeckRef.current;
+                  
+              if (!isThisDeckSupposedToPlay && ref.current && !ref.current.paused) {
                   ref.current.pause();
+                  ref.current.volume = 1;
               }
            });
         }
