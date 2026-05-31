@@ -29,6 +29,7 @@ export default function AudioOrchestrator() {
   const activeDeckRef = useRef<"A" | "B" | "C">("A");
   const sweeperRef = useRef<HTMLAudioElement | null>(null);
   const transitionAudioRef = useRef<HTMLAudioElement | null>(null);
+  const isFirstLoadRef = useRef<boolean>(true);
   const keepAliveRef = useRef<HTMLAudioElement | null>(null);
 
   const [schedule, setSchedule] = useState<any[]>([]);
@@ -196,24 +197,37 @@ export default function AudioOrchestrator() {
   useEffect(() => {
     if (!hasGesture || !transitionAudioRef.current) return;
     
-    const JINGLES = [
-      "/audio/jingles/Station_Jingle_chill.mp3",
-      "/audio/jingles/Station_Jingle_drive.mp3",
-      "/audio/jingles/Station_Jingle_news.mp3",
-      "/audio/jingles/Station_Jingle_party.mp3",
-      "/audio/jingles/Station_Jingle_romance.mp3"
-    ];
-    
-    // Reset volume and play jingle
     transitionAudioRef.current.volume = 1.0;
-    transitionAudioRef.current.src = JINGLES[Math.floor(Math.random() * JINGLES.length)];
     
-    // Fallback if the specific jingle doesn't exist
+    if (isFirstLoadRef.current) {
+      // First App Open: Play shuffled Station Jingle
+      const JINGLES = [
+        "/audio/jingles/Station_Jingle_chill.mp3",
+        "/audio/jingles/Station_Jingle_drive.mp3",
+        "/audio/jingles/Station_Jingle_news.mp3",
+        "/audio/jingles/Station_Jingle_party.mp3",
+        "/audio/jingles/Station_Jingle_romance.mp3"
+      ];
+      transitionAudioRef.current.src = JINGLES[Math.floor(Math.random() * JINGLES.length)];
+      isFirstLoadRef.current = false;
+    } else {
+      // Channel Change: Play specific genre sweeper
+      if (cityId === "global") {
+        // Random from 1 to 20 for global
+        const randomId = Math.floor(Math.random() * 20) + 1;
+        transitionAudioRef.current.src = `/audio/fallbacks/Future_Radio_${randomId}.mp3`;
+      } else {
+        // 01 to 04 for specific genre
+        const randomNum = String(Math.floor(Math.random() * 4) + 1).padStart(2, '0');
+        transitionAudioRef.current.src = `/audio/Sweepers/Sweeper_${cityId}_${randomNum}.mp3`;
+      }
+    }
+    
     transitionAudioRef.current.onerror = () => {
        transitionAudioRef.current!.src = "/audio/fallbacks/Future_Radio_1.mp3";
     };
     
-    transitionAudioRef.current.play().catch(e => console.warn("Transition jingle blocked:", e));
+    transitionAudioRef.current.play().catch(e => console.warn("Transition audio blocked:", e));
     
   }, [cityId, hasGesture]);
 
@@ -408,11 +422,24 @@ export default function AudioOrchestrator() {
 
         // --- SEAMLESS TIGHT SEGUE (2-second overlapping crossfade) ---
         // Pause previous decks gracefully instead of instantly
-        [mediaRefA, mediaRefB, mediaRefC].forEach((ref, index) => {
-           const deckName = ["A", "B", "C"][index];
-           if (deckName !== activeDeckRef.current && ref.current && !ref.current.paused) {
-               const player = ref.current;
-               setTimeout(() => { player.pause(); player.volume = 1; }, 2000);
+        [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
+           const deckName = ["A", "B", "C", "sweeper"][index];
+           // If it's a media deck and not active, or if it's the sweeper and we are moving to a song
+           if ((deckName !== activeDeckRef.current && deckName !== "sweeper") || (deckName === "sweeper" && currentElementToPlay.element_type !== "sweeper" && currentElementToPlay.element_type !== "station_id")) {
+               if (ref.current && !ref.current.paused) {
+                   const player = ref.current;
+                   let vol = player.volume;
+                   const fade = setInterval(() => {
+                       vol -= 0.1;
+                       if (vol <= 0) {
+                           player.pause();
+                           player.volume = 1;
+                           clearInterval(fade);
+                       } else {
+                           player.volume = vol;
+                       }
+                   }, 200); // Fades out over 2 seconds
+               }
            }
         });
 
@@ -427,6 +454,12 @@ export default function AudioOrchestrator() {
               if (player.src !== currentElementToPlay.media_url) player.src = currentElementToPlay.media_url;
               player.volume = 1.0;
               if (offsetSeconds > 0.5) try { player.currentTime = offsetSeconds; } catch(e) {}
+              // Fade out transition audio
+              if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
+                 const tAudio = transitionAudioRef.current;
+                 let vol = tAudio.volume;
+                 const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.pause(); tAudio.volume = 1; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+              }
               player.play().catch(e => handleMediaError("sweeper"));
            }
         } else {
@@ -436,6 +469,12 @@ export default function AudioOrchestrator() {
               if (primaryDeck.src !== targetUrl) primaryDeck.src = targetUrl;
               primaryDeck.volume = 1.0;
               if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
+              // Fade out transition audio
+              if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
+                 const tAudio = transitionAudioRef.current;
+                 let vol = tAudio.volume;
+                 const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.pause(); tAudio.volume = 1; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+              }
               primaryDeck.play().catch(e => handleMediaError(activeDeckRef.current));
            }
         }
@@ -445,10 +484,11 @@ export default function AudioOrchestrator() {
         // --- HARDCODE EXCLUSIVITY RULE (MUTEX) WITH 1.5s CROSSFADE GRACE PERIOD ---
         const CROSSFADE_GRACE_PERIOD = 1.5;
         if (offsetSeconds > CROSSFADE_GRACE_PERIOD) {
-           // Ensure only active deck and sweeper are playing, hard-pause others
-           [mediaRefA, mediaRefB, mediaRefC].forEach((ref, index) => {
-              const deckName = ["A", "B", "C"][index];
-              if (deckName !== activeDeckRef.current && ref.current && !ref.current.paused) {
+           // Ensure only active deck and active element are playing, hard-pause others
+           [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
+              const deckName = ["A", "B", "C", "sweeper"][index];
+              const isActiveSweeper = (deckName === "sweeper" && (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id"));
+              if (deckName !== activeDeckRef.current && !isActiveSweeper && ref.current && !ref.current.paused) {
                   ref.current.pause();
               }
            });
@@ -486,21 +526,14 @@ export default function AudioOrchestrator() {
   }, [isPlaying]);
 
   const handleGestureClick = () => {
-    if (mediaRefA.current && mediaRefA.current.paused) mediaRefA.current.play().catch(() => {});
-    if (mediaRefB.current && mediaRefB.current.paused) mediaRefB.current.play().catch(() => {});
-    if (mediaRefC.current && mediaRefC.current.paused) mediaRefC.current.play().catch(() => {});
-    
-    const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
-    if (mediaRefA.current && !mediaRefA.current.src) mediaRefA.current.src = silentSrc;
-    if (mediaRefB.current && !mediaRefB.current.src) mediaRefB.current.src = silentSrc;
-    if (mediaRefC.current && !mediaRefC.current.src) mediaRefC.current.src = silentSrc;
-    if (sweeperRef.current && !sweeperRef.current.src) sweeperRef.current.src = silentSrc;
-
-    mediaRefA.current?.play().catch(() => {});
-    mediaRefB.current?.play().catch(() => {});
-    mediaRefC.current?.play().catch(() => {});
-    sweeperRef.current?.play().catch(() => {});
+    // Only play the keepAlive to unlock AudioContext.
+    // The Global Synchronizer Loop will handle playing the activeDeck/sweeper.
     keepAliveRef.current?.play().catch(() => {});
+    
+    // Also unlock transitionAudioRef
+    if (transitionAudioRef.current && transitionAudioRef.current.paused && transitionAudioRef.current.src) {
+        transitionAudioRef.current.play().catch(() => {});
+    }
 
     setHasGesture(true);
     setIsPlaying(true);
