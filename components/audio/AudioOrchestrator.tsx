@@ -197,6 +197,14 @@ export default function AudioOrchestrator() {
   useEffect(() => {
     if (!hasGesture || !transitionAudioRef.current) return;
     
+    // HARD STOP old audio to prevent mixing when switching stations
+    if (sweeperRef.current) sweeperRef.current.pause();
+    if (mediaRefA.current) mediaRefA.current.pause();
+    if (mediaRefB.current) mediaRefB.current.pause();
+    if (mediaRefC.current) mediaRefC.current.pause();
+    // Also reset currentElementIdRef to force a clean state transition when new schedule loads
+    currentElementIdRef.current = null;
+
     transitionAudioRef.current.volume = 1.0;
     
     if (isFirstLoadRef.current) {
@@ -454,11 +462,11 @@ export default function AudioOrchestrator() {
               if (player.src !== currentElementToPlay.media_url) player.src = currentElementToPlay.media_url;
               player.volume = 1.0;
               if (offsetSeconds > 0.5) try { player.currentTime = offsetSeconds; } catch(e) {}
-              // Fade out transition audio
+              // HARD STOP transition audio for Master Clock Sweepers to prevent parallel clashing
               if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
-                 const tAudio = transitionAudioRef.current;
-                 let vol = tAudio.volume;
-                 const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.pause(); tAudio.volume = 1; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+                 transitionAudioRef.current.pause();
+                 try { transitionAudioRef.current.currentTime = 0; } catch(e) {}
+                 transitionAudioRef.current.volume = 1;
               }
               player.play().catch(e => handleMediaError("sweeper"));
            }
@@ -469,11 +477,17 @@ export default function AudioOrchestrator() {
               if (primaryDeck.src !== targetUrl) primaryDeck.src = targetUrl;
               primaryDeck.volume = 1.0;
               if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
-              // Fade out transition audio
+              // Fade out transition audio ONLY if it's a song, otherwise hard stop for jocktalk
               if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
                  const tAudio = transitionAudioRef.current;
-                 let vol = tAudio.volume;
-                 const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.pause(); tAudio.volume = 1; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+                 if (currentElementToPlay.element_type === "jocktalk") {
+                     tAudio.pause();
+                     try { tAudio.currentTime = 0; } catch(e) {}
+                     tAudio.volume = 1;
+                 } else {
+                     let vol = tAudio.volume;
+                     const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.pause(); tAudio.volume = 1; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+                 }
               }
               primaryDeck.play().catch(e => handleMediaError(activeDeckRef.current));
            }
