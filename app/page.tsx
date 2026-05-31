@@ -239,12 +239,14 @@ export default function EntrySplashPage() {
 
         {/* Top-Tier Corporate Footer */}
         <footer className="w-full text-center pb-8 pt-6 px-6 flex flex-col gap-4 mt-auto">
-          <div className="flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+          <div className="flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-brand-dark flex-wrap">
             <Link href="/terms" className="hover:underline hover:text-black">Terms</Link>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/privacy" className="hover:underline hover:text-black">Privacy</Link>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/creators" className="hover:underline hover:text-black">Creators</Link>
+            <span className="w-1 h-1 rounded-full bg-black/30"></span>
+            <Link href="/business" className="hover:underline hover:text-black">Business</Link>
           </div>
           <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[320px] mx-auto select-none font-medium">
             Future Radio is a decentralized global audio platform empowering independent artists and creators.
