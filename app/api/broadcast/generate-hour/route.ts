@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import Groq from "groq-sdk";
 import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
+import { searchJamendoTrack } from "@/lib/jamendo";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
 import * as mm from "music-metadata";
 import path from "path";
@@ -160,43 +161,60 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
   const derivedVibe = typeof vibeConfig === "string" ? cityId : vibeConfig.derivedVibe;
   
   if (!isFallbackCall) {
-      // PHASE 3: THE BRAIN - Query Supabase Curated Tracks First
-      const supabase = createClient();
-      let query = supabase.from('curated_tracks').select('*').eq('bot_flag', false);
+      // --- HYBRID QUALITY-WEIGHTED ROUTER ---
+      const routerRoll = Math.random();
       
-      // Apply F_Vibe formulas based on derivedVibe
-      if (derivedVibe === 'party') {
-          query = query.gte('energy_score', 0.70);
-      } else if (derivedVibe === 'chill' || derivedVibe === 'love') {
-          query = query.lte('energy_score', 0.50);
-      } else if (derivedVibe === 'drive') {
-          query = query.gte('energy_score', 0.50);
-      }
-      
-      const { data: curatedTracks, error } = await query;
-      
-      if (!error && curatedTracks && curatedTracks.length > 0) {
-          // Filter out played tracks and duration limits
-          let validCurated = curatedTracks.filter(t => !playedSongs.has(t.track_id) && t.duration_seconds >= 120 && t.duration_seconds <= 420);
+      // Attempt Source 1: The Premium Hub (Supabase Curated) - 60% probability OR if fallback from lower tiers
+      if (routerRoll <= 0.60) {
+          const supabase = createClient();
+          let query = supabase.from('curated_tracks').select('*').eq('bot_flag', false);
           
-          if (validCurated.length > 0) {
-              const track = validCurated[Math.floor(Math.random() * validCurated.length)];
-              playedSongs.add(track.track_id);
-              return {
-                  id: track.track_id,
-                  title: track.title,
-                  artist: track.artist,
-                  durationSeconds: track.duration_seconds,
-                  streamUrl: track.stream_url,
-                  permalink: "",
-                  license: "CC-BY"
-              };
+          if (derivedVibe === 'party') query = query.gte('energy_score', 0.70);
+          else if (derivedVibe === 'chill' || derivedVibe === 'love') query = query.lte('energy_score', 0.50);
+          else if (derivedVibe === 'drive') query = query.gte('energy_score', 0.50);
+          
+          const { data: curatedTracks, error } = await query;
+          if (!error && curatedTracks && curatedTracks.length > 0) {
+              let validCurated = curatedTracks.filter(t => !playedSongs.has(t.track_id) && t.duration_seconds >= 120 && t.duration_seconds <= 420);
+              if (validCurated.length > 0) {
+                  const track = validCurated[Math.floor(Math.random() * validCurated.length)];
+                  playedSongs.add(track.track_id);
+                  return {
+                      id: track.track_id, title: track.title, artist: track.artist,
+                      durationSeconds: track.duration_seconds, streamUrl: track.stream_url,
+                      permalink: "", license: "CC-BY"
+                  };
+              }
           }
+          console.warn(`[Hybrid Engine] Supabase Curated exhausted for '${derivedVibe}'. Falling back to Jamendo.`);
       }
-      console.warn(`[Master Clock - The Brain] Supabase Query exhausted for vibe '${derivedVibe}'. Falling back to Audius Search.`);
+
+      // Attempt Source 2: The Indie Hub (Jamendo API) - 30% probability (0.60 to 0.90) OR fallback from Supabase
+      if (routerRoll <= 0.90) {
+          const jamendoQuery = typeof vibeConfig === "string" ? "pop" : vibeConfig.query;
+          const jamendoTracks = await searchJamendoTrack(jamendoQuery);
+          let validJamendo = jamendoTracks.filter(t => !playedSongs.has(t.id) && t.durationSeconds >= 120 && t.durationSeconds <= 420);
+          if (validJamendo.length > 0) {
+              const track = validJamendo[Math.floor(Math.random() * validJamendo.length)];
+              playedSongs.add(track.id);
+              return track;
+          }
+          console.warn(`[Hybrid Engine] Jamendo exhausted for '${derivedVibe}'. Falling back to Audius.`);
+      }
+      
+      // Attempt Source 3: The Decentralized Backup (Audius API) - 10% probability (0.90 to 1.0) OR fallback from Jamendo
+      let audiusTracks = await searchAudiusTrack(cleanQuery);
+      let validAudius = audiusTracks.filter(t => !playedSongs.has(t.id) && t.durationSeconds >= 120 && t.durationSeconds <= 420);
+      
+      if (validAudius.length > 0) {
+          const track = validAudius[Math.floor(Math.random() * validAudius.length)];
+          playedSongs.add(track.id);
+          return track;
+      }
+      console.warn(`[Hybrid Engine] Audius exhausted for '${cleanQuery}'. Triggering safety clear.`);
   }
 
-  // --- GRACEFUL DEGRADATION TO DIRECT AUDIUS SEARCH ---
+  // --- STATIC EXHAUSTION FALLBACK ---
   let allTracks = await searchAudiusTrack(cleanQuery);
   let tracks = allTracks.filter(t => t.durationSeconds && t.durationSeconds <= 420);
 
