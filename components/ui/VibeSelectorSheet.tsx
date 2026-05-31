@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 
 export const GENRES = [
-  { id: "global", name: "Global 🌍" },
-  { id: "drive", name: "Drive 🚗" },
-  { id: "chill", name: "Chill ☕" },
-  { id: "party", name: "Party 🪩" },
-  { id: "romance", name: "Love 🌙" },
-  { id: "news", name: "Talk 🎙️" },
+  { id: "global", name: "Global 📻" },
+  { id: "drive", name: "Drive 📻" },
+  { id: "chill", name: "Chill 📻" },
+  { id: "party", name: "Party 📻" },
+  { id: "romance", name: "Love 📻" },
+  { id: "news", name: "Talk 📻" },
 ];
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {

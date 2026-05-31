@@ -11,7 +11,7 @@ export const useCityStore = create<CityStore>()(
   persist(
     (set) => ({
       cityId: "global",
-      cityName: "Global 🌍",
+      cityName: "Global 📻",
       setCityId: (cityId, cityName) => set({ cityId, cityName }),
     }),
     {
