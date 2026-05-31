@@ -401,7 +401,8 @@ export default function AudioOrchestrator() {
           songDurationS: currentElementToPlay.duration_ms / 1000,
           rjAudioUrl: "", jingleUrl: "", rjTranscript: currentElementToPlay.metadata?.transcript || "",
           newsHeadlines: [], mood: "Live", validFrom: currentElementToPlay.start_time, validUntil: currentElementToPlay.end_time,
-          coverArt: currentElementToPlay.metadata?.coverArt || currentElementToPlay.metadata?.artwork_url || ""
+          coverArt: currentElementToPlay.metadata?.coverArt || currentElementToPlay.metadata?.artwork_url || "",
+          permalink: currentElementToPlay.metadata?.permalink || ""
         };
         setCurrentBlock(mockBlock);
 

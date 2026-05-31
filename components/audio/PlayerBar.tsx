@@ -46,9 +46,16 @@ export default function PlayerBar() {
             <h4 className="text-sm font-semibold text-white">
               {currentBlock ? currentBlock.songTitle : "Future Radio Stream"}
             </h4>
-            <p className="text-xs text-gray-400">
-              {currentBlock ? currentBlock.songArtist : "Tuning Ambient Live Beats..."}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-gray-400">
+                {currentBlock ? currentBlock.songArtist : "Tuning Ambient Live Beats..."}
+              </p>
+              {currentBlock?.permalink && (
+                <a href={currentBlock.permalink} target="_blank" rel="noopener noreferrer" className="text-[9px] text-brand-red hover:underline whitespace-nowrap">
+                  🔗 Licensed via Audius
+                </a>
+              )}
+            </div>
           </div>
         </div>
 

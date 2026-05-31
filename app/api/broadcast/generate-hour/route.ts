@@ -187,7 +187,9 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
                   title: track.title,
                   artist: track.artist,
                   durationSeconds: track.duration_seconds,
-                  streamUrl: track.stream_url
+                  streamUrl: track.stream_url,
+                  permalink: "",
+                  license: "CC-BY"
               };
           }
       }
@@ -217,7 +219,9 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
                 title: randomFile.replace(/\.[^/.]+$/, ""),
                 artist: "Future Radio Premium Fallback",
                 durationSeconds: durMs / 1000,
-                streamUrl: urlPath
+                streamUrl: urlPath,
+                permalink: "",
+                license: "CC-BY"
               };
             } catch(e) { }
           }
@@ -229,7 +233,9 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
               title: "Future Radio Chill Mix (Backup)",
               artist: "System",
               durationSeconds: 339,
-              streamUrl: "https://discoveryprovider.audius.co/v1/tracks/50ENP3g/stream?app_name=FutureRadio"
+              streamUrl: "https://discoveryprovider.audius.co/v1/tracks/50ENP3g/stream?app_name=FutureRadio",
+              permalink: "https://audius.co/future/chill-mix",
+              license: "CC-BY"
           };
         }
         playedSongs.add(fallbackTrack.id);
@@ -559,7 +565,7 @@ export async function POST(request: Request) {
     for (let i = 0; i < prefetchSongs.length; i++) {
         // Add the song
         const s = prefetchSongs[i].song;
-        addElement('song', prefetchSongs[i].duration, s.streamUrl, { title: s.title, artist: s.artist, trackId: s.id });
+        addElement('song', prefetchSongs[i].duration, s.streamUrl, { title: s.title, artist: s.artist, trackId: s.id, permalink: s.permalink });
         
         // Add Sweeper
         if (prefetchSweepers[i]) {

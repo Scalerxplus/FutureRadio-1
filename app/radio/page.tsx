@@ -206,10 +206,17 @@ export default function RadioPlayerPage() {
               )}
             </div>
             
-            {/* Centered Artist Name */}
-            <p className="text-[14px] font-bold text-brand-red uppercase tracking-[0.3em] text-center mt-4">
-              {currentBlock ? currentBlock.songArtist : "Future Radio Sync Engine"}
-            </p>
+            {/* Centered Artist Name & Attribution */}
+            <div className="flex flex-col items-center mt-4">
+              <p className="text-[14px] font-bold text-brand-red uppercase tracking-[0.3em] text-center">
+                {currentBlock ? currentBlock.songArtist : "Future Radio Sync Engine"}
+              </p>
+              {currentBlock?.permalink && (
+                <a href={currentBlock.permalink} target="_blank" rel="noopener noreferrer" className="mt-2 px-3 py-1 rounded border border-brand-red/30 bg-brand-red/10 text-[10px] text-brand-red uppercase tracking-widest hover:bg-brand-red hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1">
+                  <span>🔗</span> Licensed via Audius
+                </a>
+              )}
+            </div>
           </div>
         </div>
 

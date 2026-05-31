@@ -39,4 +39,5 @@ export interface PlaylistBlock {
   validUntil: string;
   rjName?: string;
   coverArt?: string;
+  permalink?: string;
 }

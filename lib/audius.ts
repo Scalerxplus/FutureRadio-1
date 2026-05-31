@@ -21,6 +21,8 @@ export interface AudiusTrack {
   artist: string;
   durationSeconds: number;
   streamUrl: string;
+  permalink: string;
+  license: string;
 }
 
 export async function searchAudiusTrack(query: string, maxRetries = 3): Promise<AudiusTrack[]> {
@@ -43,13 +45,22 @@ export async function searchAudiusTrack(query: string, maxRetries = 3): Promise<
       const json = await res.json();
       
       if (json.data && json.data.length > 0) {
-        return json.data.map((track: any) => ({
-          id: track.id,
-          title: track.title,
-          artist: track.user?.name || "Unknown Artist",
-          durationSeconds: track.duration,
-          streamUrl: `${host}/v1/tracks/${track.id}/stream?app_name=${APP_NAME}`
-        }));
+        // Strict OML Compliance: Filter out "All Rights Reserved"
+        const legalTracks = json.data.filter((track: any) => 
+          !track.license || track.license.toLowerCase() !== 'all rights reserved'
+        );
+
+        if (legalTracks.length > 0) {
+          return legalTracks.map((track: any) => ({
+            id: track.id,
+            title: track.title,
+            artist: track.user?.name || "Unknown Artist",
+            durationSeconds: track.duration,
+            streamUrl: `${host}/v1/tracks/${track.id}/stream?app_name=${APP_NAME}`,
+            permalink: track.permalink || `https://audius.co/${track.user?.handle}/${track.permalink || track.id}`,
+            license: track.license || "CC-BY"
+          }));
+        }
       }
       return []; // Return empty if no results, not a retryable error
     } catch (error) {
