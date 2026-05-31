@@ -465,91 +465,120 @@ export async function POST(request: Request) {
         console.warn("[Master Clock] Preflight failed. Engaging STRICT FALLBACK MODE for this hour.");
     }
 
-    while (currentTimeMs < targetEndTime.getTime()) {
-      if (isFallbackMode) {
-          const fallbackTrack = await getSong("fallback", cityId, playedSongs);
-          addElement('song', getSafeSongDuration(fallbackTrack), fallbackTrack.streamUrl, { title: fallbackTrack.title, artist: fallbackTrack.artist, trackId: fallbackTrack.id });
-          
-          const genreSweeper = getSweeperByGenre(cityId);
-          addElement('sweeper', await getLocalAudioDuration(genreSweeper), genreSweeper, { title: "Genre Sweeper" });
-          continue;
-      }
 
-      // 1. TOTH Station ID (Only once per hour at segment 1)
-      if (segmentIndex === 1) {
-        const stationId = getJingleByGenre(cityId);
-        addElement('station_id', await getLocalAudioDuration(stationId), stationId, { title: "Station ID" });
-      }
-
-      // Generate up to 12 Jocktalk Placeholders per hour
-      if (segmentIndex <= 12) {
-          // Get next song details
-          let nextSongInfo = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
-
-          // Jocktalk Placeholder (JT1 - JT12)
-          // The admin will manually drag and drop audio files into these empty slots via the Master Clock UI
-          const rjDur = 30000; // Default 30s placeholder duration
-          const blockId = addElement('jocktalk', rjDur, "", { 
-            title: `JT${segmentIndex}`, 
-            transcript: "EMPTY SLOT - Awaiting Manual Jocktalk Upload from RCS Library",
-            rjName: stationProfile.name,
-            isEmptyPlaceholder: true 
-          });
-
-          // Play Song 1 (The Teased Song)
-          addElement('song', getSafeSongDuration(nextSongInfo), nextSongInfo.streamUrl, { title: nextSongInfo.title, artist: nextSongInfo.artist, trackId: nextSongInfo.id });
-          
-          // Genre Sweeper instead of Zapper between songs
-          const songSweeper = getSweeperByGenre(cityId);
-          addElement('sweeper', await getLocalAudioDuration(songSweeper), songSweeper, { title: "Radio Sweeper" });
-
-          // Play Song 2
-          const song2 = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
-          addElement('song', getSafeSongDuration(song2), song2.streamUrl, { title: song2.title, artist: song2.artist, trackId: song2.id });
-          lastSongTitle = song2.title;
-
-          // Ad Break (4 per hour -> segmentIndex 1, 2, 3, 4)
-          if (segmentIndex <= 4) {
-              // Bumper into the Ad
-              const sweeper2 = getSweeperByGenre(cityId);
-              addElement('sweeper', await getLocalAudioDuration(sweeper2), sweeper2, { title: "Radio Sweeper" });
-              
-              // AgentX SSP Orchestration: Fetch contextual programmatic ad
-              const sspContext: SspContext = {
-                  cityId: cityId,
-                  liveWeather: liveWeather,
-                  timeOfDay: "evening" // generic
-              };
-              
-              const adDecision = await fetchContextualAd(sspContext);
-              
-              if (adDecision && adDecision.mediaUrl) {
-                 // Play SSP dynamic Ad
-                 addElement('sweeper', adDecision.durationMs, adDecision.mediaUrl, { title: adDecision.campaignTitle, isAd: true });
-                 console.log(`[AgentX SSP] Weaving Ad: ${adDecision.campaignTitle}`);
-              } else {
-                 // Fallback Song to retain listening appeal
-                 const fallbackSong = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
-                 addElement('song', getSafeSongDuration(fallbackSong), fallbackSong.streamUrl, { title: fallbackSong.title, artist: fallbackSong.artist, trackId: fallbackSong.id });
-              }
-              
-              // Note: No sweeper after the Ad. It directly flows into the next segment (Song/Jocktalk).
-          } else {
-              // Segment 5 end, sweeper out
-              const sweeperOut = getSweeperByGenre(cityId);
-              addElement('sweeper', await getLocalAudioDuration(sweeperOut), sweeperOut, { title: "Radio Sweeper" });
-          }
-          
-          segmentIndex++;
-      } else {
-          // Fill the remaining time in the hour (52-minute music budget) without any more RJ talks
-          const fillSong = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
-          addElement('song', getSafeSongDuration(fillSong), fillSong.streamUrl, { title: fillSong.title, artist: fillSong.artist, trackId: fillSong.id });
-          
-          // Sweeper instead of Zapper for fill time
-          const fillSweeper = getSweeperByGenre(cityId);
-          addElement('sweeper', await getLocalAudioDuration(fillSweeper), fillSweeper, { title: "Radio Sweeper" });
-      }
+    // --- DYNAMIC TIME-SLICING ALGORITHM ---
+    
+    // 1. TOTH Station Jingle (Always Segment 0)
+    let totalScheduledDurationMs = 0;
+    const stationId = getJingleByGenre(cityId);
+    const stationIdDur = await getLocalAudioDuration(stationId);
+    addElement('station_id', stationIdDur, stationId, { title: "Station ID" });
+    totalScheduledDurationMs += stationIdDur;
+    
+    // 2. Pre-fetch Songs to fill the hour
+    const TARGET_HOUR_MS = 3600 * 1000;
+    const AD_DURATION_MS = 30000;
+    const NUM_ADS = 4;
+    const NUM_JTS = 4;
+    const TOTAL_AD_TIME_MS = AD_DURATION_MS * NUM_ADS;
+    
+    const prefetchSongs = [];
+    const prefetchSweepers = [];
+    let currentMusicDuration = 0;
+    
+    // We fetch songs until we hit roughly 50 minutes (3000s) to leave room for Ads (120s) and Jocktalks (~240s) + sweepers
+    while (totalScheduledDurationMs + currentMusicDuration + TOTAL_AD_TIME_MS < (TARGET_HOUR_MS - 120000)) {
+        if (isFallbackMode) {
+             const fallbackTrack = await getSong("fallback", cityId, playedSongs);
+             const dur = getSafeSongDuration(fallbackTrack);
+             prefetchSongs.push({ type: 'song', song: fallbackTrack, duration: dur });
+             currentMusicDuration += dur;
+             
+             const sw = getSweeperByGenre(cityId);
+             const swDur = await getLocalAudioDuration(sw);
+             prefetchSweepers.push({ url: sw, duration: swDur });
+             currentMusicDuration += swDur;
+        } else {
+             // Dayparting Logic can be implemented here by adjusting the query
+             const song = await getSong(getSearchQueryForGenre(cityId).query, cityId, playedSongs);
+             const dur = getSafeSongDuration(song);
+             prefetchSongs.push({ type: 'song', song, duration: dur });
+             currentMusicDuration += dur;
+             
+             const sw = getSweeperByGenre(cityId);
+             const swDur = await getLocalAudioDuration(sw);
+             prefetchSweepers.push({ url: sw, duration: swDur });
+             currentMusicDuration += swDur;
+        }
+    }
+    
+    // Calculate total Jocktalk Time remaining
+    const D_talk_ms = TARGET_HOUR_MS - (totalScheduledDurationMs + currentMusicDuration + TOTAL_AD_TIME_MS);
+    
+    // If D_talk_ms is too small (e.g. less than 4x 15s), we pop a song
+    if (D_talk_ms < (15000 * NUM_JTS) && prefetchSongs.length > 0) {
+        console.warn("[Master Clock] Reconciliation loop: Popping last song to make room for Jocktalks.");
+        const removedSong = prefetchSongs.pop();
+        const removedSweeper = prefetchSweepers.pop();
+        if (removedSong) currentMusicDuration -= removedSong.duration;
+        if (removedSweeper) currentMusicDuration -= removedSweeper.duration;
+    }
+    
+    const FINAL_D_talk_ms = TARGET_HOUR_MS - (totalScheduledDurationMs + currentMusicDuration + TOTAL_AD_TIME_MS);
+    const jt_dur_ms = Math.floor(FINAL_D_talk_ms / NUM_JTS);
+    
+    // Now assemble the precise hour schedule
+    let jtCount = 0;
+    let adCount = 0;
+    
+    for (let i = 0; i < prefetchSongs.length; i++) {
+        // Add the song
+        const s = prefetchSongs[i].song;
+        addElement('song', prefetchSongs[i].duration, s.streamUrl, { title: s.title, artist: s.artist, trackId: s.id });
+        
+        // Add Sweeper
+        if (prefetchSweepers[i]) {
+            addElement('sweeper', prefetchSweepers[i].duration, prefetchSweepers[i].url, { title: "Radio Sweeper" });
+        }
+        
+        // After every 2 songs, drop an Ad or a JT
+        if ((i + 1) % 2 === 0) {
+            if (adCount < NUM_ADS && jtCount < NUM_JTS) {
+                if ((i + 1) % 4 === 0) {
+                    // AD Insertion
+                    const sspContext = { cityId: cityId, liveWeather: liveWeather, timeOfDay: "evening" };
+                    const adDecision = await fetchContextualAd(sspContext);
+                    if (adDecision && adDecision.mediaUrl) {
+                        addElement('sweeper', adDecision.durationMs, adDecision.mediaUrl, { title: adDecision.campaignTitle, isAd: true });
+                    } else {
+                        // If AD fails, we just put a Sweeper filler
+                        const fillerSw = getSweeperByGenre(cityId);
+                        addElement('sweeper', await getLocalAudioDuration(fillerSw), fillerSw, { title: "Ad Fallback Sweeper" });
+                    }
+                    adCount++;
+                } else {
+                    // JT Insertion
+                    addElement('jocktalk', jt_dur_ms, "", { 
+                        title: `JT${jtCount + 1}`, 
+                        transcript: "EMPTY SLOT - Awaiting Manual Jocktalk Upload from RCS Library",
+                        rjName: stationProfile.name,
+                        isEmptyPlaceholder: true 
+                    });
+                    jtCount++;
+                }
+            }
+        }
+    }
+    
+    // If there are leftover JTs or ADs because we didn't have enough songs, stick them at the end
+    while (jtCount < NUM_JTS) {
+         addElement('jocktalk', jt_dur_ms, "", { title: `JT${jtCount + 1}`, rjName: stationProfile.name, transcript: "EMPTY SLOT", isEmptyPlaceholder: true });
+         jtCount++;
+    }
+    while (adCount < NUM_ADS) {
+         const swFallback = getSweeperByGenre(cityId);
+         addElement('sweeper', AD_DURATION_MS, swFallback, { title: "Radio Sweeper", isAd: true });
+         adCount++;
     }
 
     // Wipe any existing schedule blocks in this hour window to allow clean JIT regeneration
