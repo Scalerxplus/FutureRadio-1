@@ -13,8 +13,8 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Layout UI States
-  const [isMixerOpen, setIsMixerOpen] = useState(true);
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isMixerOpen, setIsMixerOpen] = useState(false);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
   const [isLibraryOpen, setIsLibraryOpen] = useState(true);
 
   useEffect(() => {

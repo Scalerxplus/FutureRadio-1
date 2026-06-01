@@ -1,7 +1,14 @@
 import { Activity, Clock, RadioTower } from "lucide-react";
 import LiveListenersCard from "@/components/admin/LiveListenersCard";
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ searchParams }: { searchParams?: { channel?: string } }) {
+  const channel = searchParams?.channel || "global";
+  const showName = channel === "news" ? "Future Radio News" : 
+                   channel === "drive" ? "The Morning Drive" : 
+                   channel === "party" ? "The Global Club" : 
+                   channel === "romance" ? "Midnight Romance" : "Global Master Stream";
+  const rjName = channel === "news" ? "No RJ (Podcast Engine)" : "RJ: AIRA (Auto-Pilot)";
+
   return (
     <div className="p-8">
       <header className="mb-8 flex justify-between items-end">
@@ -19,8 +26,8 @@ export default function AdminDashboard() {
         <StatCard 
           icon={<RadioTower className="text-blue-400" />}
           title="Active Show"
-          value="Evening Rush"
-          subtitle="RJ: AIRA (Auto-Pilot)"
+          value={showName}
+          subtitle={rjName}
         />
         <StatCard 
           icon={<Clock className="text-purple-400" />}
@@ -42,7 +49,7 @@ export default function AdminDashboard() {
           <h3 className="text-lg font-semibold text-white mb-6">Recent System Activity</h3>
           <div className="space-y-4">
             <ActivityRow time="Just now" action="System injected EDM Sweeper" type="info" />
-            <ActivityRow time="12 mins ago" action="Master Clock generated 25 items for Evening Rush" type="success" />
+            <ActivityRow time="12 mins ago" action={`Master Clock generated 25 items for ${showName}`} type="success" />
             <ActivityRow time="1 hr ago" action="Azure TTS rendered RJ Voiceover (68 seconds)" type="info" />
             <ActivityRow time="2 hrs ago" action="Live Cut Overridden by Admin" type="warning" />
           </div>
