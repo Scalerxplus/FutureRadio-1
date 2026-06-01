@@ -6,6 +6,7 @@ import { searchJamendoTrack } from "@/lib/jamendo";
 import { searchPodcastEpisode } from "@/lib/itunes";
 import { getGlobalNewsBite, getShortGlobalNewsBite } from "@/lib/newsbites";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
+import { getRandomOriginalTrack } from "@/lib/originals";
 import * as mm from "music-metadata";
 import path from "path";
 import fs from "fs";
@@ -613,7 +614,21 @@ export async function POST(request: Request) {
              prefetchSweepers.push({ url: sw, duration: swDur });
              currentMusicDuration += swDur;
         } else {
-             const song = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+             let song: any = null;
+             
+             // 30% chance to drop a Future Radio Original Production
+             if (Math.random() < 0.3) {
+                 const original = getRandomOriginalTrack(cityId, playedSongs);
+                 if (original) {
+                     song = original;
+                     playedSongs.add(original.id);
+                 }
+             }
+             
+             if (!song) {
+                 song = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+             }
+             
              lastTrackEnergy = song.energyScore || 0.5;
              const dur = getSafeSongDuration(song);
              prefetchSongs.push({ type: 'song', song, duration: dur });
