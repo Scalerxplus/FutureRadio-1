@@ -201,38 +201,41 @@ export default function AudioOrchestrator() {
   useEffect(() => {
     if (!hasGesture || !transitionAudioRef.current) return;
     
-    // HARD STOP old audio to prevent mixing when switching stations
-    if (sweeperRef.current) sweeperRef.current.pause();
-    if (mediaRefA.current) mediaRefA.current.pause();
-    if (mediaRefB.current) mediaRefB.current.pause();
-    if (mediaRefC.current) mediaRefC.current.pause();
-    // Also reset currentElementIdRef to force a clean state transition when new schedule loads
+    // Quick fade out old audio instead of hard stop to prevent abrupt cuts
+    [sweeperRef, mediaRefA, mediaRefB, mediaRefC].forEach(ref => {
+      if (ref.current && !ref.current.paused) {
+         const player = ref.current;
+         let vol = player.volume;
+         const fade = setInterval(() => {
+             vol -= 0.1;
+             if (vol <= 0) {
+                 player.pause();
+                 player.volume = 1;
+                 clearInterval(fade);
+             } else {
+                 player.volume = vol;
+             }
+         }, 50); // 500ms total fade out
+      }
+    });
+    
+    // Reset currentElementIdRef to force a clean state transition when new schedule loads
     currentElementIdRef.current = null;
 
     transitionAudioRef.current.volume = 1.0;
     
     if (isFirstLoadRef.current) {
-      // First App Open: Play shuffled Station Jingle
-      const JINGLES = [
-        "/audio/jingles/Station_Jingle_chill.mp3",
-        "/audio/jingles/Station_Jingle_drive.mp3",
-        "/audio/jingles/Station_Jingle_news.mp3",
-        "/audio/jingles/Station_Jingle_party.mp3",
-        "/audio/jingles/Station_Jingle_romance.mp3"
-      ];
-      transitionAudioRef.current.src = JINGLES[Math.floor(Math.random() * JINGLES.length)];
+      // First App Open: Premium Startup Jingle / Sonic Branding
+      transitionAudioRef.current.src = "/audio/jingles/Station_Jingle_chill.mp3"; // Using existing jingle as placeholder for the 2s startup sound
       isFirstLoadRef.current = false;
     } else {
-      // Channel Change: Play specific genre sweeper
-      if (cityId === "global") {
-        // Random from 1 to 20 for global
-        const randomId = Math.floor(Math.random() * 20) + 1;
-        transitionAudioRef.current.src = `/audio/fallbacks/Future_Radio_${randomId}.mp3`;
-      } else {
-        // 01 to 04 for specific genre
-        const randomNum = String(Math.floor(Math.random() * 4) + 1).padStart(2, '0');
-        transitionAudioRef.current.src = `/audio/Sweepers/Sweeper_${cityId}_${randomNum}.mp3`;
-      }
+      // Channel Change: Play analog tuning/glitch sound effect
+      const GLITCHES = [
+        "/audio/Zappers/zapper_swoosh_01.mp3",
+        "/audio/Zappers/zapper_laser_02.mp3",
+        "/audio/Zappers/zapper_transition_03.mp3"
+      ];
+      transitionAudioRef.current.src = GLITCHES[Math.floor(Math.random() * GLITCHES.length)];
     }
     
     transitionAudioRef.current.onerror = () => {
