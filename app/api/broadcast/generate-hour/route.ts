@@ -179,7 +179,7 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
   
   // --- NEWS/TALK STATION PODCAST ROUTING ---
   if (cityId === "news" && !isFallbackCall) {
-      const topics = ["technology", "finance", "artificial intelligence", "startups", "wellness", "business", "career", "leadership"];
+      const topics = ["technology india", "finance india", "artificial intelligence hindi", "startups india", "wellness hindi", "business india hindi", "career india", "leadership hindi"];
       const randomTopic = topics[Math.floor(Math.random() * topics.length)];
       const podcast = await searchPodcastEpisode(randomTopic, playedSongs);
       if (podcast && !podcast.id.startsWith("system-fallback")) {

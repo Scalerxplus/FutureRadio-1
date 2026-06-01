@@ -12,7 +12,7 @@ const FALLBACK_PODCAST: AudiusTrack = {
 
 export async function searchPodcastEpisode(query: string, excludeIds: Set<string>): Promise<AudiusTrack> {
   try {
-    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=podcast&entity=podcastEpisode&limit=50`;
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=podcast&entity=podcastEpisode&limit=50&country=IN`;
     const res = await fetch(url, { cache: "no-cache" });
     if (!res.ok) throw new Error("iTunes API failed");
     
