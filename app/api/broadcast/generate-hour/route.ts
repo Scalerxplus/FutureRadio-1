@@ -26,6 +26,8 @@ function getSweeperByGenre(genre: string) {
       let files = fs.readdirSync(sweepersDir).filter(f => f.endsWith(".mp3"));
       if (genre.toLowerCase() !== "global") {
         files = files.filter(f => f.toLowerCase().includes(`sweeper_${genre.toLowerCase()}`));
+      } else {
+        files = files.filter(f => !f.toLowerCase().includes(`sweeper_chill`));
       }
       if (files.length > 0) {
         return `/audio/Sweepers/${files[Math.floor(Math.random() * files.length)]}`;
