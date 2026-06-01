@@ -4,7 +4,7 @@ import Groq from "groq-sdk";
 import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
 import { searchJamendoTrack } from "@/lib/jamendo";
 import { searchPodcastEpisode } from "@/lib/itunes";
-import { getGlobalNewsBite } from "@/lib/newsbites";
+import { getGlobalNewsBite, getShortGlobalNewsBite } from "@/lib/newsbites";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
 import * as mm from "music-metadata";
 import path from "path";
@@ -478,7 +478,7 @@ export async function POST(request: Request) {
       let finalDurationMs = durationMs;
       
       // HARD STOP: Never overshoot the 60-minute hot clock boundary (xx:59:59)
-      if (cityId !== "news" && currentTimeMs + finalDurationMs > targetEndTime.getTime()) {
+      if (cityId !== "news" && cityId !== "global" && cityId !== "drive" && currentTimeMs + finalDurationMs > targetEndTime.getTime()) {
          finalDurationMs = targetEndTime.getTime() - currentTimeMs;
          metadata.isCapped = true; // Mark as capped so the frontend knows to cut it off gracefully
       }
@@ -654,8 +654,22 @@ export async function POST(request: Request) {
                             const dur = await getLocalAudioDuration(fillerSw);
                             addElement('sweeper', dur, fillerSw, { title: "News Sweeper Fallback" });
                         }
+                    } else if (cityId === "global" || cityId === "drive") {
+                        // --- SHORT GLOBAL NEWS BITES FOR MUSIC STATIONS (1-2 MINS) ---
+                        const newsBite = await getShortGlobalNewsBite(targetSlot);
+                        if (newsBite) {
+                            addElement('jocktalk', newsBite.durationMs, newsBite.mediaUrl, { 
+                                title: `${newsBite.providerName} (Quick Global Update)`, 
+                                rjName: "Future Radio Global",
+                                isEmptyPlaceholder: false 
+                            });
+                        } else {
+                            const fillerSw = getSweeperByGenre(cityId);
+                            const dur = await getLocalAudioDuration(fillerSw);
+                            addElement('sweeper', dur, fillerSw, { title: "Global Sweeper Fallback" });
+                        }
                     } else {
-                        // --- MANUAL JOCKTALK FOR MUSIC STATIONS ---
+                        // --- MANUAL JOCKTALK FOR LOCAL MUSIC STATIONS ---
                         const manualJt = manualJocktalks.find(j => j.slot_index === targetSlot);
                         
                         if (manualJt) {
