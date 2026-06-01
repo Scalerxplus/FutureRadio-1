@@ -64,8 +64,8 @@ export async function getGlobalNewsBite(slotIndex: number): Promise<NewsBite | n
 }
 
 const SHORT_GLOBAL_FEEDS = [
-  { provider: "BBC Minute", url: "https://podcasts.files.bbci.co.uk/p02nq0lx.rss", fallbackDur: 60000 },
-  { provider: "Fox News Hourly", url: "https://feeds.megaphone.fm/foxnewsradio", fallbackDur: 90000 }
+  { provider: "WSJ Minute Briefing", url: "https://video-api.wsj.com/podcast/rss/wsj/minute-briefing", fallbackDur: 150000 },
+  { provider: "WSJ Tech News", url: "https://video-api.wsj.com/podcast/rss/wsj/tech-news-briefing", fallbackDur: 150000 }
 ];
 
 export async function getShortGlobalNewsBite(slotIndex: number): Promise<NewsBite | null> {

@@ -19,22 +19,35 @@ const ytCache = new Map<string, { video: any; expiresAt: number }>();
 const globalPlayedSweepers = new Set<string>();
 const globalPlayedJingles = new Set<string>();
 
-function getSweeperByGenre(genre: string) {
+async function getContextualSweeper(genre: string, targetEnergy?: number) {
   try {
-    const sweepersDir = path.join(process.cwd(), "public", "audio", "Sweepers");
-    if (fs.existsSync(sweepersDir)) {
-      let files = fs.readdirSync(sweepersDir).filter(f => f.endsWith(".mp3"));
-      if (genre.toLowerCase() !== "global") {
-        files = files.filter(f => f.toLowerCase().includes(`sweeper_${genre.toLowerCase()}`));
+    const supabase = createClient();
+    let query = supabase.from('curated_sweepers').select('media_url, energy_score');
+    
+    if (genre.toLowerCase() !== "global") {
+      query = query.eq('genre', genre.toLowerCase());
+    }
+    
+    const { data: sweepers } = await query;
+    if (sweepers && sweepers.length > 0) {
+      if (targetEnergy !== undefined) {
+        // Sort by how close they are to the target energy
+        sweepers.sort((a, b) => Math.abs(a.energy_score - targetEnergy) - Math.abs(b.energy_score - targetEnergy));
+        
+        // Take from the top 3 closest matches randomly
+        const topMatches = sweepers.slice(0, 3);
+        const selected = topMatches[Math.floor(Math.random() * topMatches.length)];
+        return selected.media_url;
       } else {
-        files = files.filter(f => !f.toLowerCase().includes(`sweeper_chill`));
-      }
-      if (files.length > 0) {
-        return `/audio/Sweepers/${files[Math.floor(Math.random() * files.length)]}`;
+        const selected = sweepers[Math.floor(Math.random() * sweepers.length)];
+        return selected.media_url;
       }
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error("[Master Clock] Failed to get contextual sweeper:", e);
+  }
   
+  // Static Fallback
   const sweepers = [
     `/audio/Sweepers/Sweeper_${genre}_01.mp3`,
     `/audio/Sweepers/Sweeper_${genre}_02.mp3`,
@@ -197,7 +210,7 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
                   return {
                       id: track.track_id, title: track.title, artist: track.artist,
                       durationSeconds: track.duration_seconds, streamUrl: track.stream_url,
-                      permalink: "", license: "CC-BY"
+                      permalink: "", license: "CC-BY", energyScore: track.energy_score
                   };
               }
           }
@@ -212,6 +225,7 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
           if (validJamendo.length > 0) {
               const track = validJamendo[Math.floor(Math.random() * validJamendo.length)];
               playedSongs.add(track.id);
+              track.energyScore = derivedVibe === 'party' ? 0.8 : (derivedVibe === 'chill' || derivedVibe === 'romance' ? 0.3 : 0.6);
               return track;
           }
           console.warn(`[Hybrid Engine] Jamendo exhausted for '${derivedVibe}'. Falling back to Audius.`);
@@ -224,6 +238,7 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
       if (validAudius.length > 0) {
           const track = validAudius[Math.floor(Math.random() * validAudius.length)];
           playedSongs.add(track.id);
+          track.energyScore = derivedVibe === 'party' ? 0.8 : (derivedVibe === 'chill' || derivedVibe === 'romance' ? 0.3 : 0.6);
           return track;
       }
       console.warn(`[Hybrid Engine] Audius exhausted for '${cleanQuery}'. Triggering safety clear.`);
@@ -509,6 +524,7 @@ export async function POST(request: Request) {
 
     let segmentIndex = 1;
     let lastSongTitle = "nothing";
+    let lastTrackEnergy = 0.5;
     const playedSongs = new Set<string>();
 
     // --- GLOBAL CROSS-STATION ANTI-REPETITION COOLDOWN (6 HOURS) ---
@@ -592,12 +608,13 @@ export async function POST(request: Request) {
              prefetchSongs.push({ type: 'song', song: fallbackTrack, duration: dur });
              currentMusicDuration += dur;
              
-             const sw = getSweeperByGenre(cityId);
+             const sw = await getContextualSweeper(cityId, lastTrackEnergy);
              const swDur = await getLocalAudioDuration(sw);
              prefetchSweepers.push({ url: sw, duration: swDur });
              currentMusicDuration += swDur;
         } else {
              const song = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+             lastTrackEnergy = song.energyScore || 0.5;
              const dur = getSafeSongDuration(song);
              prefetchSongs.push({ type: 'song', song, duration: dur });
              currentMusicDuration += dur;
@@ -652,7 +669,7 @@ export async function POST(request: Request) {
                                 isEmptyPlaceholder: false 
                             });
                         } else {
-                            const fillerSw = getSweeperByGenre(cityId);
+                            const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
                             const dur = await getLocalAudioDuration(fillerSw);
                             addElement('sweeper', dur, fillerSw, { title: "News Sweeper Fallback" });
                         }
@@ -666,7 +683,7 @@ export async function POST(request: Request) {
                                 isEmptyPlaceholder: false 
                             });
                         } else {
-                            const fillerSw = getSweeperByGenre(cityId);
+                            const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
                             const dur = await getLocalAudioDuration(fillerSw);
                             addElement('sweeper', dur, fillerSw, { title: "Global Sweeper Fallback" });
                         }
@@ -682,7 +699,7 @@ export async function POST(request: Request) {
                             });
                         } else {
                             // Fallback if RJ forgot to upload for this slot
-                            const fillerSw = getSweeperByGenre(cityId);
+                            const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
                             const dur = await getLocalAudioDuration(fillerSw);
                             addElement('sweeper', dur, fillerSw, { title: "Station Sweeper (JT Fallback)" });
                         }

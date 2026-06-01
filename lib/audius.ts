@@ -23,6 +23,7 @@ export interface AudiusTrack {
   streamUrl: string;
   permalink: string;
   license: string;
+  energyScore?: number;
 }
 
 export async function searchAudiusTrack(query: string, maxRetries = 3): Promise<AudiusTrack[]> {
