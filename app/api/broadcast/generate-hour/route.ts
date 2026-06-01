@@ -6,7 +6,7 @@ import { searchJamendoTrack } from "@/lib/jamendo";
 import { searchPodcastEpisode } from "@/lib/itunes";
 import { getGlobalNewsBite, getShortGlobalNewsBite } from "@/lib/newsbites";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
-import { getRandomOriginalTrack } from "@/lib/originals";
+import { getHourlyOriginalsQueue } from "@/lib/originals";
 import * as mm from "music-metadata";
 import path from "path";
 import fs from "fs";
@@ -601,6 +601,9 @@ export async function POST(request: Request) {
     const prefetchSweepers: any[] = [];
     let currentMusicDuration = 0;
     
+    // Deterministic queue for Future Radio Originals
+    const originalsQueue = getHourlyOriginalsQueue(cityId, playedSongs);
+    
     // We fetch songs until we hit roughly 50-55 minutes, accounting for Ads and actual Manual Jocktalk durations
     while (totalScheduledDurationMs + currentMusicDuration + TOTAL_AD_TIME_MS + totalManualJtDurMs < (TARGET_HOUR_MS - 60000)) {
         if (isFallbackMode) {
@@ -616,13 +619,9 @@ export async function POST(request: Request) {
         } else {
              let song: any = null;
              
-             // 30% chance to drop a Future Radio Original Production
-             if (Math.random() < 0.3) {
-                 const original = getRandomOriginalTrack(cityId, playedSongs);
-                 if (original) {
-                     song = original;
-                     playedSongs.add(original.id);
-                 }
+             // Inject deterministic Future Radio Original Productions evenly
+             if (originalsQueue.length > 0 && prefetchSongs.length % 3 === 0) {
+                 song = originalsQueue.shift();
              }
              
              if (!song) {

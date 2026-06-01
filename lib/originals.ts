@@ -16,28 +16,31 @@ export function getOriginalTracks() {
   }
 }
 
-export function getRandomOriginalTrack(cityId: string, playedSongs: Set<string>) {
+export function getHourlyOriginalsQueue(cityId: string, playedSongs: Set<string>) {
   const tracks = getOriginalTracks();
-  if (!tracks.length) return null;
+  if (!tracks.length) return [];
 
-  // Filter based on cityId vibe
-  let targetEnergyMin = 0;
-  let targetEnergyMax = 1;
+  const queue: any[] = [];
 
-  if (cityId === 'chill' || cityId === 'romance') {
-    targetEnergyMax = 0.65;
-  } else if (cityId === 'party' || cityId === 'drive') {
-    targetEnergyMin = 0.65;
+  const addRandomVersion = (titlePrefix: string, count: number) => {
+    let available = tracks.filter(t => t.title.startsWith(titlePrefix) && !playedSongs.has(t.id));
+    if (available.length < count) {
+       available = tracks.filter(t => t.title.startsWith(titlePrefix));
+    }
+    available.sort(() => Math.random() - 0.5);
+    for(let i = 0; i < count && i < available.length; i++) {
+        queue.push(available[i]);
+        playedSongs.add(available[i].id);
+    }
+  };
+
+  if (cityId === 'global' || cityId === 'party' || cityId === 'drive') {
+      addRandomVersion("Tain Sun", 2);
+      addRandomVersion("Dekhi Leb", 2);
+      addRandomVersion("Dhuaan", 1);
+  } else if (cityId === 'chill' || cityId === 'romance' || cityId === 'love') {
+      addRandomVersion("Main Tum Aur Hum", 2);
   }
-
-  const validTracks = tracks.filter(t => {
-    if (playedSongs.has(t.id)) return false;
-    const energy = t.energyScore || 0.5;
-    return energy >= targetEnergyMin && energy <= targetEnergyMax;
-  });
-
-  if (validTracks.length === 0) return null;
-
-  const selected = validTracks[Math.floor(Math.random() * validTracks.length)];
-  return selected;
+  
+  return queue.sort(() => Math.random() - 0.5);
 }
