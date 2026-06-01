@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import Groq from "groq-sdk";
 import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
 import { searchJamendoTrack } from "@/lib/jamendo";
+import { searchPodcastEpisode } from "@/lib/itunes";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
 import * as mm from "music-metadata";
 import path from "path";
@@ -160,6 +161,17 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
   const cleanQuery = typeof vibeConfig === "string" ? "fallback" : vibeConfig.query.replace(/official audio|official video/gi, "").trim();
   const derivedVibe = typeof vibeConfig === "string" ? cityId : vibeConfig.derivedVibe;
   
+  // --- NEWS/TALK STATION PODCAST ROUTING ---
+  if (cityId === "news" && !isFallbackCall) {
+      const topics = ["technology", "finance", "artificial intelligence", "startups", "wellness", "business", "career", "leadership"];
+      const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+      const podcast = await searchPodcastEpisode(randomTopic, playedSongs);
+      if (podcast && !podcast.id.startsWith("system-fallback")) {
+          playedSongs.add(podcast.id);
+      }
+      return podcast;
+  }
+
   if (!isFallbackCall) {
       // --- HYBRID QUALITY-WEIGHTED ROUTER ---
       const routerRoll = Math.random();
@@ -562,7 +574,7 @@ export async function POST(request: Request) {
     const TARGET_HOUR_MS = 3600 * 1000;
     const AD_DURATION_MS = 30000;
     const NUM_ADS = 4;
-    const NUM_JTS = isNightMode ? 0 : 4;
+    const NUM_JTS = (isNightMode || cityId === "news") ? 0 : 4;
     const TOTAL_AD_TIME_MS = AD_DURATION_MS * NUM_ADS;
     
     const prefetchSongs: any[] = [];
