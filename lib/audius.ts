@@ -24,6 +24,7 @@ export interface AudiusTrack {
   permalink: string;
   license: string;
   energyScore?: number;
+  coverArt?: string;
 }
 
 export async function searchAudiusTrack(query: string, maxRetries = 3): Promise<AudiusTrack[]> {
@@ -58,8 +59,9 @@ export async function searchAudiusTrack(query: string, maxRetries = 3): Promise<
             artist: track.user?.name || "Unknown Artist",
             durationSeconds: track.duration,
             streamUrl: `${host}/v1/tracks/${track.id}/stream?app_name=${APP_NAME}`,
-            permalink: track.permalink || `https://audius.co/${track.user?.handle}/${track.permalink || track.id}`,
-            license: track.license || "CC-BY"
+            permalink: `https://audius.co${track.permalink}`,
+            license: track.license || "All Rights Reserved",
+            coverArt: track.artwork?.['480x480'] || track.artwork?.['1000x1000'] || track.artwork?.['150x150'] || undefined
           }));
         }
       }

@@ -6,6 +6,7 @@ export interface JamendoTrack {
   audio: string;
   shareurl: string;
   license_ccurl: string;
+  image: string;
 }
 
 // Public client_id for testing Jamendo API. In production, this should be an env variable.
@@ -37,7 +38,8 @@ export async function searchJamendoTrack(query: string, maxRetries = 3): Promise
           durationSeconds: track.duration,
           streamUrl: track.audio,
           permalink: track.shareurl,
-          license: track.license_ccurl || 'CC-BY'
+          license: track.license_ccurl || 'CC-BY',
+          coverArt: track.image || undefined
         }));
 
         return mappedTracks;

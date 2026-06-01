@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function TelemetryDisplay() {
   const { currentBlock } = useAudioStore();
 
-  const imageUrl = currentBlock?.coverArt || "/logo-dark-theme.png";
+  const imageUrl = currentBlock?.coverArt || "/logo-transparent.png";
 
   return (
     <div className="w-full aspect-square max-h-[260px] flex items-center justify-center my-4 relative overflow-hidden rounded-[2rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/[0.02] shadow-2xl">

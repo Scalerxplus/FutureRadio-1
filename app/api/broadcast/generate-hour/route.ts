@@ -633,7 +633,7 @@ export async function POST(request: Request) {
     for (let i = 0; i < prefetchSongs.length; i++) {
         // Add the song
         const s = prefetchSongs[i].song;
-        addElement('song', prefetchSongs[i].duration, s.streamUrl, { title: s.title, artist: s.artist, trackId: s.id, permalink: s.permalink });
+        addElement('song', prefetchSongs[i].duration, s.streamUrl, { title: s.title, artist: s.artist, trackId: s.id, permalink: s.permalink, coverArt: s.coverArt });
         
         // Add Sweeper
         if (prefetchSweepers[i]) {
