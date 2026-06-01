@@ -165,6 +165,10 @@ export default function AudioOrchestrator() {
   // 2. Fetch Master Clock and Schedule on Mount
   useEffect(() => {
     let active = true;
+    
+    // Clear schedule immediately on station change to prevent old audio from overlapping
+    setSchedule([]);
+    
     async function initSync() {
       try {
         const timeRes = await fetch("/api/time");
@@ -248,9 +252,12 @@ export default function AudioOrchestrator() {
           setPhase("idle");
           mediaRefB.current?.pause();
           mediaRefC.current?.pause();
-          if (mediaRefA.current) {
+          // Only play hardcoded fallback on Deck A if we are NOT currently playing the station transition jingle
+          if (mediaRefA.current && (!transitionAudioRef.current || transitionAudioRef.current.paused)) {
             mediaRefA.current.src = "https://discoveryprovider.audius.co/v1/tracks/l88e8/stream?app_name=FutureRadio";
             mediaRefA.current.play().catch(e => console.error(e));
+          } else if (mediaRefA.current) {
+            mediaRefA.current.pause(); // Ensure Deck A is completely quiet while transition Jingle plays
           }
         }
         if (!isGeneratingRef.current) {
