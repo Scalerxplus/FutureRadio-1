@@ -9,9 +9,11 @@ let supabaseAnonKey = "";
 try {
   const envPath = path.join(__dirname, ".env.local");
   if (fs.existsSync(envPath)) {
-    // Basic fix for potential UTF-16/BOM encoding that broke supabase CLI
-    const envContent = fs.readFileSync(envPath, "utf8").replace(/\0/g, ''); 
-    const lines = envContent.split("\n");
+    // Attempt to read as utf16le which might fix the corrupted characters
+    const envContentUtf16 = fs.readFileSync(envPath, "utf16le"); 
+    const envContentUtf8 = fs.readFileSync(envPath, "utf8");
+    const combinedContent = envContentUtf16 + "\n" + envContentUtf8;
+    const lines = combinedContent.split("\n");
     for (const line of lines) {
       if (line.includes("NEXT_PUBLIC_SUPABASE_URL=")) supabaseUrl = line.split("=")[1].trim();
       if (line.includes("NEXT_PUBLIC_SUPABASE_ANON_KEY=")) supabaseAnonKey = line.split("=")[1].trim();

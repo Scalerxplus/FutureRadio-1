@@ -680,7 +680,8 @@ export async function POST(request: Request) {
                             addElement('jocktalk', newsBite.durationMs, newsBite.mediaUrl, { 
                                 title: `${newsBite.providerName} (Quick Global Update)`, 
                                 rjName: "Future Radio Global",
-                                isEmptyPlaceholder: false 
+                                isEmptyPlaceholder: false,
+                                permalink: newsBite.permalink
                             });
                         } else {
                             const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);

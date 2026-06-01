@@ -132,6 +132,26 @@ export default function RadioPlayerPage() {
   // Disabled manual scrubber jumps for live radio broadcast
   // (Live radio cannot be rewound or skipped forward)
 
+  const getProviderInfo = (permalink: string | undefined) => {
+    if (!permalink) return { name: "Direct Source", url: "#" };
+    if (permalink.includes("audius.co")) return { name: "Audius", url: permalink };
+    if (permalink.includes("jamendo.com")) return { name: "Jamendo", url: permalink };
+    if (permalink.includes("apple.com") || permalink.includes("itunes.apple.com")) return { name: "Apple Podcasts", url: permalink };
+    if (permalink.includes("wsj.com") || permalink.includes("megaphone.fm") || permalink.includes("foxnews")) return { name: "Global News", url: permalink };
+    if (permalink.includes("bbc.co")) return { name: "BBC News", url: permalink };
+    if (permalink.includes("npr.org")) return { name: "NPR News", url: permalink };
+    
+    // Fallback
+    try {
+      const urlObj = new URL(permalink);
+      return { name: urlObj.hostname.replace("www.", ""), url: permalink };
+    } catch(e) {
+      return { name: "External Source", url: permalink };
+    }
+  };
+
+  const provider = getProviderInfo(currentBlock?.permalink);
+
   return (
     <motion.div
       initial={{ y: 50, opacity: 0 }}
@@ -212,8 +232,8 @@ export default function RadioPlayerPage() {
                 {currentBlock ? currentBlock.songArtist : "Future Radio Sync Engine"}
               </p>
               {currentBlock?.permalink && (
-                <a href={currentBlock.permalink} target="_blank" rel="noopener noreferrer" className="mt-2 px-3 py-1 rounded border border-brand-red/30 bg-brand-red/10 text-[10px] text-brand-red uppercase tracking-widest hover:bg-brand-red hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1">
-                  <span>🔗</span> Licensed via Audius
+                <a href={provider.url} target="_blank" rel="noopener noreferrer" className="mt-2 px-3 py-1 rounded border border-brand-red/30 bg-brand-red/10 text-[10px] text-brand-red uppercase tracking-widest hover:bg-brand-red hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1">
+                  <span>🔗</span> Licensed via {provider.name}
                 </a>
               )}
             </div>

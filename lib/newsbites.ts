@@ -2,6 +2,7 @@ export interface NewsBite {
   providerName: string;
   mediaUrl: string;
   durationMs: number;
+  permalink: string;
 }
 
 const GLOBAL_FEEDS = [
