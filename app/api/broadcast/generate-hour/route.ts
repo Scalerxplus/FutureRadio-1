@@ -619,7 +619,7 @@ export async function POST(request: Request) {
              prefetchSongs.push({ type: 'song', song, duration: dur });
              currentMusicDuration += dur;
              
-             const sw = getSweeperByGenre(cityId);
+             const sw = await getContextualSweeper(cityId, lastTrackEnergy);
              const swDur = await getLocalAudioDuration(sw);
              prefetchSweepers.push({ url: sw, duration: swDur });
              currentMusicDuration += swDur;
@@ -650,7 +650,7 @@ export async function POST(request: Request) {
                     if (adDecision && adDecision.mediaUrl) {
                         addElement('sweeper', adDecision.durationMs, adDecision.mediaUrl, { title: adDecision.campaignTitle, isAd: true });
                     } else {
-                        const fillerSw = getSweeperByGenre(cityId);
+                        const fillerSw = await getContextualSweeper(cityId, prefetchSongs[i].song.energyScore || 0.5);
                         const dur = await getLocalAudioDuration(fillerSw);
                         addElement('sweeper', dur, fillerSw, { title: "Ad Fallback Sweeper" });
                     }
