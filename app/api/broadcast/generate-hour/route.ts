@@ -4,6 +4,7 @@ import Groq from "groq-sdk";
 import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
 import { searchJamendoTrack } from "@/lib/jamendo";
 import { searchPodcastEpisode } from "@/lib/itunes";
+import { getGlobalNewsBite } from "@/lib/newsbites";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
 import * as mm from "music-metadata";
 import path from "path";
@@ -477,7 +478,7 @@ export async function POST(request: Request) {
       let finalDurationMs = durationMs;
       
       // HARD STOP: Never overshoot the 60-minute hot clock boundary (xx:59:59)
-      if (currentTimeMs + finalDurationMs > targetEndTime.getTime()) {
+      if (cityId !== "news" && currentTimeMs + finalDurationMs > targetEndTime.getTime()) {
          finalDurationMs = targetEndTime.getTime() - currentTimeMs;
          metadata.isCapped = true; // Mark as capped so the frontend knows to cut it off gracefully
       }
@@ -574,7 +575,7 @@ export async function POST(request: Request) {
     const TARGET_HOUR_MS = 3600 * 1000;
     const AD_DURATION_MS = 30000;
     const NUM_ADS = 4;
-    const NUM_JTS = (isNightMode || cityId === "news") ? 0 : 4;
+    const NUM_JTS = isNightMode ? 0 : 4;
     const TOTAL_AD_TIME_MS = AD_DURATION_MS * NUM_ADS;
     
     const prefetchSongs: any[] = [];
@@ -636,21 +637,39 @@ export async function POST(request: Request) {
                     }
                     adCount++;
                 } else {
-                    // JT Insertion (Manual Pre-Produced)
+                    // JT Insertion
                     const targetSlot = jtCount + 1;
-                    const manualJt = manualJocktalks.find(j => j.slot_index === targetSlot);
                     
-                    if (manualJt) {
-                        addElement('jocktalk', manualJt.duration_ms, manualJt.media_url, { 
-                            title: `Live Studio RJ (Segment ${targetSlot})`, 
-                            rjName: "Future Radio Live",
-                            isEmptyPlaceholder: false 
-                        });
+                    if (cityId === "news") {
+                        // --- GLOBAL NEWS BITES FOR NEWS STATION ---
+                        const newsBite = await getGlobalNewsBite(targetSlot);
+                        if (newsBite) {
+                            addElement('jocktalk', newsBite.durationMs, newsBite.mediaUrl, { 
+                                title: `${newsBite.providerName} (Live Audio Update)`, 
+                                rjName: "Global News Desk",
+                                isEmptyPlaceholder: false 
+                            });
+                        } else {
+                            const fillerSw = getSweeperByGenre(cityId);
+                            const dur = await getLocalAudioDuration(fillerSw);
+                            addElement('sweeper', dur, fillerSw, { title: "News Sweeper Fallback" });
+                        }
                     } else {
-                        // Fallback if RJ forgot to upload for this slot
-                        const fillerSw = getSweeperByGenre(cityId);
-                        const dur = await getLocalAudioDuration(fillerSw);
-                        addElement('sweeper', dur, fillerSw, { title: "Station Sweeper (JT Fallback)" });
+                        // --- MANUAL JOCKTALK FOR MUSIC STATIONS ---
+                        const manualJt = manualJocktalks.find(j => j.slot_index === targetSlot);
+                        
+                        if (manualJt) {
+                            addElement('jocktalk', manualJt.duration_ms, manualJt.media_url, { 
+                                title: `Live Studio RJ (Segment ${targetSlot})`, 
+                                rjName: "Future Radio Live",
+                                isEmptyPlaceholder: false 
+                            });
+                        } else {
+                            // Fallback if RJ forgot to upload for this slot
+                            const fillerSw = getSweeperByGenre(cityId);
+                            const dur = await getLocalAudioDuration(fillerSw);
+                            addElement('sweeper', dur, fillerSw, { title: "Station Sweeper (JT Fallback)" });
+                        }
                     }
                     jtCount++;
                 }
