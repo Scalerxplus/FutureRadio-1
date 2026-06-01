@@ -10,7 +10,7 @@ export default function TelemetryDisplay() {
   const imageUrl = currentBlock?.coverArt || "/logo-transparent.png";
 
   return (
-    <div className="w-full aspect-square max-h-[260px] flex items-center justify-center my-4 relative overflow-hidden rounded-[2rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/[0.02] shadow-2xl">
+    <div className="w-full aspect-square max-h-[260px] flex items-center justify-center my-4 relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-white/[0.15] to-white/[0.05] border border-white/[0.1] shadow-2xl backdrop-blur-xl">
       <AnimatePresence mode="wait">
         <motion.img
           key={imageUrl}
