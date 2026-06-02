@@ -79,27 +79,26 @@ const STATION_VOICES = {
 
 const PREMIUM_GENRES = {
   drive: {
-    punjabi: ["punjabi pop", "punjabi hip hop", "desi hip hop", "punjabi rap", "upbeat punjabi"],
-    hindi: ["bollywood hits", "desi indie", "hindi pop", "mumbai pop", "hindi upbeat", "bollywood dance"],
-    intl: ["pop hits", "top 40", "indie pop", "upbeat indie", "commercial pop", "synth pop"]
+    punjabi: ["punjabi indie pop", "punjabi hip hop", "desi hip hop", "punjabi rap", "upbeat desi indie"],
+    hindi: ["hindi indie pop", "desi indie", "mumbai indie", "hindi upbeat synth", "indian pop indie"],
+    intl: ["indie pop", "synth pop", "upbeat indie", "bedroom pop", "alt pop"]
   },
   chill: {
-    punjabi: ["punjabi lofi", "punjabi chill", "punjabi acoustic", "punjabi slow", "desi chill"],
-    hindi: ["hindi lofi", "desi lofi", "hindi chillwave", "indian ambient", "bollywood lofi chill"],
-    intl: ["lofi beats", "chillout", "ambient electronic", "chillhop", "night drive lo-fi"]
+    punjabi: ["punjabi acoustic", "punjabi indie chill", "punjabi folk chill", "desi chill ambient"],
+    hindi: ["hindi indie chill", "desi acoustic chill", "hindi chillwave", "indian ambient indie"],
+    intl: ["lofi hip hop", "chillhop indie", "ambient electronic", "chill wave", "night drive ambient"]
   },
   party: {
-    punjabi: ["punjabi trap", "punjabi edm", "bhangra bass", "desi trap", "punjabi dj"],
-    hindi: ["desi bass", "hindi edm", "bollywood house", "mumbai dance", "indian edm", "hindi club mix"],
-    intl: ["tech house", "festival bass", "electronic dance", "house mix", "progressive house", "edm"]
+    punjabi: ["punjabi trap", "punjabi edm", "desi bass", "desi trap indie"],
+    hindi: ["desi bass", "hindi edm", "mumbai electronic", "indian edm", "hindi club indie"],
+    intl: ["tech house", "festival bass", "electronic dance", "progressive house", "edm"]
   },
   romance: {
-    punjabi: ["punjabi romantic", "punjabi sad song", "punjabi acoustic romance", "sufi romantic"],
-    hindi: ["bollywood romantic", "hindi love songs", "urdu romantic", "desi soul", "hindi acoustic"],
-    intl: ["r&b romance", "slow jams", "acoustic love", "soulful pop", "indie folk romance"]
+    punjabi: ["punjabi acoustic romance", "sufi acoustic", "punjabi folk love", "desi indie soul"],
+    hindi: ["hindi acoustic love", "urdu acoustic", "desi soul", "hindi indie romance", "indian indie love"],
+    intl: ["r&b romance", "slow jams indie", "acoustic love", "soulful pop", "indie folk romance"]
   },
   news: {
-    // For news we still play instrumental or very light music in the background or fallback tracks
     punjabi: ["punjabi instrumental", "desi background score"],
     hindi: ["indian classical chill", "hindi instrumental", "news background music"],
     intl: ["corporate background", "light electronic", "ambient background", "documentary music"]

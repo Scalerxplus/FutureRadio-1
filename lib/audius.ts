@@ -47,10 +47,20 @@ export async function searchAudiusTrack(query: string, maxRetries = 3): Promise<
       const json = await res.json();
       
       if (json.data && json.data.length > 0) {
-        // Strict OML Compliance: Filter out "All Rights Reserved"
-        const legalTracks = json.data.filter((track: any) => 
-          !track.license || track.license.toLowerCase() !== 'all rights reserved'
-        );
+        // Strict OML Compliance & Original Indie Filter
+        const blockList = ["bollywood", "lofi", "remix", "mashup", "slowed", "reverb", "cover", "bootleg", "t-series", "type beat", "recreate", "recreated"];
+        
+        const legalTracks = json.data.filter((track: any) => {
+          const trackText = `${track.title} ${track.user?.name} ${track.description || ""}`.toLowerCase();
+          
+          // Strict OML Compliance: Filter out "All Rights Reserved"
+          const isCreativeCommons = !track.license || track.license.toLowerCase() !== 'all rights reserved';
+          
+          // Strict Copyright/Originality Filter
+          const isOriginalIndie = !blockList.some(blockedWord => trackText.includes(blockedWord));
+          
+          return isCreativeCommons && isOriginalIndie;
+        });
 
         if (legalTracks.length > 0) {
           return legalTracks.map((track: any) => ({
