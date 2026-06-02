@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import AudioOrchestrator from "@/components/audio/AudioOrchestrator";
 import PlayerBar from "@/components/audio/PlayerBar";
-import RadioBubble from "@/components/ui/RadioBubble";
+
 import { Analytics } from "@vercel/analytics/react";
 
 import { Baloo_2, Space_Grotesk, Space_Mono } from "next/font/google";
@@ -88,7 +88,7 @@ export default function RootLayout({
         {/* Persistent Audio Core Layers */}
         <AudioOrchestrator />
         <PlayerBar />
-        <RadioBubble />
+
         
         {/* Global Brand Watermark */}
         <div className="fixed inset-0 z-[-10] opacity-[0.04] pointer-events-none flex items-center justify-center overflow-hidden">
