@@ -57,6 +57,9 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
     apple: "/icons/apple-touch-icon.png",
   },
+  alternates: {
+    canonical: "https://thefutureradio.com",
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
