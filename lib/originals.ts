@@ -1,14 +1,44 @@
 import fs from 'fs';
 import path from 'path';
 
-let originalsCache: any[] | null = null;
+export interface OriginalTrack {
+  id: string;
+  title: string;
+  artist: string;
+  durationMs: number;
+  durationSeconds: number;
+  streamUrl: string;
+  energyScore: number;
+  target_stations: string[];
+}
 
-export function getOriginalTracks() {
+let originalsCache: OriginalTrack[] | null = null;
+
+export function getOriginalTracks(): OriginalTrack[] {
   if (originalsCache) return originalsCache;
   try {
     const metaPath = path.join(process.cwd(), 'public', 'audio', 'originals', 'metadata.json');
+    if (!fs.existsSync(metaPath)) return [];
     const data = fs.readFileSync(metaPath, 'utf8');
-    originalsCache = JSON.parse(data);
+    const parsed = JSON.parse(data);
+    
+    // Inject station tags on the fly based on user policy
+    originalsCache = parsed.map((track: any) => {
+      let stations = ["global"]; // By default, most are global
+      
+      const t = track.title.toLowerCase();
+      // Tain Sun & Dekhi Leb are Bagheli but have global appeal
+      if (t.includes("tain sun") || t.includes("dekhi leb")) {
+        stations = ["bagheli", "global"];
+      }
+      // "fr_" tracks are specifically marked for fallbacks but also belong to global
+      if (t.startsWith("fr_")) {
+         stations = ["global", "fallback"];
+      }
+      
+      return { ...track, target_stations: stations };
+    });
+    
     return originalsCache || [];
   } catch (e) {
     console.error('[Originals] Failed to load metadata', e);
@@ -16,35 +46,30 @@ export function getOriginalTracks() {
   }
 }
 
-export function getHourlyOriginalsQueue(cityId: string, playedSongs: Set<string>) {
+export function getFallbackOriginal(): string | null {
   const tracks = getOriginalTracks();
-  if (!tracks.length) return [];
-
-  const queue: any[] = [];
-
-  const addRandomVersion = (titlePrefix: string, count: number) => {
-    let available = tracks.filter(t => t.title.startsWith(titlePrefix) && !playedSongs.has(t.id));
-    if (available.length < count) {
-       available = tracks.filter(t => t.title.startsWith(titlePrefix));
-    }
-    available.sort(() => Math.random() - 0.5);
-    for(let i = 0; i < count && i < available.length; i++) {
-        queue.push(available[i]);
-        playedSongs.add(available[i].id);
-    }
-  };
-
-  if (cityId === 'global' || cityId === 'party' || cityId === 'drive') {
-      addRandomVersion("Tain Sun", 2);
-      addRandomVersion("Dekhi Leb", 2);
-      addRandomVersion("Dhuaan", 1);
-      addRandomVersion("Progressive", 1);
-      addRandomVersion("Metallic", 1);
-      addRandomVersion("Indie Dance", 1);
-  } else if (cityId === 'chill' || cityId === 'romance' || cityId === 'love') {
-      addRandomVersion("Main Tum Aur Hum", 2);
-      addRandomVersion("Purani Kitab", 1);
+  const fallbacks = tracks.filter(t => t.title.toLowerCase().startsWith('fr_') || t.streamUrl.toLowerCase().includes('/fr_'));
+  if (fallbacks.length > 0) {
+     return fallbacks[Math.floor(Math.random() * fallbacks.length)].streamUrl;
   }
-  
-  return queue.sort(() => Math.random() - 0.5);
+  return null;
+}
+
+export function getOriginalForStation(cityId: string, playedSongs: Set<string>): OriginalTrack | null {
+    const tracks = getOriginalTracks();
+    
+    // Exact match for regional priority
+    let valid = tracks.filter(t => t.target_stations.includes(cityId) && !playedSongs.has(t.id));
+    
+    // If no exact match (or if station is global), fallback to global tracks
+    if (valid.length === 0) {
+        valid = tracks.filter(t => t.target_stations.includes("global") && !playedSongs.has(t.id) && !t.target_stations.includes("fallback"));
+    }
+    
+    if (valid.length > 0) {
+        const track = valid[Math.floor(Math.random() * valid.length)];
+        playedSongs.add(track.id);
+        return track;
+    }
+    return null;
 }

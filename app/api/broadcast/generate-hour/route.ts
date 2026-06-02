@@ -5,7 +5,7 @@ import { searchJamendoTrack } from "@/lib/jamendo";
 import { searchPodcastEpisode } from "@/lib/itunes";
 import { getGlobalNewsBite, getShortGlobalNewsBite } from "@/lib/newsbites";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
-import { getHourlyOriginalsQueue } from "@/lib/originals";
+import { getOriginalForStation, getFallbackOriginal } from "@/lib/originals";
 import * as mm from "music-metadata";
 import path from "path";
 import fs from "fs";
@@ -23,8 +23,11 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
     const supabase = createClient();
     let query = supabase.from('curated_sweepers').select('media_url, energy_score');
     
-    if (genre.toLowerCase() !== "global") {
-      query = query.eq('genre', genre.toLowerCase());
+    // All stations share global sweepers except news
+    if (genre.toLowerCase() === "news") {
+      query = query.eq('genre', 'news');
+    } else {
+      query = query.eq('genre', 'global');
     }
     
     const { data: sweepers } = await query;
@@ -46,12 +49,19 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
     console.error("[Master Clock] Failed to get contextual sweeper:", e);
   }
   
+  // Try FR Fallback original track first
+  const frFallback = getFallbackOriginal();
+  if (frFallback) {
+    return frFallback;
+  }
+  
   // Static Fallback
+  const staticGenre = genre.toLowerCase() === "news" ? "news" : "global";
   const sweepers = [
-    `/audio/Sweepers/Sweeper_${genre}_01.mp3`,
-    `/audio/Sweepers/Sweeper_${genre}_02.mp3`,
-    `/audio/Sweepers/Sweeper_${genre}_03.mp3`,
-    `/audio/Sweepers/Sweeper_${genre}_04.mp3`,
+    `/audio/Sweepers/Sweeper_${staticGenre}_01.mp3`,
+    `/audio/Sweepers/Sweeper_${staticGenre}_02.mp3`,
+    `/audio/Sweepers/Sweeper_${staticGenre}_03.mp3`,
+    `/audio/Sweepers/Sweeper_${staticGenre}_04.mp3`,
   ];
   return sweepers[Math.floor(Math.random() * sweepers.length)];
 }
@@ -464,9 +474,11 @@ export async function POST(request: Request) {
     const prefetchSweepers: any[] = [];
     let currentMusicDuration = 0;
     
-    // Deterministic queue for Future Radio Originals
-    const originalsQueue = getHourlyOriginalsQueue(cityId, playedSongs);
-    
+    let regionalCount = 0;
+    let globalCount = 0;
+    const isCoreStation = cityId === "hindi" || cityId === "punjabi";
+    const targetRegionalRatio = isCoreStation ? 0.2 : 0.5;
+
     // We fetch songs until we hit roughly 50-55 minutes, accounting for Ads and actual Manual Jocktalk durations
     while (totalScheduledDurationMs + currentMusicDuration + TOTAL_AD_TIME_MS + totalManualJtDurMs < (TARGET_HOUR_MS - 60000)) {
         if (isFallbackMode) {
@@ -482,11 +494,46 @@ export async function POST(request: Request) {
         } else {
              let song: any = null;
              
-             // Inject deterministic Future Radio Original Productions evenly
-             if (originalsQueue.length > 0 && prefetchSongs.length % 3 === 0) {
-                 song = originalsQueue.shift();
+             const totalSongs = regionalCount + globalCount;
+             const currentRegionalRatio = totalSongs === 0 ? 0 : (regionalCount / totalSongs);
+             
+             let trackType = "global";
+             // If we are below the target ratio of regional tracks, we must force a regional track
+             if (currentRegionalRatio < targetRegionalRatio && cityId !== "news") {
+                 trackType = "regional";
              }
              
+             // 1. Try fetching regional track if required
+             if (trackType === "regional") {
+                 song = getOriginalForStation(cityId, playedSongs);
+                 // Note: In future when Supabase has target_stations, we will query curated_tracks here too
+                 if (song) {
+                     regionalCount++;
+                 } else {
+                     // If we exhaust regional tracks, fallback to global to avoid empty airtime
+                     trackType = "global";
+                 }
+             }
+             
+             // 2. Try fetching global track
+             if (!song && trackType === "global") {
+                 // Try injecting global Originals periodically (30% chance)
+                 if (Math.random() < 0.3) {
+                     song = getOriginalForStation("global", playedSongs);
+                 }
+                 
+                 // If no original available or roll failed, fetch from Jamendo/Audius via getSong
+                 if (!song) {
+                     // We pass 'global' to ensure the search queries pull from the broad indie catalogue
+                     song = await getSong(getSearchQueryForGenre("global"), "global", playedSongs);
+                 }
+                 
+                 if (song) {
+                     globalCount++;
+                 }
+             }
+             
+             // 3. Absolute Fallback
              if (!song) {
                  song = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
              }

@@ -30,8 +30,15 @@ export async function searchJamendoTrack(query: string, maxRetries = 3): Promise
       const json = await res.json();
       
       if (json.results && json.results.length > 0) {
+        const blockList = ["bollywood", "lofi", "remix", "mashup", "slowed", "reverb", "cover", "bootleg", "t-series", "type beat", "recreate", "recreated"];
+        
+        const legalTracks = json.results.filter((track: JamendoTrack) => {
+          const trackText = `${track.name} ${track.artist_name}`.toLowerCase();
+          return !blockList.some(blocked => trackText.includes(blocked));
+        });
+
         // Map to our common AudiusTrack interface used by the rest of the app
-        const mappedTracks = json.results.map((track: JamendoTrack) => ({
+        const mappedTracks = legalTracks.map((track: JamendoTrack) => ({
           id: `jamendo-${track.id}`,
           title: track.name,
           artist: track.artist_name,
