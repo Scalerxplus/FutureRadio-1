@@ -127,7 +127,7 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
         
         const istIsoString = `${year}-${month}-${day}T${hourStr}:00:00+05:30`;
         
-        await fetch(`/api/broadcast/generate-hour?startTime=${encodeURIComponent(istIsoString)}`, { method: "POST" });
+        await fetch(`/api/broadcast/generate-hour?city=${currentChannel}&startTime=${encodeURIComponent(istIsoString)}`, { method: "POST" });
         setGenerationProgress(i + 1);
       }
       alert("Next 24 hours generated successfully! Master clock is now future-proof.");
