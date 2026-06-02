@@ -38,8 +38,12 @@ export function getHourlyOriginalsQueue(cityId: string, playedSongs: Set<string>
       addRandomVersion("Tain Sun", 2);
       addRandomVersion("Dekhi Leb", 2);
       addRandomVersion("Dhuaan", 1);
+      addRandomVersion("Progressive", 1);
+      addRandomVersion("Metallic", 1);
+      addRandomVersion("Indie Dance", 1);
   } else if (cityId === 'chill' || cityId === 'romance' || cityId === 'love') {
       addRandomVersion("Main Tum Aur Hum", 2);
+      addRandomVersion("Purani Kitab", 1);
   }
   
   return queue.sort(() => Math.random() - 0.5);
