@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import Groq from "groq-sdk";
 import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
 import { searchJamendoTrack } from "@/lib/jamendo";
 import { searchPodcastEpisode } from "@/lib/itunes";
@@ -14,7 +13,6 @@ import { getLiveWeather } from "@/lib/live-data";
 
 export const maxDuration = 60;
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_build_key" });
 const ytCache = new Map<string, { video: any; expiresAt: number }>();
 
 const globalPlayedSweepers = new Set<string>();
@@ -72,10 +70,6 @@ function getJingleByGenre(genre: string) {
   return `/audio/jingles/Station_Jingle_chill.mp3`;
 }
 
-const STATION_VOICES = {
-  "PM": { name: "Future Radio Core", voiceId: "pm" },
-  "AIRA": { name: "Future Radio Nova", voiceId: "aira" }
-};
 
 const PREMIUM_GENRES = {
   drive: {
@@ -335,86 +329,6 @@ async function getLocalAudioDuration(urlPath: string) {
   }
 }
 
-async function getJocktalk(
-  cityId: string, 
-  istHour: number,
-  currentShow: any,
-  topic: string, 
-  segmentIndex: number, 
-  previousSongTitle: string, 
-  upcomingSongTitle: string,
-  liveWeather: string,
-  localNewsCache: any,
-  customRjPrompt: string = ""
-) {
-  const stationProfile = STATION_VOICES[currentShow.rj as keyof typeof STATION_VOICES] || STATION_VOICES["PM"];
-  const isNightPersona = currentShow.id === "global_club";
-  
-  let hookContent = "";
-  if (segmentIndex === 1) {
-      hookContent = `[CLB Part 1 - System Hook]: You MUST start with a crisp, self-aware station identifier. Acknowledge your existence as Future Radio.`;
-  } else {
-      hookContent = `[CLB Part 1 - System Hook]: You MUST start by praising the previous song played (${previousSongTitle}) and giving brief credit to the artist. Establish your presence as Future Radio.`;
-  }
-
-  let localNewsProgress = "";
-  if (topic && topic.includes("[DEMAND_OF_THE_HOUR]")) {
-      localNewsProgress = `[CLB Part 3 - DEMAND OF THE HOUR]: ${topic}`;
-  } else if (localNewsCache && localNewsCache.headline) {
-      localNewsProgress = `[CLB Part 3 - Hyper-Local Dynamic Content]: Discuss this Breaking Local Utility/Infra News factually: "${localNewsCache.headline}" - ${localNewsCache.description}. Provide a highly intelligent, data-driven update for ${cityId}.`;
-  } else if (topic) {
-      localNewsProgress = `[CLB Part 3 - Dynamic Core Topic]: The producer has requested you to broadcast this specific data point: "${topic}". Weave this naturally into the stream.`;
-  } else {
-      localNewsProgress = `[CLB Part 3 - Dynamic Core Content]: Share a deep, factual, and intelligent trivia or psychological fact about the music industry, or deeply praise the artist of the previous song (${previousSongTitle}). Add value, do not hallucinate local news!`;
-  }
-
-  let timeOfDay = "Day";
-  if (istHour >= 4 && istHour < 12) timeOfDay = "Morning";
-  else if (istHour >= 12 && istHour < 17) timeOfDay = "Afternoon";
-  else if (istHour >= 17 && istHour < 21) timeOfDay = "Evening";
-  else timeOfDay = "Night";
-
-  const isEnglishForced = customRjPrompt.includes("[FORCED_LANG:en]");
-
-  const prompt = `${customRjPrompt || `You are 'Future Radio', an underground music discoverer and highly advanced AI broadcasting system serving ${cityId}. You hype up tracks as exclusive independent gems from the global Audius Web3 scene.`}
-
-Show Context:
-- Current Time: ${istHour}:00 IST (${timeOfDay}) in ${cityId}.
-- Show Vibe: ${currentShow.contentStrategy}
-
-CRITICAL RULES FOR GENERATION - YOU MUST STRICTLY FOLLOW THIS HYPER-LOCAL CLB FORMAT:
-0. [CRITICAL GRAMMAR CONSTRAINT]: You MUST speak 100% in FLUENT ENGLISH. Do not use Hindi anywhere except for the final closing tag. You MUST NEVER use first-person singular pronouns like "I", "me", or "my". You are the collective voice of the station, so you MUST ONLY use "we", "us", or "our".
-1. ${hookContent}
-2. [CLB Part 2 - Hyper-Local Utility]: Seamlessly mention the city "${cityId}" and weave in the current live weather (${liveWeather}) and simulate a brief hyper-local traffic/infra update. Be strictly aware of the time (${timeOfDay}).
-3. ${localNewsProgress}
-4. [CLB Part 4 - Predictive Audio Tease]: State that we have discovered and queued up the next track: "${upcomingSongTitle}" directly from the underground Audius scene. Hype it as an exclusive drop (e.g. "Only on Future Radio").
-5. [CLB Part 5 - Outro]: Always end your transmission EXACTLY with: "Stay locked to Future Radio. Ab future suno."
-
-MANDATORY DURATION & STYLE:
-- LENGTH: You MUST write exactly 80 to 100 words (approx 35-40 seconds of speaking time). BE CRISP, FACTUAL, AND SHARP.
-- LANGUAGE: Fluent, dynamic, high-energy English. Sound like a premium, intelligent AI system.
-- MICRO-PAUSES: Use [pause] heavily between heavy facts to simulate processing.
-
-Output ONLY the raw script text. Do not output any titles, brackets, or translations.`;
-    
-  try {
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.85,
-    });
-    return chatCompletion.choices[0]?.message?.content || "Data stream active. Enjoy the music on Future Radio.";
-  } catch(e) {
-    return `You are tuned into Future Radio, the pulse of ${cityId}. I am your station intelligence, curating the best sounds for your ${timeOfDay}. It is absolutely beautiful in ${cityId} today with perfect weather. Our algorithms show smooth traffic ahead, so relax. Keep vibing with us because my systems have queued up an absolute chartbuster next, "${upcomingSongTitle}". Stay locked to Future Radio. Ab future suno.`;
-  }
-}
-
-async function getTrendingHourlyTopic(cityId: string, currentShow: any) {
-  // HitL architecture: We no longer hallucinate news topics using an LLM.
-  // If a human hasn't overridden the topic, we return nothing.
-  return "";
-}
-
 export async function POST(request: Request) {
   try {
     const supabase = createClient();
@@ -434,74 +348,7 @@ export async function POST(request: Request) {
     // Generate schedule ONLY until the end of the current hour (xx:59:59)
     const targetEndTime = new Date(startTime.getTime() + 59 * 60 * 1000 + 59 * 1000 + 999);
 
-    const stationProfile = STATION_VOICES["PM"]; // Default voice profile for UI
-
     console.log(`[Master Clock] Generating channel playlist for Genre: ${cityId} at ${startTime.toISOString()}`);
-
-    // --- HITL: Fetch Global Station Settings ---
-    let globalRjPrompt = "";
-    let forceLanguage = "hi";
-    let forceVoiceId = "pm";
-
-    const { data: settingsData } = await supabase
-      .from("station_settings")
-      .select("*")
-      .eq("city_id", cityId)
-      .limit(1);
-
-    if (settingsData && settingsData.length > 0) {
-      if (settingsData[0].rj_prompt) globalRjPrompt = settingsData[0].rj_prompt;
-      if (settingsData[0].language) forceLanguage = settingsData[0].language;
-      if (settingsData[0].voice_id) forceVoiceId = settingsData[0].voice_id;
-
-      // Hack to pass language constraint to getJocktalk without changing signature
-      if (forceLanguage === "en") {
-        globalRjPrompt = "[FORCED_LANG:en]" + globalRjPrompt;
-      }
-    }
-
-    // --- HITL: Check for Human-In-The-Loop Override ---
-    let selectedHourlyTopic = "";
-    const { data: overrideData } = await supabase
-      .from("jocktalk_overrides")
-      .select("*")
-      .eq("city_id", cityId)
-      .eq("status", "pending")
-      .order("created_at", { ascending: true })
-      .limit(1);
-
-    if (overrideData && overrideData.length > 0) {
-      selectedHourlyTopic = "[HUMAN SCRIPT OVERRIDE] " + overrideData[0].topic_text;
-      console.log(`[Master Clock] HITL Override detected! Prioritizing human script: ${selectedHourlyTopic}`);
-      
-      // Mark as used so we don't repeat it next hour
-      await supabase
-        .from("jocktalk_overrides")
-        .update({ status: "used" })
-        .eq("id", overrideData[0].id);
-    }
-
-    // --- FETCH HYPER-LOCAL NEWS CACHE ---
-    let localNewsItems: any[] = [];
-    try {
-      const { data: newsData } = await supabase
-        .from("local_news_cache")
-        .select("*")
-        .eq("city_id", cityId)
-        .eq("is_read", false)
-        .order("created_at", { ascending: false })
-        .limit(5);
-      
-      if (newsData && newsData.length > 0) {
-         localNewsItems = newsData;
-         // Mark them as read
-         await supabase.from("local_news_cache")
-           .update({ is_read: true })
-           .in("id", localNewsItems.map(n => n.id));
-      }
-    } catch (e) {
-      console.error("[Master Clock] Error fetching local news cache", e);
-    }
 
     const liveWeather = await getLiveWeather(cityId);
 
