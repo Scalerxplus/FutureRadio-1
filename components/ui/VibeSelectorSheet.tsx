@@ -4,12 +4,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 
 export const GENRES = [
-  { id: "global", name: "Global 📻" },
-  { id: "drive", name: "Drive 📻" },
-  { id: "chill", name: "Chill 📻" },
-  { id: "party", name: "Party 📻" },
-  { id: "romance", name: "Love 📻" },
-  { id: "news", name: "Talk 📻" },
+  { id: "hindi", name: "Future Radio - Hindi" },
+  { id: "malwi", name: "Future Radio - Malwi" },
+  { id: "bagheli", name: "Future Radio - Bagheli" },
+  { id: "bundeli", name: "Future Radio - Bundeli" },
+  { id: "chhattisgarhi", name: "Future Radio - Chhattisgarhi" },
+  { id: "sarguja", name: "Future Radio - Sarguja/Ambikapur" },
+  { id: "bastar", name: "Future Radio - Bastar/Jagdalpur" },
+  { id: "raigarh", name: "Future Radio - Raigarh" },
+  { id: "punjabi", name: "Future Radio - Punjabi" },
+  { id: "news", name: "Future Radio - News" },
 ];
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -53,7 +57,7 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
             {/* Genre Options List */}
             <div className="space-y-1.5">
               {GENRES.map((genre) => {
-                const isSelected = genre.name === cityName || (cityName === "Raipur, CG" && genre.id === "drive"); // Fallback for old default state
+                const isSelected = genre.name === cityName || (["Global 📻", "Global", "Raipur, CG"].includes(cityName) && genre.id === "hindi"); // Fallback for old default states
                 return (
                   <button
                     key={genre.id}

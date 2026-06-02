@@ -10,8 +10,8 @@ interface CityStore {
 export const useCityStore = create<CityStore>()(
   persist(
     (set) => ({
-      cityId: "global",
-      cityName: "Global 📻",
+      cityId: "hindi",
+      cityName: "Future Radio - Hindi",
       setCityId: (cityId, cityName) => set({ cityId, cityName }),
     }),
     {
