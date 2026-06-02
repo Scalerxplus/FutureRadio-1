@@ -217,11 +217,20 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
           console.warn(`[Hybrid Engine] Supabase Curated exhausted for '${derivedVibe}'. Falling back to Jamendo.`);
       }
 
-      // Attempt Source 2: The Indie Hub (Jamendo API) - 30% probability (0.60 to 0.90) OR fallback from Supabase
+      // Attempt Source 2: The Indie Hub (Jamendo API)
       if (routerRoll <= 0.90) {
           const jamendoQuery = typeof vibeConfig === "string" ? "pop" : vibeConfig.query;
           const jamendoTracks = await searchJamendoTrack(jamendoQuery);
           let validJamendo = jamendoTracks.filter(t => !playedSongs.has(t.id) && t.durationSeconds >= 120 && t.durationSeconds <= 420);
+          
+          if (derivedVibe === 'chill' || derivedVibe === 'romance' || derivedVibe === 'love') {
+              const blockedTerms = ["edm", "house", "progressive", "trap", "bass", "club", "dance", "upbeat"];
+              validJamendo = validJamendo.filter(t => {
+                  const txt = (t.title + " " + t.artist).toLowerCase();
+                  return !blockedTerms.some(b => txt.includes(b));
+              });
+          }
+
           if (validJamendo.length > 0) {
               const track = validJamendo[Math.floor(Math.random() * validJamendo.length)];
               playedSongs.add(track.id);
@@ -231,10 +240,18 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
           console.warn(`[Hybrid Engine] Jamendo exhausted for '${derivedVibe}'. Falling back to Audius.`);
       }
       
-      // Attempt Source 3: The Decentralized Backup (Audius API) - 10% probability (0.90 to 1.0) OR fallback from Jamendo
+      // Attempt Source 3: The Decentralized Backup (Audius API)
       let audiusTracks = await searchAudiusTrack(cleanQuery);
       let validAudius = audiusTracks.filter(t => !playedSongs.has(t.id) && t.durationSeconds >= 120 && t.durationSeconds <= 420);
       
+      if (derivedVibe === 'chill' || derivedVibe === 'romance' || derivedVibe === 'love') {
+          const blockedTerms = ["edm", "house", "progressive", "trap", "bass", "club", "dance", "upbeat"];
+          validAudius = validAudius.filter(t => {
+              const txt = (t.title + " " + t.artist).toLowerCase();
+              return !blockedTerms.some(b => txt.includes(b));
+          });
+      }
+
       if (validAudius.length > 0) {
           const track = validAudius[Math.floor(Math.random() * validAudius.length)];
           playedSongs.add(track.id);
