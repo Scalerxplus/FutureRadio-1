@@ -46,10 +46,16 @@ export function getOriginalTracks(): OriginalTrack[] {
   }
 }
 
-export function getFallbackOriginal(): string | null {
+export function getFallbackOriginal(targetEnergy?: number): string | null {
   const tracks = getOriginalTracks();
-  const fallbacks = tracks.filter(t => t.title.toLowerCase().startsWith('fr_') || t.streamUrl.toLowerCase().includes('/fr_'));
+  let fallbacks = tracks.filter(t => t.title.toLowerCase().startsWith('fr_') || t.streamUrl.toLowerCase().includes('/fr_'));
+  
   if (fallbacks.length > 0) {
+     if (targetEnergy !== undefined) {
+         fallbacks.sort((a, b) => Math.abs((a.energyScore || 0.5) - targetEnergy) - Math.abs((b.energyScore || 0.5) - targetEnergy));
+         const topMatches = fallbacks.slice(0, Math.min(3, fallbacks.length));
+         return topMatches[Math.floor(Math.random() * topMatches.length)].streamUrl;
+     }
      return fallbacks[Math.floor(Math.random() * fallbacks.length)].streamUrl;
   }
   return null;

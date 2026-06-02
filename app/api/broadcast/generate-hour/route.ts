@@ -50,7 +50,7 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
   }
   
   // Try FR Fallback original track first
-  const frFallback = getFallbackOriginal();
+  const frFallback = getFallbackOriginal(targetEnergy);
   if (frFallback) {
     return frFallback;
   }
