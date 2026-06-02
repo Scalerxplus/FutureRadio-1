@@ -302,8 +302,8 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
               title: "Future Radio Chill Mix (Backup)",
               artist: "System",
               durationSeconds: 339,
-              streamUrl: "https://discoveryprovider.audius.co/v1/tracks/50ENP3g/stream?app_name=FutureRadio",
-              permalink: "https://audius.co/future/chill-mix",
+              streamUrl: "http://localhost:3000/audio/fallbacks/Future_Radio_1.mp3", // Local fallback
+              permalink: "https://thefutureradio.com",
               license: "CC-BY"
           };
         }

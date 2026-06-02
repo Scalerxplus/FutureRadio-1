@@ -257,7 +257,7 @@ export default function AudioOrchestrator() {
           mediaRefC.current?.pause();
           // Only play hardcoded fallback on Deck A if we are NOT currently playing the station transition jingle
           if (mediaRefA.current && (!transitionAudioRef.current || transitionAudioRef.current.paused)) {
-            mediaRefA.current.src = "https://discoveryprovider.audius.co/v1/tracks/l88e8/stream?app_name=FutureRadio";
+            mediaRefA.current.src = "/audio/fallbacks/Future_Radio_1.mp3";
             mediaRefA.current.play().catch(e => console.error(e));
           } else if (mediaRefA.current) {
             mediaRefA.current.pause(); // Ensure Deck A is completely quiet while transition Jingle plays
@@ -304,7 +304,7 @@ export default function AudioOrchestrator() {
           mediaRefB.current?.pause();
           mediaRefC.current?.pause();
           if (mediaRefA.current) {
-            mediaRefA.current.src = "https://discoveryprovider.audius.co/v1/tracks/l88e8/stream?app_name=FutureRadio";
+            mediaRefA.current.src = "/audio/fallbacks/Future_Radio_1.mp3";
             mediaRefA.current.play().catch(e => console.error(e));
           }
         }
