@@ -83,7 +83,7 @@ export default function EntrySplashPage() {
             <img 
               src="/logo-custom.png" 
               alt="Future Radio" 
-              className="h-[220px] md:h-[280px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
+              className="w-[260px] md:w-[320px] h-auto object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
             />
             
             {/* Regional Subtitle */}
@@ -97,7 +97,7 @@ export default function EntrySplashPage() {
             </div>
             
             {/* The Neo-Brutalist Sticker Badge */}
-            <div className="mt-2 -rotate-2 bg-yellow-300 text-black border-brutal border-black px-4 py-2 font-display font-bold uppercase tracking-widest text-sm shadow-brutal hover:-translate-y-1 hover:shadow-brutal-hover transition-all cursor-pointer">
+            <div className="mt-4 -rotate-2 bg-yellow-300 text-black border-brutal border-black px-4 py-2 font-display font-bold uppercase tracking-widest text-sm shadow-brutal hover:-translate-y-1 hover:shadow-brutal-hover transition-all cursor-pointer">
               Powered By Indie Creators
             </div>
 
