@@ -83,15 +83,25 @@ export default function EntrySplashPage() {
             <img 
               src="/logo-custom.png" 
               alt="Future Radio" 
-              className="h-[270px] md:h-[330px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
+              className="h-[220px] md:h-[280px] object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
             />
             
+            {/* Regional Subtitle */}
+            <div className="text-center flex flex-col items-center leading-tight -mt-2 mb-2">
+              <p className="text-xl md:text-2xl font-display font-extrabold text-brand-dark tracking-wider select-none uppercase">
+                MP और CG का
+              </p>
+              <p className="text-[22px] md:text-3xl font-display font-extrabold text-white tracking-wider select-none uppercase drop-shadow-md">
+                नं 1 डिजिटल रेडियो नेटवर्क
+              </p>
+            </div>
+            
             {/* The Neo-Brutalist Sticker Badge */}
-            <div className="mt-4 -rotate-2 bg-yellow-300 text-black border-brutal border-black px-4 py-2 font-display font-bold uppercase tracking-widest text-sm shadow-brutal hover:-translate-y-1 hover:shadow-brutal-hover transition-all cursor-pointer">
+            <div className="mt-2 -rotate-2 bg-yellow-300 text-black border-brutal border-black px-4 py-2 font-display font-bold uppercase tracking-widest text-sm shadow-brutal hover:-translate-y-1 hover:shadow-brutal-hover transition-all cursor-pointer">
               Powered By Indie Creators
             </div>
 
-            <p className="text-4xl md:text-5xl font-display font-extrabold text-brand-dark tracking-wider select-none mt-6 uppercase">
+            <p className="text-4xl md:text-5xl font-display font-extrabold text-brand-dark tracking-wider select-none mt-4 uppercase">
               अब <span className="text-white">"फ्यूचर"</span> सुनो!
             </p>
           </div>
