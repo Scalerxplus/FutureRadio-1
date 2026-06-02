@@ -5,12 +5,13 @@ import ScheduleClient from "./ScheduleClient";
 export const dynamic = "force-dynamic";
 
 function getShowForHour(hour: number, currentChannel: string) {
+  // Format the channel name properly (e.g., 'bastar' -> 'Bastar', 'hindi' -> 'Hindi')
+  const formattedName = currentChannel === 'news' 
+    ? 'Future Radio - News'
+    : `Future Radio - ${currentChannel.charAt(0).toUpperCase() + currentChannel.slice(1)}`;
+
   return { 
-    name: currentChannel === "news" ? "Future Radio News" :
-          currentChannel === "drive" ? "The Morning Drive" :
-          currentChannel === "party" ? "The Global Club" :
-          currentChannel === "romance" ? "Midnight Romance" :
-          "Future Radio Chill", 
+    name: formattedName, 
     color: "text-brand-red" 
   };
 }
@@ -71,7 +72,7 @@ export default async function SchedulePage({
 }: {
   searchParams: { channel?: string };
 }) {
-  const currentChannel = searchParams.channel || "chill";
+  const currentChannel = searchParams.channel || "hindi";
   const supabase = createClient();
   
   // Fetch today's schedule from DB using explicit IST boundaries

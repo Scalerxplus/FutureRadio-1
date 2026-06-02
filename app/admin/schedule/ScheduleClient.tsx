@@ -374,12 +374,16 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
               onChange={(e) => window.location.href = `/admin/schedule?channel=${e.target.value}`}
               className="bg-[#111118] border border-[#2a2a35] text-white rounded-lg px-4 py-2 text-sm font-bold shadow-lg"
             >
-              <option value="global">Global</option>
-              <option value="chill">Chill Station</option>
-              <option value="drive">Drive Station</option>
-              <option value="party">Party Station</option>
-              <option value="romance">Romance Station</option>
-              <option value="news">News Station</option>
+              <option value="hindi">Future Radio - Hindi</option>
+              <option value="malwi">Future Radio - Malwi</option>
+              <option value="bagheli">Future Radio - Bagheli</option>
+              <option value="bundeli">Future Radio - Bundeli</option>
+              <option value="chhattisgarhi">Future Radio - Chhattisgarhi</option>
+              <option value="sarguja">Future Radio - Sarguja/Ambikapur</option>
+              <option value="bastar">Future Radio - Bastar/Jagdalpur</option>
+              <option value="raigarh">Future Radio - Raigarh</option>
+              <option value="punjabi">Future Radio - Punjabi</option>
+              <option value="news">Future Radio - News</option>
             </select>
           </div>
         </header>
