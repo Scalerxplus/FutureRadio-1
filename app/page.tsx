@@ -87,7 +87,7 @@ export default function EntrySplashPage() {
             />
             
             {/* Regional Subtitle */}
-            <div className="text-center flex flex-col items-center leading-tight -mt-2 mb-2">
+            <div className="text-center flex flex-col items-center leading-tight mt-4 mb-2">
               <p className="text-xl md:text-2xl font-display font-extrabold text-brand-dark tracking-wider select-none uppercase">
                 MP और CG का
               </p>
