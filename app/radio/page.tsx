@@ -12,7 +12,7 @@ import VibeSelectorSheet from "@/components/ui/VibeSelectorSheet";
 
 export default function RadioPlayerPage() {
   const router = useRouter();
-  const { cityName } = useCityStore();
+  const { cityName, cityId } = useCityStore();
   const { setMode } = useUiStore();
   const { user } = useAuthStore();
   const {
@@ -26,6 +26,33 @@ export default function RadioPlayerPage() {
 
   const [isLiked, setIsLiked] = useState(false);
   const [isVibeSheetOpen, setIsVibeSheetOpen] = useState(false);
+
+  // Dynamic SEO Injection for Dialect & Regional Stations
+  useEffect(() => {
+    const seoMap: Record<string, { title: string, desc: string }> = {
+      hindi: { title: "Future Radio Hindi | India's Best AI Hindi Music Station", desc: "Listen to the best Hindi Indie and Global music 24/7 on Future Radio Hindi." },
+      bagheli: { title: "Future Radio Bagheli | MP's No. 1 Bagheli Dialect Radio", desc: "Enjoy authentic Bagheli folk, regional hits, and global music mixed for Baghelkhand on Future Radio Bagheli." },
+      bundeli: { title: "Future Radio Bundeli | The Heartbeat of Bundelkhand", desc: "Tune into Future Radio Bundeli for the best Bundeli regional songs, folk music, and global hits." },
+      chhattisgarhi: { title: "Future Radio CG | Chhattisgarhi & Global Hits", desc: "Listen to Future Radio CG for non-stop Chhattisgarhi regional hits and global music." },
+      malwi: { title: "Future Radio Malwi | MP's Malwi Dialect Music Station", desc: "Future Radio Malwi brings you the sweet dialect of Malwa with regional music and global hits." },
+      sarguja: { title: "Future Radio Sarguja | Ambikapur & Sarguja's AI Radio", desc: "Experience the unique Sargujiha dialect and regional music from Ambikapur mixed with global hits." },
+      bastar: { title: "Future Radio Bastar | Jagdalpur's Voice", desc: "The vibrant culture of Bastar and Jagdalpur, featuring regional music and AI-curated playlists." },
+      raigarh: { title: "Future Radio Raigarh | Regional & Global Mix", desc: "Tune into Future Radio Raigarh for a seamless mix of regional hits and global chartbusters." },
+      punjabi: { title: "Future Radio Punjabi | Global Punjabi Hits", desc: "24/7 Punjabi bangers, hip-hop, and global hits on Future Radio Punjabi." },
+      news: { title: "Future Radio News | 24/7 Live AI News Station", desc: "Stay updated with real-time news, weather, and traffic curated by AI on Future Radio News." },
+    };
+
+    const seo = seoMap[cityId] || { title: `Future Radio | ${cityName}`, desc: "Experience the next generation of sound with Future Radio." };
+    document.title = seo.title;
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', seo.desc);
+  }, [cityId, cityName]);
 
   // Synchronize active song liked states from Supabase
   useEffect(() => {

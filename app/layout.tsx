@@ -28,12 +28,12 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Future Radio | India's First Autonomous AI Virtual Radio Station",
-  description: "Experience the next generation of sound. Future Radio is India's first 100% autonomous, AI-powered virtual radio station. The New-age radio station.",
-  keywords: ["radio", "internet radio india", "ai radio station", "virtual radio", "future radio", "indie music", "web3 radio", "audius india"],
+  title: "Future Radio | MP & CG's No. 1 AI Virtual Radio Network",
+  description: "Experience the next generation of sound. Future Radio is India's first 100% autonomous, AI-powered virtual radio station network covering MP and CG.",
+  keywords: ["radio", "internet radio india", "ai radio station", "future radio", "madhya pradesh radio", "chhattisgarh radio", "bagheli", "bundeli", "malwi", "chhattisgarhi", "sarguja", "bastar", "punjabi radio", "indie music"],
   openGraph: {
-    title: "Future Radio | India's First Autonomous AI Radio",
-    description: "The New-age radio station. Tune into the future of sound with India's 100% autonomous virtual radio.",
+    title: "Future Radio | MP & CG's No. 1 AI Radio Network",
+    description: "The New-age radio network. Tune into the future of sound with regional and global music in your own dialect.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",
     images: [
