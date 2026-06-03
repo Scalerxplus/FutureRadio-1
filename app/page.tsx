@@ -87,23 +87,14 @@ export default function EntrySplashPage() {
             />
             
             {/* Regional Subtitle */}
-            <div className="text-center flex flex-col items-center leading-tight mt-4 mb-2">
-              <p className="text-xl md:text-2xl font-display font-extrabold text-brand-dark tracking-wider select-none uppercase">
-                MP और CG का
+            <div className="text-center flex flex-col items-center leading-tight mt-6 mb-2">
+              <p className="text-sm md:text-base font-display font-black text-brand-dark tracking-widest select-none uppercase mb-2">
+                MP-CG ka pehla AI Radio
               </p>
-              <p className="text-[22px] md:text-3xl font-display font-extrabold text-white tracking-wider select-none uppercase drop-shadow-md">
-                नं 1 डिजिटल रेडियो नेटवर्क
-              </p>
+              <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-display font-black uppercase tracking-[0.2em] text-[11px] shadow-brutal transform -rotate-1">
+                10 Boli, Ek Platform
+              </div>
             </div>
-            
-            {/* The Neo-Brutalist Sticker Badge */}
-            <div className="mt-4 -rotate-2 bg-yellow-300 text-black border-brutal border-black px-4 py-2 font-display font-bold uppercase tracking-widest text-sm shadow-brutal hover:-translate-y-1 hover:shadow-brutal-hover transition-all cursor-pointer">
-              Powered By Indie Creators
-            </div>
-
-            <p className="text-4xl md:text-5xl font-display font-extrabold text-brand-dark tracking-wider select-none mt-4 uppercase">
-              अब <span className="text-white">"फ्यूचर"</span> सुनो!
-            </p>
           </div>
         </motion.div>
 
@@ -116,64 +107,25 @@ export default function EntrySplashPage() {
             animate="show"
             className="space-y-4"
           >
-            {/* Card 1: Integrated Retro Radio Tuner Dashboard */}
-            <motion.div
-              variants={cardVariants}
-              className="rounded-none bg-white border-brutal border-black flex flex-col relative overflow-hidden group shadow-brutal hover:shadow-brutal-hover transition-all duration-300"
-            >
-              {/* Decorative Dot Matrix Background */}
-              <div 
-                className="absolute inset-0 pointer-events-none text-brand-red opacity-10"
-                style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '8px 8px' }} 
-              />
-
-              {/* Top Section: The Tuner (Changes Channel) */}
-              <div 
-                onClick={(e) => { e.stopPropagation(); setIsBottomSheetOpen(true); }}
-                className="p-5 flex flex-col justify-center cursor-pointer hover:bg-gray-50 transition-colors relative z-10"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold tracking-[0.2em] text-brand-red uppercase bg-red-100 px-2 py-0.5 border border-brand-red shadow-sm">
-                      FM / AM TUNER
-                    </span>
-                    <h2 className="text-[22px] font-black text-brand-dark tracking-tight uppercase flex items-center gap-2 mt-2">
-                      {cityName}
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 text-brand-red animate-bounce">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                      </svg>
-                    </h2>
-                  </div>
-                  {/* Vintage Dial Graphic */}
-                  <div className="w-14 h-14 rounded-full border-[3px] border-black bg-[#f0f0f0] flex items-center justify-center relative shadow-[inset_0_2px_6px_rgba(0,0,0,0.2)]">
-                    <div className="w-1.5 h-6 bg-brand-red absolute top-1.5 rounded-full shadow-sm transform -rotate-45 origin-bottom"></div>
-                    <div className="w-4 h-4 bg-black rounded-full z-10 shadow-sm border border-gray-600"></div>
-                    <div className="absolute inset-0 rounded-full border-[2px] border-dashed border-gray-300 opacity-50 m-1"></div>
-                  </div>
-                </div>
-                <p className="text-[11px] text-gray-500 font-bold uppercase mt-3 tracking-wider">
-                  चैनल बदलने के लिए यहाँ क्लिक करें
-                </p>
-              </div>
-
-              {/* Bottom Section: The Play Button (Opens Player) */}
-              <div 
+            {/* Abhi Suno Button & Live Proof (Above the Fold) */}
+            <div className="flex flex-col items-center space-y-4 mb-8 relative z-10 w-full">
+              <button 
                 onClick={() => handleCardClick("radio", "/radio")}
-                className="bg-brand-red border-t-2 border-black p-4 flex items-center justify-between cursor-pointer hover:bg-red-600 active:bg-red-700 transition-colors relative z-10"
+                className="bg-black text-white w-full py-4 rounded-full font-black text-xl tracking-widest uppercase flex items-center justify-center gap-3 border-[3px] border-black shadow-[0_8px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[0_12px_0_0_rgba(0,0,0,1)] active:translate-y-2 active:shadow-[0_0px_0_0_rgba(0,0,0,1)] transition-all"
               >
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-400 border border-black animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
-                  <span className="text-sm md:text-base font-black text-white uppercase tracking-widest drop-shadow-sm">
-                    रेडियो चालू करें (PLAY)
-                  </span>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border-2 border-black shadow-brutal-sm group-hover:scale-110 transition-transform">
-                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-black ml-0.5">
-                    <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
-                  </svg>
-                </div>
+                Abhi Suno 
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                  <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
+                </svg>
+              </button>
+              
+              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-black/10">
+                <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)] border border-black" />
+                <span className="text-[11px] font-black text-brand-dark uppercase tracking-widest">
+                  Live: 2,400+ listeners
+                </span>
               </div>
-            </motion.div>
+            </div>
 
             {/* Grid for Cards 2 & 3 */}
             <div className="grid grid-cols-2 gap-4">

@@ -5,16 +5,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 
 export const GENRES = [
-  { id: "hindi", name: "Future Radio - Hindi" },
-  { id: "malwi", name: "Future Radio - Malwi" },
-  { id: "bagheli", name: "Future Radio - Bagheli" },
-  { id: "bundeli", name: "Future Radio - Bundeli" },
-  { id: "chhattisgarhi", name: "Future Radio - Chhattisgarhi" },
-  { id: "sarguja", name: "Future Radio - Sarguja/Ambikapur" },
-  { id: "bastar", name: "Future Radio - Bastar/Jagdalpur" },
-  { id: "raigarh", name: "Future Radio - Raigarh" },
-  { id: "punjabi", name: "Future Radio - Punjabi" },
-  { id: "news", name: "Future Radio - News" },
+  { id: "hindi", name: "Hindi", region: "Global Indie", listeners: "2.4k" },
+  { id: "malwi", name: "Malwi", region: "Madhya Pradesh", listeners: "1.9k" },
+  { id: "bagheli", name: "Bagheli", region: "Vindhya Region", listeners: "2.1k" },
+  { id: "bundeli", name: "Bundeli", region: "Bundelkhand", listeners: "1.8k" },
+  { id: "chhattisgarhi", name: "Chhattisgarhi", region: "Chhattisgarh", listeners: "2.2k" },
+  { id: "sarguja", name: "Sarguja", region: "Ambikapur", listeners: "1.1k" },
+  { id: "bastar", name: "Bastar", region: "Jagdalpur", listeners: "1.3k" },
+  { id: "raigarh", name: "Raigarh", region: "East CG", listeners: "1.4k" },
+  { id: "punjabi", name: "Punjabi", region: "Global Hits", listeners: "3.2k" },
+  { id: "news", name: "News", region: "BBC + WSJ", listeners: "5.4k" },
 ];
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -82,32 +82,45 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
             </div>
 
             {/* Genre Options List */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {GENRES.map((genre) => {
-                const isSelected = genre.name === cityName || (["Global 📻", "Global", "Raipur, CG"].includes(cityName) && genre.id === "hindi"); // Fallback for old default states
+                const isSelected = cityName.includes(genre.name) || (["Global 📻", "Global", "Raipur, CG"].includes(cityName) && genre.id === "hindi"); 
                 return (
                   <button
                     key={genre.id}
-                    onClick={() => handleSelectCity(genre.id, genre.name)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-none text-left font-black uppercase tracking-wider transition-all duration-200 border-2 ${
+                    onClick={() => handleSelectCity(genre.id, `Future Radio - ${genre.name}`)}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-none text-left transition-all duration-200 border-2 ${
                       isSelected
                         ? "bg-brand-red text-black border-brand-red translate-x-2 shadow-[-8px_0_0_0_rgba(255,255,255,1)]"
                         : "bg-transparent text-white border-white/10 hover:border-white hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
                     }`}
                   >
-                    <span>{genre.name}</span>
-                    {isSelected && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={4}
-                        stroke="currentColor"
-                        className="w-5 h-5 text-black"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                      </svg>
-                    )}
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[14px] font-black uppercase tracking-wider">{genre.name}</span>
+                        {genre.id === 'news' ? (
+                          <span className="text-[10px] bg-white text-black px-1.5 font-bold uppercase tracking-widest border border-black">LIVE</span>
+                        ) : (
+                          <span className="text-[12px]">🎵</span>
+                        )}
+                      </div>
+                      <span className={`text-[10px] font-bold uppercase tracking-widest mt-0.5 ${isSelected ? 'text-black/70' : 'text-gray-400'}`}>
+                        {genre.region}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {isSelected ? (
+                        <div className="flex items-center gap-1.5 bg-black/10 px-2 py-1 rounded-sm border border-black/20">
+                          <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Playing</span>
+                        </div>
+                      ) : (
+                        <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">
+                          {genre.listeners} listeners
+                        </span>
+                      )}
+                    </div>
                   </button>
                 );
               })}

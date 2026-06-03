@@ -188,7 +188,7 @@ export default function RadioPlayerPage() {
       className="min-h-screen flex justify-center items-center bg-transparent p-0 md:p-4"
     >
       {/* Mobile Shell Container */}
-      <div className="w-full max-w-full md:max-w-[400px] h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-black/40 md:bg-[#111118] backdrop-blur-md text-white flex flex-col justify-between p-6 relative overflow-y-auto overflow-x-hidden md:border-[6px] md:border-brand-red md:rounded-none md:shadow-[16px_16px_0_0_rgba(255,255,255,1)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="w-full max-w-[420px] mx-auto h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-black/40 md:bg-[#111118] backdrop-blur-md text-white flex flex-col justify-between px-4 py-6 md:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] relative overflow-y-auto overflow-x-hidden md:border-[6px] md:border-brand-red md:rounded-none md:shadow-[16px_16px_0_0_rgba(255,255,255,1)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {/* Glow Effects */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[200px] bg-brand-red/20 blur-[120px] pointer-events-none" />
         
