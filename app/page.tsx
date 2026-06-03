@@ -120,11 +120,15 @@ export default function EntrySplashPage() {
         </motion.div>
 
         {/* How it Works Micro-Explainer */}
-        <div className="flex flex-col items-center text-center space-y-1 mb-2 px-4 relative z-10">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark bg-black/10 px-3 py-1 rounded-full mb-1">How it Works</h3>
-          <p className="text-[11px] font-sans font-bold text-black/80 max-w-xs leading-relaxed uppercase tracking-wide">
-            Click Play <span className="text-brand-red font-black px-1">•</span> Choose from 8 Dialects & 2 Languages (Hindi & Punjabi)
-          </p>
+        <div className="flex justify-center mb-4 px-4 relative z-10 w-full mt-2">
+          <div className="bg-black text-white border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] px-4 py-2 font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-widest flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 transform rotate-1">
+             <span className="text-brand-yellow shrink-0">HOW TO PLAY:</span>
+             <div className="flex items-center gap-2 opacity-90 text-center">
+               <span>CLICK DIAL</span>
+               <span className="text-brand-red">▶</span>
+               <span>CHOOSE FROM 8 DIALECTS & 2 LANGUAGES (HINDI & PUNJABI)</span>
+             </div>
+          </div>
         </div>
 
         {/* Experience Cards Section */}
