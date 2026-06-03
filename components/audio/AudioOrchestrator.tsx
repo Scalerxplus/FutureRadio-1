@@ -142,6 +142,57 @@ export default function AudioOrchestrator() {
     };
   }, []);
 
+  // --- MOBILE RESILIENCE: Handle Audio Context Suspension & Network Drops ---
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isPlaying) {
+        // Attempt to resume audio context if it was suspended (common on iOS/Android backgrounding)
+        try {
+          const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+          if (AudioContextClass) {
+             const ctx = new AudioContextClass();
+             if (ctx.state === 'suspended') {
+               ctx.resume().then(() => {
+                 // Kickstart the active deck
+                 const activeDeck = activeDeckRef.current === "A" ? mediaRefA.current : (activeDeckRef.current === "B" ? mediaRefB.current : mediaRefC.current);
+                 if (activeDeck && activeDeck.paused) {
+                    activeDeck.play().catch(() => {});
+                 }
+               });
+             }
+          }
+        } catch(e) {}
+      }
+    };
+
+    const handleOnline = () => {
+      if (isPlaying) {
+         console.log("[AudioOrchestrator] Network reconnected. Reloading active streams...");
+         setTimeout(() => {
+            const activeDeck = activeDeckRef.current === "A" ? mediaRefA.current : (activeDeckRef.current === "B" ? mediaRefB.current : mediaRefC.current);
+            if (activeDeck) {
+               activeDeck.load();
+               activeDeck.play().catch(() => {});
+            }
+            if (sweeperRef.current && phase === "playing_jingle") {
+               sweeperRef.current.load();
+               sweeperRef.current.play().catch(() => {});
+            }
+         }, 500);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('online', handleOnline);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('online', handleOnline);
+    };
+  }, [isPlaying, phase]);
+
   // 1.5 Global interaction listener to auto-unlock audio
   useEffect(() => {
     if (hasGesture) return;
