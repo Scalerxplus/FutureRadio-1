@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCityStore, useUiStore, useAuthStore, useAudioStore } from "@/lib/store";
+import { useCityStore, useUiStore, useAuthStore } from "@/lib/store";
+import { useAudioStore } from "@/components/audio/useAudioStore";
 import AuthModal from "@/components/auth/AuthModal";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 
@@ -150,7 +151,7 @@ export default function EntrySplashPage() {
                   <div className="absolute inset-3 rounded-full border border-zinc-700/30 pointer-events-none group-hover:border-brand-red/20 transition-colors"></div>
                   <div className="absolute inset-5 rounded-full border border-zinc-700/10 pointer-events-none"></div>
                   
-                  <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3 text-[22px] md:text-2xl tracking-widest text-[#f5f5f5]">अभी सुनें</span>
+                  <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3 text-[22px] md:text-2xl tracking-widest text-[#f5f5f5]">PLAY</span>
                 </button>
               </div>
               
