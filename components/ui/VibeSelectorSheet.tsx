@@ -84,7 +84,8 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
             {/* Genre Options List */}
             <div className="space-y-2">
               {GENRES.map((genre) => {
-                const isSelected = cityName.includes(genre.name) || (["Global 📻", "Global", "Raipur, CG"].includes(cityName) && genre.id === "hindi"); 
+                const safeCityName = cityName || "";
+                const isSelected = safeCityName.includes(genre.name) || (["Global 📻", "Global", "Raipur, CG"].includes(safeCityName) && genre.id === "hindi"); 
                 return (
                   <button
                     key={genre.id}
