@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCityStore, useUiStore, useAuthStore } from "@/lib/store";
+import { useCityStore, useUiStore, useAuthStore, useAudioStore } from "@/lib/store";
 import AuthModal from "@/components/auth/AuthModal";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 
@@ -16,22 +16,18 @@ export default function EntrySplashPage() {
   const { cityName, setCityId } = useCityStore();
   const { setMode } = useUiStore();
   const { user, isYtPremium } = useAuthStore();
+  const { isPlaying } = useAudioStore();
   
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [splashComplete, setSplashComplete] = useState(false);
-  const [ctaText, setCtaText] = useState("अभी सुनें");
   const [listeners, setListeners] = useState(2438);
 
   useEffect(() => {
-    const textInterval = setInterval(() => {
-      setCtaText((prev) => (prev === "अभी सुनें" ? "Play" : "अभी सुनें"));
-    }, 3000);
     const listenerInterval = setInterval(() => {
       setListeners(prev => prev + (Math.floor(Math.random() * 7) - 3));
     }, 4500);
     return () => {
-      clearInterval(textInterval);
       clearInterval(listenerInterval);
     };
   }, []);
@@ -147,13 +143,13 @@ export default function EntrySplashPage() {
                 className="relative bg-gradient-to-b from-zinc-800 to-zinc-950 text-white w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full font-baloo font-bold text-2xl tracking-widest uppercase flex flex-col items-center justify-center border-[4px] border-zinc-900 shadow-[inset_0_-8px_15px_rgba(0,0,0,1),inset_0_8px_15px_rgba(255,255,255,0.15),0_20px_30px_rgba(0,0,0,0.8),0_0_0_8px_rgba(20,20,20,0.5)] hover:-translate-y-1 active:shadow-[inset_0_8px_20px_rgba(0,0,0,1),0_5px_10px_rgba(0,0,0,0.8),0_0_0_8px_rgba(20,20,20,0.5)] active:translate-y-2 transition-all duration-300 group"
               >
                 {/* The Dimple */}
-                <div className="absolute top-3 w-4 h-4 rounded-full bg-zinc-950 shadow-[inset_0_3px_6px_rgba(0,0,0,1),0_1px_1px_rgba(255,255,255,0.2)] group-hover:bg-brand-red transition-colors duration-500"></div>
+                <div className={`absolute top-3 w-4 h-4 rounded-full transition-colors duration-500 ${isPlaying ? 'bg-green-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_12px_#22c55e]' : 'bg-brand-red shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_8px_#ff0032]'}`}></div>
                 
                 {/* Concentric Dial Ridges */}
                 <div className="absolute inset-4 rounded-full border border-zinc-700/30 pointer-events-none"></div>
                 <div className="absolute inset-6 rounded-full border border-zinc-700/10 pointer-events-none"></div>
                 
-                <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3">{ctaText}</span>
+                <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3">PLAY</span>
               </button>
               
               <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
