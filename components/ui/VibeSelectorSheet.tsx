@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 
@@ -23,6 +24,32 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
     setCityId(id, name);
     onClose();
   };
+
+  // --- MOBILE RESILIENCE & PRELOAD LOGIC (Root Cause 2) ---
+  // Silently preload other channels sequentially in the background when the sheet opens.
+  // Sequential fetching prevents rate-limiting the DB or external APIs (like Audius) while eliminating switch lag.
+  useEffect(() => {
+    if (isOpen) {
+      let isCancelled = false;
+      const prefetchChannels = async () => {
+        for (const genre of GENRES) {
+          if (isCancelled) break;
+          if (genre.name !== cityName) {
+            try {
+              // Pre-trigger the generator API so that when the user taps, the playlist is already built
+              await fetch(`/api/broadcast/generate-hour?city=${genre.id}`, { method: 'POST' });
+            } catch (e) {
+              console.warn(`Failed to preload ${genre.id}`);
+            }
+          }
+        }
+      };
+      // Give the sheet UI animation 500ms to finish smoothly before starting background network tasks
+      setTimeout(() => { if (!isCancelled) prefetchChannels(); }, 500);
+
+      return () => { isCancelled = true; };
+    }
+  }, [isOpen, cityName]);
 
   return (
     <AnimatePresence>
