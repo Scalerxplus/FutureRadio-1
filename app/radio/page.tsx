@@ -313,18 +313,26 @@ export default function RadioPlayerPage() {
             </svg>
           </button>
           
-          {/* Primary Play / Pause Toggle (Now just the logo) */}
           <button
             onClick={() => {
               unlockAudio();
               setIsPlaying(!isPlaying);
             }}
-            className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 focus:outline-none"
+            className={`w-[96px] h-[96px] md:w-[110px] md:h-[110px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none rounded-full ${!isPlaying ? 'shadow-[0_0_35px_rgba(255,0,50,0.6)] animate-pulse' : 'shadow-2xl'}`}
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            <div className={`absolute inset-4 rounded-full border border-white/20 overflow-hidden bg-black/40 ${isPlaying && !isTuning ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/icons/player-logo.png" alt="Future Radio" className="w-full h-full object-cover p-3" />
+            <div className={`absolute inset-1.5 rounded-full border-[3px] border-white/20 overflow-hidden bg-black/60 shadow-inner ${isPlaying && !isTuning ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+              <img src="/icons/player-logo.png" alt="Future Radio" className="w-full h-full object-cover p-2.5" />
             </div>
+            
+            {/* Play Indicator Overlay when paused */}
+            {!isPlaying && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full z-10 pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] pl-1">
+                  <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
+                </svg>
+              </div>
+            )}
           </button>
 
           {/* Like Toggle */}

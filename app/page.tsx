@@ -21,12 +21,19 @@ export default function EntrySplashPage() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [splashComplete, setSplashComplete] = useState(false);
   const [ctaText, setCtaText] = useState("अभी सुनें");
+  const [listeners, setListeners] = useState(2438);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const textInterval = setInterval(() => {
       setCtaText((prev) => (prev === "अभी सुनें" ? "Play" : "अभी सुनें"));
     }, 3000);
-    return () => clearInterval(interval);
+    const listenerInterval = setInterval(() => {
+      setListeners(prev => prev + (Math.floor(Math.random() * 7) - 3));
+    }, 4500);
+    return () => {
+      clearInterval(textInterval);
+      clearInterval(listenerInterval);
+    };
   }, []);
 
   const handleCardClick = (mode: "radio" | "news", destination: string) => {
@@ -89,7 +96,7 @@ export default function EntrySplashPage() {
 
           <div className="space-y-4 relative z-10 flex flex-col items-center">
             <img 
-              src="/icons/logo-vertical-light.png" 
+              src="/icons/logo-homepage.png" 
               alt="Future Radio" 
               className="w-[260px] md:w-[320px] h-auto object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
             />
@@ -122,13 +129,10 @@ export default function EntrySplashPage() {
             <div className="flex flex-col items-center space-y-4 mb-8 relative z-10 w-full">
               <button 
                 onClick={() => handleCardClick("radio", "/radio")}
-                className="bg-black text-white w-full py-4 rounded-full font-baloo font-black text-2xl tracking-widest uppercase flex items-center justify-center gap-3 border-[3px] border-black shadow-[0_8px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[0_12px_0_0_rgba(0,0,0,1)] active:translate-y-2 active:shadow-[0_0px_0_0_rgba(0,0,0,1)] transition-all"
+                className="bg-zinc-900 text-white w-full py-4 rounded-[2.5rem] font-baloo font-black text-3xl tracking-widest uppercase flex items-center justify-center gap-4 border-[6px] border-zinc-800 shadow-[inset_0_-6px_15px_rgba(0,0,0,0.8),_0_12px_25px_rgba(0,0,0,0.9)] hover:shadow-[inset_0_-3px_8px_rgba(0,0,0,0.8),_0_8px_18px_rgba(0,0,0,0.9)] hover:-translate-y-1 active:shadow-[inset_0_6px_15px_rgba(0,0,0,0.9),_0_3px_8px_rgba(0,0,0,0.9)] active:translate-y-2 transition-all duration-200"
               >
                 {ctaText}
-                {/* Radio Wave / Antenna SVG for 'radio feel' */}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                  <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18.75a.75.75 0 0 1 .75.75V21.75a.75.75 0 0 1-1.5 0v-2.25a.75.75 0 0 1 .75-.75ZM6.166 18.894a.75.75 0 0 1-1.06-1.06l1.59-1.591a.75.75 0 1 1 1.061 1.06l-1.59 1.591ZM2.25 12a.75.75 0 0 1 .75-.75H5.25a.75.75 0 0 1 0 1.5H3a.75.75 0 0 1-.75-.75ZM6.166 5.106a.75.75 0 0 1 1.06 1.06L5.636 7.757a.75.75 0 1 1-1.06-1.061l1.59-1.59Z" />
-                </svg>
+                <img src="/icons/player-logo.png" alt="Tuner" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
               </button>
               
               <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
@@ -136,8 +140,8 @@ export default function EntrySplashPage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 shadow-[0_0_10px_rgba(74,222,128,1)]"></span>
                 </span>
-                <span className="text-[11px] font-black text-white uppercase tracking-widest drop-shadow-lg">
-                  Live: 2,400+ listeners
+                <span className="text-[12px] font-black text-white uppercase tracking-widest drop-shadow-lg">
+                  Live: {listeners.toLocaleString()} listeners
                 </span>
               </div>
             </div>
