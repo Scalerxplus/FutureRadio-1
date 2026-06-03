@@ -117,11 +117,10 @@ export default function EntrySplashPage() {
 
         {/* How it Works Micro-Explainer */}
         <div className="flex justify-center mb-4 px-4 relative z-10 w-full mt-2">
-          <div className="bg-black text-white border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] px-4 py-2 font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-widest flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 transform rotate-1">
-             <span className="text-brand-yellow shrink-0">HOW TO PLAY:</span>
-             <div className="flex items-center gap-2 opacity-90 text-center">
-               <span>CLICK DIAL</span>
-               <span className="text-brand-red">▶</span>
+          <div className="bg-black text-white border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] px-4 py-2.5 font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-widest flex items-center justify-center transform rotate-1">
+             <div className="flex items-center gap-2 md:gap-3 opacity-95 text-center flex-wrap justify-center">
+               <span>CLICK PLAY</span>
+               <img src="/icons/player-logo.png" alt="Play" className="w-5 h-5 object-contain" />
                <span>CHOOSE FROM 8 DIALECTS & 2 LANGUAGES (HINDI & PUNJABI)</span>
              </div>
           </div>
@@ -138,19 +137,22 @@ export default function EntrySplashPage() {
           >
             {/* Abhi Suno Button & Live Proof (Above the Fold) */}
             <div className="flex flex-col items-center space-y-4 mb-8 relative z-10 w-full">
-              <button 
-                onClick={() => handleCardClick("radio", "/radio")}
-                className="relative bg-gradient-to-b from-zinc-800 to-zinc-950 text-white w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full font-baloo font-bold text-2xl tracking-widest uppercase flex flex-col items-center justify-center border-[4px] border-zinc-900 shadow-[inset_0_-8px_15px_rgba(0,0,0,1),inset_0_8px_15px_rgba(255,255,255,0.15),0_20px_30px_rgba(0,0,0,0.8),0_0_0_8px_rgba(20,20,20,0.5)] hover:-translate-y-1 active:shadow-[inset_0_8px_20px_rgba(0,0,0,1),0_5px_10px_rgba(0,0,0,0.8),0_0_0_8px_rgba(20,20,20,0.5)] active:translate-y-2 transition-all duration-300 group"
-              >
-                {/* The Dimple */}
-                <div className={`absolute top-3 w-4 h-4 rounded-full transition-colors duration-500 ${isPlaying ? 'bg-green-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_12px_#22c55e]' : 'bg-brand-red shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_8px_#ff0032]'}`}></div>
-                
-                {/* Concentric Dial Ridges */}
-                <div className="absolute inset-4 rounded-full border border-zinc-700/30 pointer-events-none"></div>
-                <div className="absolute inset-6 rounded-full border border-zinc-700/10 pointer-events-none"></div>
-                
-                <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3">PLAY</span>
-              </button>
+              {/* Recessed Frame Wrapper */}
+              <div className="relative p-2 md:p-2.5 rounded-full bg-[#dc0029] shadow-[inset_0_15px_25px_rgba(0,0,0,0.7),inset_0_-2px_5px_rgba(255,255,255,0.3),0_1px_2px_rgba(255,255,255,0.2)] border border-black/10">
+                <button 
+                  onClick={() => handleCardClick("radio", "/radio")}
+                  className="relative bg-gradient-to-b from-zinc-800 to-zinc-950 text-white w-[130px] h-[130px] md:w-[150px] md:h-[150px] rounded-full font-baloo font-bold uppercase flex flex-col items-center justify-center border-t border-zinc-700/50 border-b-2 border-zinc-950 shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_2px_5px_rgba(255,255,255,0.1)] hover:-rotate-12 hover:shadow-[0_4px_10px_rgba(0,0,0,0.9),inset_0_2px_5px_rgba(255,255,255,0.1)] active:rotate-0 active:scale-[0.97] active:shadow-[inset_0_10px_20px_rgba(0,0,0,0.9)] transition-all duration-300 group"
+                >
+                  {/* The Dimple */}
+                  <div className={`absolute top-3 w-4 h-4 rounded-full transition-colors duration-500 ${isPlaying ? 'bg-green-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_12px_#22c55e]' : 'bg-brand-red shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_8px_#ff0032]'}`}></div>
+                  
+                  {/* Concentric Dial Ridges */}
+                  <div className="absolute inset-3 rounded-full border border-zinc-700/30 pointer-events-none group-hover:border-brand-red/20 transition-colors"></div>
+                  <div className="absolute inset-5 rounded-full border border-zinc-700/10 pointer-events-none"></div>
+                  
+                  <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3 text-[22px] md:text-2xl tracking-widest text-[#f5f5f5]">अभी सुनें</span>
+                </button>
+              </div>
               
               <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
                 <span className="relative flex h-3 w-3">
