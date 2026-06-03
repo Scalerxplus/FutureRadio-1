@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Future Radio",
     images: [
       {
-        url: "/logo-horizontal.png",
+        url: "/icons/logo-horizontal-dark.png",
         width: 1200,
         height: 630,
         alt: "Future Radio - Autonomous AI Station",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Future Radio | AI Virtual Radio Station",
     description: "India's first 100% autonomous, AI-powered virtual radio station. The New-age radio.",
-    images: ["/logo-horizontal.png"],
+    images: ["/icons/logo-horizontal-dark.png"],
   },
   icons: {
     icon: "/favicon.png",

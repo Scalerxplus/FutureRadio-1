@@ -66,9 +66,9 @@ export default function CinematicSplash({ onComplete }: { onComplete: () => void
             />
             
             <img 
-              src="/logo-custom.png" 
+              src="/icons/logo-vertical-light.png" 
               alt="Future Radio" 
-              className="w-auto h-[210px] md:h-[260px] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]" 
+              className="w-64 md:w-80 h-auto object-contain select-none pointer-events-none drop-shadow-2xl" 
             />
           </motion.div>
         </motion.div>

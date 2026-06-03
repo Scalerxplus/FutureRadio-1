@@ -81,7 +81,7 @@ export default function EntrySplashPage() {
 
           <div className="space-y-4 relative z-10 flex flex-col items-center">
             <img 
-              src="/logo-custom.png" 
+              src="/icons/logo-vertical-light.png" 
               alt="Future Radio" 
               className="w-[260px] md:w-[320px] h-auto object-contain mx-auto select-none pointer-events-none drop-shadow-2xl transition-transform duration-700 hover:scale-105" 
             />
