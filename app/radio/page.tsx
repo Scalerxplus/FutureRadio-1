@@ -321,8 +321,8 @@ export default function RadioPlayerPage() {
             className={`w-[96px] h-[96px] md:w-[110px] md:h-[110px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none rounded-full ${!isPlaying ? 'shadow-[0_0_35px_rgba(255,0,50,0.6)] animate-pulse' : 'shadow-2xl'}`}
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            <div className={`absolute inset-1.5 rounded-full border-[3px] border-white/20 overflow-hidden bg-black/60 shadow-inner ${isPlaying && !isTuning ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/icons/player-logo.png" alt="Future Radio" className="w-full h-full object-cover p-2.5" />
+            <div className={`absolute inset-1.5 rounded-full border-[3px] overflow-hidden bg-black/60 shadow-inner ${isPlaying && !isTuning ? 'animate-rgb-glow' : 'border-[#ff0032] shadow-[0_0_15px_#ff0032,inset_0_0_10px_#ff0032] animate-pulse'}`}>
+              <img src="/icons/player-logo.png" alt="Future Radio" className={`w-full h-full object-cover p-2.5 ${isPlaying && !isTuning ? 'animate-[spin_4s_linear_infinite]' : ''}`} />
             </div>
             
             {/* Play Indicator Overlay when paused */}

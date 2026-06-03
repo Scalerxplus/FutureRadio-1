@@ -103,13 +103,13 @@ export default function EntrySplashPage() {
             
             {/* Regional Subtitle */}
             <div className="text-center flex flex-col items-center leading-tight mt-6 mb-2">
-              <p className="text-xl md:text-2xl font-baloo font-extrabold text-brand-dark tracking-wider select-none uppercase">
+              <p className="text-xl md:text-2xl font-baloo font-bold text-brand-dark tracking-wide select-none uppercase">
                 MP और CG का
               </p>
-              <p className="text-[22px] md:text-3xl font-baloo font-extrabold text-white tracking-wider select-none uppercase drop-shadow-md mb-2 mt-1">
+              <p className="text-[22px] md:text-3xl font-baloo font-bold text-white tracking-wide select-none uppercase drop-shadow-md mb-2 mt-1">
                 नं 1 डिजिटल रेडियो नेटवर्क
               </p>
-              <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-baloo font-black uppercase tracking-[0.2em] text-[12px] shadow-brutal transform -rotate-1">
+              <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-baloo font-bold uppercase tracking-[0.2em] text-[12px] shadow-brutal transform -rotate-1">
                 10 बोली, 1 प्लेटफॉर्म
               </div>
             </div>
@@ -129,10 +129,10 @@ export default function EntrySplashPage() {
             <div className="flex flex-col items-center space-y-4 mb-8 relative z-10 w-full">
               <button 
                 onClick={() => handleCardClick("radio", "/radio")}
-                className="bg-zinc-900 text-white w-full py-4 rounded-[2.5rem] font-baloo font-black text-3xl tracking-widest uppercase flex items-center justify-center gap-4 border-[6px] border-zinc-800 shadow-[inset_0_-6px_15px_rgba(0,0,0,0.8),_0_12px_25px_rgba(0,0,0,0.9)] hover:shadow-[inset_0_-3px_8px_rgba(0,0,0,0.8),_0_8px_18px_rgba(0,0,0,0.9)] hover:-translate-y-1 active:shadow-[inset_0_6px_15px_rgba(0,0,0,0.9),_0_3px_8px_rgba(0,0,0,0.9)] active:translate-y-2 transition-all duration-200"
+                className="bg-zinc-900 text-white w-[85%] max-w-[340px] py-3 rounded-[2rem] font-baloo font-bold text-2xl tracking-widest uppercase flex items-center justify-center gap-3 border-[4px] border-zinc-800 shadow-[inset_0_-4px_10px_rgba(0,0,0,0.8),_0_10px_20px_rgba(0,0,0,0.8)] hover:shadow-[inset_0_-2px_6px_rgba(0,0,0,0.8),_0_6px_15px_rgba(0,0,0,0.9)] hover:-translate-y-1 active:shadow-[inset_0_4px_10px_rgba(0,0,0,0.9),_0_2px_5px_rgba(0,0,0,0.9)] active:translate-y-1 transition-all duration-200"
               >
                 {ctaText}
-                <img src="/icons/player-logo.png" alt="Tuner" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
+                <img src="/icons/player-logo.png" alt="Tuner" className="w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.3)]" />
               </button>
               
               <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
