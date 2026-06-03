@@ -109,6 +109,9 @@ export default function EntrySplashPage() {
               <p className="text-[22px] md:text-3xl font-baloo font-bold text-white tracking-wide select-none uppercase drop-shadow-md mb-2 mt-1">
                 नं 1 डिजिटल रेडियो नेटवर्क
               </p>
+              <p className="text-[10px] md:text-xs font-sans font-bold text-brand-dark/80 uppercase tracking-[0.2em] mb-4">
+                Central India's #1 Digital Radio Network
+              </p>
               <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-baloo font-bold uppercase tracking-[0.2em] text-[12px] shadow-brutal transform -rotate-1">
                 10 बोली, 1 प्लेटफॉर्म
               </div>
@@ -116,8 +119,16 @@ export default function EntrySplashPage() {
           </div>
         </motion.div>
 
+        {/* How it Works Micro-Explainer */}
+        <div className="flex flex-col items-center text-center space-y-1 mb-2 px-4 relative z-10">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark bg-black/10 px-3 py-1 rounded-full mb-1">How it Works</h3>
+          <p className="text-[11px] font-sans font-bold text-black/80 max-w-xs leading-relaxed uppercase tracking-wide">
+            Open the app <span className="text-brand-red font-black px-1">•</span> Click Play <span className="text-brand-red font-black px-1">•</span> Choose from 8 Dialects & 2 Languages (Hindi & Punjabi)
+          </p>
+        </div>
+
         {/* Experience Cards Section */}
-        <div className="flex flex-col justify-end pb-2 pt-4">
+        <div className="flex flex-col justify-end pb-2 pt-2">
 
           <motion.div
             variants={containerVariants}
@@ -187,7 +198,7 @@ export default function EntrySplashPage() {
                 <div className="space-y-1">
                   <span className="text-[10px] font-bold tracking-[0.1em] text-brand-red uppercase">CREATORS</span>
                   <h2 className="text-xl font-black text-white tracking-tight uppercase leading-tight">
-                    Artist<br/>Portal
+                    Apply as<br/>Artist
                   </h2>
                 </div>
 
@@ -212,6 +223,8 @@ export default function EntrySplashPage() {
         {/* Top-Tier Corporate Footer */}
         <footer className="w-full text-center pb-8 pt-6 px-6 flex flex-col gap-4 mt-auto">
           <div className="flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-brand-dark flex-wrap">
+            <Link href="/about" className="hover:underline hover:text-black">About</Link>
+            <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/terms" className="hover:underline hover:text-black">Terms</Link>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/privacy" className="hover:underline hover:text-black">Privacy</Link>
@@ -222,8 +235,8 @@ export default function EntrySplashPage() {
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/takedown" className="hover:underline hover:text-brand-red">Takedowns</Link>
           </div>
-          <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[320px] mx-auto select-none font-medium">
-            Future Radio is a decentralized global audio platform empowering independent artists and creators.
+          <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[340px] md:max-w-md mx-auto select-none font-medium text-balance">
+            Future Radio is Central India's premier online radio MP CG, empowering independent artists. A truly decentralized Hindi indie audio platform streaming the best regional music, talk shows, and culturally relevant content.
           </p>
           <div className="text-[9px] text-brand-dark font-digital font-bold tracking-widest uppercase select-none mt-2">
             &copy; {new Date().getFullYear()} FUTURE RADIO & MEDIA MAFIAS
