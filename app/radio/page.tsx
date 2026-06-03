@@ -318,7 +318,7 @@ export default function RadioPlayerPage() {
               unlockAudio();
               setIsPlaying(!isPlaying);
             }}
-            className={`w-[96px] h-[96px] md:w-[110px] md:h-[110px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none rounded-full ${!isPlaying ? 'shadow-[0_0_35px_rgba(255,0,50,0.6)] animate-pulse' : 'shadow-2xl'}`}
+            className={`w-[96px] h-[96px] md:w-[110px] md:h-[110px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none rounded-full ${!isPlaying ? 'shadow-[0_0_15px_rgba(255,0,50,0.5)] animate-pulse' : 'shadow-2xl'}`}
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
             <div className={`absolute inset-1.5 rounded-full border-[3px] overflow-hidden bg-black/60 shadow-inner ${isPlaying && !isTuning ? 'animate-rgb-glow' : 'border-[#ff0032] shadow-[0_0_15px_#ff0032,inset_0_0_10px_#ff0032] animate-pulse'}`}>
