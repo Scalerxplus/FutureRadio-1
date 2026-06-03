@@ -123,7 +123,7 @@ export default function EntrySplashPage() {
         <div className="flex flex-col items-center text-center space-y-1 mb-2 px-4 relative z-10">
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark bg-black/10 px-3 py-1 rounded-full mb-1">How it Works</h3>
           <p className="text-[11px] font-sans font-bold text-black/80 max-w-xs leading-relaxed uppercase tracking-wide">
-            Open the app <span className="text-brand-red font-black px-1">•</span> Click Play <span className="text-brand-red font-black px-1">•</span> Choose from 8 Dialects & 2 Languages (Hindi & Punjabi)
+            Click Play <span className="text-brand-red font-black px-1">•</span> Choose from 8 Dialects & 2 Languages (Hindi & Punjabi)
           </p>
         </div>
 
