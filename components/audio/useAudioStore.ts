@@ -11,6 +11,7 @@ interface AudioStore {
   viewMode: "fullscreen" | "minimized" | "bubble";
   ytVolume: number;
   isPlaying: boolean;
+  isTuning: boolean;
   hasGesture: boolean;
   setPhase: (phase: AudioPhase) => void;
   setCurrentBlock: (block: PlaylistBlock | null) => void;
@@ -19,6 +20,7 @@ interface AudioStore {
   setViewMode: (mode: "fullscreen" | "minimized" | "bubble") => void;
   setYtVolume: (volume: number) => void;
   setIsPlaying: (playing: boolean) => void;
+  setIsTuning: (tuning: boolean) => void;
   setCityId: (cityId: string) => void;
   setHasGesture: (hasGesture: boolean) => void;
 }
@@ -32,6 +34,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   viewMode: "bubble",
   ytVolume: 80,
   isPlaying: true,
+  isTuning: false,
   hasGesture: false,
   setPhase: (phase) => set({ phase }),
   setCurrentBlock: (currentBlock) => set({ currentBlock }),
@@ -40,6 +43,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setViewMode: (viewMode) => set({ viewMode }),
   setYtVolume: (ytVolume) => set({ ytVolume }),
   setIsPlaying: (isPlaying) => set({ isPlaying }),
+  setIsTuning: (isTuning) => set({ isTuning }),
   setCityId: (cityId) => set({ cityId }),
   setHasGesture: (hasGesture) => set({ hasGesture }),
 }));

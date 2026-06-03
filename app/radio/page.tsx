@@ -22,6 +22,7 @@ export default function RadioPlayerPage() {
     phase,
     setIsPlaying,
     setViewMode,
+    isTuning,
   } = useAudioStore();
 
   const [isLiked, setIsLiked] = useState(false);
@@ -321,7 +322,7 @@ export default function RadioPlayerPage() {
             className="w-[72px] h-[72px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 focus:outline-none"
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            <div className={`absolute inset-4 rounded-full border border-white/20 overflow-hidden bg-black/40 ${isPlaying ? 'animate-spin' : ''}`} style={{ animationDuration: '8s' }}>
+            <div className={`absolute inset-4 rounded-full border border-white/20 overflow-hidden bg-black/40 ${isPlaying && !isTuning ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
               <img src="/icons/player-logo.png" alt="Future Radio" className="w-full h-full object-cover p-3" />
             </div>
           </button>

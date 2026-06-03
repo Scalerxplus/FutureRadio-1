@@ -19,6 +19,7 @@ export default function AudioOrchestrator() {
     setCurrentBlock,
     setUpcomingBlocks,
     setIsPlaying,
+    setIsTuning,
     setHasGesture,
   } = useAudioStore();
 
@@ -216,6 +217,7 @@ export default function AudioOrchestrator() {
   // 2. Fetch Master Clock and Schedule on Mount
   useEffect(() => {
     let active = true;
+    setIsTuning(true);
     
     // Clear schedule immediately on station change to prevent old audio from overlapping
     setSchedule([]);
@@ -323,7 +325,7 @@ export default function AudioOrchestrator() {
               isGeneratingRef.current = false;
               activeBlockIdRef.current = null;
             })
-            .catch(() => { isGeneratingRef.current = false; });
+            .catch(() => { isGeneratingRef.current = false; setIsTuning(false); });
         }
         return;
       }
@@ -369,7 +371,7 @@ export default function AudioOrchestrator() {
               isGeneratingRef.current = false;
               activeBlockIdRef.current = null;
             })
-            .catch(() => { isGeneratingRef.current = false; });
+            .catch(() => { isGeneratingRef.current = false; setIsTuning(false); });
         }
         return;
       }
@@ -580,7 +582,7 @@ export default function AudioOrchestrator() {
                  try { transitionAudioRef.current.currentTime = 0; } catch(e) {}
                  transitionAudioRef.current.volume = 1;
               }
-              player.play().catch(e => handleMediaError("sweeper"));
+              player.play().then(() => setIsTuning(false)).catch(e => handleMediaError("sweeper"));
            }
         } else {
            setPhase(currentElementToPlay.element_type === "jocktalk" ? "playing_jocktalk" : "playing_song");
@@ -601,7 +603,7 @@ export default function AudioOrchestrator() {
                      const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.pause(); tAudio.volume = 1; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
                  }
               }
-              primaryDeck.play().catch(e => handleMediaError(activeDeckRef.current));
+              primaryDeck.play().then(() => setIsTuning(false)).catch(e => handleMediaError(activeDeckRef.current));
            }
         }
       } else {

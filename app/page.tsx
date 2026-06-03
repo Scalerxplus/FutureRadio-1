@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore, useUiStore, useAuthStore } from "@/lib/store";
@@ -20,6 +20,14 @@ export default function EntrySplashPage() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [splashComplete, setSplashComplete] = useState(false);
+  const [ctaText, setCtaText] = useState("अभी सुनें");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCtaText((prev) => (prev === "अभी सुनें" ? "Play" : "अभी सुनें"));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleCardClick = (mode: "radio" | "news", destination: string) => {
     setMode(mode);
@@ -88,11 +96,14 @@ export default function EntrySplashPage() {
             
             {/* Regional Subtitle */}
             <div className="text-center flex flex-col items-center leading-tight mt-6 mb-2">
-              <p className="text-sm md:text-base font-display font-black text-brand-dark tracking-widest select-none uppercase mb-2">
-                MP-CG ka pehla AI Radio
+              <p className="text-xl md:text-2xl font-baloo font-extrabold text-brand-dark tracking-wider select-none uppercase">
+                MP और CG का
               </p>
-              <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-display font-black uppercase tracking-[0.2em] text-[11px] shadow-brutal transform -rotate-1">
-                10 Boli, Ek Platform
+              <p className="text-[22px] md:text-3xl font-baloo font-extrabold text-white tracking-wider select-none uppercase drop-shadow-md mb-2 mt-1">
+                नं 1 डिजिटल रेडियो नेटवर्क
+              </p>
+              <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-baloo font-black uppercase tracking-[0.2em] text-[12px] shadow-brutal transform -rotate-1">
+                10 बोली, 1 प्लेटफॉर्म
               </div>
             </div>
           </div>
@@ -111,17 +122,21 @@ export default function EntrySplashPage() {
             <div className="flex flex-col items-center space-y-4 mb-8 relative z-10 w-full">
               <button 
                 onClick={() => handleCardClick("radio", "/radio")}
-                className="bg-black text-white w-full py-4 rounded-full font-black text-xl tracking-widest uppercase flex items-center justify-center gap-3 border-[3px] border-black shadow-[0_8px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[0_12px_0_0_rgba(0,0,0,1)] active:translate-y-2 active:shadow-[0_0px_0_0_rgba(0,0,0,1)] transition-all"
+                className="bg-black text-white w-full py-4 rounded-full font-baloo font-black text-2xl tracking-widest uppercase flex items-center justify-center gap-3 border-[3px] border-black shadow-[0_8px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[0_12px_0_0_rgba(0,0,0,1)] active:translate-y-2 active:shadow-[0_0px_0_0_rgba(0,0,0,1)] transition-all"
               >
-                Abhi Suno 
+                {ctaText}
+                {/* Radio Wave / Antenna SVG for 'radio feel' */}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                  <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
+                  <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18.75a.75.75 0 0 1 .75.75V21.75a.75.75 0 0 1-1.5 0v-2.25a.75.75 0 0 1 .75-.75ZM6.166 18.894a.75.75 0 0 1-1.06-1.06l1.59-1.591a.75.75 0 1 1 1.061 1.06l-1.59 1.591ZM2.25 12a.75.75 0 0 1 .75-.75H5.25a.75.75 0 0 1 0 1.5H3a.75.75 0 0 1-.75-.75ZM6.166 5.106a.75.75 0 0 1 1.06 1.06L5.636 7.757a.75.75 0 1 1-1.06-1.061l1.59-1.59Z" />
                 </svg>
               </button>
               
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-black/10">
-                <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)] border border-black" />
-                <span className="text-[11px] font-black text-brand-dark uppercase tracking-widest">
+              <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 shadow-[0_0_10px_rgba(74,222,128,1)]"></span>
+                </span>
+                <span className="text-[11px] font-black text-white uppercase tracking-widest drop-shadow-lg">
                   Live: 2,400+ listeners
                 </span>
               </div>
