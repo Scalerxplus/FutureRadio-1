@@ -140,10 +140,16 @@ export default function EntrySplashPage() {
             <div className="flex flex-col items-center space-y-4 mb-8 relative z-10 w-full">
               <button 
                 onClick={() => handleCardClick("radio", "/radio")}
-                className="bg-zinc-900 text-white w-[85%] max-w-[340px] py-3 rounded-[2rem] font-baloo font-bold text-2xl tracking-widest uppercase flex items-center justify-center gap-3 border-[4px] border-zinc-800 shadow-[inset_0_-4px_10px_rgba(0,0,0,0.8),_0_10px_20px_rgba(0,0,0,0.8)] hover:shadow-[inset_0_-2px_6px_rgba(0,0,0,0.8),_0_6px_15px_rgba(0,0,0,0.9)] hover:-translate-y-1 active:shadow-[inset_0_4px_10px_rgba(0,0,0,0.9),_0_2px_5px_rgba(0,0,0,0.9)] active:translate-y-1 transition-all duration-200"
+                className="relative bg-gradient-to-b from-zinc-800 to-zinc-950 text-white w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full font-baloo font-bold text-2xl tracking-widest uppercase flex flex-col items-center justify-center border-[4px] border-zinc-900 shadow-[inset_0_-8px_15px_rgba(0,0,0,1),inset_0_8px_15px_rgba(255,255,255,0.15),0_20px_30px_rgba(0,0,0,0.8),0_0_0_8px_rgba(20,20,20,0.5)] hover:-translate-y-1 active:shadow-[inset_0_8px_20px_rgba(0,0,0,1),0_5px_10px_rgba(0,0,0,0.8),0_0_0_8px_rgba(20,20,20,0.5)] active:translate-y-2 transition-all duration-300 group"
               >
-                {ctaText}
-                <img src="/icons/player-logo.png" alt="Tuner" className="w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.3)]" />
+                {/* The Dimple */}
+                <div className="absolute top-3 w-4 h-4 rounded-full bg-zinc-950 shadow-[inset_0_3px_6px_rgba(0,0,0,1),0_1px_1px_rgba(255,255,255,0.2)] group-hover:bg-brand-red transition-colors duration-500"></div>
+                
+                {/* Concentric Dial Ridges */}
+                <div className="absolute inset-4 rounded-full border border-zinc-700/30 pointer-events-none"></div>
+                <div className="absolute inset-6 rounded-full border border-zinc-700/10 pointer-events-none"></div>
+                
+                <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3">{ctaText}</span>
               </button>
               
               <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
