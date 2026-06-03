@@ -176,7 +176,7 @@ export default function AudioOrchestrator() {
                activeDeck.load();
                activeDeck.play().catch(() => {});
             }
-            if (sweeperRef.current && phase === "playing_jingle") {
+            if (sweeperRef.current && !sweeperRef.current.paused) {
                sweeperRef.current.load();
                sweeperRef.current.play().catch(() => {});
             }
@@ -191,7 +191,7 @@ export default function AudioOrchestrator() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('online', handleOnline);
     };
-  }, [isPlaying, phase]);
+  }, [isPlaying]);
 
   // 1.5 Global interaction listener to auto-unlock audio
   useEffect(() => {
