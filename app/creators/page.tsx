@@ -43,18 +43,24 @@ export default function CreatorsPage() {
                 "We are the architects of the new soundscape. Join the revolution."
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
                 <Link 
                   href="/creators/apply" 
-                  className="px-8 py-4 bg-brand-dark text-white text-center font-black uppercase tracking-widest border-4 border-transparent hover:bg-brand-red hover:shadow-brutal transition-all"
+                  className="px-6 py-3 bg-brand-dark text-white text-center font-black uppercase tracking-widest border-4 border-transparent hover:bg-brand-red hover:shadow-brutal transition-all"
                 >
                   Apply as Creator
                 </Link>
                 <Link 
-                  href="/admin/review" 
-                  className="px-8 py-4 bg-white text-brand-dark text-center font-black uppercase tracking-widest border-4 border-brand-dark hover:bg-brand-yellow transition-all"
+                  href="/creators/portal" 
+                  className="px-6 py-3 bg-[#FFDB58] text-brand-dark text-center font-black uppercase tracking-widest border-4 border-brand-dark hover:bg-white transition-all"
                 >
-                  Admin Review Portal
+                  Verified Portal
+                </Link>
+                <Link 
+                  href="/admin/review" 
+                  className="px-6 py-3 bg-white text-brand-dark text-center font-black uppercase tracking-widest border-4 border-brand-dark hover:bg-gray-100 transition-all w-full sm:w-auto"
+                >
+                  Admin Review
                 </Link>
               </div>
             </section>

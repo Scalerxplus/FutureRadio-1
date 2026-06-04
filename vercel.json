@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/generate-next-hour",
       "schedule": "55 12 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-submissions",
+      "schedule": "0 0 * * *"
     }
   ]
 }
