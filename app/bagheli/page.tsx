@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Radio, Mic, Play, Pause, Activity, Users, ShieldAlert, BadgeCheck, Copy } from "lucide-react";
@@ -13,6 +13,11 @@ export default function BagheliCampaignPage() {
   const { setCityId } = useCityStore();
   const { setIsPlaying } = useAudioStore();
   
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const [isPlayingAnthem, setIsPlayingAnthem] = useState(false);
   const [progress, setProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -92,31 +97,33 @@ export default function BagheliCampaignPage() {
         </motion.div>
 
         {/* Floating Embers */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-[#FF6B1A]"
-              initial={{ 
-                x: Math.random() * window.innerWidth, 
-                y: window.innerHeight + 100,
-                opacity: 0
-              }}
-              animate={{ 
-                y: -100,
-                x: `calc(${Math.random() * 100}vw - 50vw)`,
-                opacity: [0, 0.8, 0],
-                scale: [0.5, 1.5, 0.5]
-              }}
-              transition={{ 
-                duration: 5 + Math.random() * 5, 
-                repeat: Infinity, 
-                delay: Math.random() * 5,
-                ease: "linear"
-              }}
-            />
-          ))}
-        </div>
+        {isMounted && (
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 rounded-full bg-[#FF6B1A]"
+                initial={{ 
+                  x: Math.random() * window.innerWidth, 
+                  y: window.innerHeight + 100,
+                  opacity: 0
+                }}
+                animate={{ 
+                  y: -100,
+                  x: `calc(${Math.random() * 100}vw - 50vw)`,
+                  opacity: [0, 0.8, 0],
+                  scale: [0.5, 1.5, 0.5]
+                }}
+                transition={{ 
+                  duration: 5 + Math.random() * 5, 
+                  repeat: Infinity, 
+                  delay: Math.random() * 5,
+                  ease: "linear"
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
