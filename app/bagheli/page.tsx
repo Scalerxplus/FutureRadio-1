@@ -75,8 +75,8 @@ export default function BagheliCampaignPage() {
 
       {/* Floating Header */}
       <header className="fixed top-0 w-full z-40 bg-gradient-to-b from-[#0A0805] to-transparent pt-6 pb-12 px-6 flex justify-between items-start pointer-events-none">
-        <Link href="/" className="pointer-events-auto h-24 md:h-32 mt-2 ml-2 transition-transform hover:scale-105">
-           <img src="/icons/logo-horizontal-light.png" alt="Future Radio" className="h-full w-auto object-contain drop-shadow-2xl" />
+        <Link href="/" className="pointer-events-auto w-48 md:w-72 lg:w-80 mt-2 md:mt-4 ml-2 md:ml-6 transition-transform hover:scale-105">
+           <img src="/icons/logo-horizontal-light.png" alt="Future Radio" className="w-full h-auto object-contain drop-shadow-2xl" />
         </Link>
         <button 
           onClick={handleTuneIn}
