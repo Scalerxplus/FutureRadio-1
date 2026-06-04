@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
+import { resetAndUnlockAudioForTransition } from "@/components/audio/useAudioStore";
 
 export const GENRES = [
   { id: "hindi", name: "Hindi", region: "Global Indie", listeners: "2.4k" },
@@ -21,6 +22,7 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
   const { cityName, setCityId } = useCityStore();
 
   const handleSelectCity = (id: string, name: string) => {
+    resetAndUnlockAudioForTransition();
     setCityId(id, name);
     onClose();
   };

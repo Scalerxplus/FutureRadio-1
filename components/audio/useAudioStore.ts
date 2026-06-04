@@ -63,3 +63,20 @@ export function unlockAudio() {
     }
   });
 }
+
+export function resetAndUnlockAudioForTransition() {
+  if (typeof document === "undefined") return;
+  const silentSrc = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+  
+  // Force reset main decks to silent and play synchronously during user click
+  const ids = ["media-player-a", "media-player-b", "media-player-c"];
+  ids.forEach(id => {
+    const el = document.getElementById(id) as HTMLAudioElement | null;
+    if (el) {
+      el.pause();
+      el.src = silentSrc;
+      el.load();
+      el.play().catch(() => {});
+    }
+  });
+}

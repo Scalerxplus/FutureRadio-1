@@ -262,8 +262,7 @@ export default function AudioOrchestrator() {
          const fade = setInterval(() => {
              vol -= 0.1;
              if (vol <= 0) {
-                 player.pause();
-                 player.volume = 1;
+                 player.volume = 0; // Keep playing silently to preserve iOS unlock state
                  clearInterval(fade);
              } else {
                  player.volume = vol;
@@ -313,7 +312,7 @@ export default function AudioOrchestrator() {
             mediaRefA.current.src = "/audio/fallbacks/Future_Radio_1.mp3";
             mediaRefA.current.play().catch(e => console.error(e));
           } else if (mediaRefA.current) {
-            mediaRefA.current.pause(); // Ensure Deck A is completely quiet while transition Jingle plays
+            mediaRefA.current.volume = 0; // Ensure Deck A is quiet without pausing to preserve iOS unlock
           }
         }
         if (!isGeneratingRef.current) {
@@ -358,6 +357,7 @@ export default function AudioOrchestrator() {
           mediaRefC.current?.pause();
           if (mediaRefA.current) {
             mediaRefA.current.src = "/audio/fallbacks/Future_Radio_1.mp3";
+            mediaRefA.current.volume = 1;
             mediaRefA.current.play().catch(e => console.error(e));
           }
         }
@@ -510,10 +510,9 @@ export default function AudioOrchestrator() {
                    const isEnteringJock = currentElementToPlay.element_type === "jocktalk";
                    const isExitingJock = prevElement && prevElement.element_type === "jocktalk";
                    
-                   if (isEnteringJock || isExitingJock) {
+                    if (isEnteringJock || isExitingJock) {
                        // Strict exclusivity: zero overlap for jocktalks
-                       player.pause();
-                       player.volume = 1;
+                       player.volume = 0;
                        try { player.currentTime = 0; } catch(e) {}
                    } else {
                        // Determine fade out duration
@@ -528,8 +527,7 @@ export default function AudioOrchestrator() {
                        const fade = setInterval(() => {
                            vol -= volDrop;
                            if (vol <= 0) {
-                               player.pause();
-                               player.volume = 1;
+                               player.volume = 0; // Keep playing silently
                                clearInterval(fade);
                            } else {
                                player.volume = vol;
@@ -578,9 +576,7 @@ export default function AudioOrchestrator() {
               if (offsetSeconds > 0.5) try { player.currentTime = offsetSeconds; } catch(e) {}
               // HARD STOP transition audio for Master Clock Sweepers to prevent parallel clashing
               if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
-                 transitionAudioRef.current.pause();
-                 try { transitionAudioRef.current.currentTime = 0; } catch(e) {}
-                 transitionAudioRef.current.volume = 1;
+                 transitionAudioRef.current.volume = 0;
               }
               player.play().then(() => setIsTuning(false)).catch(e => handleMediaError("sweeper"));
            }
@@ -595,12 +591,10 @@ export default function AudioOrchestrator() {
               if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
                  const tAudio = transitionAudioRef.current;
                  if (currentElementToPlay.element_type === "jocktalk") {
-                     tAudio.pause();
-                     try { tAudio.currentTime = 0; } catch(e) {}
-                     tAudio.volume = 1;
+                     tAudio.volume = 0;
                  } else {
                      let vol = tAudio.volume;
-                     const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.pause(); tAudio.volume = 1; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+                     const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.volume = 0; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
                  }
               }
               primaryDeck.play().then(() => setIsTuning(false)).catch(e => handleMediaError(activeDeckRef.current));
@@ -622,8 +616,7 @@ export default function AudioOrchestrator() {
                   : deckName === activeDeckRef.current;
                   
               if (!isThisDeckSupposedToPlay && ref.current && !ref.current.paused) {
-                  ref.current.pause();
-                  ref.current.volume = 1;
+                  ref.current.volume = 0; // Mute instead of pause to keep iOS unlocked
               }
            });
         }
