@@ -75,9 +75,9 @@ export default function BagheliCampaignPage() {
 
       {/* Floating Header */}
       <header className="fixed top-0 w-full z-40 bg-gradient-to-b from-[#0A0805] to-transparent pt-6 pb-12 px-6 flex justify-between items-start pointer-events-none">
-        <div className="h-8 md:h-10">
-           <img src="/icons/logo-horizontal-light.png" alt="Future Radio" className="h-full w-auto object-contain" />
-        </div>
+        <Link href="/" className="pointer-events-auto h-24 md:h-32 mt-2 ml-2 transition-transform hover:scale-105">
+           <img src="/icons/logo-horizontal-light.png" alt="Future Radio" className="h-full w-auto object-contain drop-shadow-2xl" />
+        </Link>
         <button 
           onClick={handleTuneIn}
           className="pointer-events-auto flex items-center gap-2 bg-[#C0392B] hover:bg-[#FF6B1A] text-white px-5 py-2.5 rounded-full font-bold uppercase tracking-wider text-xs transition-colors shadow-[0_0_20px_rgba(192,57,43,0.4)] border border-white/10"
@@ -175,7 +175,7 @@ export default function BagheliCampaignPage() {
           {[
             { val: "29 Cr+", label: "Vernacular Listeners" },
             { val: "10+", label: "Live Dialects" },
-            { val: "₹0", label: "License Cost" },
+            { val: "100%", label: "Digital Reach" },
             { val: "24/7", label: "Autonomous Engine" }
           ].map((stat, i) => (
             <motion.div 
