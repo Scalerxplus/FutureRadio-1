@@ -75,7 +75,9 @@ export default function BagheliCampaignPage() {
 
       {/* Floating Header */}
       <header className="fixed top-0 w-full z-40 bg-gradient-to-b from-[#0A0805] to-transparent pt-6 pb-12 px-6 flex justify-between items-start pointer-events-none">
-        <div className="font-baloo font-black text-xl tracking-widest text-[#FF6B1A]">FUTURE RADIO</div>
+        <div className="h-8 md:h-10">
+           <img src="/icons/logo-horizontal-light.png" alt="Future Radio" className="h-full w-auto object-contain" />
+        </div>
         <button 
           onClick={handleTuneIn}
           className="pointer-events-auto flex items-center gap-2 bg-[#C0392B] hover:bg-[#FF6B1A] text-white px-5 py-2.5 rounded-full font-bold uppercase tracking-wider text-xs transition-colors shadow-[0_0_20px_rgba(192,57,43,0.4)] border border-white/10"
@@ -244,16 +246,14 @@ export default function BagheliCampaignPage() {
             <h3 className="text-4xl md:text-5xl font-black text-white mb-4">तैं सुन नौजवान!</h3>
             <div className="pl-6 border-l-4 border-[#F0A500] text-[#F0A500] text-lg italic mb-10 leading-relaxed">
               &quot;तैं सुन नौजवान!<br />
-              छोड़ दे य जहर, बचाइले आपन जान।<br />
-              गदर मचाई देब... गरदा उड़ाई देब!<br />
-              फ्यूचर रेडियो... अब सबके काने मा बाजी!&quot;
+              छोड़ दे य जहर, बचाइले आपन जान।&quot;
             </div>
 
             {/* Custom Player UI */}
             <div className="bg-black/40 rounded-2xl p-6 mb-8 border border-white/5">
               <audio 
                 ref={audioRef} 
-                src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Placeholder audio
+                src="/audio/originals/tain_sun_1.mp3"
                 onTimeUpdate={handleTimeUpdate} 
                 onEnded={() => { setIsPlayingAnthem(false); setProgress(0); }}
               />
@@ -370,7 +370,7 @@ export default function BagheliCampaignPage() {
 
       {/* ── FOOTER ── */}
       <footer className="py-12 px-6 text-center bg-[#0A0805]">
-        <div className="font-baloo font-black text-2xl text-[#FF6B1A] mb-2">FUTURE RADIO</div>
+        <div className="font-black text-4xl text-white tracking-tight mb-2">फ्यूचर रेडियो</div>
         <div className="text-white/40 text-sm mb-8">विंध्य की आवाज़ — India&apos;s Vernacular AI Radio Network</div>
         <div className="flex justify-center gap-6 text-sm font-medium text-white/60 mb-12">
           <Link href="/" className="hover:text-white transition-colors">Platform</Link>
