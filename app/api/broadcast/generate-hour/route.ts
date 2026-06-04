@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { searchAudiusTrack, AudiusTrack } from "@/lib/audius";
-import { searchJamendoTrack } from "@/lib/jamendo";
 import { searchPodcastEpisode } from "@/lib/itunes";
+import { LocalTrack } from "@/lib/types";
 import { getGlobalNewsBite, getShortGlobalNewsBite } from "@/lib/newsbites";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
 import { getOriginalForStation, getFallbackOriginal } from "@/lib/originals";
@@ -176,10 +175,8 @@ function getSearchQueryForGenre(genre: string, targetTimeIso?: string): { query:
   return { query: categoryArray[Math.floor(Math.random() * categoryArray.length)], derivedVibe: vibe };
 }
 
-async function getSong(vibeConfig: { query: string, derivedVibe: string } | string, cityId: string, playedSongs: Set<string>): Promise<AudiusTrack> {
+async function getSong(vibeConfig: { query: string, derivedVibe: string } | string, cityId: string, playedSongs: Set<string>): Promise<LocalTrack> {
   const isFallbackCall = typeof vibeConfig === "string" && vibeConfig === "fallback";
-  const cleanQuery = typeof vibeConfig === "string" ? "fallback" : vibeConfig.query.replace(/official audio|official video/gi, "").trim();
-  const derivedVibe = typeof vibeConfig === "string" ? cityId : vibeConfig.derivedVibe;
   
   // --- NEWS/TALK STATION PODCAST ROUTING ---
   if (cityId === "news" && !isFallbackCall) {
@@ -192,137 +189,84 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
       return podcast;
   }
 
-  if (!isFallbackCall) {
-      // --- HYBRID QUALITY-WEIGHTED ROUTER ---
-      const routerRoll = Math.random();
-      
-      // Attempt Source 1: The Premium Hub (Supabase Curated) - 30% probability OR if fallback from lower tiers
-      if (routerRoll <= 0.30) {
-          const supabase = createClient();
-          let query = supabase.from('curated_tracks').select('*').eq('bot_flag', false);
-          
-          if (derivedVibe === 'party') query = query.gte('energy_score', 0.70);
-          else if (derivedVibe === 'chill' || derivedVibe === 'love') query = query.lte('energy_score', 0.50);
-          else if (derivedVibe === 'drive') query = query.gte('energy_score', 0.50);
-          
-          const { data: curatedTracks, error } = await query;
-          if (!error && curatedTracks && curatedTracks.length > 0) {
-              let validCurated = curatedTracks.filter(t => !playedSongs.has(t.track_id) && t.duration_seconds >= 120 && t.duration_seconds <= 420);
-              if (validCurated.length > 0) {
-                  const track = validCurated[Math.floor(Math.random() * validCurated.length)];
-                  playedSongs.add(track.track_id);
-                  return {
-                      id: track.track_id, title: track.title, artist: track.artist,
-                      durationSeconds: track.duration_seconds, streamUrl: track.stream_url,
-                      permalink: "", license: "CC-BY", energyScore: track.energy_score
-                  };
-              }
-          }
-          console.warn(`[Hybrid Engine] Supabase Curated exhausted for '${derivedVibe}'. Falling back to Jamendo.`);
-      }
+  // --- LOCAL FILE SYSTEM AUDIO ENGINE ---
+  // The system looks in `public/audio/{cityId}/songs`
+  const baseAudioDir = path.join(process.cwd(), "public", "audio");
+  const targetDir = path.join(baseAudioDir, cityId, "songs");
+  const globalFallbackDir = path.join(baseAudioDir, "global", "songs");
+  const staticFallbackDir = path.join(baseAudioDir, "fallbacks");
 
-      // Attempt Source 2: The Indie Hub (Jamendo API)
-      if (routerRoll <= 0.90) {
-          const jamendoQuery = typeof vibeConfig === "string" ? "pop" : vibeConfig.query;
-          const jamendoTracks = await searchJamendoTrack(jamendoQuery);
-          let validJamendo = jamendoTracks.filter(t => !playedSongs.has(t.id) && t.durationSeconds >= 120 && t.durationSeconds <= 420);
-          
-          if (derivedVibe === 'chill' || derivedVibe === 'romance' || derivedVibe === 'love') {
-              const blockedTerms = ["edm", "house", "progressive", "trap", "bass", "club", "dance", "upbeat"];
-              validJamendo = validJamendo.filter(t => {
-                  const txt = (t.title + " " + t.artist).toLowerCase();
-                  return !blockedTerms.some(b => txt.includes(b));
-              });
-          }
+  let files: string[] = [];
+  let selectedDir = targetDir;
 
-          if (validJamendo.length > 0) {
-              const track = validJamendo[Math.floor(Math.random() * validJamendo.length)];
-              playedSongs.add(track.id);
-              track.energyScore = derivedVibe === 'party' ? 0.8 : (derivedVibe === 'chill' || derivedVibe === 'romance' ? 0.3 : 0.6);
-              return track;
-          }
-          console.warn(`[Hybrid Engine] Jamendo exhausted for '${derivedVibe}'. Falling back to Audius.`);
-      }
-      
-      // Attempt Source 3: The Decentralized Backup (Audius API)
-      let audiusTracks = await searchAudiusTrack(cleanQuery);
-      let validAudius = audiusTracks.filter(t => !playedSongs.has(t.id) && t.durationSeconds >= 120 && t.durationSeconds <= 420);
-      
-      if (derivedVibe === 'chill' || derivedVibe === 'romance' || derivedVibe === 'love') {
-          const blockedTerms = ["edm", "house", "progressive", "trap", "bass", "club", "dance", "upbeat"];
-          validAudius = validAudius.filter(t => {
-              const txt = (t.title + " " + t.artist).toLowerCase();
-              return !blockedTerms.some(b => txt.includes(b));
-          });
-      }
-
-      if (validAudius.length > 0) {
-          const track = validAudius[Math.floor(Math.random() * validAudius.length)];
-          playedSongs.add(track.id);
-          track.energyScore = derivedVibe === 'party' ? 0.8 : (derivedVibe === 'chill' || derivedVibe === 'romance' ? 0.3 : 0.6);
-          return track;
-      }
-      console.warn(`[Hybrid Engine] Audius exhausted for '${cleanQuery}'. Triggering safety clear.`);
+  if (fs.existsSync(targetDir)) {
+      files = fs.readdirSync(targetDir).filter(f => f.endsWith(".mp3") || f.endsWith(".wav"));
   }
 
-  // --- STATIC EXHAUSTION FALLBACK ---
-  let allTracks = await searchAudiusTrack(cleanQuery);
-  let tracks = allTracks.filter(t => t.durationSeconds && t.durationSeconds <= 420);
-
-  if (tracks.length === 0) {
-    tracks = await searchAudiusTrack("hindi lofi chill");
-    if (tracks.length === 0) {
-        // Local Fallback Logic
-        const fallbacksDir = path.join(process.cwd(), "public", "audio", "fallbacks");
-        let fallbackTrack: any = null;
-        if (fs.existsSync(fallbacksDir)) {
-          const files = fs.readdirSync(fallbacksDir).filter(f => f.endsWith(".mp3") || f.endsWith(".wav"));
-          if (files.length > 0) {
-            const randomFile = files[Math.floor(Math.random() * files.length)];
-            const urlPath = `/audio/fallbacks/${randomFile}`;
-            try {
-              const metadata = await mm.parseFile(path.join(fallbacksDir, randomFile));
-              const durMs = Math.round((metadata.format.duration || 200) * 1000);
-              fallbackTrack = {
-                id: "system-fallback-" + Math.random().toString(36).substring(7),
-                title: randomFile.replace(/\.[^/.]+$/, ""),
-                artist: "Future Radio Premium Fallback",
-                durationSeconds: durMs / 1000,
-                streamUrl: urlPath,
-                permalink: "",
-                license: "CC-BY"
-              };
-            } catch(e) { }
-          }
-        }
-        
-        if (!fallbackTrack) {
-          fallbackTrack = {
-              id: "system-fallback-" + Math.random().toString(36).substring(7),
-              title: "Future Radio Chill Mix (Backup)",
-              artist: "System",
-              durationSeconds: 339,
-              streamUrl: "http://localhost:3000/audio/fallbacks/Future_Radio_1.mp3", // Local fallback
-              permalink: "https://thefutureradio.com",
-              license: "CC-BY"
-          };
-        }
-        playedSongs.add(fallbackTrack.id);
-        return fallbackTrack as AudiusTrack;
-    }
+  // Fallback to Global Songs if dialect folder is missing or empty
+  if (files.length === 0 && fs.existsSync(globalFallbackDir)) {
+      selectedDir = globalFallbackDir;
+      files = fs.readdirSync(globalFallbackDir).filter(f => f.endsWith(".mp3") || f.endsWith(".wav"));
   }
 
-  let validTracks = tracks.filter(t => !playedSongs.has(t.id) && t.durationSeconds >= 120 && t.durationSeconds <= 420);
-  if (validTracks.length === 0) {
-      validTracks = tracks.filter(t => !playedSongs.has(t.id));
-      if (validTracks.length === 0) {
-          playedSongs.clear();
-          validTracks = tracks.filter(t => t.durationSeconds >= 120 && t.durationSeconds <= 420);
-          if (validTracks.length === 0) validTracks = tracks;
+  // Absolute static fallback
+  if (files.length === 0) {
+      selectedDir = staticFallbackDir;
+      if (fs.existsSync(staticFallbackDir)) {
+          files = fs.readdirSync(staticFallbackDir).filter(f => f.endsWith(".mp3") || f.endsWith(".wav"));
       }
   }
 
-  const track = validTracks[Math.floor(Math.random() * validTracks.length)];
+  // Generate Fallback Track Object
+  if (files.length === 0) {
+      const fallbackTrack: LocalTrack = {
+          id: "system-fallback-" + Math.random().toString(36).substring(7),
+          title: "Future Radio Chill Mix (Backup)",
+          artist: "System",
+          durationSeconds: 339,
+          streamUrl: "/audio/fallbacks/Future_Radio_1.mp3",
+          permalink: "https://thefutureradio.com",
+          license: "CC-BY",
+          energyScore: 0.5
+      };
+      playedSongs.add(fallbackTrack.id);
+      return fallbackTrack;
+  }
+
+  // Filter out played songs if we have enough tracks
+  let validFiles = files.filter(f => !playedSongs.has(f));
+  if (validFiles.length === 0) {
+      playedSongs.clear(); // Reset history if we exhausted the library
+      validFiles = files;
+  }
+
+  // Pick a random track
+  const randomFile = validFiles[Math.floor(Math.random() * validFiles.length)];
+  const relativeUrl = selectedDir.replace(path.join(process.cwd(), "public"), "").replace(/\\/g, "/");
+  const streamUrl = `${relativeUrl}/${randomFile}`;
+
+  let durSeconds = 200; // default 3 min 20 sec
+  let trackTitle = randomFile.replace(/\.[^/.]+$/, "");
+  let trackArtist = "Future Radio Artist";
+
+  try {
+      const metadata = await mm.parseFile(path.join(selectedDir, randomFile));
+      durSeconds = metadata.format.duration || 200;
+      if (metadata.common.title) trackTitle = metadata.common.title;
+      if (metadata.common.artist) trackArtist = metadata.common.artist;
+  } catch(e) {}
+
+  const track: LocalTrack = {
+      id: randomFile, // use filename as unique ID locally
+      title: trackTitle,
+      artist: trackArtist,
+      durationSeconds: durSeconds,
+      streamUrl: streamUrl,
+      permalink: "",
+      license: "Local",
+      energyScore: 0.5
+  };
+
   playedSongs.add(track.id);
   return track;
 }
@@ -390,7 +334,7 @@ export async function POST(request: Request) {
     };
 
     // Helper to calculate a safe song duration and prevent the "2-second zapper bug"
-    const getSafeSongDuration = (song: AudiusTrack) => {
+    const getSafeSongDuration = (song: LocalTrack) => {
       let durMs = Math.round((song.durationSeconds || 0) * 1000);
       if (durMs < 60000) durMs = 240000; // Fallback to 4 mins if search returns a short clip or 0
       return durMs; // No more Math.min cap, let the song play fully!

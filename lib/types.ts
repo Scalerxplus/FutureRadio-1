@@ -17,6 +17,18 @@ export interface Track {
   duration?: number;
 }
 
+export interface LocalTrack {
+  id: string;
+  title: string;
+  artist: string;
+  durationSeconds: number;
+  streamUrl: string;
+  permalink?: string;
+  license?: string;
+  energyScore?: number;
+  artwork_url?: string;
+}
+
 export interface UserSession {
   id: string;
   email: string;

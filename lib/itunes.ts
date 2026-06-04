@@ -1,6 +1,6 @@
-import { AudiusTrack } from "./audius";
+import { LocalTrack } from "./types";
 
-const FALLBACK_PODCAST: AudiusTrack = {
+const FALLBACK_PODCAST: LocalTrack = {
   id: "system-fallback-podcast-1",
   title: "Future Radio Tech Update",
   artist: "Future Radio News Desk",
@@ -10,7 +10,7 @@ const FALLBACK_PODCAST: AudiusTrack = {
   permalink: ""
 };
 
-export async function searchPodcastEpisode(query: string, excludeIds: Set<string>): Promise<AudiusTrack> {
+export async function searchPodcastEpisode(query: string, excludeIds: Set<string>): Promise<LocalTrack> {
   try {
     const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=podcast&entity=podcastEpisode&limit=50&country=IN`;
     const res = await fetch(url, { cache: "no-cache" });

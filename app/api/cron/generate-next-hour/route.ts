@@ -53,8 +53,8 @@ export async function GET(request: Request) {
       const data = await res.json();
       results.push({ genre, success: data.success, elements: data.schedule?.length });
       
-      // Wait 5 seconds between stations to absolutely guarantee we don't hit Audius API rate limits
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      // Small delay to prevent spiking local disk I/O too hard
+      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (err: any) {
       console.error(`[Cron] Failed for ${genre}:`, err);
       results.push({ genre, success: false, error: err.message });
