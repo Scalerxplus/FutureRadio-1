@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore, useUiStore, useAuthStore } from "@/lib/store";
-import { useAudioStore } from "@/components/audio/useAudioStore";
+import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import AuthModal from "@/components/auth/AuthModal";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 
@@ -35,6 +35,7 @@ export default function EntrySplashPage() {
 
   const handleCardClick = (mode: "radio" | "news", destination: string) => {
     setMode(mode);
+    unlockAudio(); // Unlock audio context on user interaction for iOS
     router.push(destination);
   };
 
