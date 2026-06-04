@@ -177,10 +177,11 @@ export default function EntrySplashPage() {
                 className="aspect-square rounded-none bg-[#FFDB58] border-brutal border-black p-4 flex flex-col justify-between relative overflow-hidden group cursor-pointer shadow-brutal hover:-translate-y-1 hover:-translate-x-1 hover:shadow-brutal-hover active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-300"
               >
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold tracking-[0.1em] text-black uppercase">CHARTS</span>
-                  <h2 className="text-xl font-black text-black tracking-tight uppercase leading-tight">
-                    Top 50<br/>Indie
-                  </h2>
+                  <span className="text-[10px] font-bold tracking-[0.1em] text-black uppercase">Spotlight</span>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-black text-black leading-[1.1] tracking-tighter">CREATOR</span>
+                    <span className="text-2xl font-black text-black leading-[1.1] tracking-tighter">SPOTLIGHT</span>
+                  </div>
                 </div>
                 
                 {/* Decorative Dot Matrix Background */}
