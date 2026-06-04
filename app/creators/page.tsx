@@ -39,9 +39,24 @@ export default function CreatorsPage() {
             </section>
 
             <section className="pt-8 border-t-4 border-brand-dark border-dashed">
-              <p className="text-2xl md:text-3xl font-black italic text-center uppercase tracking-widest">
+              <p className="text-2xl md:text-3xl font-black italic text-center uppercase tracking-widest mb-8">
                 "We are the architects of the new soundscape. Join the revolution."
               </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  href="/creators/apply" 
+                  className="px-8 py-4 bg-brand-dark text-white text-center font-black uppercase tracking-widest border-4 border-transparent hover:bg-brand-red hover:shadow-brutal transition-all"
+                >
+                  Apply as Creator
+                </Link>
+                <Link 
+                  href="/admin/review" 
+                  className="px-8 py-4 bg-white text-brand-dark text-center font-black uppercase tracking-widest border-4 border-brand-dark hover:bg-brand-yellow transition-all"
+                >
+                  Admin Review Portal
+                </Link>
+              </div>
             </section>
           </div>
         </div>
