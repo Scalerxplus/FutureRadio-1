@@ -200,7 +200,6 @@ export default function AudioOrchestrator() {
     const unlockFn = () => {
       unlockAudio();
       setHasGesture(true);
-      if (!isPlaying) setIsPlaying(true);
     };
     window.addEventListener("click", unlockFn, { once: true });
     window.addEventListener("touchstart", unlockFn, { once: true });

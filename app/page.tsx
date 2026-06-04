@@ -17,7 +17,7 @@ export default function EntrySplashPage() {
   const { cityName, setCityId } = useCityStore();
   const { setMode } = useUiStore();
   const { user, isYtPremium } = useAuthStore();
-  const { isPlaying } = useAudioStore();
+  const { isPlaying, setIsPlaying } = useAudioStore();
   
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -36,6 +36,7 @@ export default function EntrySplashPage() {
   const handleCardClick = (mode: "radio" | "news", destination: string) => {
     setMode(mode);
     unlockAudio(); // Unlock audio context on user interaction for iOS
+    setIsPlaying(true); // Start playback only when user explicitly clicks PLAY
     router.push(destination);
   };
 

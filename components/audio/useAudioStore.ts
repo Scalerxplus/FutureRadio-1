@@ -33,7 +33,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   cityId: "raipur",
   viewMode: "bubble",
   ytVolume: 80,
-  isPlaying: true,
+  isPlaying: false,
   isTuning: false,
   hasGesture: false,
   setPhase: (phase) => set({ phase }),
