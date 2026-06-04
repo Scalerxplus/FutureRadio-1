@@ -55,7 +55,8 @@ export async function getGlobalNewsBite(slotIndex: number): Promise<NewsBite | n
     return {
       providerName: feedConfig.provider,
       mediaUrl: mediaUrl,
-      durationMs: durationMs || feedConfig.fallbackDur
+      durationMs: durationMs || feedConfig.fallbackDur,
+      permalink: feedConfig.url
     };
     
   } catch (err) {
@@ -102,7 +103,8 @@ export async function getShortGlobalNewsBite(slotIndex: number): Promise<NewsBit
     return {
       providerName: feedConfig.provider,
       mediaUrl: mediaUrl,
-      durationMs: durationMs || feedConfig.fallbackDur
+      durationMs: durationMs || feedConfig.fallbackDur,
+      permalink: feedConfig.url
     };
     
   } catch (err) {

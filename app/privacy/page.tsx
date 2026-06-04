@@ -32,7 +32,7 @@ export default function PrivacyPage() {
                 Data We Collect
               </h2>
               <p className="text-lg font-medium leading-relaxed pl-10">
-                We collect minimal data necessary to power our streaming engine. This includes your anonymized listening patterns, preferred "Vibe Stations", and basic device information to optimize audio playback.
+                We collect minimal data necessary to power our streaming engine. This includes your anonymized listening patterns, preferred &quot;Vibe Stations&quot;, and basic device information to optimize audio playback.
               </p>
             </section>
 

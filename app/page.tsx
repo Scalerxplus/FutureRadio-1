@@ -113,7 +113,7 @@ export default function EntrySplashPage() {
                 नं 1 डिजिटल रेडियो नेटवर्क
               </p>
               <p className="text-[10px] md:text-xs font-sans font-bold text-brand-dark/80 uppercase tracking-[0.2em] mb-4">
-                Digital India's #1 Digital Radio Network
+                Digital India&apos;s #1 Digital Radio Network
               </p>
               <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-baloo font-bold uppercase tracking-[0.2em] text-[12px] shadow-brutal transform -rotate-1">
                 10 बोली, 1 प्लेटफॉर्म
@@ -254,7 +254,7 @@ export default function EntrySplashPage() {
             <Link href="/takedown" className="hover:underline hover:text-brand-red">Takedowns</Link>
           </div>
           <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[340px] md:max-w-md mx-auto select-none font-medium text-balance">
-            Future Radio is Digital India's premier creator-sourced radio network. A truly decentralized audio platform empowering independent creators by streaming their regional music, talk shows, and culturally relevant content to millions.
+            Future Radio is Digital India&apos;s premier creator-sourced radio network. A truly decentralized audio platform empowering independent creators by streaming their regional music, talk shows, and culturally relevant content to millions.
           </p>
           <div className="text-[9px] text-brand-dark font-digital font-bold tracking-widest uppercase select-none mt-2">
             &copy; {new Date().getFullYear()} FUTURE RADIO & MEDIA MAFIAS

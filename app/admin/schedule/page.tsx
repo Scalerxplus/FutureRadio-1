@@ -134,7 +134,7 @@ export default async function SchedulePage({
   for (let hour = 0; hour < 24; hour++) {
     const show = getShowForHour(hour, currentChannel);
     let elements = dbItemsByHour[hour] || [];
-    let isActive = elements.length > 0;
+    const isActive = elements.length > 0;
     
     if (!isActive) {
       elements = generateHotClockPlaceholders(hour, show);

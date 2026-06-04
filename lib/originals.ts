@@ -48,7 +48,7 @@ export function getOriginalTracks(): OriginalTrack[] {
 
 export function getFallbackOriginal(targetEnergy?: number): string | null {
   const tracks = getOriginalTracks();
-  let fallbacks = tracks.filter(t => t.title.toLowerCase().startsWith('fr_') || t.streamUrl.toLowerCase().includes('/fr_'));
+  const fallbacks = tracks.filter(t => t.title.toLowerCase().startsWith('fr_') || t.streamUrl.toLowerCase().includes('/fr_'));
   
   if (fallbacks.length > 0) {
      if (targetEnergy !== undefined) {

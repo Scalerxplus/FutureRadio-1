@@ -215,7 +215,7 @@ export default function AudioOrchestrator() {
     }
     const cleanupPoll = initSync();
     return () => { active = false; cleanupPoll.then(c => c && c()); };
-  }, [hasGesture, cityId]);
+  }, [hasGesture, cityId, setIsTuning]);
 
   
   // 2.5 Instant Transition Sweeper on Channel Change
@@ -264,7 +264,7 @@ export default function AudioOrchestrator() {
     
     transitionAudioRef.current.play().catch(e => console.warn("Transition audio blocked:", e));
     
-  }, [cityId, hasGesture]);
+  }, [cityId, hasGesture, isPlaying]);
 
   // 3. The Global Synchronizer Loop (Runs every 500ms)
   useEffect(() => {
@@ -592,14 +592,14 @@ export default function AudioOrchestrator() {
     }, 500);
 
     return () => clearInterval(interval);
-  }, [schedule, isPlaying, syncOffsetMs, cityId, hasGesture, setPhase, setCurrentBlock, setUpcomingBlocks]);
-
-  // Handle HTML Media Fallbacks
-  const syncAudioElement = (el: HTMLAudioElement | null) => {
-    if (!el || el.paused || !hasGesture || !isPlaying) return;
-  };
+  }, [schedule, isPlaying, syncOffsetMs, cityId, hasGesture, setPhase, setCurrentBlock, setUpcomingBlocks, setIsTuning]);
 
   useEffect(() => {
+    // Handle HTML Media Fallbacks
+    const syncAudioElement = (el: HTMLAudioElement | null) => {
+      if (!el || el.paused || !hasGesture || !isPlaying) return;
+    };
+
     const interval = setInterval(() => {
        syncAudioElement(mediaRefA.current);
        syncAudioElement(mediaRefB.current);
@@ -620,19 +620,7 @@ export default function AudioOrchestrator() {
     }
   }, [isPlaying]);
 
-  const handleGestureClick = () => {
-    // Only play the keepAlive to unlock AudioContext.
-    // The Global Synchronizer Loop will handle playing the activeDeck/sweeper.
-    keepAliveRef.current?.play().catch(() => {});
-    
-    // Also unlock transitionAudioRef
-    if (transitionAudioRef.current && transitionAudioRef.current.paused && transitionAudioRef.current.src) {
-        transitionAudioRef.current.play().catch(() => {});
-    }
 
-    setHasGesture(true);
-    setIsPlaying(true);
-  };
 
   return (
     <>

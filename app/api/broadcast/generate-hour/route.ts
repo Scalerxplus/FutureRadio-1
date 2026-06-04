@@ -340,8 +340,8 @@ export async function POST(request: Request) {
       return durMs; // No more Math.min cap, let the song play fully!
     };
 
-    let segmentIndex = 1;
-    let lastSongTitle = "nothing";
+    const segmentIndex = 1;
+    const lastSongTitle = "nothing";
     let lastTrackEnergy = 0.5;
     const playedSongs = new Set<string>();
 

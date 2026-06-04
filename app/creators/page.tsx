@@ -25,7 +25,7 @@ export default function CreatorsPage() {
                 The Vision Behind Future Radio
               </h2>
               <p className="text-lg md:text-xl font-medium leading-relaxed">
-                Future Radio isn't just an internet radio station; it's a rebellion against the algorithmic monotony of modern streaming platforms. We built this platform for the independent creators, the undiscovered talents, and the global audiophiles who crave authentic human connection.
+                Future Radio isn&apos;t just an internet radio station; it&apos;s a rebellion against the algorithmic monotony of modern streaming platforms. We built this platform for the independent creators, the undiscovered talents, and the global audiophiles who crave authentic human connection.
               </p>
             </section>
 
@@ -40,7 +40,7 @@ export default function CreatorsPage() {
 
             <section className="pt-8 border-t-4 border-brand-dark border-dashed">
               <p className="text-2xl md:text-3xl font-black italic text-center uppercase tracking-widest mb-8">
-                "We are the architects of the new soundscape. Join the revolution."
+                &quot;We are the architects of the new soundscape. Join the revolution.&quot;
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">

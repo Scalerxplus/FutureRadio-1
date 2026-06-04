@@ -44,7 +44,7 @@ export default function BusinessPage() {
               Communicate and engage with your in-store or in-house audience. Promote offers and announcements in real-time just by a simple prompt. 
             </p>
             <div className="bg-gray-100 p-3 border-l-4 border-brand-red text-sm font-bold uppercase mt-auto">
-              Put your prompt, select the voice, drag and drop. It's that easy.
+              Put your prompt, select the voice, drag and drop. It&apos;s that easy.
             </div>
           </div>
 

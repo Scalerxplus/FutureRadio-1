@@ -57,7 +57,7 @@ export default function TermsPage() {
                 Liability
               </h2>
               <p className="text-lg font-medium leading-relaxed pl-10 border-l-4 border-brand-red py-2 pl-4">
-                Future Radio is provided "as is". We are not responsible if our curated tracks cause spontaneous dancing, deep emotional reflection, or late-night driving sessions.
+                Future Radio is provided &quot;as is&quot;. We are not responsible if our curated tracks cause spontaneous dancing, deep emotional reflection, or late-night driving sessions.
               </p>
             </section>
           </div>
