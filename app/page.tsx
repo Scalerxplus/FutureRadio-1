@@ -15,13 +15,17 @@ import VibeSelectorSheet from "@/components/ui/VibeSelectorSheet";
 export default function EntrySplashPage() {
   const router = useRouter();
   const { cityName, setCityId } = useCityStore();
-  const { setMode } = useUiStore();
+  const { setMode, splashComplete, setSplashComplete } = useUiStore();
   const { user, isYtPremium } = useAuthStore();
   const { isPlaying, setIsPlaying } = useAudioStore();
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [splashComplete, setSplashComplete] = useState(false);
   const [listeners, setListeners] = useState(2438);
 
   useEffect(() => {
@@ -147,7 +151,7 @@ export default function EntrySplashPage() {
                   className="relative bg-gradient-to-b from-zinc-800 to-zinc-950 text-white w-[130px] h-[130px] md:w-[150px] md:h-[150px] rounded-full font-baloo font-bold uppercase flex flex-col items-center justify-center border-t border-zinc-700/50 border-b-2 border-zinc-950 shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_2px_5px_rgba(255,255,255,0.1)] hover:-rotate-12 hover:shadow-[0_4px_10px_rgba(0,0,0,0.9),inset_0_2px_5px_rgba(255,255,255,0.1)] active:rotate-0 active:scale-[0.97] active:shadow-[inset_0_10px_20px_rgba(0,0,0,0.9)] transition-all duration-300 group"
                 >
                   {/* The Dimple */}
-                  <div className={`absolute top-3 w-4 h-4 rounded-full transition-colors duration-500 ${isPlaying ? 'bg-green-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_12px_#22c55e]' : 'bg-brand-red shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_8px_#ff0032]'}`}></div>
+                  <div className={`absolute top-3 w-4 h-4 rounded-full transition-colors duration-500 ${mounted && isPlaying ? 'bg-green-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_12px_#22c55e]' : 'bg-brand-red shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_8px_#ff0032]'}`}></div>
                   
                   {/* Concentric Dial Ridges */}
                   <div className="absolute inset-3 rounded-full border border-zinc-700/30 pointer-events-none group-hover:border-brand-red/20 transition-colors"></div>

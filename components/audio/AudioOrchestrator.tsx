@@ -43,38 +43,7 @@ export default function AudioOrchestrator() {
   const webAudioInitializedRef = useRef<boolean>(false);
   const [listenerId] = useState(() => typeof window !== "undefined" ? crypto.randomUUID() : "anon");
 
-  // --- LOUDNORM: Inject Web Audio API Compressor ---
-  useEffect(() => {
-    if (hasGesture && !webAudioInitializedRef.current) {
-      webAudioInitializedRef.current = true;
-      try {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        if (!AudioContextClass) return;
-        const ctx = new AudioContextClass();
 
-        const compressor = ctx.createDynamicsCompressor();
-        compressor.threshold.setValueAtTime(-24, ctx.currentTime);
-        compressor.knee.setValueAtTime(30, ctx.currentTime);
-        compressor.ratio.setValueAtTime(12, ctx.currentTime);
-        compressor.attack.setValueAtTime(0.003, ctx.currentTime);
-        compressor.release.setValueAtTime(0.25, ctx.currentTime);
-        
-        compressor.connect(ctx.destination);
-
-        const refs = [mediaRefA, mediaRefB, mediaRefC, sweeperRef];
-        refs.forEach(r => {
-          if (r.current) {
-            const source = ctx.createMediaElementSource(r.current);
-            source.connect(compressor);
-          }
-        });
-        
-        console.log("[AudioOrchestrator] Web Audio API Loudness Normalizer (Compressor) injected!");
-      } catch (e) {
-        console.error("[AudioOrchestrator] Failed to inject Compressor (CORS/State Error)", e);
-      }
-    }
-  }, [hasGesture]);
 
   // --- SMART AUTO-HEAL: Silence Detection ---
   const handleMediaError = (deckType: "A" | "B" | "C" | "sweeper") => {
@@ -251,7 +220,7 @@ export default function AudioOrchestrator() {
   
   // 2.5 Instant Transition Sweeper on Channel Change
   useEffect(() => {
-    if (!hasGesture || !transitionAudioRef.current) return;
+    if (!hasGesture || !isPlaying || !transitionAudioRef.current) return;
     
     // Quick fade out old audio instead of hard stop to prevent abrupt cuts
     [sweeperRef, mediaRefA, mediaRefB, mediaRefC].forEach(ref => {

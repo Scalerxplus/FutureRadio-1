@@ -22,12 +22,16 @@ export const useCityStore = create<CityStore>()(
 
 interface UiStore {
   mode: "radio" | "news" | null;
+  splashComplete: boolean;
   setMode: (mode: "radio" | "news" | null) => void;
+  setSplashComplete: (complete: boolean) => void;
 }
 
 export const useUiStore = create<UiStore>((set) => ({
   mode: null,
+  splashComplete: false,
   setMode: (mode) => set({ mode }),
+  setSplashComplete: (splashComplete) => set({ splashComplete }),
 }));
 
 interface AuthStore {
