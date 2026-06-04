@@ -85,70 +85,74 @@ export default function AdminReviewPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-brand-dark flex flex-col font-sans">
-      <header className="bg-black text-white p-4 flex items-center justify-between sticky top-0 z-50">
+    <div className="p-8 font-sans">
+      <header className="mb-8 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/creators" className="hover:-translate-x-1 transition-transform">
-            <div className="p-2 border-2 border-white/20 hover:border-white transition-colors">
-              <MoveLeft className="w-5 h-5" />
+            <div className="p-2 border-2 border-white/20 rounded-lg hover:border-white transition-colors bg-[#111118]">
+              <MoveLeft className="w-5 h-5 text-gray-300" />
             </div>
           </Link>
-          <h1 className="text-xl font-bold uppercase tracking-widest">
-            Admin Review Dashboard
-          </h1>
+          <div>
+            <h2 className="text-3xl font-bold text-white mb-2">Content Audit</h2>
+            <p className="text-gray-400">Review pending creator applications and audio samples.</p>
+          </div>
         </div>
-        <div className="text-sm font-mono opacity-60 bg-white/10 px-3 py-1 rounded">
-          {applications.length} Pending
+        <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-full">
+          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+          <span className="text-sm font-medium text-blue-400 uppercase tracking-wide">
+            {applications.length} Pending
+          </span>
         </div>
       </header>
 
-      <main className="flex-grow p-6 max-w-6xl mx-auto w-full">
+      <main className="w-full">
         {loading ? (
-          <div className="text-center py-20 animate-pulse font-bold text-xl">Loading Queue...</div>
+          <div className="text-center py-20 animate-pulse font-bold text-xl text-gray-500">Loading Queue...</div>
         ) : applications.length === 0 ? (
-          <div className="text-center py-20">
-            <h2 className="text-3xl font-black text-gray-400 uppercase tracking-widest">No Pending Applications</h2>
+          <div className="text-center py-20 bg-[#111118] border border-[#1a1a24] rounded-2xl">
+            <h2 className="text-3xl font-black text-gray-600 uppercase tracking-widest">No Pending Applications</h2>
             <p className="mt-4 text-gray-500">The queue is currently empty.</p>
           </div>
         ) : (
           <div className="grid gap-6">
             {applications.map((app) => (
-              <div key={app.id} className="bg-white border border-gray-200 shadow-sm rounded-lg overflow-hidden flex flex-col md:flex-row">
+              <div key={app.id} className="bg-[#111118] border border-[#1a1a24] rounded-2xl overflow-hidden flex flex-col md:flex-row">
                 {/* Details Section */}
-                <div className="p-6 flex-grow border-b md:border-b-0 md:border-r border-gray-100 space-y-4">
+                <div className="p-6 flex-grow border-b md:border-b-0 md:border-r border-[#1a1a24] space-y-4">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-2xl font-black">{app.name}</h3>
-                      <p className="text-gray-500 font-mono text-sm">{app.email} • {app.phone}</p>
+                      <h3 className="text-2xl font-black text-white">{app.name}</h3>
+                      <p className="text-gray-400 font-mono text-sm">{app.email} • {app.phone}</p>
                     </div>
                     <div className="flex gap-2">
-                      <span className="bg-brand-red/10 text-brand-red px-3 py-1 text-xs font-black uppercase tracking-widest rounded-full">
+                      <span className="bg-red-500/10 text-red-400 border border-red-500/20 px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">
                         {app.type} Creator
                       </span>
-                      <span className="bg-brand-dark/10 text-brand-dark px-3 py-1 text-xs font-black uppercase tracking-widest rounded-full">
+                      <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">
                         {app.target_station}
                       </span>
                     </div>
                   </div>
                   
-                  <div className="pt-4 border-t border-gray-100">
-                    <p className="text-xs text-gray-400 uppercase font-bold tracking-widest mb-2">Submitted Audio Sample</p>
-                    <audio controls src={app.sample_file_url} className="w-full h-10 outline-none" controlsList="nodownload"></audio>
+                  <div className="pt-4 border-t border-[#1a1a24]">
+                    <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-2">Submitted Audio Sample</p>
+                    <audio controls src={app.sample_file_url} className="w-full h-10 outline-none grayscale invert" controlsList="nodownload"></audio>
                   </div>
                 </div>
 
                 {/* Actions Section */}
-                <div className="bg-gray-50 p-6 md:w-64 flex flex-col justify-center gap-3 shrink-0">
+                <div className="bg-[#0d0d14] p-6 md:w-64 flex flex-col justify-center gap-3 shrink-0">
                   <button 
                     onClick={() => handleAction(app.id, 'approve')}
-                    className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded transition-colors"
+                    className="w-full flex items-center justify-center gap-2 bg-green-500/20 hover:bg-green-500 text-green-400 hover:text-white border border-green-500/30 font-bold py-3 px-4 rounded-xl transition-all"
                   >
                     <CheckCircle className="w-5 h-5" />
                     APPROVE
                   </button>
                   <button 
                     onClick={() => handleAction(app.id, 'reject')}
-                    className="w-full flex items-center justify-center gap-2 bg-white hover:bg-red-50 text-red-500 border border-red-200 font-bold py-3 px-4 rounded transition-colors"
+                    className="w-full flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold py-3 px-4 rounded-xl transition-all"
                   >
                     <XCircle className="w-5 h-5" />
                     REJECT

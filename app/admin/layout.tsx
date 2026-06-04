@@ -79,6 +79,14 @@ export default function AdminLayout({
               {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap">Asset Manager</span>}
             </Link>
             <Link 
+              href="/admin/review" 
+              className={`flex items-center gap-3 py-3 rounded-xl hover:bg-[#1a1a24] text-gray-400 hover:text-white transition-all ${isCollapsed ? "justify-center px-0" : "px-4"}`}
+              title="Content Audit"
+            >
+              <Mic2 size={18} className="shrink-0" />
+              {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap">Content Audit</span>}
+            </Link>
+            <Link 
               href="/admin/settings" 
               className={`flex items-center gap-3 py-3 rounded-xl hover:bg-[#1a1a24] text-gray-400 hover:text-white transition-all ${isCollapsed ? "justify-center px-0" : "px-4"}`}
               title="Settings"
