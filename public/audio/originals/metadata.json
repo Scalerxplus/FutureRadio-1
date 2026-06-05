@@ -310,5 +310,31 @@
     "coverArt": "/logo-horizontal.png",
     "permalink": "https://thefutureradio.com",
     "energyScore": 0.7
+  },
+  {
+    "id": "original_fr_bagheli_jingle_1",
+    "title": "FR - Bagheli Jingle 01",
+    "artist": "TheFutureRadioNetwork",
+    "album": "The Future Radio Originals",
+    "durationSeconds": 60,
+    "durationMs": 60000,
+    "streamUrl": "/audio/originals/FR - Bagheli Jingle 01.mp3",
+    "artwork_url": "/logo-horizontal.png",
+    "coverArt": "/logo-horizontal.png",
+    "permalink": "https://thefutureradio.com",
+    "energyScore": 0.8
+  },
+  {
+    "id": "original_fr_bagheli_jingle_2",
+    "title": "FR - Bagheli Jingle 02",
+    "artist": "TheFutureRadioNetwork",
+    "album": "The Future Radio Originals",
+    "durationSeconds": 60,
+    "durationMs": 60000,
+    "streamUrl": "/audio/originals/FR - Bagheli Jingle 02.mp3",
+    "artwork_url": "/logo-horizontal.png",
+    "coverArt": "/logo-horizontal.png",
+    "permalink": "https://thefutureradio.com",
+    "energyScore": 0.8
   }
 ]

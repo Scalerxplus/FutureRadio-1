@@ -4,7 +4,7 @@ import { searchPodcastEpisode } from "@/lib/itunes";
 import { LocalTrack } from "@/lib/types";
 import { getGlobalNewsBite, getShortGlobalNewsBite } from "@/lib/newsbites";
 import { fetchContextualAd, SspContext } from "@/lib/ssp";
-import { getOriginalForStation, getFallbackOriginal } from "@/lib/originals";
+import { getOriginalForStation, getFallbackOriginal, getOriginalTracks } from "@/lib/originals";
 import * as mm from "music-metadata";
 import path from "path";
 import fs from "fs";
@@ -65,10 +65,18 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
   return sweepers[Math.floor(Math.random() * sweepers.length)];
 }
 
-function getJingleByGenre(genre: string) {
+function getJingleByGenre(genre: string, currentHour?: number) {
   try {
     const jinglesDir = path.join(process.cwd(), "public", "audio", "jingles");
     if (fs.existsSync(jinglesDir)) {
+      if (genre.toLowerCase() === "bagheli" && currentHour !== undefined) {
+        const bagheliFiles = fs.readdirSync(jinglesDir).filter(f => f.toLowerCase().includes('bagheli') && f.endsWith(".mp3")).sort();
+        if (bagheliFiles.length > 0) {
+          const index = currentHour % bagheliFiles.length;
+          return `/audio/jingles/${bagheliFiles[index]}`;
+        }
+      }
+
       const files = fs.readdirSync(jinglesDir).filter(f => f.toLowerCase().includes(`station_jingle_`) && f.endsWith(".mp3"));
       if (files.length > 0) {
         return `/audio/jingles/${files[Math.floor(Math.random() * files.length)]}`;
@@ -402,7 +410,7 @@ export async function POST(request: Request) {
 
     // 1. TOTH Station Jingle (Always Segment 0)
     let totalScheduledDurationMs = 0;
-    const stationId = getJingleByGenre(cityId);
+    const stationId = getJingleByGenre(cityId, currentIstHour);
     const stationIdDur = await getLocalAudioDuration(stationId);
     addElement('station_id', stationIdDur, stationId, { title: "Station ID" });
     totalScheduledDurationMs += stationIdDur;
@@ -420,6 +428,7 @@ export async function POST(request: Request) {
     
     let regionalCount = 0;
     let globalCount = 0;
+    let bagheliJinglesInjected = 0;
     const isCoreStation = cityId === "hindi" || cityId === "punjabi";
     const targetRegionalRatio = isCoreStation ? 0.2 : 0.5;
 
@@ -438,6 +447,20 @@ export async function POST(request: Request) {
         } else {
              let song: any = null;
              
+             // Inject Bagheli Original Jingles (2 per hour exactly)
+             if (cityId === "bagheli" && bagheliJinglesInjected < 2 && (prefetchSongs.length === 3 || prefetchSongs.length === 7)) {
+                 const jingleIndex = (currentIstHour + bagheliJinglesInjected) % 2; // alternates 0 and 1
+                 const trackId = jingleIndex === 0 ? "original_fr_bagheli_jingle_1" : "original_fr_bagheli_jingle_2";
+                 
+                 const tracks = getOriginalTracks();
+                 const jingleSong = tracks.find(t => t.id === trackId);
+                 if (jingleSong) {
+                     song = jingleSong;
+                     bagheliJinglesInjected++;
+                     playedSongs.add(song.id);
+                 }
+             }
+             
              const totalSongs = regionalCount + globalCount;
              const currentRegionalRatio = totalSongs === 0 ? 0 : (regionalCount / totalSongs);
              
@@ -448,7 +471,7 @@ export async function POST(request: Request) {
              }
              
              // 1. Try fetching regional track if required
-             if (trackType === "regional") {
+             if (!song && trackType === "regional") {
                  song = getOriginalForStation(cityId, playedSongs);
                  // Note: In future when Supabase has target_stations, we will query curated_tracks here too
                  if (song) {

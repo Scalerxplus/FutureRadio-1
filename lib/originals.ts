@@ -28,7 +28,7 @@ export function getOriginalTracks(): OriginalTrack[] {
       
       const t = track.title.toLowerCase();
       // Tain Sun & Dekhi Leb are Bagheli but have global appeal
-      if (t.includes("tain sun") || t.includes("dekhi leb")) {
+      if (t.includes("tain sun") || t.includes("dekhi leb") || t.includes("bagheli jingle")) {
         stations = ["bagheli", "global"];
       }
       // "fr_" tracks are specifically marked for fallbacks but also belong to global
