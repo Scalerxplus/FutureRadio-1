@@ -260,7 +260,29 @@ export default function EntrySplashPage() {
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/takedown" className="hover:underline hover:text-brand-red">Takedowns</Link>
           </div>
-          <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[340px] md:max-w-md mx-auto select-none font-medium text-balance">
+
+          {/* SEO Vernacular Stations Footer Links */}
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-2 px-2 text-[9px] font-bold uppercase tracking-wider text-black/60">
+            <Link href="/radio/hindi" className="hover:text-black hover:underline transition-colors">Hindi Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/bagheli" className="hover:text-black hover:underline transition-colors">Bagheli Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/radio/bundeli" className="hover:text-black hover:underline transition-colors">Bundeli Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/radio/chhattisgarhi" className="hover:text-black hover:underline transition-colors">Chhattisgarhi Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/radio/malwi" className="hover:text-black hover:underline transition-colors">Malwi Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/radio/sarguja" className="hover:text-black hover:underline transition-colors">Sarguja Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/radio/bastar" className="hover:text-black hover:underline transition-colors">Bastar Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/radio/raigarh" className="hover:text-black hover:underline transition-colors">Raigarh Radio</Link>
+            <span className="text-black/20">•</span>
+            <Link href="/radio/punjabi" className="hover:text-black hover:underline transition-colors">Punjabi Radio</Link>
+          </div>
+
+          <p className="text-[10px] text-black/70 font-sans leading-relaxed max-w-[340px] md:max-w-md mx-auto select-none font-medium text-balance mt-2">
             Future Radio is Digital India&apos;s premier creator-sourced radio network. A truly decentralized audio platform empowering independent creators by streaming their regional music, talk shows, and culturally relevant content to millions.
           </p>
           <div className="text-[9px] text-brand-dark font-digital font-bold tracking-widest uppercase select-none mt-2">
