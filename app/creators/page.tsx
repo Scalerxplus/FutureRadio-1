@@ -1,9 +1,35 @@
 import Link from "next/link";
 import { MoveLeft } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Independent Creators | Future Radio India",
+  description: "Join Future Radio as an independent creator, RJ, or artist. Submit your indie music and reach a global audience.",
+  alternates: {
+    canonical: "https://thefutureradio.com/creators",
+  },
+  openGraph: {
+    title: "Independent Creators | Future Radio India",
+    description: "Join Future Radio as an independent creator, RJ, or artist.",
+    url: "https://thefutureradio.com/creators",
+  }
+};
 
 export default function CreatorsPage() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Independent Creators | Future Radio India",
+    "description": "Join Future Radio as an independent creator, RJ, or artist. Submit your indie music and reach a global audience.",
+    "url": "https://thefutureradio.com/creators"
+  };
+
   return (
     <div className="min-h-screen bg-brand-red text-brand-dark flex flex-col font-mono selection:bg-brand-yellow selection:text-black">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       {/* Brutalist Header */}
       <header className="border-b-4 border-brand-dark bg-white p-4 flex items-center gap-4 sticky top-0 z-50">
         <Link href="/" className="hover:-translate-x-1 transition-transform">

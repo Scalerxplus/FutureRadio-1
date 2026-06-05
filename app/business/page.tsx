@@ -1,9 +1,39 @@
 import Link from "next/link";
 import { MoveLeft, Building2, Radio, Headphones, Code } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Business & Advertisers | Future Radio India",
+  description: "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across MP & CG with targeted audio ads.",
+  alternates: {
+    canonical: "https://thefutureradio.com/business",
+  },
+  openGraph: {
+    title: "Business & Advertisers | Future Radio India",
+    description: "Advertise on Future Radio or license our AI radio SaaS technology.",
+    url: "https://thefutureradio.com/business",
+  }
+};
 
 export default function BusinessPage() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Business & Advertisers | Future Radio India",
+    "description": "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across MP & CG with targeted audio ads.",
+    "url": "https://thefutureradio.com/business",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Future Radio"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-brand-yellow text-brand-dark flex flex-col font-mono selection:bg-brand-red selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       {/* Brutalist Header */}
       <header className="border-b-4 border-brand-dark bg-white p-4 flex items-center gap-4 sticky top-0 z-50">
         <Link href="/" className="hover:-translate-x-1 transition-transform">
