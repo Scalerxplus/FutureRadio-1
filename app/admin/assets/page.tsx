@@ -12,7 +12,8 @@ const supabase = createClient(
 
 export default function AssetManagerPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [bucket, setBucket] = useState<"jingles" | "sweepers" | "jocktalks" | "commercials">("sweepers");
+  const [bucket, setBucket] = useState<"jingles" | "sweepers" | "jocktalks" | "commercials" | "segments">("sweepers");
+  const [station, setStation] = useState<string>("global");
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -35,10 +36,11 @@ export default function AssetManagerPage() {
     try {
       // Clean filename for URL safety
       const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`;
+      const uploadPath = station === "global" ? fileName : `${station}/${fileName}`;
       
       const { data, error } = await supabase.storage
         .from(bucket)
-        .upload(fileName, file, {
+        .upload(uploadPath, file, {
           cacheControl: '3600',
           upsert: false
         });
@@ -102,7 +104,36 @@ export default function AssetManagerPage() {
             >
               Commercials
             </button>
+            <button 
+              onClick={() => setBucket("segments")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${bucket === 'segments' ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'text-gray-400 hover:text-red-400'}`}
+              title="Urgent Announcements / Instant Broadcasts"
+            >
+              Segments
+            </button>
           </div>
+        </div>
+
+        {/* Station Target Selector */}
+        <div className="px-6 py-4 border-b border-[#1a1a24] bg-[#0d0d14] flex items-center justify-between">
+          <div className="text-sm font-bold text-gray-400">Target Station Folder:</div>
+          <select 
+            value={station}
+            onChange={(e) => setStation(e.target.value)}
+            className="bg-[#1a1a24] border border-[#2a2a35] rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-blue-500 w-64"
+          >
+            <option value="global">Global (All Stations)</option>
+            <option value="hindi">Hindi</option>
+            <option value="bagheli">Bagheli</option>
+            <option value="bundeli">Bundeli</option>
+            <option value="chhattisgarhi">Chhattisgarhi</option>
+            <option value="malwi">Malwi</option>
+            <option value="sarguja">Sarguja</option>
+            <option value="bastar">Bastar</option>
+            <option value="raigarh">Raigarh</option>
+            <option value="punjabi">Punjabi</option>
+            <option value="news">News & Talk</option>
+          </select>
         </div>
 
         <div className="p-6">

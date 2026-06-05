@@ -117,6 +117,49 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Instant Broadcast */}
+        <div className="bg-[#111118] border border-red-900/50 p-6 rounded-2xl space-y-6 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-red-600 animate-pulse"></div>
+          <div className="flex items-center justify-between border-b border-[#2a2a35] pb-4">
+            <div className="flex items-center gap-3 text-red-500">
+              <Mic2 size={24} className="animate-pulse" />
+              <h3 className="text-lg font-bold text-white">Instant Broadcast & Emergency Override</h3>
+            </div>
+            <span className="bg-red-500/10 text-red-400 border border-red-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+              High Priority
+            </span>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1 space-y-4">
+              <div>
+                <p className="text-sm text-gray-300 font-medium mb-1">Queue Insertion Strategy</p>
+                <p className="text-xs text-gray-500 mb-4">Instant Broadcasts are automatically scheduled to play exactly after the 5th element in the current 'Now Playing' queue of the targeted station to ensure smooth crossfading.</p>
+                
+                <div className="p-4 bg-black/40 border border-[#2a2a35] rounded-xl flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-white">Emergency Text-to-Speech</h4>
+                    <p className="text-xs text-gray-500">Generate an AI voiceover announcement instantly.</p>
+                  </div>
+                  <button className="bg-[#1a1a24] hover:bg-[#2a2a35] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-[#3a3a45]">
+                    Open Editor
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex-1 space-y-4">
+              <p className="text-sm text-gray-300 font-medium mb-1">Direct Audio Injection</p>
+              <p className="text-xs text-gray-500 mb-4">If you already have a pre-produced high quality segment (e.g. Police Announcement), upload it directly to the Asset Manager as a <strong>Segment</strong>.</p>
+              
+              <a href="/admin/assets" className="block w-full text-center bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 text-red-400 hover:text-red-300 font-bold py-4 rounded-xl transition-all">
+                Upload Segment to Asset Manager
+              </a>
+            </div>
+          </div>
+        </div>
+
+
         {/* Save Button */}
         <div className="flex justify-end pt-4">
           <button 
