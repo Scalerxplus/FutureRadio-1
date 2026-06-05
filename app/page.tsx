@@ -22,6 +22,10 @@ export default function EntrySplashPage() {
   
   useEffect(() => {
     setMounted(true);
+    // Check if we've already shown the splash in this browser session
+    if (sessionStorage.getItem("future_radio_splash_shown") === "true") {
+      setSplashComplete(true);
+    }
   }, []);
   
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -67,7 +71,10 @@ export default function EntrySplashPage() {
 
   return (
     <>
-      {!splashComplete && <CinematicSplash onComplete={() => setSplashComplete(true)} />}
+      {!splashComplete && <CinematicSplash onComplete={() => {
+        setSplashComplete(true);
+        sessionStorage.setItem("future_radio_splash_shown", "true");
+      }} />}
       
       <div className={`min-h-screen bg-brand-red flex justify-center items-center transition-opacity duration-1000 ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
         {/* Centered Mobile viewport shell */}
