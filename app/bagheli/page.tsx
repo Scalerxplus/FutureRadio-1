@@ -253,7 +253,7 @@ export default function BagheliCampaignPage() {
             <div className="bg-black/40 rounded-2xl p-6 mb-8 border border-white/5">
               <audio 
                 ref={audioRef} 
-                src="/audio/originals/tain_sun_1.mp3"
+                src="/audio/originals/tain_sun_5.mp3"
                 onTimeUpdate={handleTimeUpdate} 
                 onEnded={() => { setIsPlayingAnthem(false); setProgress(0); }}
               />
