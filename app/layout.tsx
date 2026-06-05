@@ -29,11 +29,11 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Future Radio | MP & CG's No. 1 AI Virtual Radio Network",
-  description: "Experience the next generation of sound. Future Radio is India's first 100% autonomous, AI-powered virtual radio station network covering MP and CG.",
+  title: "Future Radio | Digital India's #1 Digital Audio Network",
+  description: "Experience the next generation of sound. Future Radio is India's first 100% autonomous, AI-powered virtual radio station network covering all regional and global dialects.",
   keywords: ["radio", "internet radio india", "ai radio station", "future radio", "madhya pradesh radio", "chhattisgarh radio", "bagheli", "bundeli", "malwi", "chhattisgarhi", "sarguja", "bastar", "punjabi radio", "indie music"],
   openGraph: {
-    title: "Future Radio | MP & CG's No. 1 AI Radio Network",
+    title: "Future Radio | Digital India's #1 Digital Audio Network",
     description: "The New-age radio network. Tune into the future of sound with regional and global music in your own dialect.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",

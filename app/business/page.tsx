@@ -4,7 +4,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Business & Advertisers | Future Radio India",
-  description: "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across MP & CG with targeted audio ads.",
+  description: "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across Digital India with targeted audio ads.",
   alternates: {
     canonical: "https://thefutureradio.com/business",
   },
@@ -20,7 +20,7 @@ export default function BusinessPage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Business & Advertisers | Future Radio India",
-    "description": "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across MP & CG with targeted audio ads.",
+    "description": "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across Digital India with targeted audio ads.",
     "url": "https://thefutureradio.com/business",
     "publisher": {
       "@type": "Organization",
