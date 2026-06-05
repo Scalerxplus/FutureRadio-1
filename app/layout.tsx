@@ -5,6 +5,7 @@ import AudioOrchestrator from "@/components/audio/AudioOrchestrator";
 import PlayerBar from "@/components/audio/PlayerBar";
 
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 
 import { Baloo_2, Space_Grotesk, Space_Mono } from "next/font/google";
 
@@ -113,6 +114,21 @@ export default function RootLayout({
             })
           }}
         />
+        
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-TY6F9GVTSY"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-TY6F9GVTSY');
+          `}
+        </Script>
       </body>
     </html>
   );
