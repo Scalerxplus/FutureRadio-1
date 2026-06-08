@@ -33,5 +33,44 @@ export async function generateMetadata({ params }: { params: { station: string }
 }
 
 export default function StationRadioPage({ params }: { params: { station: string } }) {
-  return <RadioClient initialStation={params.station.toLowerCase()} />;
+  const station = params.station.toLowerCase();
+  const seo = seoMap[station] || { title: `Future Radio ${station} | Live AI Radio`, desc: "Experience the next generation of sound with Future Radio." };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RadioStation",
+    "name": seo.title,
+    "description": seo.desc,
+    "url": `https://thefutureradio.com/radio/${station}`,
+    "image": "https://thefutureradio.com/fr-business-cover.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "IN"
+    }
+  };
+
+  return (
+    <>
+      {/* JSON-LD Structured Data for Google */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
+      {/* Screen-Reader Only SEO Content for Google Bots */}
+      <div className="sr-only">
+        <h1>{seo.title}</h1>
+        <article>
+          <p>{seo.desc}</p>
+          <h2>About Future Radio {station.charAt(0).toUpperCase() + station.slice(1)}</h2>
+          <p>
+            Welcome to the official live stream for Future Radio {station}. We broadcast 100% autonomous, AI-powered radio featuring the best independent music, local vernacular folk hits, global chartbusters, and real-time updates. 
+            Digital India's #1 Digital Audio Network brings the radio experience to your smartphone. Tune in to hear AI RJs speaking in your local dialect, providing a seamless blend of nostalgia and the future of sound.
+          </p>
+        </article>
+      </div>
+
+      <RadioClient initialStation={station} />
+    </>
+  );
 }
