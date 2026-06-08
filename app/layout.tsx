@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     images: ["/icons/logo-horizontal-dark.png"],
   },
   icons: {
-    icon: "/favicon.png",
+    icon: "/icons/player-logo.png",
     apple: "/icons/apple-touch-icon.png",
   },
   alternates: {
