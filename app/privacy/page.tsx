@@ -1,5 +1,14 @@
 import Link from "next/link";
 import { MoveLeft } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | Future Radio",
+  description: "Learn how Future Radio collects and protects your data to deliver an autonomous, algorithm-driven regional audio experience.",
+  alternates: {
+    canonical: "https://thefutureradio.com/privacy",
+  },
+};
 
 export default function PrivacyPage() {
   return (

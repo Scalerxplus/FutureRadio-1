@@ -1,5 +1,14 @@
 import Link from "next/link";
 import { MoveLeft } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service | Future Radio",
+  description: "Read the Terms of Service and acceptable use policies for Future Radio.",
+  alternates: {
+    canonical: "https://thefutureradio.com/terms",
+  },
+};
 
 export default function TermsPage() {
   return (

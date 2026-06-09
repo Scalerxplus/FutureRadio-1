@@ -16,13 +16,33 @@ export const metadata: Metadata = {
 };
 
 export default function CreatorsPage() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Independent Creators | Future Radio India",
-    "description": "Join Future Radio as an independent creator, RJ, or artist. Submit your indie music and reach a global audience.",
-    "url": "https://thefutureradio.com/creators"
-  };
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Independent Creators | Future Radio India",
+      "description": "Join Future Radio as an independent creator, RJ, or artist. Submit your indie music and reach a global audience.",
+      "url": "https://thefutureradio.com/creators"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://thefutureradio.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "The Creators",
+          "item": "https://thefutureradio.com/creators"
+        }
+      ]
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-brand-red text-brand-dark flex flex-col font-mono selection:bg-brand-yellow selection:text-black">

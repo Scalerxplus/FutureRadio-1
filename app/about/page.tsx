@@ -1,5 +1,14 @@
 import Link from "next/link";
 import { MoveLeft } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us | Future Radio",
+  description: "Learn about Future Radio's mission to decentralize audio, empower regional creators, and build Digital India's #1 Digital Audio Network.",
+  alternates: {
+    canonical: "https://thefutureradio.com/about",
+  },
+};
 
 export default function AboutPage() {
   return (

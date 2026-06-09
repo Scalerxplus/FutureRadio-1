@@ -98,6 +98,28 @@ export default function RootLayout({
             gtag('config', 'G-TY6F9GVTSY');
           `}
         </Script>
+        
+        {/* SEO JSON-LD Schemas */}
+        <Script id="organization-schema" strategy="beforeInteractive" type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "name": "Future Radio",
+                  "url": "https://thefutureradio.com",
+                  "logo": "https://thefutureradio.com/icons/player-logo.png"
+                },
+                {
+                  "@type": "WebSite",
+                  "name": "Future Radio | Digital India's #1 Digital Audio Network",
+                  "url": "https://thefutureradio.com"
+                }
+              ]
+            }
+          `}
+        </Script>
       </head>
       <body
         className={`${balooFont.variable} ${spaceGrotesk.variable} ${digitalFont.variable} font-sans antialiased text-white min-h-screen selection:bg-brand-red selection:text-white`}

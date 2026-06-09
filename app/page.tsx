@@ -116,12 +116,12 @@ export default function EntrySplashPage() {
               <p className="text-xl md:text-2xl font-baloo font-bold text-brand-dark tracking-wide select-none uppercase">
                 डिजिटल इंडिया का
               </p>
-              <p className="text-[22px] md:text-3xl font-baloo font-bold text-white tracking-wide select-none uppercase drop-shadow-md mb-2 mt-1">
+              <h1 className="text-[22px] md:text-3xl font-baloo font-bold text-white tracking-wide select-none uppercase drop-shadow-md mb-2 mt-1">
                 नं 1 डिजिटल रेडियो नेटवर्क
-              </p>
-              <p className="text-[10px] md:text-xs font-sans font-bold text-brand-dark/80 uppercase tracking-[0.2em] mb-4">
+              </h1>
+              <h2 className="text-[10px] md:text-xs font-sans font-bold text-brand-dark/80 uppercase tracking-[0.2em] mb-4">
                 Digital India&apos;s #1 Digital Radio Network
-              </p>
+              </h2>
               <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-baloo font-bold uppercase tracking-[0.2em] text-[12px] shadow-brutal transform -rotate-1">
                 10 बोली, 1 प्लेटफॉर्म
               </div>
@@ -155,6 +155,7 @@ export default function EntrySplashPage() {
               <div className="relative p-2 md:p-2.5 rounded-full bg-[#dc0029] shadow-[inset_0_15px_25px_rgba(0,0,0,0.7),inset_0_-2px_5px_rgba(255,255,255,0.3),0_1px_2px_rgba(255,255,255,0.2)] border border-black/10">
                 <button 
                   onClick={() => handleCardClick("radio", "/radio")}
+                  aria-label="Play Future Radio"
                   className="relative bg-gradient-to-b from-zinc-800 to-zinc-950 text-white w-[130px] h-[130px] md:w-[150px] md:h-[150px] rounded-full font-baloo font-bold uppercase flex flex-col items-center justify-center border-t border-zinc-700/50 border-b-2 border-zinc-950 shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_2px_5px_rgba(255,255,255,0.1)] hover:-rotate-12 hover:shadow-[0_4px_10px_rgba(0,0,0,0.9),inset_0_2px_5px_rgba(255,255,255,0.1)] active:rotate-0 active:scale-[0.97] active:shadow-[inset_0_10px_20px_rgba(0,0,0,0.9)] transition-all duration-300 group"
                 >
                   {/* The Dimple */}

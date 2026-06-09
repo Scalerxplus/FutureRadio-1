@@ -16,17 +16,37 @@ export const metadata: Metadata = {
 };
 
 export default function BusinessPage() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Business & Advertisers | Future Radio India",
-    "description": "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across Digital India with targeted audio ads.",
-    "url": "https://thefutureradio.com/business",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Future Radio"
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Business & Advertisers | Future Radio India",
+      "description": "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across Digital India with targeted audio ads.",
+      "url": "https://thefutureradio.com/business",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Future Radio"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://thefutureradio.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Business & Advertisers",
+          "item": "https://thefutureradio.com/business"
+        }
+      ]
     }
-  };
+  ];
 
   return (
     <div className="min-h-screen bg-brand-yellow text-brand-dark flex flex-col font-mono selection:bg-brand-red selection:text-white">
