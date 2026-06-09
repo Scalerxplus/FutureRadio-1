@@ -4,7 +4,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About Us | Future Radio",
-  description: "Learn about Future Radio's mission to decentralize audio, empower regional creators, and build Digital India's #1 Digital Audio Network.",
+  description: "Learn about Future Radio's mission to decentralize audio, empower regional creators, and build Digital India's #1 Digital & Virtual Radio Network.",
   alternates: {
     canonical: "https://thefutureradio.com/about",
   },

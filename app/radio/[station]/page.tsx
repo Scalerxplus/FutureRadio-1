@@ -65,7 +65,7 @@ export default function StationRadioPage({ params }: { params: { station: string
           <h2>About Future Radio {station.charAt(0).toUpperCase() + station.slice(1)}</h2>
           <p>
             Welcome to the official live stream for Future Radio {station}. We broadcast 100% autonomous, AI-powered radio featuring the best independent music, local vernacular folk hits, global chartbusters, and real-time updates. 
-            Digital India's #1 Digital Audio Network brings the radio experience to your smartphone. Tune in to hear AI RJs speaking in your local dialect, providing a seamless blend of nostalgia and the future of sound.
+            Digital India's #1 Digital & Virtual Radio Network brings the radio experience to your smartphone. Tune in to hear AI RJs speaking in your local dialect, providing a seamless blend of nostalgia and the future of sound.
           </p>
         </article>
       </div>

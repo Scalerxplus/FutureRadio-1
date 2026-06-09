@@ -116,11 +116,11 @@ export default function EntrySplashPage() {
               <p className="text-xl md:text-2xl font-baloo font-bold text-brand-dark tracking-wide select-none uppercase">
                 डिजिटल इंडिया का
               </p>
-              <h1 className="text-[22px] md:text-3xl font-baloo font-bold text-white tracking-wide select-none uppercase drop-shadow-md mb-2 mt-1">
-                नं 1 डिजिटल रेडियो नेटवर्क
+              <h1 className="text-[20px] md:text-3xl font-baloo font-bold text-white tracking-wide select-none uppercase drop-shadow-md mb-2 mt-1">
+                नं 1 डिजिटल और वर्चुअल रेडियो नेटवर्क
               </h1>
-              <h2 className="text-[10px] md:text-xs font-sans font-bold text-brand-dark/80 uppercase tracking-[0.2em] mb-4">
-                Digital India&apos;s #1 Digital Radio Network
+              <h2 className="text-[9px] md:text-xs font-sans font-bold text-brand-dark/80 uppercase tracking-[0.2em] mb-4">
+                Digital India&apos;s #1 Digital & Virtual Radio Network
               </h2>
               <div className="bg-yellow-300 text-black border-brutal border-black px-4 py-1.5 font-baloo font-bold uppercase tracking-[0.2em] text-[12px] shadow-brutal transform -rotate-1">
                 10 बोली, 1 प्लेटफॉर्म
