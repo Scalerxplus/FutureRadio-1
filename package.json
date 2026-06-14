@@ -30,6 +30,7 @@
     "node-edge-tts": "^1.2.10",
     "react": "^18",
     "react-dom": "^18",
+    "react-simple-maps": "^3.0.0",
     "xstate": "^5.31.1",
     "yt-search": "^2.13.1",
     "zustand": "^5.0.13"

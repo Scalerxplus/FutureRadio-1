@@ -255,7 +255,13 @@ export default function EntrySplashPage() {
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/creators" className="hover:underline hover:text-black">Creators</Link>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
+            <Link href="/technology" className="hover:underline hover:text-black">Tech</Link>
+            <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <Link href="/business" className="hover:underline hover:text-black">Business</Link>
+            <span className="w-1 h-1 rounded-full bg-black/30"></span>
+            <Link href="/partner" className="hover:underline hover:text-black">Partner</Link>
+            <span className="w-1 h-1 rounded-full bg-black/30"></span>
+            <Link href="/analysis" className="hover:underline hover:text-black">Analysis</Link>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
             <a href="/media-kit.html" target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-brand-red font-black">Advertise</a>
             <span className="w-1 h-1 rounded-full bg-black/30"></span>
