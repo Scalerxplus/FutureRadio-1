@@ -125,21 +125,30 @@ export default function EntrySplashPage() {
                   Initiate Broadcast Sequence
                 </p>
 
-                {/* Massive Play Button */}
-                <div className="relative p-3 rounded-full bg-[#111] shadow-[inset_0_10px_20px_rgba(0,0,0,1)] border border-white/5 mb-8">
+                {/* Massive Play Button Dial */}
+                <div className="relative p-2.5 rounded-full bg-[#111] shadow-[inset_0_15px_25px_rgba(0,0,0,0.7),inset_0_-2px_5px_rgba(255,255,255,0.3),0_1px_2px_rgba(255,255,255,0.2)] border border-black/50 mb-8">
                   <button 
                     onClick={() => handleCardClick("radio", "/radio")}
                     aria-label="Play Future Radio"
-                    className="relative bg-gradient-to-b from-brand-red to-[#b3001e] text-white w-[140px] h-[140px] rounded-full font-baloo font-bold uppercase flex flex-col items-center justify-center border-t border-white/20 border-b-4 border-black/40 shadow-[0_10px_20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(255,46,46,0.3)] active:translate-y-2 active:shadow-none transition-all duration-300 group"
+                    className="relative bg-gradient-to-b from-zinc-800 to-zinc-950 text-white w-[160px] h-[160px] rounded-full font-baloo font-bold uppercase flex flex-col items-center justify-center border-t border-zinc-700/50 border-b-2 border-zinc-950 shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_2px_5px_rgba(255,255,255,0.1)] hover:-rotate-12 hover:shadow-[0_4px_10px_rgba(0,0,0,0.9),inset_0_2px_5px_rgba(255,255,255,0.1)] active:rotate-0 active:scale-[0.97] active:shadow-[inset_0_10px_20px_rgba(0,0,0,0.9)] transition-all duration-300 group"
                   >
-                    <div className="w-[50px] h-[50px] rounded-full bg-[#111118] flex items-center justify-center shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] relative z-10">
-                       <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
+                    {/* Inner glowing accent */}
+                    <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${mounted && isPlaying ? 'shadow-[inset_0_0_20px_#22c55e]' : 'shadow-[inset_0_0_20px_rgba(255,46,46,0.3)]'}`}></div>
+                    
+                    {/* Center Core */}
+                    <div className="w-[60px] h-[60px] rounded-full bg-[#111118] border-2 border-[#1c1c24] flex items-center justify-center shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] relative z-10 overflow-hidden mb-1">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50"></div>
+                      <div className="w-[20px] h-[20px] rounded-full bg-[#0a0a0d] shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)]"></div>
                     </div>
                     
                     {/* The Dimple Indicator */}
-                    <div className={`absolute top-4 w-3 h-3 rounded-full transition-colors duration-500 ${mounted && isPlaying ? 'bg-green-500 shadow-[0_0_12px_#22c55e]' : 'bg-black shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]'}`}></div>
+                    <div className={`absolute top-3 w-4 h-4 rounded-full transition-colors duration-500 ${mounted && isPlaying ? 'bg-green-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_12px_#22c55e]' : 'bg-brand-red shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_0_8px_#ff0032]'}`}></div>
                     
-                    <div className="absolute inset-2 rounded-full border border-white/10 pointer-events-none"></div>
+                    {/* Concentric Dial Ridges */}
+                    <div className="absolute inset-3 rounded-full border border-zinc-700/30 pointer-events-none group-hover:border-brand-red/20 transition-colors"></div>
+                    <div className="absolute inset-5 rounded-full border border-zinc-700/10 pointer-events-none"></div>
+                    
+                    <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,1)] z-10 mt-3 text-2xl tracking-widest text-[#f5f5f5]">PLAY</span>
                   </button>
                 </div>
 
