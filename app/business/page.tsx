@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MoveLeft, Building2, Radio, Headphones, Code } from "lucide-react";
 import { Metadata } from "next";
+import { Header } from "@/components/layout/Header";
 
 export const metadata: Metadata = {
   title: "Business & Advertisers | Future Radio India",
@@ -54,20 +55,11 @@ export default function BusinessPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      {/* Brutalist Header */}
-      <header className="border-b-4 border-brand-dark bg-white p-4 flex items-center gap-4 sticky top-0 z-50">
-        <Link href="/" className="hover:-translate-x-1 transition-transform">
-          <div className="p-2 border-2 border-brand-dark shadow-brutal-sm bg-brand-red text-white hover:bg-brand-dark hover:text-white transition-colors">
-            <MoveLeft className="w-6 h-6" />
-          </div>
-        </Link>
-        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
-          Business & Tech
-        </h1>
-      </header>
+      {/* Global Header */}
+      <Header />
 
       {/* Main Content */}
-      <main className="flex-grow p-6 md:p-12 lg:p-24 max-w-5xl mx-auto w-full">
+      <main className="flex-grow p-6 md:p-12 lg:p-24 pt-32 md:pt-40 max-w-5xl mx-auto w-full">
         
         {/* Intro */}
         <div className="mb-12 bg-white border-4 border-brand-dark p-6 md:p-10 shadow-brutal translate-x-1 -translate-y-1">

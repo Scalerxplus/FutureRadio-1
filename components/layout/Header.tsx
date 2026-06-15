@@ -38,7 +38,7 @@ export const Header = () => {
             <img 
               src="/icons/logo-horizontal-dark.png" 
               alt="Future Radio" 
-              className="h-8 object-contain"
+              className="h-12 md:h-14 object-contain"
             />
           </Link>
           <span className="hidden lg:inline-block text-[10px] font-mono text-brand-dark font-bold tracking-widest uppercase border-2 border-brand-dark px-2 py-0.5 bg-brand-yellow shadow-brutal-sm">
