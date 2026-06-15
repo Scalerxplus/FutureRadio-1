@@ -135,10 +135,15 @@ export default function EntrySplashPage() {
                     {/* Inner glowing accent */}
                     <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${mounted && isPlaying ? 'shadow-[inset_0_0_20px_#22c55e]' : 'shadow-[inset_0_0_20px_rgba(255,46,46,0.3)]'}`}></div>
                     
-                    {/* Center Core */}
-                    <div className="w-[60px] h-[60px] rounded-full bg-[#111118] border-2 border-[#1c1c24] flex items-center justify-center shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] relative z-10 overflow-hidden mb-1">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50"></div>
-                      <div className="w-[20px] h-[20px] rounded-full bg-[#0a0a0d] shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)]"></div>
+                    {/* Center Core (Premium Metallic Cap) */}
+                    <div className="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 border border-zinc-800 flex items-center justify-center shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] relative z-10 overflow-hidden mb-1">
+                      {/* Brushed metal reflection */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-black/40"></div>
+                      {/* Inner engraved ring */}
+                      <div className="w-[30px] h-[30px] rounded-full border border-black/30 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)] flex items-center justify-center relative">
+                        {/* Center spindle */}
+                        <div className="w-[8px] h-[8px] rounded-full bg-zinc-900 shadow-[inset_0_1px_3px_rgba(0,0,0,1)]"></div>
+                      </div>
                     </div>
                     
                     {/* The Dimple Indicator */}
