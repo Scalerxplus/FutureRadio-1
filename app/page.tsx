@@ -72,7 +72,7 @@ export default function EntrySplashPage() {
           >
             {/* Reduced logo size for premium hierarchy */}
             <img 
-              src="/icons/logo-homepage.png" 
+              src="/icons/logo-vertical-dark.png" 
               alt="Future Radio" 
               className="w-[200px] md:w-[280px] h-auto object-contain select-none pointer-events-none transition-transform duration-700 hover:scale-105 mb-8 filter drop-shadow-xl" 
             />
