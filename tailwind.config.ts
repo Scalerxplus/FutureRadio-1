@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "brand-yellow": "#F3F574", // Neo-Brutalist High-Vis Yellow
         "brand-red": "#FF2E2E",    // Neo-Brutalist Red
         "brand-dark": "#0A0D14",   // Deep Navy / Dark Charcoal
         "brand-surface": "#111118",
