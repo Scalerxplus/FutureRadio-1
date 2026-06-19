@@ -169,7 +169,7 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
       const res = await fetch("/api/broadcast/skip", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason })
+        body: JSON.stringify({ reason, cityId: currentChannel })
       });
       const data = await res.json();
       if (data.success) {

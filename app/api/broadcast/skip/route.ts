@@ -4,7 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 export async function POST(req: Request) {
   try {
     const supabase = createClient();
-    const cityId = "raipur";
+    const body = await req.json().catch(() => ({}));
+    const cityId = body.cityId || "raipur";
+    const skipReason = body.reason || "Manual skip via Admin Dashboard";
     
     // Find the currently playing element
     const nowISO = new Date().toISOString();
@@ -28,9 +30,6 @@ export async function POST(req: Request) {
     if (shiftMs <= 0) {
        return NextResponse.json({ success: false, error: "Element already finished" });
     }
-
-    const body = await req.json().catch(() => ({}));
-    const skipReason = body.reason || "Manual skip via Admin Dashboard";
 
     // 1. End the current element immediately and mark as skipped
     await supabase
