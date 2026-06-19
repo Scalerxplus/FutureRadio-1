@@ -55,7 +55,14 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
   }
   
   // Static Fallback
-  const staticGenre = genre.toLowerCase() === "news" ? "news" : "global";
+  let staticGenre = "chill";
+  if (genre.toLowerCase() === "news") {
+      staticGenre = "news";
+  } else {
+      const globals = ["chill", "drive", "party", "romance"];
+      staticGenre = globals[Math.floor(Math.random() * globals.length)];
+  }
+  
   const sweepers = [
     `/audio/Sweepers/Sweeper_${staticGenre}_01.mp3`,
     `/audio/Sweepers/Sweeper_${staticGenre}_02.mp3`,

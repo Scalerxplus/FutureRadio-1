@@ -412,7 +412,7 @@ export default function AudioOrchestrator() {
           const nextDeck = nextDeckName === "A" ? mediaRefA.current : (nextDeckName === "B" ? mediaRefB.current : mediaRefC.current);
           const nextTargetUrl = nextElement.element_type === "song" ? nextElement.youtube_id : nextElement.media_url;
           
-          if (nextDeck && nextDeck.src !== nextTargetUrl && nextTargetUrl) {
+          if (nextDeck && !nextDeck.src.endsWith(nextTargetUrl) && nextTargetUrl) {
               nextDeck.src = nextTargetUrl;
               nextDeck.preload = "auto";
               console.log(`[Smart Preload] Loading upcoming track into Deck ${nextDeckName} early.`);
@@ -539,7 +539,7 @@ export default function AudioOrchestrator() {
            setPhase("playing_jingle");
            const player = sweeperRef.current;
            if (player) {
-              if (player.src !== currentElementToPlay.media_url) player.src = currentElementToPlay.media_url;
+              if (!player.src.endsWith(currentElementToPlay.media_url)) player.src = currentElementToPlay.media_url;
               applyFadeIn(player, currentElementToPlay.element_type);
               if (offsetSeconds > 0.5) try { player.currentTime = offsetSeconds; } catch(e) {}
               // HARD STOP transition audio for Master Clock Sweepers to prevent parallel clashing
@@ -552,7 +552,7 @@ export default function AudioOrchestrator() {
            setPhase(currentElementToPlay.element_type === "jocktalk" ? "playing_jocktalk" : "playing_song");
            const targetUrl = currentElementToPlay.element_type === "song" ? currentElementToPlay.youtube_id : currentElementToPlay.media_url;
            if (primaryDeck) {
-              if (primaryDeck.src !== targetUrl) primaryDeck.src = targetUrl;
+              if (!primaryDeck.src.endsWith(targetUrl)) primaryDeck.src = targetUrl;
               applyFadeIn(primaryDeck, currentElementToPlay.element_type);
               if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
               // Fade out transition audio ONLY if it's a song, otherwise hard stop for jocktalk
