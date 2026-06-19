@@ -429,6 +429,7 @@ export async function POST(request: Request) {
     let regionalCount = 0;
     let globalCount = 0;
     let bagheliJinglesInjected = 0;
+    let globalOriginalsInjected = 0;
     const isCoreStation = cityId === "hindi" || cityId === "punjabi";
     const targetRegionalRatio = isCoreStation ? 0.2 : 0.5;
 
@@ -484,12 +485,15 @@ export async function POST(request: Request) {
              
              // 2. Try fetching global track
              if (!song && trackType === "global") {
-                 // Try injecting global Originals periodically (30% chance)
-                 if (Math.random() < 0.3) {
+                 // Force exactly 2 Global Originals per hour
+                 if (globalOriginalsInjected < 2) {
                      song = getOriginalForStation("global", playedSongs);
+                     if (song) {
+                         globalOriginalsInjected++;
+                     }
                  }
                  
-                 // If no original available or roll failed, fetch from Jamendo/Audius via getSong
+                 // If no original available or quota met, fetch from local/indie catalogue via getSong
                  if (!song) {
                      // We pass 'global' to ensure the search queries pull from the broad indie catalogue
                      song = await getSong(getSearchQueryForGenre("global"), "global", playedSongs);
