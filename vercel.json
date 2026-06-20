@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/generate-next-hour",
-      "schedule": "55 12 * * *"
+      "schedule": "55 * * * *"
     },
     {
       "path": "/api/cron/cleanup-submissions",
