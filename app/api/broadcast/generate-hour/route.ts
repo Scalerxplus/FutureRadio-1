@@ -437,6 +437,7 @@ export async function POST(request: Request) {
     let globalCount = 0;
     let bagheliJinglesInjected = 0;
     let globalOriginalsInjected = 0;
+    let newOriginalsInjected = 0;
     let hasPlayedSpecialOriginal = false;
     const isCoreStation = cityId === "hindi" || cityId === "punjabi";
     const targetRegionalRatio = isCoreStation ? 0.2 : 0.5;
@@ -477,6 +478,17 @@ export async function POST(request: Request) {
              // If we are below the target ratio of regional tracks, we must force a regional track
              if (currentRegionalRatio < targetRegionalRatio && cityId !== "news") {
                  trackType = "regional";
+             }
+             
+             // 0.5 Try fetching newly added originals first (Force 2 per hour)
+             if (!song && newOriginalsInjected < 2) {
+                 song = getOriginalForStation("global", playedSongs, !hasPlayedSpecialOriginal, true);
+                 if (song) {
+                     newOriginalsInjected++;
+                     globalCount++; // They are technically global
+                     const tLower = song.title.toLowerCase();
+                     if (tLower.includes("dekhi leb") || tLower.includes("tain sun")) hasPlayedSpecialOriginal = true;
+                 }
              }
              
              // 1. Try fetching regional track if required

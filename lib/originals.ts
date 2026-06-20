@@ -70,13 +70,15 @@ export function getFallbackOriginal(targetEnergy?: number): string | null {
   return null;
 }
 
-export function getOriginalForStation(cityId: string, playedSongs: Set<string>, allowSpecial: boolean = true): OriginalTrack | null {
+export function getOriginalForStation(cityId: string, playedSongs: Set<string>, allowSpecial: boolean = true, onlyNew: boolean = false): OriginalTrack | null {
     const tracks = getOriginalTracks();
     
     const isTrackValid = (t: OriginalTrack, targetStation: string) => {
         if (!t.target_stations.includes(targetStation)) return false;
         if (targetStation === "global" && t.target_stations.includes("fallback")) return false;
         if (playedSongs.has(t.id) || playedSongs.has(t.streamUrl)) return false;
+        
+        if (onlyNew && !t.isNew) return false;
         
         const titleLower = t.title.toLowerCase();
         const isSpecial = titleLower.includes("dekhi leb") || titleLower.includes("tain sun");
@@ -89,7 +91,7 @@ export function getOriginalForStation(cityId: string, playedSongs: Set<string>, 
     let valid = tracks.filter(t => isTrackValid(t, cityId));
     
     // If no exact match (or if station is global), fallback to global tracks
-    if (valid.length === 0) {
+    if (valid.length === 0 && cityId !== "global") {
         valid = tracks.filter(t => isTrackValid(t, "global"));
     }
     

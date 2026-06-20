@@ -177,7 +177,8 @@
       "bagheli",
       "punjabi",
       "devotional"
-    ]
+    ],
+    "isNew": true
   },
   {
     "id": "original_hanuman_chalisa_rock_version",
@@ -197,7 +198,8 @@
       "bagheli",
       "punjabi",
       "devotional"
-    ]
+    ],
+    "isNew": true
   },
   {
     "id": "original_main_tum_aur_hum_1",
@@ -297,7 +299,8 @@
       "bagheli",
       "punjabi",
       "devotional"
-    ]
+    ],
+    "isNew": true
   },
   {
     "id": "original_shiva_panchakshara_stotram___shiva_shambhoo_mix",
@@ -317,7 +320,8 @@
       "bagheli",
       "punjabi",
       "devotional"
-    ]
+    ],
+    "isNew": true
   },
   {
     "id": "original_tain_sun_1",
@@ -517,7 +521,8 @@
       "bagheli",
       "punjabi",
       "devotional"
-    ]
+    ],
+    "isNew": true
   },
   {
     "id": "original___________________________ram_charit_manas___goswami_tulsidas",
@@ -537,6 +542,7 @@
       "bagheli",
       "punjabi",
       "devotional"
-    ]
+    ],
+    "isNew": true
   }
 ]
