@@ -70,20 +70,33 @@ export function getFallbackOriginal(targetEnergy?: number): string | null {
   return null;
 }
 
-export function getOriginalForStation(cityId: string, playedSongs: Set<string>): OriginalTrack | null {
+export function getOriginalForStation(cityId: string, playedSongs: Set<string>, allowSpecial: boolean = true): OriginalTrack | null {
     const tracks = getOriginalTracks();
     
+    const isTrackValid = (t: OriginalTrack, targetStation: string) => {
+        if (!t.target_stations.includes(targetStation)) return false;
+        if (targetStation === "global" && t.target_stations.includes("fallback")) return false;
+        if (playedSongs.has(t.id) || playedSongs.has(t.streamUrl)) return false;
+        
+        const titleLower = t.title.toLowerCase();
+        const isSpecial = titleLower.includes("dekhi leb") || titleLower.includes("tain sun");
+        if (isSpecial && !allowSpecial) return false;
+        
+        return true;
+    };
+    
     // Exact match for regional priority
-    let valid = tracks.filter(t => t.target_stations.includes(cityId) && !playedSongs.has(t.id));
+    let valid = tracks.filter(t => isTrackValid(t, cityId));
     
     // If no exact match (or if station is global), fallback to global tracks
     if (valid.length === 0) {
-        valid = tracks.filter(t => t.target_stations.includes("global") && !playedSongs.has(t.id) && !t.target_stations.includes("fallback"));
+        valid = tracks.filter(t => isTrackValid(t, "global"));
     }
     
     if (valid.length > 0) {
         const track = valid[Math.floor(Math.random() * valid.length)];
         playedSongs.add(track.id);
+        playedSongs.add(track.streamUrl);
         return track;
     }
     return null;

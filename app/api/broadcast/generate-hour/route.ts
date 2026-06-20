@@ -437,6 +437,7 @@ export async function POST(request: Request) {
     let globalCount = 0;
     let bagheliJinglesInjected = 0;
     let globalOriginalsInjected = 0;
+    let hasPlayedSpecialOriginal = false;
     const isCoreStation = cityId === "hindi" || cityId === "punjabi";
     const targetRegionalRatio = isCoreStation ? 0.2 : 0.5;
 
@@ -480,10 +481,12 @@ export async function POST(request: Request) {
              
              // 1. Try fetching regional track if required
              if (!song && trackType === "regional") {
-                 song = getOriginalForStation(cityId, playedSongs);
+                 song = getOriginalForStation(cityId, playedSongs, !hasPlayedSpecialOriginal);
                  // Note: In future when Supabase has target_stations, we will query curated_tracks here too
                  if (song) {
                      regionalCount++;
+                     const tLower = song.title.toLowerCase();
+                     if (tLower.includes("dekhi leb") || tLower.includes("tain sun")) hasPlayedSpecialOriginal = true;
                  } else {
                      // If we exhaust regional tracks, fallback to global to avoid empty airtime
                      trackType = "global";
@@ -494,9 +497,11 @@ export async function POST(request: Request) {
              if (!song && trackType === "global") {
                  // Force exactly 2 Global Originals per hour
                  if (globalOriginalsInjected < 2) {
-                     song = getOriginalForStation("global", playedSongs);
+                     song = getOriginalForStation("global", playedSongs, !hasPlayedSpecialOriginal);
                      if (song) {
                          globalOriginalsInjected++;
+                         const tLower = song.title.toLowerCase();
+                         if (tLower.includes("dekhi leb") || tLower.includes("tain sun")) hasPlayedSpecialOriginal = true;
                      }
                  }
                  
