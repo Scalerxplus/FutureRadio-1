@@ -17,40 +17,30 @@ let originalsCache: OriginalTrack[] | null = null;
 export function getOriginalTracks(): OriginalTrack[] {
   try {
     const metaPath = path.join(process.cwd(), 'public', 'audio', 'originals', 'metadata.json');
-    if (!fs.existsSync(metaPath)) return [];
     const data = fs.readFileSync(metaPath, 'utf8');
     const parsed = JSON.parse(data);
     
-    // Filter out files that no longer exist
-    const existingTracks = parsed.filter((track: any) => {
-       try {
-           const urlPath = track.streamUrl.split('?')[0];
-           const decodedPath = decodeURIComponent(urlPath);
-           const filePath = path.join(process.cwd(), 'public', decodedPath);
-           return fs.existsSync(filePath);
-       } catch (e) {
-           return false;
-       }
-    });
-    
-    // Inject station tags on the fly based on user policy
-    return existingTracks.map((track: any) => {
-      let stations = ["global"]; // By default, most are global
-      
-      const t = track.title.toLowerCase();
-      // Tain Sun & Dekhi Leb are Bagheli but have global appeal
-      if (t.includes("tain sun") || t.includes("dekhi leb") || t.includes("bagheli jingle")) {
-        stations = ["bagheli", "global"];
-      }
-      // "fr_" tracks are specifically marked for fallbacks but also belong to global
-      if (t.startsWith("fr_")) {
-         stations = ["global", "fallback"];
-      }
-      
-      return { ...track, target_stations: stations };
+    // In Vercel serverless, fs.existsSync on public folder fails. 
+    // We trust metadata.json. If a file is deleted, it should be removed from metadata.json.
+    return parsed.map((track: any) => {
+        const titleLower = (track.title || "").toLowerCase();
+        let energyScore = track.energyScore || 0.6;
+        if (titleLower.includes("chill") || titleLower.includes("lofi")) {
+            energyScore = 0.3;
+        } else if (titleLower.includes("rock") || titleLower.includes("dance")) {
+            energyScore = 0.8;
+        }
+        
+        return {
+            id: track.id,
+            title: track.title,
+            streamUrl: track.streamUrl,
+            target_stations: track.target_stations || ["global"],
+            isNew: track.isNew || false,
+            energyScore
+        } as OriginalTrack;
     });
   } catch (e) {
-    console.error('[Originals] Failed to load metadata', e);
     return [];
   }
 }

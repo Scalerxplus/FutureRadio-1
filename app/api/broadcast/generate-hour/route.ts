@@ -507,17 +507,15 @@ export async function POST(request: Request) {
              
              // 2. Try fetching global track
              if (!song && trackType === "global") {
-                 // Force exactly 2 Global Originals per hour
-                 if (globalOriginalsInjected < 2) {
-                     song = getOriginalForStation("global", playedSongs, !hasPlayedSpecialOriginal);
-                     if (song) {
-                         globalOriginalsInjected++;
-                         const tLower = song.title.toLowerCase();
-                         if (tLower.includes("dekhi leb") || tLower.includes("tain sun")) hasPlayedSpecialOriginal = true;
-                     }
+                 // Fetch from originals to fill the hour
+                 song = getOriginalForStation("global", playedSongs, !hasPlayedSpecialOriginal);
+                 if (song) {
+                     globalOriginalsInjected++;
+                     const tLower = song.title.toLowerCase();
+                     if (tLower.includes("dekhi leb") || tLower.includes("tain sun")) hasPlayedSpecialOriginal = true;
                  }
                  
-                 // If no original available or quota met, fetch from local/indie catalogue via getSong
+                 // If no original available, fetch from local/indie catalogue via getSong
                  if (!song) {
                      // We pass 'global' to ensure the search queries pull from the broad indie catalogue
                      song = await getSong(getSearchQueryForGenre("global"), "global", playedSongs);
