@@ -541,7 +541,7 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
                         ) : isPlaceholder ? (
                           element.metadata?.subtitle
                         ) : (
-                          element.element_type === 'song' ? `YT: ${element.youtube_id}` : element.media_url
+                          element.element_type === 'song' ? `File: ${element.youtube_id}` : element.media_url
                         )}
                       </p>
                     </div>
