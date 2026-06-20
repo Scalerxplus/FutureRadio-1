@@ -400,15 +400,16 @@ export async function POST(request: Request) {
     let totalManualJtDurMs = 0;
     if (!isNightMode) {
          try {
-             const { data: dbJts } = await supabase
+             const { data: dbJts, error: jtErr } = await supabase
                  .from('manual_jocktalks')
                  .select('media_url, duration_ms, slot_index')
                  .eq('hour_block', currentIstHour)
                  .order('slot_index', { ascending: true });
                  
-             if (dbJts && dbJts.length > 0) {
-                 manualJocktalks = dbJts;
-                 totalManualJtDurMs = dbJts.reduce((acc, curr) => acc + curr.duration_ms, 0);
+             if (!jtErr && dbJts) {
+                 // Filter out any placeholders or empty audio to prevent stream breakage
+                 manualJocktalks = dbJts.filter(j => j.media_url && j.media_url.trim() !== "" && !j.media_url.toLowerCase().includes("placeholder"));
+                 totalManualJtDurMs = manualJocktalks.reduce((acc, curr) => acc + curr.duration_ms, 0);
              }
          } catch(e) {
              console.error("[Master Clock] Error fetching manual jocktalks:", e);
