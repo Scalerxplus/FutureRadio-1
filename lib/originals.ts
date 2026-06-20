@@ -15,15 +15,26 @@ export interface OriginalTrack {
 let originalsCache: OriginalTrack[] | null = null;
 
 export function getOriginalTracks(): OriginalTrack[] {
-  if (originalsCache) return originalsCache;
   try {
     const metaPath = path.join(process.cwd(), 'public', 'audio', 'originals', 'metadata.json');
     if (!fs.existsSync(metaPath)) return [];
     const data = fs.readFileSync(metaPath, 'utf8');
     const parsed = JSON.parse(data);
     
+    // Filter out files that no longer exist
+    const existingTracks = parsed.filter((track: any) => {
+       try {
+           const urlPath = track.streamUrl.split('?')[0];
+           const decodedPath = decodeURIComponent(urlPath);
+           const filePath = path.join(process.cwd(), 'public', decodedPath);
+           return fs.existsSync(filePath);
+       } catch (e) {
+           return false;
+       }
+    });
+    
     // Inject station tags on the fly based on user policy
-    originalsCache = parsed.map((track: any) => {
+    return existingTracks.map((track: any) => {
       let stations = ["global"]; // By default, most are global
       
       const t = track.title.toLowerCase();
@@ -38,8 +49,6 @@ export function getOriginalTracks(): OriginalTrack[] {
       
       return { ...track, target_stations: stations };
     });
-    
-    return originalsCache || [];
   } catch (e) {
     console.error('[Originals] Failed to load metadata', e);
     return [];
