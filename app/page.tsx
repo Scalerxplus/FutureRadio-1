@@ -105,11 +105,11 @@ export default function EntrySplashPage() {
             className="flex flex-col items-center w-full"
           >
             <h1 className="text-6xl md:text-8xl lg:text-[140px] font-khand font-black text-black leading-[1.1] md:leading-[0.9] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
-              भारत का <br className="hidden md:block"/> पहला ऑडियो <br className="hidden md:block"/> नेटवर्क
+              भारत का <br className="hidden md:block"/> पहला <span className="font-sans font-black tracking-tighter">INDEPENDENT</span> ऑडियो <br className="hidden md:block"/> नेटवर्क
             </h1>
             
             <p className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              अपनी माटी, अपनी भक्ति। <br className="md:hidden"/> सीधे आपके डिवाइस पर।
+              Apni Maati, Apni Bhakti. <br className="md:hidden"/> Straight to your devices.
             </p>
           </motion.div>
 
@@ -130,11 +130,11 @@ export default function EntrySplashPage() {
 
               <div className="relative z-10 text-left">
                 <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  अलौकिक भक्ति
+                  Divine Bhakti
                 </div>
-                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">डिवोशनल <br/> वाइब</h2>
+                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">DEVOTIONAL <br/> Vibe</h2>
                 <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
-                  महाकाल की भस्म आरती से लेकर राघव के मधुर भजनों तक।
+                  Mahakaal ki Bhasma Aarti se lekar Raghav ke soulful Bhajans tak. Pure devotion.
                 </p>
               </div>
               
@@ -143,7 +143,7 @@ export default function EntrySplashPage() {
                   <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center group-hover:bg-white border-4 border-transparent group-hover:border-black transition-colors">
                     <Play className="w-6 h-6 text-[#FFA500] group-hover:text-black ml-1" fill="currentColor" />
                   </div>
-                  <span className="font-black text-black tracking-widest uppercase text-lg">अभी सुनें</span>
+                  <span className="font-black text-black tracking-widest uppercase text-lg">Listen Now</span>
                 </div>
                 <div className="flex flex-col items-end">
                    <span className="text-xs font-black text-black uppercase tracking-widest mb-1">Live Now</span>
@@ -169,11 +169,11 @@ export default function EntrySplashPage() {
 
               <div className="relative z-10 text-left">
                 <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  अपनी माटी
+                  Apni Maati
                 </div>
-                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">रीज़नल <br/> वाइब</h2>
+                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">REGIONAL <br/> Vibe</h2>
                 <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
-                  भोजपुरी की मिठास, बघेली की ठाठ, और अवधी का रस। लोकल हिट्स।
+                  Bhojpuri ki mithas, Bagheli ki thaath, aur Awadhi ka ras. All local hits.
                 </p>
               </div>
               
@@ -182,7 +182,7 @@ export default function EntrySplashPage() {
                   <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center group-hover:bg-white border-4 border-transparent group-hover:border-black transition-colors">
                     <Play className="w-6 h-6 text-[#00E5FF] group-hover:text-black ml-1" fill="currentColor" />
                   </div>
-                  <span className="font-black text-black tracking-widest uppercase text-lg">अभी सुनें</span>
+                  <span className="font-black text-black tracking-widest uppercase text-lg">Listen Now</span>
                 </div>
                 <div className="flex flex-col items-end">
                    <span className="text-xs font-black text-black uppercase tracking-widest mb-1">Live Now</span>
