@@ -24,6 +24,8 @@ export const DEVOTIONAL_STATIONS = [
   { id: "laxmi", name: "Radio Mahalakshmi", region: "Devotional", listeners: "6k+" },
   { id: "saraswati", name: "Radio Saraswati", region: "Devotional", listeners: "3k+" },
   { id: "durga", name: "Radio Aadi Shakti", region: "Devotional", listeners: "9k+" },
+  { id: "satsang", name: "Radio Satsang", region: "Devotional", listeners: "12k+" },
+  { id: "bhakti", name: "Bhakti Radio", region: "Devotional", listeners: "15k+" },
 ];
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
