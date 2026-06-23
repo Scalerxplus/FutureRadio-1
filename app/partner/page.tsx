@@ -67,11 +67,11 @@ export default function PartnerPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-brand-yellow text-brand-dark selection:bg-brand-red selection:text-white font-sans overflow-hidden">
+    <main className="flex min-h-screen flex-col bg-[#FFB6C1] text-black selection:bg-black selection:text-[#FFB6C1] font-sans overflow-hidden">
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-40 pb-20 px-6 relative border-b-4 border-brand-dark bg-white">
+      <section className="pt-40 pb-20 px-6 relative border-b-[6px] border-black bg-transparent">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_right,#FF2E2E_0%,transparent_40%)] opacity-20 pointer-events-none" />
         <div className="max-w-6xl mx-auto space-y-16 relative z-10">
           <motion.div
@@ -80,11 +80,11 @@ export default function PartnerPage() {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <span className="text-brand-dark font-mono font-bold text-sm tracking-widest uppercase border-2 border-brand-dark px-3 py-1 bg-brand-yellow shadow-brutal-sm">
+            <span className="text-black font-mono font-bold text-sm tracking-widest uppercase border-4 border-black px-4 py-2 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               Regional Sovereignty
             </span>
-            <h1 className="font-display font-black text-5xl md:text-7xl tracking-widest uppercase text-brand-dark leading-[0.9]">
-              OWN THE VOICE OF <br/> YOUR <span className="text-brand-red bg-brand-yellow px-2 border-4 border-brand-dark shadow-brutal inline-block transform -rotate-2 mt-2">REGION</span>
+            <h1 className="font-khand font-black text-6xl md:text-8xl tracking-widest uppercase text-black leading-[0.9]">
+              OWN THE VOICE OF <br/> YOUR <span className="text-[#E5FF00] bg-black px-2 border-4 border-black inline-block transform -rotate-2 mt-2">REGION</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-700 font-sans max-w-4xl leading-relaxed border-l-8 border-brand-red pl-6 font-medium">
               Build the backbone of local media. You are not just launching a station; you are building a regional monopoly and owning your market&apos;s cultural gateway on Digital India&apos;s #1 network.

@@ -1,142 +1,99 @@
+"use client";
+
 import Link from "next/link";
-import { MoveLeft, Building2, Radio, Headphones, Code } from "lucide-react";
-import { Metadata } from "next";
+import { Building2, Radio, ArrowRight } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 
-export const metadata: Metadata = {
-  title: "Business & Advertisers | Future Radio India",
-  description: "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across Digital India with targeted audio ads.",
-  alternates: {
-    canonical: "https://thefutureradio.com/business",
-  },
-  openGraph: {
-    title: "Business & Advertisers | Future Radio India",
-    description: "Advertise on Future Radio or license our AI radio SaaS technology.",
-    url: "https://thefutureradio.com/business",
-  }
-};
-
 export default function BusinessPage() {
-  const schema = [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "name": "Business & Advertisers | Future Radio India",
-      "description": "Advertise on Future Radio or license our AI radio SaaS technology. Reach millions across Digital India with targeted audio ads.",
-      "url": "https://thefutureradio.com/business",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Future Radio"
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://thefutureradio.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Business & Advertisers",
-          "item": "https://thefutureradio.com/business"
-        }
-      ]
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-brand-yellow text-brand-dark flex flex-col font-mono selection:bg-brand-red selection:text-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
+    <div className="min-h-screen bg-[#FDE047] text-black flex flex-col font-sans selection:bg-black selection:text-[#FDE047] overflow-hidden relative">
+      
+      {/* Background Ambience / Neo Brutalist Watermarks */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[20%] left-[-5%] text-[70vw] leading-none text-black/[0.04] font-black font-khand select-none -rotate-6">
+          B2B
+        </div>
+        <div className="absolute inset-0 opacity-[0.08] bg-[url('/textures/noise.png')] mix-blend-overlay" />
+      </div>
+
       {/* Global Header */}
       <Header />
 
       {/* Main Content */}
-      <main className="flex-grow p-6 md:p-12 lg:p-24 pt-32 md:pt-40 max-w-5xl mx-auto w-full">
+      <main className="flex-grow flex flex-col items-center pt-32 pb-20 px-6 relative z-10 w-full max-w-7xl mx-auto">
         
-        {/* Intro */}
-        <div className="mb-12 bg-white border-4 border-brand-dark p-6 md:p-10 shadow-brutal translate-x-1 -translate-y-1">
-          <h2 className="text-2xl md:text-4xl font-black uppercase mb-4 leading-tight">
-            Next-Gen Audio Solutions for Brands & Creators
-          </h2>
-          <p className="text-lg md:text-xl font-medium">
-            We build state-of-the-art audio streaming and broadcasting technologies. Explore our ecosystem of products below.
+        {/* Hero Section */}
+        <div className="text-center mt-12 mb-20 max-w-4xl flex flex-col items-center">
+          <div className="inline-block bg-white border-4 border-black px-6 py-2 rounded-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-10 transform rotate-2">
+            <span className="font-bold text-black tracking-widest text-sm uppercase">Business & Technology</span>
+          </div>
+          
+          <h1 className="text-6xl md:text-8xl lg:text-[110px] font-black font-khand text-black mb-6 uppercase tracking-tight leading-[0.9] drop-shadow-sm">
+            NEXT-GEN <br className="hidden md:block" /> AUDIO SOLUTIONS
+          </h1>
+          
+          <p className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            We build state-of-the-art audio streaming and broadcasting technologies. Explore our ecosystem.
           </p>
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
           
-          {/* Card 1: Instore Radios */}
-          <div className="bg-white border-4 border-brand-dark p-6 shadow-[8px_8px_0_0_#EF4444] hover:shadow-none hover:translate-x-[8px] hover:translate-y-[8px] transition-all flex flex-col">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="bg-brand-red text-white p-3 border-2 border-brand-dark">
-                <Building2 className="w-8 h-8" />
+          {/* Card 1 */}
+          <div className="bg-white border-4 border-black p-10 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col">
+            <div className="flex items-center gap-6 mb-8">
+              <div className="w-20 h-20 bg-[#FF0055] border-4 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Building2 className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-black uppercase tracking-tight leading-none">In-Store / In-House Radios</h3>
+              <h3 className="text-3xl md:text-4xl font-black font-khand uppercase tracking-wide text-black leading-none">In-Store <br/> Radios</h3>
             </div>
-            <p className="text-base font-medium mb-4 flex-grow">
-              Communicate and engage with your in-store or in-house audience. Promote offers and announcements in real-time just by a simple prompt. 
+            <p className="text-black/80 font-bold text-lg leading-snug mb-8 flex-grow">
+              Communicate and engage with your in-store or in-house audience. Promote offers and announcements in real-time just by a simple prompt.
             </p>
-            <div className="bg-gray-100 p-3 border-l-4 border-brand-red text-sm font-bold uppercase mt-auto">
-              Put your prompt, select the voice, drag and drop. It&apos;s that easy.
+            <div className="bg-[#E5FF00] p-4 border-4 border-black rounded-xl text-black font-black uppercase tracking-wider text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">
+              Type prompt. Select Voice. Broadcast.
             </div>
           </div>
 
-          {/* Card 2: Radio 3.0 SaaS */}
-          <div className="bg-white border-4 border-brand-dark p-6 shadow-[8px_8px_0_0_#111827] hover:shadow-none hover:translate-x-[8px] hover:translate-y-[8px] transition-all flex flex-col">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="bg-brand-dark text-white p-3 border-2 border-brand-dark">
-                <Radio className="w-8 h-8" />
+          {/* Card 2 */}
+          <div className="bg-white border-4 border-black p-10 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col">
+            <div className="flex items-center gap-6 mb-8">
+              <div className="w-20 h-20 bg-[#00E5FF] border-4 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Radio className="w-10 h-10 text-black" />
               </div>
-              <h3 className="text-2xl font-black uppercase tracking-tight leading-none">Radio 3.0 Technology SaaS</h3>
+              <h3 className="text-3xl md:text-4xl font-black font-khand uppercase tracking-wide text-black leading-none">Radio 3.0 <br/> SaaS</h3>
             </div>
-            <p className="text-base font-medium mb-4 flex-grow">
-              Run multiple radio stations on one common platform. Front-end, backend, programming, and production setup—everything is entirely virtual.
+            <p className="text-black/80 font-bold text-lg leading-snug mb-8 flex-grow">
+              Want to start your own 100% autonomous web radio station? License our proprietary AI master clock and streaming technology.
             </p>
-            <div className="bg-brand-yellow/30 p-3 border-l-4 border-brand-dark text-sm font-bold uppercase mt-auto">
-              Focus on business growth and PR, we handle the tech.
+            <div className="bg-[#FF69B4] p-4 border-4 border-black rounded-xl text-black font-black uppercase tracking-wider text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">
+              Enterprise Licensing Available
             </div>
           </div>
 
-          {/* Card 3: Future Radio Consumer */}
-          <div className="bg-white border-4 border-brand-dark p-6 shadow-[8px_8px_0_0_#FFFFFF] hover:shadow-none hover:translate-x-[8px] hover:translate-y-[8px] transition-all md:col-span-2">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="bg-white text-brand-dark p-3 border-2 border-brand-dark">
-                <Headphones className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-black uppercase tracking-tight leading-none">Future Radio</h3>
-            </div>
-            <p className="text-lg font-medium max-w-3xl">
-              Our flagship consumer-facing audio streaming platform. A decentralized global hub empowering independent artists, driven by predictive curation and unfiltered human emotion.
-            </p>
-          </div>
         </div>
 
-        {/* Attribution */}
-        <div className="bg-brand-dark text-white border-4 border-white p-6 shadow-[8px_8px_0_0_rgba(0,0,0,0.5)] flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <Code className="w-10 h-10 text-brand-yellow" />
-            <div>
-              <p className="text-lg font-bold uppercase">Technology Co-Developed By</p>
-              <p className="text-sm text-gray-300">The Future Radio & Media Mafias</p>
-            </div>
+        {/* CTA Section */}
+        <div className="w-full max-w-4xl mx-auto bg-black border-[6px] border-black rounded-[3rem] p-10 md:p-16 text-center shadow-[16px_16px_0px_0px_rgba(255,0,85,1)] relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-[#FF0055] rounded-full blur-[100px] opacity-20" />
+          
+          <h2 className="text-4xl md:text-6xl font-black font-khand text-white mb-6 uppercase leading-tight relative z-10">
+            Let's build <span className="text-[#FF0055]">Together</span>
+          </h2>
+          <p className="text-white/80 font-bold text-lg md:text-xl mb-12 max-w-2xl mx-auto relative z-10">
+            Contact our business team to discuss enterprise licensing, custom in-store radio solutions, or advertising on Future Radio.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-10">
+            <a 
+              href="mailto:business@thefutureradio.com"
+              className="group bg-[#FF0055] text-white px-10 py-5 rounded-full font-black uppercase tracking-widest text-lg border-4 border-[#FF0055] hover:bg-transparent hover:text-[#FF0055] transition-colors flex items-center gap-3"
+            >
+              Contact Us
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+            </a>
           </div>
-          <a 
-            href="https://mediamafias.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-brand-yellow text-brand-dark px-6 py-3 font-black uppercase border-2 border-white hover:bg-white transition-colors text-center w-full md:w-auto"
-          >
-            Visit MediaMafias.com
-          </a>
         </div>
 
       </main>

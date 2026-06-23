@@ -190,16 +190,9 @@ export default function ApplyPage() {
                 onChange={e => setFormData({...formData, target_station: e.target.value})}
                 className="w-full p-3 border-2 border-brand-dark bg-brand-light focus:outline-none cursor-pointer"
               >
-                <option value="hindi">Hindi</option>
-                <option value="punjabi">Punjabi</option>
-                <option value="bundeli">Bundeli</option>
-                <option value="bagheli">Bagheli</option>
-                <option value="chhattisgarhi">Chhattisgarhi</option>
-                <option value="malwi">Malwi</option>
-                <option value="sarguja">Sarguja</option>
-                <option value="bastar">Bastar</option>
-                <option value="raigarh">Raigarh</option>
-                <option value="news">News & Talk</option>
+                <option value="regional">Regional</option>
+                <option value="satsang">Satsang</option>
+                <option value="devotional">Devotional</option>
               </select>
             </div>
 

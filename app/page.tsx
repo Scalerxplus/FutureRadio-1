@@ -217,8 +217,8 @@ export default function EntrySplashPage() {
               <div className="w-16 h-16 bg-white border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <Heart className="w-8 h-8 text-black" />
               </div>
-              <h3 className="text-2xl font-black font-khand uppercase tracking-wide text-black mb-4">Pure & Sacred Content</h3>
-              <p className="text-black/80 font-bold leading-snug">Our Devotional network feels like a temple. A completely pure and serene experience.</p>
+              <h3 className="text-2xl font-black font-khand uppercase tracking-wide text-black mb-4">Independent World-Class Content</h3>
+              <p className="text-black/80 font-bold leading-snug">Independent World-Class Regional and Devotional Content straight to you.</p>
             </div>
 
             <div className="bg-white border-4 border-black p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
