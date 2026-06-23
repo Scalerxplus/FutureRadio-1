@@ -7,7 +7,7 @@ import PlayerBar from "@/components/audio/PlayerBar";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 
-import { Baloo_2, Space_Grotesk, Space_Mono } from "next/font/google";
+import { Baloo_2, Space_Grotesk, Space_Mono, Khand, Rozha_One } from "next/font/google";
 
 const digitalFont = Space_Mono({
   subsets: ["latin"],
@@ -19,6 +19,18 @@ const balooFont = Baloo_2({
   subsets: ["devanagari", "latin"],
   variable: "--font-baloo",
   weight: ["400", "500", "600", "700", "800"],
+});
+
+const khandFont = Khand({
+  subsets: ["devanagari", "latin"],
+  variable: "--font-khand",
+  weight: ["700", "600", "500", "400", "300"],
+});
+
+const rozhaOne = Rozha_One({
+  subsets: ["devanagari", "latin"],
+  variable: "--font-rozha",
+  weight: ["400"],
 });
 
 const spaceGrotesk = Space_Grotesk({
@@ -82,7 +94,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className={`dark scroll-smooth ${khandFont.variable} ${rozhaOne.variable}`}>
       <head>
         {/* Google Analytics */}
         <Script

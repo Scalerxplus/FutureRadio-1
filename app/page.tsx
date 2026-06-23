@@ -104,7 +104,7 @@ export default function EntrySplashPage() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="flex flex-col items-center w-full"
           >
-            <h1 className="text-6xl md:text-8xl lg:text-[140px] font-black font-baloo text-black leading-[1.1] md:leading-[0.9] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
+            <h1 className="text-6xl md:text-8xl lg:text-[140px] font-khand font-black text-black leading-[1.1] md:leading-[0.9] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
               भारत का <br className="hidden md:block"/> पहला ऑडियो <br className="hidden md:block"/> नेटवर्क
             </h1>
             
@@ -132,7 +132,7 @@ export default function EntrySplashPage() {
                 <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                   अलौकिक भक्ति
                 </div>
-                <h2 className="text-4xl md:text-6xl font-black font-baloo text-black mb-4 leading-tight">डिवोशनल <br/> वाइब</h2>
+                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">डिवोशनल <br/> वाइब</h2>
                 <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
                   महाकाल की भस्म आरती से लेकर राघव के मधुर भजनों तक।
                 </p>
@@ -171,7 +171,7 @@ export default function EntrySplashPage() {
                 <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                   अपनी माटी
                 </div>
-                <h2 className="text-4xl md:text-6xl font-black font-baloo text-black mb-4 leading-tight">रीज़नल <br/> वाइब</h2>
+                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">रीज़नल <br/> वाइब</h2>
                 <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
                   भोजपुरी की मिठास, बघेली की ठाठ, और अवधी का रस। लोकल हिट्स।
                 </p>
@@ -197,11 +197,11 @@ export default function EntrySplashPage() {
           </div>
         </div>
 
-        {/* NEO-BRUTALIST FEATURES SECTION */}
+        {/* NEO-BRUTALIST FEATURES SECTION (English) */}
         <div className="w-full max-w-7xl mx-auto px-6 py-20 mt-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-black font-baloo text-black mb-4 uppercase">हम क्या लेकर आए हैं?</h2>
-            <p className="text-xl font-bold text-black/70">सिर्फ एक स्ट्रीम नहीं, बल्कि एक कल्चरल मूवमेंट।</p>
+            <h2 className="text-4xl md:text-6xl font-black font-khand text-black mb-4 uppercase">Why We Hit Different</h2>
+            <p className="text-xl font-bold text-black/70">Not just a stream, but a cultural movement.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -209,34 +209,34 @@ export default function EntrySplashPage() {
               <div className="w-16 h-16 bg-white border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <Radio className="w-8 h-8 text-black" />
               </div>
-              <h3 className="text-2xl font-black font-baloo text-black mb-4">24/7 असीमित प्रसारण</h3>
-              <p className="text-black/80 font-bold leading-snug">आर्टिफिशियल इंटेलिजेंस की शक्ति से चलने वाला हमारा मास्टर क्लॉक। बिना रुके लगातार स्ट्रीमिंग।</p>
+              <h3 className="text-2xl font-black font-khand uppercase tracking-wide text-black mb-4">24/7 Autonomous Streaming</h3>
+              <p className="text-black/80 font-bold leading-snug">Powered by our AI Master Clock. Endless, buffering-free streaming.</p>
             </div>
 
             <div className="bg-[#E5FF00] border-4 border-black p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
               <div className="w-16 h-16 bg-white border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <Heart className="w-8 h-8 text-black" />
               </div>
-              <h3 className="text-2xl font-black font-baloo text-black mb-4">शुद्ध और पवित्र सामग्री</h3>
-              <p className="text-black/80 font-bold leading-snug">हमारा डिवोशनल नेटवर्क आपको मंदिर जैसा एहसास देगा। एकदम शुद्ध और सात्विक अनुभव।</p>
+              <h3 className="text-2xl font-black font-khand uppercase tracking-wide text-black mb-4">Pure & Sacred Content</h3>
+              <p className="text-black/80 font-bold leading-snug">Our Devotional network feels like a temple. A completely pure and serene experience.</p>
             </div>
 
             <div className="bg-white border-4 border-black p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
               <div className="w-16 h-16 bg-[#00E5FF] border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <Users className="w-8 h-8 text-black" />
               </div>
-              <h3 className="text-2xl font-black font-baloo text-black mb-4">क्रिएटर्स की आवाज़</h3>
-              <p className="text-black/80 font-bold leading-snug">भारत के इंडिपेंडेंट आर्टिस्ट्स और लोक गायकों को एक ग्लोबल मंच। उनकी आवाज़ सीधे आप तक।</p>
+              <h3 className="text-2xl font-black font-khand uppercase tracking-wide text-black mb-4">Voice of Creators</h3>
+              <p className="text-black/80 font-bold leading-snug">A global stage for India's independent artists and folk singers. Their voice, straight to you.</p>
             </div>
           </div>
         </div>
 
         {/* MASSIVE NEO-BRUTALIST SCROLLER */}
-        <div className="w-full bg-black border-y-8 border-black mt-auto py-4 overflow-hidden relative z-20">
+        <div className="w-full bg-black border-y-[6px] border-black mt-auto py-2 overflow-hidden relative z-20">
           <motion.div 
             animate={{ x: [0, -2000] }}
-            transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-            className="whitespace-nowrap flex items-center gap-12 font-baloo font-black text-3xl md:text-5xl uppercase text-white"
+            transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
+            className="whitespace-nowrap flex items-center gap-10 font-khand font-black text-xl md:text-3xl uppercase text-white"
           >
             {[...stations, ...stations, ...stations, ...stations].map((station, i) => (
               <div key={i} className="flex items-center gap-12">

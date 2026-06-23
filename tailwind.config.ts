@@ -29,6 +29,8 @@ const config: Config = {
         sans: ["var(--font-space-grotesk)", "sans-serif"],
         display: ["var(--font-baloo)", "sans-serif"],
         digital: ["var(--font-digital)", "monospace"],
+        khand: ["var(--font-khand)", "sans-serif"],
+        rozha: ["var(--font-rozha)", "serif"],
       },
       keyframes: {
         marquee: {
