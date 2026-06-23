@@ -2,10 +2,12 @@
 
 import React from "react";
 import { useAudioStore } from "./useAudioStore";
+import { useCityStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function TelemetryDisplay() {
-  const { currentBlock, isTuning, isPlaying, cityId } = useAudioStore();
+  const { currentBlock, isTuning, isPlaying } = useAudioStore();
+  const { cityId } = useCityStore();
 
   const getFallbackImage = (id: string) => {
     const validIds = ['shiva', 'hanuman', 'ram', 'krishna', 'jagannath', 'ganesha', 'vishnu', 'laxmi', 'saraswati', 'durga', 'satsang', 'bhakti', 'bagheli', 'bhojpuri', 'awadhi', 'maithili', 'bundeli'];

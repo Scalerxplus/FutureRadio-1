@@ -78,7 +78,7 @@ export default function EntrySplashPage() {
         <motion.div style={{ y: yBg }} className="absolute inset-0 pointer-events-none opacity-[0.04] bg-[url('/textures/noise.png')] mix-blend-overlay" />
         
         {/* Animated Marquee - Premium Gold */}
-        <div className="w-full bg-gradient-to-r from-[#8B6508] via-[#FFD700] to-[#8B6508] border-y border-[#FFF8DC]/30 overflow-hidden py-1.5 mt-4 relative z-20 shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+        <div className="w-full bg-gradient-to-r from-[#8B6508] via-[#FFD700] to-[#8B6508] border-y border-[#FFF8DC]/30 overflow-hidden py-3 mt-4 relative z-20 shadow-[0_0_20px_rgba(255,215,0,0.2)]">
           <motion.div 
             animate={{ x: [0, -1000] }}
             transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
@@ -111,9 +111,9 @@ export default function EntrySplashPage() {
               <span className="text-[10px] md:text-[11px] font-bold text-[#FFD700] tracking-[0.3em] uppercase">100% Autonomous Streaming</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-baloo font-black text-transparent bg-clip-text bg-gradient-to-b from-[#FFF8DC] via-[#FFE4B5] to-[#DAA520] leading-[1.15] tracking-tight drop-shadow-2xl pb-2 px-4">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-baloo font-black text-transparent bg-clip-text bg-gradient-to-b from-[#FFF8DC] via-[#FFE4B5] to-[#DAA520] leading-[1.4] tracking-tight drop-shadow-2xl pb-4 px-4">
               भारत का पहला
-              <br className="hidden md:block"/> रीज़नल और डिवोशनल नेटवर्क
+              <br className="hidden md:block"/> रीज़नल और डिवोशनल ऑडियो नेटवर्क
             </h1>
             
             <p className="text-base md:text-xl font-medium text-white/70 max-w-2xl font-sans mt-2 drop-shadow-md tracking-wide leading-relaxed">
@@ -146,7 +146,7 @@ export default function EntrySplashPage() {
                   <div className="bg-gradient-to-r from-[#FFD700] to-[#FF8C00] text-black text-[10px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full inline-block mb-6 shadow-[0_0_15px_rgba(255,215,0,0.4)]">
                     अलौकिक भक्ति
                   </div>
-                  <h2 className="text-3xl md:text-5xl font-black font-baloo text-transparent bg-clip-text bg-gradient-to-b from-white to-[#FFE4B5] mb-4 drop-shadow-md">डिवोशनल वाइब</h2>
+                  <h2 className="text-3xl md:text-5xl font-black font-baloo text-transparent bg-clip-text bg-gradient-to-b from-white to-[#FFE4B5] mb-4 leading-[1.4] pb-2 drop-shadow-md">डिवोशनल वाइब</h2>
                   <p className="text-white/70 font-medium text-sm md:text-base leading-relaxed max-w-[85%]">
                     महाकाल की भस्म आरती से लेकर राघव के मधुर भजनों तक। एक ऐसा दिव्य अनुभव जो सीधा आपके हृदय में उतरे।
                   </p>
@@ -192,7 +192,7 @@ export default function EntrySplashPage() {
                   <div className="bg-gradient-to-r from-[#FF0055] to-[#7000FF] text-white text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full inline-block mb-6 shadow-[0_0_15px_rgba(255,0,85,0.4)]">
                     अपनी माटी
                   </div>
-                  <h2 className="text-3xl md:text-5xl font-black font-baloo text-transparent bg-clip-text bg-gradient-to-b from-white to-[#E0B0FF] mb-4 drop-shadow-md">रीज़नल वाइब</h2>
+                  <h2 className="text-3xl md:text-5xl font-black font-baloo text-transparent bg-clip-text bg-gradient-to-b from-white to-[#E0B0FF] mb-4 leading-[1.4] pb-2 drop-shadow-md">रीज़नल वाइब</h2>
                   <p className="text-white/70 font-medium text-sm md:text-base leading-relaxed max-w-[85%]">
                     भोजपुरी की मिठास, बघेली की ठाठ, और अवधी का रस। आपकी अपनी भाषा में लोकल हिट्स और शोज़।
                   </p>
@@ -224,8 +224,8 @@ export default function EntrySplashPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FFD700]/5 to-transparent pointer-events-none" />
           
           <div className="text-center mb-20 relative z-10">
-            <h2 className="text-3xl md:text-5xl font-baloo font-black text-white mb-4 tracking-wide">हम क्या लेकर आए हैं?</h2>
-            <p className="text-white/50 tracking-widest uppercase text-sm">एक ऐसा प्लेटफॉर्म जो आपको आपकी जड़ों से जोड़े।</p>
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-wide uppercase">Why We Hit Different</h2>
+            <p className="text-white/50 tracking-widest uppercase text-sm">Not just a stream. A cultural movement.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
