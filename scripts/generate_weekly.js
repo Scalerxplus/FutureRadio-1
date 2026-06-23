@@ -1,4 +1,4 @@
-const genres = ['hindi', 'malwi', 'bagheli', 'bundeli', 'chhattisgarhi', 'sarguja', 'bastar', 'raigarh', 'punjabi', 'news'];
+const genres = ['bagheli', 'bhojpuri', 'awadhi', 'maithili', 'bundeli', 'shiva', 'hanuman', 'ram', 'krishna', 'jagannath', 'ganesha', 'vishnu', 'laxmi', 'saraswati', 'durga'];
 (async () => {
   const now = new Date();
   const istTimeMs = now.getTime() + (5.5 * 60 * 60 * 1000);

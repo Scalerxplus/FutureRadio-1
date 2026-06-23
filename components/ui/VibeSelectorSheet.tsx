@@ -5,21 +5,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 import { resetAndUnlockAudioForTransition } from "@/components/audio/useAudioStore";
 
-export const GENRES = [
-  { id: "hindi", name: "Hindi", region: "Global Indie", listeners: "2.4k" },
-  { id: "malwi", name: "Malwi", region: "Madhya Pradesh", listeners: "1.9k" },
-  { id: "bagheli", name: "Bagheli", region: "Vindhya Region", listeners: "2.1k" },
-  { id: "bundeli", name: "Bundeli", region: "Bundelkhand", listeners: "1.8k" },
-  { id: "chhattisgarhi", name: "Chhattisgarhi", region: "Chhattisgarh", listeners: "2.2k" },
-  { id: "sarguja", name: "Sarguja", region: "Ambikapur", listeners: "1.1k" },
-  { id: "bastar", name: "Bastar", region: "Jagdalpur", listeners: "1.3k" },
-  { id: "raigarh", name: "Raigarh", region: "East CG", listeners: "1.4k" },
-  { id: "punjabi", name: "Punjabi", region: "Global Hits", listeners: "3.2k" },
-  { id: "news", name: "News", region: "BBC + WSJ", listeners: "5.4k" },
+export const REGIONAL_STATIONS = [
+  { id: "bagheli", name: "Bagheli Vibe", region: "Vindhya Region", listeners: "2.1k" },
+  { id: "bhojpuri", name: "Bhojpuri Vibe", region: "Bihar & UP", listeners: "5.4k" },
+  { id: "awadhi", name: "Awadhi Vibe", region: "Awadh Region", listeners: "3.2k" },
+  { id: "maithili", name: "Maithili Vibe", region: "Mithila", listeners: "1.8k" },
+  { id: "bundeli", name: "Bundeli Vibe", region: "Bundelkhand", listeners: "1.9k" },
+];
+
+export const DEVOTIONAL_STATIONS = [
+  { id: "shiva", name: "Radio Mahakaal", region: "Devotional", listeners: "10k+" },
+  { id: "hanuman", name: "Radio Mahabali", region: "Devotional", listeners: "8k+" },
+  { id: "ram", name: "Radio Raghav", region: "Devotional", listeners: "9k+" },
+  { id: "krishna", name: "Radio Keshav", region: "Devotional", listeners: "11k+" },
+  { id: "jagannath", name: "Radio Jagannath", region: "Devotional", listeners: "5k+" },
+  { id: "ganesha", name: "Radio EkDant", region: "Devotional", listeners: "7k+" },
+  { id: "vishnu", name: "Radio Vishnu", region: "Devotional", listeners: "4k+" },
+  { id: "laxmi", name: "Radio Mahalakshmi", region: "Devotional", listeners: "6k+" },
+  { id: "saraswati", name: "Radio Saraswati", region: "Devotional", listeners: "3k+" },
+  { id: "durga", name: "Radio Aadi Shakti", region: "Devotional", listeners: "9k+" },
 ];
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const { cityName, setCityId } = useCityStore();
+  const { cityName, setCityId, radioSection } = useCityStore();
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSelectCity = (id: string, name: string) => {
@@ -34,7 +42,8 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
       setSearchQuery(""); // Reset search when opened
       let isCancelled = false;
       const prefetchChannels = async () => {
-        for (const genre of GENRES) {
+        const currentList = radioSection === "regional" ? REGIONAL_STATIONS : DEVOTIONAL_STATIONS;
+        for (const genre of currentList) {
           if (isCancelled) break;
           if (genre.name !== cityName) {
             try {
@@ -50,7 +59,8 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
     }
   }, [isOpen, cityName]);
 
-  const filteredGenres = GENRES.filter((genre) =>
+  const currentList = radioSection === "regional" ? REGIONAL_STATIONS : DEVOTIONAL_STATIONS;
+  const filteredGenres = currentList.filter((genre) =>
     genre.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     genre.region.toLowerCase().includes(searchQuery.toLowerCase())
   );

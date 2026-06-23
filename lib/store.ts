@@ -4,15 +4,19 @@ import { persist } from "zustand/middleware";
 interface CityStore {
   cityId: string;
   cityName: string;
+  radioSection: "regional" | "devotional";
   setCityId: (cityId: string, cityName: string) => void;
+  setRadioSection: (section: "regional" | "devotional") => void;
 }
 
 export const useCityStore = create<CityStore>()(
   persist(
     (set) => ({
-      cityId: "hindi",
-      cityName: "Future Radio - Hindi",
+      cityId: "bagheli",
+      cityName: "Bagheli Vibe",
+      radioSection: "regional",
       setCityId: (cityId, cityName) => set({ cityId, cityName }),
+      setRadioSection: (radioSection) => set({ radioSection }),
     }),
     {
       name: "future-radio-station-storage",

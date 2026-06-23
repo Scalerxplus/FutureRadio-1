@@ -12,7 +12,7 @@ import VibeSelectorSheet from "@/components/ui/VibeSelectorSheet";
 
 export default function RadioClient({ initialStation }: { initialStation?: string }) {
   const router = useRouter();
-  const { cityName, cityId, setCityId } = useCityStore();
+  const { cityName, cityId, setCityId, radioSection, setRadioSection } = useCityStore();
   const { setMode } = useUiStore();
   const { user } = useAuthStore();
   const {
@@ -211,6 +211,29 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
           </div>
         </header>
 
+        {/* Section Toggle */}
+        <div className="flex justify-center mt-3 z-10 relative">
+          <div className="bg-black/50 border border-white/10 rounded-full p-1 flex items-center backdrop-blur-md">
+            <button
+              onClick={() => {
+                setRadioSection("regional");
+                setIsVibeSheetOpen(true);
+              }}
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${radioSection === "regional" ? 'bg-brand-red text-black shadow-[0_0_10px_rgba(255,0,50,0.5)]' : 'text-gray-400 hover:text-white'}`}
+            >
+              Regional
+            </button>
+            <button
+              onClick={() => {
+                setRadioSection("devotional");
+                setIsVibeSheetOpen(true);
+              }}
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${radioSection === "devotional" ? 'bg-brand-red text-black shadow-[0_0_10px_rgba(255,0,50,0.5)]' : 'text-gray-400 hover:text-white'}`}
+            >
+              Devotional
+            </button>
+          </div>
+        </div>
 
         {/* Now Playing Metadata */}
         <div className="space-y-1">
