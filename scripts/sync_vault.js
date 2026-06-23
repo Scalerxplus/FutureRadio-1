@@ -100,10 +100,15 @@ async function syncStation(station, stationPath, region) {
       const startTime = new Date(currentTime);
       const endTime = new Date(currentTime.getTime() + asset.duration);
 
+      let typeToUse = item.type;
+      if (item.type === 'promo' || item.type === 'commercial') {
+        typeToUse = 'sweeper';
+      }
+
       scheduleBlocks.push({
         id: crypto.randomUUID(),
         city_id: station,
-        element_type: item.type === 'commercial' ? 'promo' : item.type,
+        element_type: typeToUse,
         start_time: startTime.toISOString(),
         end_time: endTime.toISOString(),
         duration_ms: Math.round(asset.duration),
