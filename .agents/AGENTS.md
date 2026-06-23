@@ -1,0 +1,1 @@
+- **Audio File Protection**: Do NOT delete or replace any audio files (.mp3, .wav, etc.) in any folder without the user's explicit permission.

@@ -33,7 +33,7 @@ export async function GET(request: Request) {
       .eq("city_id", cityId)
       .gt("start_time", nowIso)
       .order("start_time", { ascending: true })
-      .limit(1);
+      .limit(50);
 
     return NextResponse.json({ 
       status: "idle", 

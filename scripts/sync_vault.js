@@ -76,45 +76,77 @@ async function syncStation(station, stationPath, region) {
     return assets[cat][Math.floor(Math.random() * assets[cat].length)];
   };
 
-  while (currentTime < scheduleEnd) {
-    // Pattern: ID -> Music -> Music -> Jingle -> Commercial -> Music -> Promo -> Music
-    const blockSequence = [
-      { type: 'station_id', cat: '2_Station_ID' },
-      { type: 'song', cat: '5_Music' },
-      { type: 'song', cat: '5_Music' },
-      { type: 'sweeper', cat: '1_Station_Jingle' },
-      { type: 'commercial', cat: '4_Commercial' },
-      { type: 'song', cat: '5_Music' },
-      { type: 'promo', cat: '3_Station_Promo' },
-      { type: 'song', cat: '5_Music' },
-    ];
+  let jingleIndex = 0;
 
-    for (const item of blockSequence) {
-      let asset = getRandomAsset(item.cat);
+  let sweepCount = 0;
+
+  while (currentTime < scheduleEnd) {
+    const sweepSequence = [];
+    
+    // Top of the hour: Jingle
+    if (sweepCount % 4 === 0) {
+        sweepSequence.push({ title: 'STATION JINGLE', cat: '1_Station_Jingle', dbType: 'sweeper' });
+    }
+
+    sweepSequence.push(
+      { title: 'SONG', cat: '5_Music', dbType: 'song' },
+      { title: 'SWEEPER', cat: '2_Station_ID', dbType: 'station_id' },
+      { title: 'SONG', cat: '5_Music', dbType: 'song' },
+      { title: 'STATION PROMO', cat: '3_Station_Promo', dbType: 'sweeper' },
+      { title: 'COMMERCIAL', cat: '4_Commercial', dbType: 'sweeper' },
+      { title: 'SWEEPER', cat: '2_Station_ID', dbType: 'station_id' },
+      { title: 'SONG', cat: '5_Music', dbType: 'song' },
+      { title: 'SWEEPER', cat: '2_Station_ID', dbType: 'station_id' },
+      { title: 'SONG', cat: '5_Music', dbType: 'song' },
+      { title: 'STATION PROMO', cat: '3_Station_Promo', dbType: 'sweeper' }
+    );
+
+    for (const item of sweepSequence) {
+      let asset;
+      
+      // Rotate jingles alternatively
+      if (item.cat === '1_Station_Jingle' && assets['1_Station_Jingle'] && assets['1_Station_Jingle'].length > 0) {
+        asset = assets['1_Station_Jingle'][jingleIndex % assets['1_Station_Jingle'].length];
+        jingleIndex++;
+      } else {
+        asset = getRandomAsset(item.cat);
+      }
+
       if (!asset) {
-         if (item.type === 'song') continue; // Music is mandatory
-         else asset = getRandomAsset('5_Music'); // Fallback to music if ID/Promo is missing
-         if(!asset) continue;
+         if (item.cat === '4_Commercial') {
+           asset = getRandomAsset('2_Station_ID') || getRandomAsset('3_Station_Promo');
+           if (!asset) {
+             asset = { url: null, duration: 1000, name: 'Placeholder' };
+           }
+         } else if (item.cat === '5_Music') {
+           continue; 
+         } else {
+           asset = getRandomAsset('5_Music');
+           if (!asset) continue;
+         }
       }
 
       const startTime = new Date(currentTime);
       const endTime = new Date(currentTime.getTime() + asset.duration);
 
-      let typeToUse = item.type;
-      if (item.type === 'promo' || item.type === 'commercial') {
-        typeToUse = 'sweeper';
+      let media_url = asset.url;
+      let youtube_id = null;
+      if (item.dbType === 'song') {
+          youtube_id = asset.url;
+          media_url = null;
       }
 
       scheduleBlocks.push({
         id: crypto.randomUUID(),
         city_id: station,
-        element_type: typeToUse,
+        element_type: item.dbType,
         start_time: startTime.toISOString(),
         end_time: endTime.toISOString(),
         duration_ms: Math.round(asset.duration),
-        media_url: asset.url,
+        media_url: media_url,
+        youtube_id: youtube_id,
         metadata: {
-          title: item.type.toUpperCase(),
+          title: item.title,
           artist: "Future Radio",
           original_filename: asset.name
         }
@@ -122,6 +154,7 @@ async function syncStation(station, stationPath, region) {
 
       currentTime = endTime;
     }
+    sweepCount++;
   }
 
   // 3. Clear old schedule from today onwards and Insert new
