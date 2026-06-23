@@ -8,7 +8,7 @@ import { useUiStore, useCityStore } from "@/lib/store";
 import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 import { Header } from "@/components/layout/Header";
-import { Play, Radio, Heart, Users, ArrowRight } from "lucide-react";
+import { Play, Radio, Heart, Users, ArrowRight, Activity, Globe, Speaker } from "lucide-react";
 
 export default function EntrySplashPage() {
   const router = useRouter();
@@ -106,7 +106,15 @@ export default function EntrySplashPage() {
           >
             <h1 className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.2] md:leading-[1.1] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
               भारत का #1 <br />
-              <span className="font-sans font-black tracking-tighter">Virtual & INDIE</span> <br />
+              <span className="font-sans font-black tracking-tighter">
+                Virtual 
+                <span className="relative inline-block mx-4 text-[#E5FF00] drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
+                  &
+                  <Speaker className="absolute -top-4 -left-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#FF69B4] transform -rotate-12 shadow-sm" strokeWidth={1.5} />
+                  <Speaker className="absolute -top-4 -right-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#00E5FF] transform rotate-12 shadow-sm" strokeWidth={1.5} />
+                </span> 
+                INDIE
+              </span> <br />
               #Radio नेटवर्क
             </h1>
             
