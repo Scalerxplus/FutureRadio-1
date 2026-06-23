@@ -15,6 +15,9 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["yt-search", "cheerio", "ws", "node-edge-tts"],
   },
+  outputFileTracingExcludes: {
+    "api/**/*": ["public/audio/**/*", "public/images/**/*", "public/logo-watermark.png"],
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
