@@ -42,18 +42,15 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
   title: "Future Radio | #1 Independent Regional & Devotional Audio Network",
-  description: "Experience India's first 100% autonomous, AI-powered virtual radio. Explore new stations, new structure, and a new business model for creators. Stream devotional, regional, bagheli lokgeet, bhojpuri music, ramcharit manas, sundar kand, hanuman chalisa, Shiva bhajan, and Radio Ramayan.",
+  description: "India's #1 network for Devotional Radio, Shiva Bhajan, Ramayan, Bhojpuri Music, Bagheli Lokgeet, and Awadhi songs. 100% autonomous virtual radio station.",
   keywords: [
-    "radio", "internet radio india", "ai radio station", "future radio", 
-    "devotional", "regional", "bagheli lokgeet", "bhojpuri music", "ramcharit manas", 
-    "sundar kand", "hanuman chalisa", "Shiva bhajan", "Radio Ramayan", 
-    "new stations", "new structure", "new business model", "madhya pradesh radio", 
-    "chhattisgarh radio", "bagheli", "bundeli", "malwi", "chhattisgarhi", 
-    "sarguja", "bastar", "punjabi radio", "indie music", "autonomous radio"
+    "devotional radio", "shiva devotional songs", "shiva bhajan", "shiva mantra", "ramayan", "radio ramayan", "ram", "ganesh", "krishna", "hanuman chalisa", "sundar kand", "ramcharit manas",
+    "regional radio", "folk music india", "bagheli lokgeet", "up ke lokgeet", "rewa ke lokgeet", "satna ke lokgeet", "bhojpuri folk music", "bhojpuri music", "awadhi", "bundeli", "braj",
+    "radio", "internet radio india", "future radio", "ai radio station", "new stations", "new structure", "new business model", "autonomous radio", "indie music"
   ],
   openGraph: {
-    title: "Future Radio | #1 Independent Regional & Devotional Audio Network",
-    description: "Tune into the future of sound with new stations and massive regional & devotional content like Hanuman Chalisa, Bagheli Lokgeet, and Radio Ramayan.",
+    title: "Future Radio | #1 Devotional, Regional & Folk Audio Network",
+    description: "Stream Shiva Bhajans, Hanuman Chalisa, Bagheli Lokgeet, Bhojpuri Music, and Regional Folk songs 24/7. The ultimate autonomous audio network.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",
     images: [
@@ -68,8 +65,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Radio | #1 Independent Regional & Devotional Audio Network",
-    description: "Stream the best of Bagheli Lokgeet, Bhojpuri Music, and Devotional tracks 24/7.",
+    title: "Future Radio | #1 Devotional, Regional & Folk Audio Network",
+    description: "Stream Shiva Bhajans, Bagheli Lokgeet, and Bhojpuri Music 24/7.",
     images: ["/og-image.jpg"],
   },
   icons: {
