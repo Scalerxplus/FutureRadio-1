@@ -8,6 +8,7 @@ import { useUiStore, useCityStore } from "@/lib/store";
 import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 import { Header } from "@/components/layout/Header";
+import { Play, Radio, Heart, Users, ArrowRight } from "lucide-react";
 
 export default function EntrySplashPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function EntrySplashPage() {
   const { setRadioSection, setCityId } = useCityStore();
   const { isPlaying, setIsPlaying } = useAudioStore();
   const [mounted, setMounted] = useState(false);
-  const [hoveredSection, setHoveredSection] = useState<"devotional" | "regional" | null>(null);
+  const [listeners, setListeners] = useState(10438);
 
   const containerRef = useRef(null);
 
@@ -25,6 +26,13 @@ export default function EntrySplashPage() {
       setSplashComplete(true);
     }
   }, [setSplashComplete]);
+
+  useEffect(() => {
+    const listenerInterval = setInterval(() => {
+      setListeners(prev => prev + (Math.floor(Math.random() * 15) - 5));
+    }, 3000);
+    return () => clearInterval(listenerInterval);
+  }, []);
 
   const handlePlayCard = (mode: "radio" | "news", section: "regional" | "devotional") => {
     setMode(mode);
@@ -40,13 +48,35 @@ export default function EntrySplashPage() {
   };
 
   const stations = [
-    "RADIO MAHAKAAL", "KESHAV VIBE", "RAGHAV VIBE", 
-    "BHOJPURI VIBE", "BAGHELI VIBE", "RADIO AADI SHAKTI", 
-    "BUNDELI VIBE", "RADIO GANPATI"
+    "रेडियो महाकाल", "केशव वाइब", "राघव वाइब", 
+    "भोजपुरी वाइब", "बघेली वाइब", "रेडियो आदि शक्ति", 
+    "बुंदेली वाइब", "रेडियो गणपति"
   ];
 
   return (
-    <div ref={containerRef} className="relative bg-[#050505] min-h-screen overflow-hidden selection:bg-[#E5FF00] selection:text-black font-sans">
+    <div ref={containerRef} className="relative bg-[#C4B5FD] min-h-screen overflow-hidden selection:bg-black selection:text-[#E5FF00] font-sans">
+      {/* Light Pastel Background with Flat Vector Watermarks */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Massive Flat Om */}
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[-10%] right-[-5%] text-[60vw] leading-none text-black/[0.03] font-black select-none"
+        >
+          ॐ
+        </motion.div>
+        {/* Massive Flat Swastika */}
+        <motion.div 
+          animate={{ rotate: -360 }}
+          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-[-10%] left-[-10%] text-[50vw] leading-none text-white/[0.15] font-black select-none"
+        >
+          卐
+        </motion.div>
+        {/* Subtle noise for texture */}
+        <div className="absolute inset-0 opacity-[0.08] bg-[url('/textures/noise.png')] mix-blend-overlay" />
+      </div>
+
       <Header />
       
       {!splashComplete && <CinematicSplash onComplete={() => {
@@ -54,150 +84,167 @@ export default function EntrySplashPage() {
         sessionStorage.setItem("future_radio_splash_shown", "true");
       }} />}
 
-      <main className={`min-h-screen text-white flex flex-col pt-16 transition-opacity duration-1000 relative ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
+      <main className={`min-h-screen text-black flex flex-col pt-20 pb-24 transition-opacity duration-1000 relative z-10 ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
         
-        {/* LIQUID / ABSTRACT BACKGROUND SYSTEM */}
-        <div className="absolute inset-0 z-0 overflow-hidden mix-blend-screen pointer-events-none">
-          {/* Base intense noise */}
-          <div className="absolute inset-0 opacity-[0.15] bg-[url('/textures/noise.png')] mix-blend-overlay z-10" />
-          
-          <AnimatePresence>
-            {/* Default Mix / Devotional View (OM & TRISHUL Liquid) */}
-            {(hoveredSection === null || hoveredSection === "devotional") && (
-              <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1 }}
-                className="absolute inset-0"
-              >
-                {/* Massive OM Symbol Blurred to Liquid */}
-                <motion.div 
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 5, -5, 0],
-                    x: [0, 50, -50, 0]
-                  }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-[20%] left-[20%] text-[40vw] leading-none text-[#FF3300] blur-[80px] md:blur-[120px] opacity-80 mix-blend-screen font-black select-none"
-                >
-                  ॐ
-                </motion.div>
-                
-                {/* Damru / Swastik Shape Blurred */}
-                <motion.div 
-                  animate={{ 
-                    scale: [1.2, 1, 1.2],
-                    rotate: [-10, 10, -10],
-                    y: [0, -50, 50, 0]
-                  }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-[10%] right-[10%] text-[40vw] leading-none text-[#E5FF00] blur-[90px] md:blur-[140px] opacity-70 mix-blend-screen font-black select-none"
-                >
-                  卐
-                </motion.div>
-
-                {/* Intense Purple/Pink accent */}
-                <div className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[50vw] h-[50vw] bg-[#FF00FF] rounded-full blur-[100px] md:blur-[150px] opacity-40 mix-blend-screen" />
-              </motion.div>
-            )}
-
-            {/* Regional View (Vibrant Cyan, Pink, Yellow Liquid) */}
-            {hoveredSection === "regional" && (
-              <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1 }}
-                className="absolute inset-0"
-              >
-                <motion.div 
-                  animate={{ scale: [1, 1.3, 1], x: [0, -100, 0] }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-[10%] left-[10%] text-[50vw] leading-none text-[#00E5FF] blur-[100px] md:blur-[140px] opacity-80 mix-blend-screen font-black select-none"
-                >
-                  R
-                </motion.div>
-                
-                <motion.div 
-                  animate={{ scale: [1.2, 1, 1.2], y: [0, 100, 0] }}
-                  transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-[20%] right-[20%] text-[50vw] leading-none text-[#FF0055] blur-[100px] md:blur-[140px] opacity-80 mix-blend-screen font-black select-none"
-                >
-                  V
-                </motion.div>
-
-                <div className="absolute top-[30%] left-[40%] w-[60vw] h-[40vw] bg-[#E5FF00] rounded-full blur-[120px] md:blur-[160px] opacity-50 mix-blend-screen" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* BRUTALIST FOREGROUND */}
-        <div className="flex-1 flex flex-col justify-center items-center relative z-10 w-full px-6">
+        {/* NEO-BRUTALIST HERO SECTION */}
+        <div className="w-full max-w-7xl mx-auto px-6 pt-12 pb-16 flex flex-col items-center text-center">
           
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
-            className="mb-8 mix-blend-difference"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
+            className="inline-block bg-[#E5FF00] border-4 border-black px-6 py-2 rounded-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-10 transform -rotate-2"
           >
-            <img src="/icons/logo-vertical-dark.png" alt="Future Radio" className="w-[120px] md:w-[180px] h-auto object-contain invert brightness-200" />
+            <span className="font-bold text-black uppercase tracking-widest text-sm md:text-base">100% Autonomous Streaming</span>
           </motion.div>
 
-          <div className="text-center w-full max-w-[90vw]">
-            <h1 className="font-[Impact,Arial_Black,sans-serif] text-[12vw] md:text-[8vw] leading-[0.8] tracking-tighter uppercase text-white mix-blend-difference">
-              FUTURE <br/> AUDIO NET
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="flex flex-col items-center w-full"
+          >
+            <h1 className="text-6xl md:text-8xl lg:text-[140px] font-black font-baloo text-black leading-[1.1] md:leading-[0.9] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
+              भारत का <br className="hidden md:block"/> पहला ऑडियो <br className="hidden md:block"/> नेटवर्क
             </h1>
-          </div>
+            
+            <p className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              अपनी माटी, अपनी भक्ति। <br className="md:hidden"/> सीधे आपके डिवाइस पर।
+            </p>
+          </motion.div>
 
-          {/* MASSIVE NAVIGATION BLOCKS */}
-          <div className="flex flex-col md:flex-row gap-4 w-full max-w-7xl mx-auto mt-16 px-4">
-            {/* Devotional Block */}
-            <motion.div 
-              onHoverStart={() => setHoveredSection("devotional")}
-              onHoverEnd={() => setHoveredSection(null)}
+          {/* VIBE CARDS (Neo-Brutalist) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-5xl mt-24">
+            
+            {/* Devotional Card */}
+            <motion.div
+              whileHover={{ y: -5, x: -5, boxShadow: "12px 12px 0px 0px rgba(0,0,0,1)" }}
+              whileTap={{ y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" }}
+              className="group bg-[#FFA500] border-4 border-black rounded-[2rem] p-8 md:p-10 cursor-pointer shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col justify-between relative overflow-hidden"
               onClick={() => handlePlayCard("radio", "devotional")}
-              className="flex-1 group cursor-pointer border-y md:border-y-0 md:border-x border-white/20 py-8 md:px-8 hover:bg-white transition-colors duration-300"
             >
-              <div className="font-[Impact,Arial_Black,sans-serif] text-[10vw] md:text-[5vw] leading-[0.8] tracking-tighter uppercase text-white group-hover:text-black transition-colors duration-300 break-words">
-                DEVOTIONAL<br/>VIBE
+              {/* Background graphic inside card */}
+              <div className="absolute -right-10 -bottom-10 text-[200px] text-black/10 font-black leading-none pointer-events-none group-hover:scale-110 transition-transform duration-500">
+                ॐ
               </div>
-              <p className="font-bold text-white/50 group-hover:text-black/60 uppercase tracking-widest mt-4 text-xs md:text-sm">
-                Pure / Unfiltered / Divine
-              </p>
+
+              <div className="relative z-10 text-left">
+                <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  अलौकिक भक्ति
+                </div>
+                <h2 className="text-4xl md:text-6xl font-black font-baloo text-black mb-4 leading-tight">डिवोशनल <br/> वाइब</h2>
+                <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
+                  महाकाल की भस्म आरती से लेकर राघव के मधुर भजनों तक।
+                </p>
+              </div>
+              
+              <div className="mt-12 flex items-center justify-between pt-6 border-t-4 border-black/20 relative z-10">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center group-hover:bg-white border-4 border-transparent group-hover:border-black transition-colors">
+                    <Play className="w-6 h-6 text-[#FFA500] group-hover:text-black ml-1" fill="currentColor" />
+                  </div>
+                  <span className="font-black text-black tracking-widest uppercase text-lg">अभी सुनें</span>
+                </div>
+                <div className="flex flex-col items-end">
+                   <span className="text-xs font-black text-black uppercase tracking-widest mb-1">Live Now</span>
+                   <div className="bg-white border-2 border-black px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
+                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                     {Math.floor(listeners * 0.7).toLocaleString()}
+                   </div>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Regional Block */}
-            <motion.div 
-              onHoverStart={() => setHoveredSection("regional")}
-              onHoverEnd={() => setHoveredSection(null)}
+            {/* Regional Card */}
+            <motion.div
+              whileHover={{ y: -5, x: -5, boxShadow: "12px 12px 0px 0px rgba(0,0,0,1)" }}
+              whileTap={{ y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" }}
+              className="group bg-[#00E5FF] border-4 border-black rounded-[2rem] p-8 md:p-10 cursor-pointer shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col justify-between relative overflow-hidden"
               onClick={() => handlePlayCard("radio", "regional")}
-              className="flex-1 group cursor-pointer border-b md:border-b-0 md:border-r border-white/20 py-8 md:px-8 hover:bg-white transition-colors duration-300"
             >
-              <div className="font-[Impact,Arial_Black,sans-serif] text-[10vw] md:text-[5vw] leading-[0.8] tracking-tighter uppercase text-white group-hover:text-black transition-colors duration-300 break-words">
-                REGIONAL<br/>VIBE
+              {/* Background graphic inside card */}
+              <div className="absolute -right-10 -bottom-10 text-[240px] text-black/10 font-black font-serif leading-none pointer-events-none group-hover:scale-110 transition-transform duration-500">
+                R
               </div>
-              <p className="font-bold text-white/50 group-hover:text-black/60 uppercase tracking-widest mt-4 text-xs md:text-sm">
-                Raw / Desi / Uncut
-              </p>
-            </motion.div>
-          </div>
 
+              <div className="relative z-10 text-left">
+                <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  अपनी माटी
+                </div>
+                <h2 className="text-4xl md:text-6xl font-black font-baloo text-black mb-4 leading-tight">रीज़नल <br/> वाइब</h2>
+                <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
+                  भोजपुरी की मिठास, बघेली की ठाठ, और अवधी का रस। लोकल हिट्स।
+                </p>
+              </div>
+              
+              <div className="mt-12 flex items-center justify-between pt-6 border-t-4 border-black/20 relative z-10">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center group-hover:bg-white border-4 border-transparent group-hover:border-black transition-colors">
+                    <Play className="w-6 h-6 text-[#00E5FF] group-hover:text-black ml-1" fill="currentColor" />
+                  </div>
+                  <span className="font-black text-black tracking-widest uppercase text-lg">अभी सुनें</span>
+                </div>
+                <div className="flex flex-col items-end">
+                   <span className="text-xs font-black text-black uppercase tracking-widest mb-1">Live Now</span>
+                   <div className="bg-white border-2 border-black px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
+                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                     {Math.floor(listeners * 0.3).toLocaleString()}
+                   </div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
         </div>
 
-        {/* VICE-STYLE SCROLLER (Massive Bottom Brands) */}
-        <div className="w-full relative z-20 py-6 md:py-8 border-t border-white/10 bg-black/40 backdrop-blur-md overflow-hidden mt-auto">
+        {/* NEO-BRUTALIST FEATURES SECTION */}
+        <div className="w-full max-w-7xl mx-auto px-6 py-20 mt-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black font-baloo text-black mb-4 uppercase">हम क्या लेकर आए हैं?</h2>
+            <p className="text-xl font-bold text-black/70">सिर्फ एक स्ट्रीम नहीं, बल्कि एक कल्चरल मूवमेंट।</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-[#FF69B4] border-4 border-black p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
+              <div className="w-16 h-16 bg-white border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Radio className="w-8 h-8 text-black" />
+              </div>
+              <h3 className="text-2xl font-black font-baloo text-black mb-4">24/7 असीमित प्रसारण</h3>
+              <p className="text-black/80 font-bold leading-snug">आर्टिफिशियल इंटेलिजेंस की शक्ति से चलने वाला हमारा मास्टर क्लॉक। बिना रुके लगातार स्ट्रीमिंग।</p>
+            </div>
+
+            <div className="bg-[#E5FF00] border-4 border-black p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
+              <div className="w-16 h-16 bg-white border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Heart className="w-8 h-8 text-black" />
+              </div>
+              <h3 className="text-2xl font-black font-baloo text-black mb-4">शुद्ध और पवित्र सामग्री</h3>
+              <p className="text-black/80 font-bold leading-snug">हमारा डिवोशनल नेटवर्क आपको मंदिर जैसा एहसास देगा। एकदम शुद्ध और सात्विक अनुभव।</p>
+            </div>
+
+            <div className="bg-white border-4 border-black p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
+              <div className="w-16 h-16 bg-[#00E5FF] border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Users className="w-8 h-8 text-black" />
+              </div>
+              <h3 className="text-2xl font-black font-baloo text-black mb-4">क्रिएटर्स की आवाज़</h3>
+              <p className="text-black/80 font-bold leading-snug">भारत के इंडिपेंडेंट आर्टिस्ट्स और लोक गायकों को एक ग्लोबल मंच। उनकी आवाज़ सीधे आप तक।</p>
+            </div>
+          </div>
+        </div>
+
+        {/* MASSIVE NEO-BRUTALIST SCROLLER */}
+        <div className="w-full bg-black border-y-8 border-black mt-auto py-4 overflow-hidden relative z-20">
           <motion.div 
             animate={{ x: [0, -2000] }}
-            transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-            className="whitespace-nowrap flex items-center gap-16 md:gap-32 font-[Impact,Arial_Black,sans-serif] text-3xl md:text-5xl tracking-tighter uppercase text-white/80"
+            transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+            className="whitespace-nowrap flex items-center gap-12 font-baloo font-black text-3xl md:text-5xl uppercase text-white"
           >
-            {/* Repeat stations multiple times for continuous scroll */}
             {[...stations, ...stations, ...stations, ...stations].map((station, i) => (
-              <span key={i} className="hover:text-[#E5FF00] transition-colors cursor-default mix-blend-difference">
-                {station}
-              </span>
+              <div key={i} className="flex items-center gap-12">
+                <span className="hover:text-[#E5FF00] transition-colors cursor-default drop-shadow-[2px_2px_0px_rgba(255,255,255,0.3)]">
+                  {station}
+                </span>
+                <span className="text-[#E5FF00]">✦</span>
+              </div>
             ))}
           </motion.div>
         </div>
