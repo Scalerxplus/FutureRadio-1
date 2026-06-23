@@ -9,7 +9,7 @@ import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 import VibeSelectorSheet from "@/components/ui/VibeSelectorSheet";
 import { Header } from "@/components/layout/Header";
-import { Play, Sparkles, Radio, Heart, Users, ArrowRight, Flame } from "lucide-react";
+import { Play, Sparkles, Radio, Heart, Users, ArrowRight, Flame, Music } from "lucide-react";
 
 export default function EntrySplashPage() {
   const router = useRouter();
