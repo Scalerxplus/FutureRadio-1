@@ -6,26 +6,26 @@ import { useCityStore } from "@/lib/store";
 import { resetAndUnlockAudioForTransition } from "@/components/audio/useAudioStore";
 
 export const REGIONAL_STATIONS = [
-  { id: "bagheli", name: "Bagheli Vibe", region: "Vindhya Region", listeners: "2.1k" },
-  { id: "bhojpuri", name: "Bhojpuri Vibe", region: "Bihar & UP", listeners: "5.4k" },
-  { id: "awadhi", name: "Awadhi Vibe", region: "Awadh Region", listeners: "3.2k" },
-  { id: "maithili", name: "Maithili Vibe", region: "Mithila", listeners: "1.8k" },
-  { id: "bundeli", name: "Bundeli Vibe", region: "Bundelkhand", listeners: "1.9k" },
+  { id: "bagheli", name: "Bagheli Vibe", region: "Vindhya Region", listeners: "2.1k", comingSoon: false },
+  { id: "bhojpuri", name: "Bhojpuri Vibe", region: "Bihar & UP", listeners: "5.4k", comingSoon: true },
+  { id: "awadhi", name: "Awadhi Vibe", region: "Awadh Region", listeners: "3.2k", comingSoon: true },
+  { id: "maithili", name: "Maithili Vibe", region: "Mithila", listeners: "1.8k", comingSoon: true },
+  { id: "bundeli", name: "Bundeli Vibe", region: "Bundelkhand", listeners: "1.9k", comingSoon: true },
 ];
 
 export const DEVOTIONAL_STATIONS = [
-  { id: "shiva", name: "Radio Mahakaal", region: "Devotional", listeners: "10k+" },
-  { id: "hanuman", name: "Radio Mahabali", region: "Devotional", listeners: "8k+" },
-  { id: "ram", name: "Radio Raghav", region: "Devotional", listeners: "9k+" },
-  { id: "krishna", name: "Radio Keshav", region: "Devotional", listeners: "11k+" },
-  { id: "jagannath", name: "Radio Jagannath", region: "Devotional", listeners: "5k+" },
-  { id: "ganesha", name: "Radio EkDant", region: "Devotional", listeners: "7k+" },
-  { id: "vishnu", name: "Radio Vishnu", region: "Devotional", listeners: "4k+" },
-  { id: "laxmi", name: "Radio Mahalakshmi", region: "Devotional", listeners: "6k+" },
-  { id: "saraswati", name: "Radio Saraswati", region: "Devotional", listeners: "3k+" },
-  { id: "durga", name: "Radio Aadi Shakti", region: "Devotional", listeners: "9k+" },
-  { id: "satsang", name: "Radio Satsang", region: "Devotional", listeners: "12k+" },
-  { id: "bhakti", name: "Bhakti Radio", region: "Devotional", listeners: "15k+" },
+  { id: "shiva", name: "Radio Mahakaal", region: "Devotional", listeners: "10k+", comingSoon: false },
+  { id: "hanuman", name: "Radio Mahabali", region: "Devotional", listeners: "8k+", comingSoon: false },
+  { id: "ram", name: "Radio Raghav", region: "Devotional", listeners: "9k+", comingSoon: false },
+  { id: "krishna", name: "Radio Keshav", region: "Devotional", listeners: "11k+", comingSoon: true },
+  { id: "jagannath", name: "Radio Jagannath", region: "Devotional", listeners: "5k+", comingSoon: false },
+  { id: "ganesha", name: "Radio EkDant", region: "Devotional", listeners: "7k+", comingSoon: true },
+  { id: "vishnu", name: "Radio Vishnu", region: "Devotional", listeners: "4k+", comingSoon: true },
+  { id: "laxmi", name: "Radio Mahalakshmi", region: "Devotional", listeners: "6k+", comingSoon: true },
+  { id: "saraswati", name: "Radio Saraswati", region: "Devotional", listeners: "3k+", comingSoon: true },
+  { id: "durga", name: "Radio Aadi Shakti", region: "Devotional", listeners: "9k+", comingSoon: true },
+  { id: "satsang", name: "Radio Satsang", region: "Devotional", listeners: "12k+", comingSoon: true },
+  { id: "bhakti", name: "Bhakti Radio", region: "Devotional", listeners: "15k+", comingSoon: true },
 ];
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -124,14 +124,24 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
                   return (
                     <button
                       key={genre.id}
-                      onClick={() => handleSelectCity(genre.id, `Future Radio - ${genre.name}`)}
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-none text-left transition-all duration-200 border-2 ${
-                        isSelected
-                          ? "bg-brand-red text-black border-brand-red translate-x-2 shadow-[-8px_0_0_0_rgba(255,255,255,1)]"
-                          : "bg-black/30 text-white border-white/10 hover:border-white hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
+                      disabled={genre.comingSoon}
+                      onClick={() => !genre.comingSoon && handleSelectCity(genre.id, `Future Radio - ${genre.name}`)}
+                      className={`w-full relative overflow-hidden flex items-center justify-between px-4 py-3 rounded-none text-left transition-all duration-200 border-2 ${
+                        genre.comingSoon 
+                          ? "bg-gray-800/50 text-gray-500 border-gray-700 cursor-not-allowed opacity-70"
+                          : isSelected
+                            ? "bg-brand-red text-black border-brand-red translate-x-2 shadow-[-8px_0_0_0_rgba(255,255,255,1)]"
+                            : "bg-black/30 text-white border-white/10 hover:border-white hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
                       }`}
                     >
-                      <div className="flex flex-col">
+                      {genre.comingSoon && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[1px] z-10">
+                          <span className="bg-brand-yellow text-brand-dark px-3 py-1 font-black text-xs uppercase tracking-[0.2em] border-2 border-brand-dark shadow-[2px_2px_0_0_rgba(0,0,0,1)] rotate-[-2deg]">
+                            Coming Soon
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex flex-col relative z-0">
                         <div className="flex items-center gap-2">
                           <span className="text-[14px] font-black uppercase tracking-wider">{genre.name}</span>
                           {genre.id === 'news' ? (
@@ -140,7 +150,7 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
                             <span className="text-[12px]">🎵</span>
                           )}
                         </div>
-                        <span className={`text-[10px] font-bold uppercase tracking-widest mt-0.5 ${isSelected ? 'text-black/70' : 'text-gray-400'}`}>
+                        <span className={`text-[10px] font-bold uppercase tracking-widest mt-0.5 ${genre.comingSoon ? 'text-gray-600' : isSelected ? 'text-black/70' : 'text-gray-400'}`}>
                           {genre.region}
                         </span>
                       </div>
