@@ -37,21 +37,21 @@ export default function PlayerBar() {
 
   if (viewMode === "minimized") {
     return (
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-brand-surface/95 backdrop-blur-md border-t border-brand-border px-6 py-4 flex items-center justify-between animate-slide-up">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#98FB98] border-t-4 border-black px-6 py-4 flex items-center justify-between font-khand">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded bg-brand-red/20 flex items-center justify-center border border-brand-red/30">
-            <span className="text-brand-red text-xl font-bold">📡</span>
+          <div className="w-10 h-10 rounded-sm bg-white flex items-center justify-center border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+            <span className="text-black text-xl font-black">📡</span>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-white">
+            <h4 className="text-lg font-black text-black leading-tight uppercase tracking-wide">
               {currentBlock ? currentBlock.songTitle : "Future Radio Stream"}
             </h4>
             <div className="flex items-center gap-2">
-              <p className="text-xs text-gray-400">
+              <p className="text-sm text-black font-bold">
                 {currentBlock ? currentBlock.songArtist : "Tuning Ambient Live Beats..."}
               </p>
               {currentBlock?.permalink && (
-                <a href={currentBlock.permalink} target="_blank" rel="noopener noreferrer" className="text-[9px] text-brand-red hover:underline whitespace-nowrap">
+                <a href={currentBlock.permalink} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-black text-white px-1 font-bold hover:underline whitespace-nowrap">
                   🔗 Licensed via Audius
                 </a>
               )}
@@ -65,14 +65,14 @@ export default function PlayerBar() {
               unlockAudio();
               setIsPlaying(!isPlaying);
             }}
-            className="w-10 h-10 rounded-full bg-brand-red hover:bg-brand-red/90 text-white flex items-center justify-center hover:scale-105 transition-all"
+            className="w-12 h-12 bg-[#FFB6C1] border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] text-black flex items-center justify-center transition-all"
             aria-label={isPlaying ? "Stop stream" : "Start stream"}
           >
-            {isPlaying ? "⏹" : "▶"}
+            <span className="text-2xl font-black">{isPlaying ? "⏹" : "▶"}</span>
           </button>
           <button
             onClick={() => setViewMode("fullscreen")}
-            className="text-xs text-gray-400 hover:text-white"
+            className="text-sm font-black text-black border-b-2 border-black hover:bg-black hover:text-[#98FB98] px-1 uppercase"
           >
             Maximize
           </button>

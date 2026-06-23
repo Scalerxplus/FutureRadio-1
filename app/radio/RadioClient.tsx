@@ -170,9 +170,9 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
       className="min-h-screen flex justify-center items-center bg-transparent p-0 md:p-4"
     >
       {/* Mobile Shell Container */}
-      <div className="w-full max-w-[420px] mx-auto h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-black/40 md:bg-[#111118] backdrop-blur-md text-white flex flex-col justify-between px-4 py-6 md:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] relative overflow-y-auto overflow-x-hidden md:border-[6px] md:border-brand-red md:rounded-none md:shadow-[16px_16px_0_0_rgba(255,255,255,1)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {/* Glow Effects */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[200px] bg-brand-red/20 blur-[120px] pointer-events-none" />
+      <div className="w-full max-w-[420px] mx-auto h-[100dvh] md:h-[850px] md:max-h-[92vh] bg-[#FFD1DC] md:bg-[#FFD1DC] text-black flex flex-col justify-between px-4 py-6 md:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] relative overflow-y-auto overflow-x-hidden md:border-4 md:border-black md:rounded-none md:shadow-[16px_16px_0_0_rgba(0,0,0,1)] font-khand [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {/* Glow Effects (Removed for Brutalism) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[200px] pointer-events-none" />
         
         {/* Top Header */}
         <header className="flex justify-between items-center h-12 relative z-10">
@@ -195,15 +195,14 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
 
         </header>
 
-        {/* Section Toggle */}
         <div className="flex justify-center mt-3 z-10 relative">
-          <div className="bg-black/50 border border-white/10 rounded-full p-1 flex items-center backdrop-blur-md">
+          <div className="bg-[#98FB98] border-4 border-black p-1 flex items-center shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
             <button
               onClick={() => {
                 setRadioSection("regional");
                 setIsVibeSheetOpen(true);
               }}
-              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${radioSection === "regional" ? 'bg-brand-red text-black shadow-[0_0_10px_rgba(255,0,50,0.5)]' : 'text-gray-400 hover:text-white'}`}
+              className={`px-4 py-1.5 border-r-4 border-black text-sm font-black uppercase tracking-wider transition-all duration-300 ${radioSection === "regional" ? 'bg-[#FFD1DC] text-black' : 'text-black hover:bg-black hover:text-white'}`}
             >
               Regional
             </button>
@@ -212,7 +211,7 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
                 setRadioSection("devotional");
                 setIsVibeSheetOpen(true);
               }}
-              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${radioSection === "devotional" ? 'bg-brand-red text-black shadow-[0_0_10px_rgba(255,0,50,0.5)]' : 'text-gray-400 hover:text-white'}`}
+              className={`px-4 py-1.5 text-sm font-black uppercase tracking-wider transition-all duration-300 ${radioSection === "devotional" ? 'bg-[#FFD1DC] text-black' : 'text-black hover:bg-black hover:text-white'}`}
             >
               Devotional
             </button>
@@ -226,29 +225,29 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
           <div className="mt-2 mb-1 w-full flex flex-col items-center">
             
             {/* Indie Supporter Badge */}
-            <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500/10 to-brand-red/10 border border-orange-500/20 backdrop-blur-md shadow-[0_0_15px_rgba(255,51,102,0.15)] hover:scale-105 transition-transform cursor-pointer">
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-              <span className="text-[9px] font-bold tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-brand-red uppercase">
+            <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 bg-white border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-transform cursor-pointer">
+              <div className="w-2 h-2 bg-red-500 border border-black animate-pulse" />
+              <span className="text-xs font-black tracking-widest text-black uppercase">
                 Powered By Indie Creators
               </span>
             </div>
 
             {/* Seamless Title Marquee */}
-            <div className="w-full flex items-center overflow-hidden">
+            <div className="w-full flex items-center overflow-hidden bg-white border-y-4 border-black py-2 mb-2 shadow-[0_4px_0_0_rgba(0,0,0,1)]">
               {React.createElement(
                 'marquee',
-                { scrollamount: "5", className: "text-[34px] font-black font-sans uppercase text-white tracking-widest leading-none border-b-4 border-brand-red pb-2" },
+                { scrollamount: "5", className: "text-[40px] font-black font-khand uppercase text-black tracking-widest leading-none" },
                 currentBlock ? currentBlock.songTitle : "Connecting to Live Broadcast..."
               )}
             </div>
             
             {/* Centered Artist Name & Attribution */}
-            <div className="flex flex-col items-center mt-4">
-              <p className="text-[14px] font-bold text-brand-red uppercase tracking-[0.3em] text-center">
+            <div className="flex flex-col items-center mt-2">
+              <p className="text-2xl font-black text-black uppercase tracking-[0.1em] text-center bg-[#FFB6C1] border-2 border-black px-4 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                 {currentBlock ? currentBlock.songArtist : "Future Radio Sync Engine"}
               </p>
               {currentBlock?.permalink && (
-                <a href={provider.url} target="_blank" rel="noopener noreferrer" className="mt-2 px-3 py-1 rounded border border-brand-red/30 bg-brand-red/10 text-[10px] text-brand-red uppercase tracking-widest hover:bg-brand-red hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1">
+                <a href={provider.url} target="_blank" rel="noopener noreferrer" className="mt-4 px-3 py-1 border-2 border-black bg-[#98FB98] text-xs font-black text-black uppercase tracking-widest hover:bg-black hover:text-[#98FB98] shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-colors cursor-pointer inline-flex items-center gap-1">
                   <span>🔗</span> Licensed via {provider.name}
                 </a>
               )}
@@ -268,20 +267,16 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
         />
 
         {/* Progress Bar Scrubber */}
-        <div className="space-y-2 mt-2">
+        <div className="space-y-2 mt-2 px-2">
           {/* Custom Track Slider */}
-          <div className="relative w-full h-[3px] bg-white/10 rounded-full">
+          <div className="relative w-full h-[12px] bg-white border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
             <div
-              className="absolute left-0 top-0 h-full bg-white rounded-full"
+              className="absolute left-0 top-0 h-full bg-[#FF69B4] border-r-2 border-black"
               style={{ width: `${(progressS / duration) * 100}%` }}
-            />
-            <div
-              className="absolute w-2.5 h-2.5 rounded-full bg-white shadow-sm -top-[3.5px] cursor-pointer transition-transform hover:scale-125"
-              style={{ left: `calc(${(progressS / duration) * 100}% - 5px)` }}
             />
           </div>
           {/* Time Codes */}
-          <div className="flex justify-between items-center text-[10px] font-medium text-white/50 tracking-wider select-none">
+          <div className="flex justify-between items-center text-xs font-black text-black tracking-wider select-none">
             <span>{formatTime(progressS)}</span>
             <span>{formatTime(duration)}</span>
           </div>
@@ -306,21 +301,12 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
               unlockAudio();
               setIsPlaying(!isPlaying);
             }}
-            className={`w-[96px] h-[96px] md:w-[110px] md:h-[110px] relative flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none rounded-full ${!isPlaying ? 'shadow-[0_0_15px_rgba(255,0,50,0.5)] animate-pulse' : 'shadow-2xl'}`}
+            className={`w-[96px] h-[96px] md:w-[110px] md:h-[110px] relative flex items-center justify-center hover:translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all duration-300 focus:outline-none border-4 border-black ${!isPlaying ? 'bg-[#98FB98] shadow-[8px_8px_0_0_rgba(0,0,0,1)]' : 'bg-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]'}`}
             aria-label={isPlaying ? "Pause Radio" : "Play Radio"}
           >
-            <div className={`absolute inset-1.5 rounded-full border-[3px] overflow-hidden bg-black/60 shadow-inner ${isPlaying && !isTuning ? 'animate-rgb-glow' : 'border-[#ff0032] shadow-[0_0_15px_#ff0032,inset_0_0_10px_#ff0032] animate-pulse'}`}>
-              <img src="/icons/player-logo.png" alt="Future Radio" className={`w-full h-full object-cover p-2.5 ${isPlaying && !isTuning ? 'animate-[spin_4s_linear_infinite]' : ''}`} />
+            <div className={`absolute inset-0 flex items-center justify-center text-4xl font-black ${isPlaying ? 'text-[#98FB98]' : 'text-black'}`}>
+              {isPlaying ? "⏹" : "▶"}
             </div>
-            
-            {/* Play Indicator Overlay when paused */}
-            {!isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full z-10 pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] pl-1">
-                  <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
-                </svg>
-              </div>
-            )}
           </button>
 
           {/* Like Toggle */}
@@ -336,19 +322,19 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
         {/* Badges / Bottom Navigation */}
         <div className="flex justify-between items-center px-2 pt-2">
           {/* Live Broadcast Indicator */}
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70 select-none">
-            <span className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]'}`} />
+          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-black select-none border-2 border-black px-2 bg-white shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+            <span className={`w-2 h-2 ${isPlaying ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
             LIVE
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-brand-red select-none">
+            <div className="text-xs font-black uppercase tracking-widest text-black bg-[#FFFDD0] border-2 border-black px-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)] select-none">
               {cityName}
             </div>
             {/* Select Vibe / Genre Trigger */}
             <button
               onClick={handleOpenVibeSheet}
-              className="flex items-center gap-1.5 text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 select-none uppercase tracking-[0.2em]"
+              className="flex items-center gap-1.5 text-black hover:bg-black hover:text-white border-2 border-black px-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)] text-xs font-black uppercase tracking-[0.2em] transition-colors duration-300 select-none"
             >
               CHANNELS 🎧
             </button>
@@ -356,31 +342,31 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
         </div>
 
         {/* Coming Up Next Section */}
-        <div className="border-t border-white/10 pt-5 mt-auto space-y-3">
-          <span className="text-[10px] font-sans font-semibold uppercase tracking-[0.25em] text-brand-red block select-none">
+        <div className="border-t-4 border-black pt-4 mt-auto space-y-3">
+          <span className="text-sm font-black uppercase tracking-[0.25em] text-black bg-white border-2 border-black px-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)] inline-block select-none">
             AI QUEUE
           </span>
 
             {upcomingBlocks.map((block, i) => (
               <div
                 key={block.blockId || i}
-                className="flex items-center justify-between bg-brand-surface/40 p-2.5 rounded-xl border border-brand-border/40"
+                className="flex items-center justify-between bg-white p-2 border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded bg-[#2a2a35]/30 flex items-center justify-center border border-brand-border text-sm">
+                  <div className="w-8 h-8 bg-[#FFB6C1] flex items-center justify-center border-2 border-black text-black font-black text-sm shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
                     {block.mood === "song" ? "🎵" : "🎙️"}
                   </div>
                   <div>
-                    <h4 className="text-xs font-semibold text-white truncate max-w-[200px]">
+                    <h4 className="text-sm font-black text-black uppercase tracking-wide truncate max-w-[200px]">
                       {block.songTitle}
                     </h4>
-                    <p className="text-[10px] text-gray-400 truncate max-w-[200px]">
+                    <p className="text-xs font-bold text-black truncate max-w-[200px]">
                       {block.songArtist}
                     </p>
                   </div>
                 </div>
 
-                <span className="px-2 py-0.5 rounded bg-brand-red/10 border border-brand-red/20 text-brand-red text-[8px] font-bold uppercase tracking-wider select-none">
+                <span className="px-2 py-0.5 bg-black text-white text-xs font-black uppercase tracking-wider select-none">
                   {block.mood === "song" ? "Song" : "Voiceover"}
                 </span>
               </div>
