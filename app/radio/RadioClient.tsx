@@ -192,23 +192,7 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
           </button>
-          <div className="flex items-center gap-2 bg-[#111118]/50 px-3 py-1.5 rounded-full border border-[#2a2a35]">
-            <span className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${isPlaying ? 'text-brand-red' : 'text-gray-500'}`}>
-              {isPlaying ? 'ON' : 'OFF'}
-            </span>
-            <button
-              onClick={() => {
-                unlockAudio();
-                setIsPlaying(!isPlaying);
-              }}
-              className={`w-10 h-5 rounded-full relative transition-colors duration-300 focus:outline-none ${isPlaying ? 'bg-brand-red' : 'bg-[#2a2a35]'}`}
-              aria-label={isPlaying ? "Turn Radio Off" : "Turn Radio On"}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full absolute top-[2px] shadow-sm transition-transform duration-300 ${isPlaying ? 'left-[22px]' : 'left-[2px]'}`}
-              />
-            </button>
-          </div>
+
         </header>
 
         {/* Section Toggle */}

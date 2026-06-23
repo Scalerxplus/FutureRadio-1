@@ -14,7 +14,7 @@ import { Play, Sparkles, Radio, Heart, Users, ArrowRight, Flame, Music } from "l
 export default function EntrySplashPage() {
   const router = useRouter();
   const { setMode, splashComplete, setSplashComplete } = useUiStore();
-  const { setRadioSection } = useCityStore();
+  const { setRadioSection, setCityId } = useCityStore();
   const { isPlaying, setIsPlaying } = useAudioStore();
   const [mounted, setMounted] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -45,6 +45,12 @@ export default function EntrySplashPage() {
   const handlePlayCard = (mode: "radio" | "news", section: "regional" | "devotional") => {
     setMode(mode);
     setRadioSection(section);
+    
+    // Instantly set cityId to pre-fetch schedule and buffer audio in the background before the page transition completes.
+    const defaultId = section === "devotional" ? "shiva" : "bhojpuri";
+    const defaultName = section === "devotional" ? "Radio Mahakaal" : "Bhojpuri Vibe";
+    setCityId(defaultId, `Future Radio - ${defaultName}`);
+    
     unlockAudio();
     setIsPlaying(true);
     router.push("/radio");

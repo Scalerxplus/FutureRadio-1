@@ -5,9 +5,17 @@ import { useAudioStore } from "./useAudioStore";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function TelemetryDisplay() {
-  const { currentBlock, isTuning, isPlaying } = useAudioStore();
+  const { currentBlock, isTuning, isPlaying, cityId } = useAudioStore();
 
-  const imageUrl = currentBlock?.coverArt || "/icons/player-logo.png";
+  const getFallbackImage = (id: string) => {
+    const validIds = ['shiva', 'hanuman', 'ram', 'krishna', 'jagannath', 'ganesha', 'vishnu', 'laxmi', 'saraswati', 'durga', 'satsang', 'bhakti', 'bagheli', 'bhojpuri', 'awadhi', 'maithili', 'bundeli'];
+    if (validIds.includes(id)) {
+      return `/images/stations/${id}_artwork.png`;
+    }
+    return "/icons/player-logo.png";
+  };
+
+  const imageUrl = currentBlock?.coverArt || getFallbackImage(cityId);
 
   return (
     <div className={`w-full aspect-square max-h-[260px] flex items-center justify-center my-4 relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-white/[0.15] to-white/[0.05] shadow-2xl backdrop-blur-xl transition-all duration-300 ${isPlaying && !isTuning ? 'border-[3px] border-transparent animate-rgb-glow' : 'border border-white/[0.1]'}`}>
