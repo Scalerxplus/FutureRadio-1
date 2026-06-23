@@ -374,16 +374,22 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
               onChange={(e) => window.location.href = `/admin/schedule?channel=${e.target.value}`}
               className="bg-[#111118] border border-[#2a2a35] text-white rounded-lg px-4 py-2 text-sm font-bold shadow-lg"
             >
-              <option value="hindi">Future Radio - Hindi</option>
-              <option value="malwi">Future Radio - Malwi</option>
-              <option value="bagheli">Future Radio - Bagheli</option>
-              <option value="bundeli">Future Radio - Bundeli</option>
-              <option value="chhattisgarhi">Future Radio - Chhattisgarhi</option>
-              <option value="sarguja">Future Radio - Sarguja/Ambikapur</option>
-              <option value="bastar">Future Radio - Bastar/Jagdalpur</option>
-              <option value="raigarh">Future Radio - Raigarh</option>
-              <option value="punjabi">Future Radio - Punjabi</option>
-              <option value="news">Future Radio - News</option>
+              <optgroup label="Regional Stations">
+                <option value="hindi-belt">Future Radio - Hindi Belt</option>
+                <option value="bagheli">Future Radio - Bagheli</option>
+                <option value="bhojpuri">Future Radio - Bhojpuri</option>
+                <option value="awadhi">Future Radio - Awadhi</option>
+                <option value="maithili">Future Radio - Maithili</option>
+                <option value="bundeli">Future Radio - Bundeli</option>
+              </optgroup>
+              <optgroup label="Devotional Stations">
+                <option value="hanuman">Devotional - Hanuman</option>
+                <option value="ram">Devotional - Ram</option>
+                <option value="shiva">Devotional - Shiva</option>
+                <option value="jagannath">Devotional - Jagannath</option>
+                <option value="krishna">Devotional - Krishna</option>
+                <option value="ganesha">Devotional - Ganesha</option>
+              </optgroup>
             </select>
           </div>
         </header>
