@@ -104,8 +104,10 @@ export default function EntrySplashPage() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="flex flex-col items-center w-full"
           >
-            <h1 className="text-6xl md:text-8xl lg:text-[140px] font-khand font-black text-black leading-[1.1] md:leading-[0.9] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
-              भारत का <br className="hidden md:block"/> पहला <span className="font-sans font-black tracking-tighter">INDEPENDENT</span> ऑडियो <br className="hidden md:block"/> नेटवर्क
+            <h1 className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.2] md:leading-[1.1] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
+              भारत का #1 <br />
+              <span className="font-sans font-black tracking-tighter">Virtual & INDIE</span> <br />
+              #Radio नेटवर्क
             </h1>
             
             <p className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
