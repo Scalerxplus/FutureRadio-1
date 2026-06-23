@@ -41,20 +41,26 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Future Radio | Digital India's #1 Digital & Virtual Radio Network",
-  description: "Experience the next generation of sound. Future Radio is India's first 100% autonomous, AI-powered virtual radio station network covering all regional and global dialects.",
-  keywords: ["radio", "internet radio india", "ai radio station", "future radio", "madhya pradesh radio", "chhattisgarh radio", "bagheli", "bundeli", "malwi", "chhattisgarhi", "sarguja", "bastar", "punjabi radio", "indie music"],
+  title: "Future Radio | #1 Independent Regional & Devotional Audio Network",
+  description: "Experience India's first 100% autonomous, AI-powered virtual radio. Explore new stations, new structure, and a new business model for creators. Stream devotional, regional, bagheli lokgeet, bhojpuri music, ramcharit manas, sundar kand, hanuman chalisa, Shiva bhajan, and Radio Ramayan.",
+  keywords: [
+    "radio", "internet radio india", "ai radio station", "future radio", 
+    "devotional", "regional", "bagheli lokgeet", "bhojpuri music", "ramcharit manas", 
+    "sundar kand", "hanuman chalisa", "Shiva bhajan", "Radio Ramayan", 
+    "new stations", "new structure", "new business model", "madhya pradesh radio", 
+    "chhattisgarh radio", "bagheli", "bundeli", "malwi", "chhattisgarhi", 
+    "sarguja", "bastar", "punjabi radio", "indie music", "autonomous radio"
+  ],
   openGraph: {
-    title: "Future Radio | Digital India's #1 Digital & Virtual Radio Network",
-    description: "The New-age radio network. Tune into the future of sound with regional and global music in your own dialect.",
+    title: "Future Radio | #1 Independent Regional & Devotional Audio Network",
+    description: "Tune into the future of sound with new stations and massive regional & devotional content like Hanuman Chalisa, Bagheli Lokgeet, and Radio Ramayan.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",
     images: [
       {
-        url: "/icons/logo-horizontal-dark.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Future Radio - Autonomous AI Station",
       },
     ],
     locale: "en_IN",
@@ -62,9 +68,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Radio | AI Virtual Radio Station",
-    description: "India's first 100% autonomous, AI-powered virtual radio station. The New-age radio.",
-    images: ["/icons/logo-horizontal-dark.png"],
+    title: "Future Radio | #1 Independent Regional & Devotional Audio Network",
+    description: "Stream the best of Bagheli Lokgeet, Bhojpuri Music, and Devotional tracks 24/7.",
+    images: ["/og-image.jpg"],
   },
   icons: {
     icon: "/icons/player-logo.png",
