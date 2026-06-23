@@ -250,7 +250,7 @@ export default function EntrySplashPage() {
                 <Users className="w-8 h-8 text-[#00E5FF]" />
               </div>
               <h3 className="text-xl font-bold mb-4 tracking-wide text-white">क्रिएटर्स की आवाज़</h3>
-              <p className="text-white/50 text-sm leading-relaxed">हम केवल ब्रॉडकास्ट नहीं करते, हम टैलेंट को मंच देते हैं। भारत के इंडिपेंडेंट आर्टिस्ट्स और RJ's की आवाज़ सीधे आप तक।</p>
+              <p className="text-white/50 text-sm leading-relaxed">हम केवल ब्रॉडकास्ट नहीं करते, हम टैलेंट को मंच देते हैं। भारत के इंडिपेंडेंट आर्टिस्ट्स और लोक गायकों की आवाज़ सीधे आप तक।</p>
             </motion.div>
           </div>
         </div>
@@ -266,7 +266,7 @@ export default function EntrySplashPage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#FFD700]/10 blur-[120px] rounded-full pointer-events-none" />
           
           <div className="max-w-4xl mx-auto px-6 text-center relative z-10 flex flex-col items-center">
-            <h2 className="text-4xl md:text-6xl font-black font-baloo text-transparent bg-clip-text bg-gradient-to-b from-white to-[#FFD700] mb-6 drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]">क्या आप एक आर्टिस्ट या RJ हैं?</h2>
+            <h2 className="text-4xl md:text-6xl font-black font-baloo text-transparent bg-clip-text bg-gradient-to-b from-white to-[#FFD700] mb-6 drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]">क्या आप एक इंडिपेंडेंट आर्टिस्ट हैं?</h2>
             <p className="text-lg text-[#FFF8DC]/70 mb-10 max-w-2xl mx-auto font-medium leading-relaxed tracking-wide">
               Future Radio आपको अपनी आवाज़ लाखों लोगों तक पहुँचाने का मौका देता है। अपनी संस्कृति, अपनी बोली और अपनी भक्ति को दुनिया के सामने लाएं।
             </p>
