@@ -14,11 +14,11 @@ export const REGIONAL_STATIONS = [
 ];
 
 export const DEVOTIONAL_STATIONS = [
-  { id: "shiva", name: "Radio Mahakaal", region: "Devotional", listeners: "10k+", comingSoon: false },
-  { id: "hanuman", name: "Radio Mahabali", region: "Devotional", listeners: "8k+", comingSoon: false },
-  { id: "ram", name: "Radio Raghav", region: "Devotional", listeners: "9k+", comingSoon: false },
+  { id: "shiva", name: "Radio Mahakaal", region: "Devotional", listeners: "10k+", comingSoon: true },
+  { id: "hanuman", name: "Radio Mahabali", region: "Devotional", listeners: "8k+", comingSoon: true },
+  { id: "ram", name: "Radio Raghav", region: "Devotional", listeners: "9k+", comingSoon: true },
   { id: "krishna", name: "Radio Keshav", region: "Devotional", listeners: "11k+", comingSoon: true },
-  { id: "jagannath", name: "Radio Jagannath", region: "Devotional", listeners: "5k+", comingSoon: false },
+  { id: "jagannath", name: "Radio Jagannath", region: "Devotional", listeners: "5k+", comingSoon: true },
   { id: "ganesha", name: "Radio EkDant", region: "Devotional", listeners: "7k+", comingSoon: true },
   { id: "vishnu", name: "Radio Vishnu", region: "Devotional", listeners: "4k+", comingSoon: true },
   { id: "laxmi", name: "Radio Mahalakshmi", region: "Devotional", listeners: "6k+", comingSoon: true },
@@ -38,29 +38,11 @@ export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean
     onClose();
   };
 
-  // --- MOBILE RESILIENCE & PRELOAD LOGIC (Root Cause 2) ---
   useEffect(() => {
     if (isOpen) {
       setSearchQuery(""); // Reset search when opened
-      let isCancelled = false;
-      const prefetchChannels = async () => {
-        const currentList = radioSection === "regional" ? REGIONAL_STATIONS : DEVOTIONAL_STATIONS;
-        for (const genre of currentList) {
-          if (isCancelled) break;
-          if (genre.name !== cityName) {
-            try {
-              await fetch(`/api/broadcast/generate-hour?city=${genre.id}`, { method: 'POST' });
-            } catch (e) {
-              console.warn(`Failed to preload ${genre.id}`);
-            }
-          }
-        }
-      };
-      setTimeout(() => { if (!isCancelled) prefetchChannels(); }, 500);
-      return () => { isCancelled = true; };
     }
-  }, [isOpen, cityName]);
-
+  }, [isOpen]);
   const currentList = radioSection === "regional" ? REGIONAL_STATIONS : DEVOTIONAL_STATIONS;
   const filteredGenres = currentList.filter((genre) =>
     genre.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
