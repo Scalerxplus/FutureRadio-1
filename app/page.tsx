@@ -9,6 +9,7 @@ import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 import { Header } from "@/components/layout/Header";
 import { Play, Radio, Heart, Users, ArrowRight, Activity, Globe, Speaker } from "lucide-react";
+import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS } from "@/lib/data";
 
 export default function EntrySplashPage() {
   const router = useRouter();
@@ -34,13 +35,17 @@ export default function EntrySplashPage() {
     return () => clearInterval(listenerInterval);
   }, []);
 
-  const handlePlayCard = (mode: "radio" | "news", section: "regional" | "devotional") => {
+  const handlePlayCard = (mode: "radio" | "news", section: "regional" | "devotional", stationId?: string, stationName?: string) => {
     setMode(mode);
     setRadioSection(section);
     
-    const defaultId = section === "devotional" ? "shiva" : "bhojpuri";
-    const defaultName = section === "devotional" ? "Radio Mahakaal" : "Bhojpuri Vibe";
-    setCityId(defaultId, `Future Radio - ${defaultName}`);
+    if (stationId && stationName) {
+      setCityId(stationId, `Future Radio - ${stationName}`);
+    } else {
+      const defaultId = section === "devotional" ? "shiva" : "bagheli";
+      const defaultName = section === "devotional" ? "Radio Mahakaal" : "Bagheli Vibe";
+      setCityId(defaultId, `Future Radio - ${defaultName}`);
+    }
     
     unlockAudio();
     setIsPlaying(true);
@@ -123,86 +128,116 @@ export default function EntrySplashPage() {
             </p>
           </motion.div>
 
-          {/* VIBE CARDS (Neo-Brutalist) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-5xl mt-24">
+          {/* STATION CATALOGS (Neo-Brutalist Grid) */}
+          <div className="w-full max-w-7xl mx-auto mt-24 flex flex-col gap-16 text-left">
             
-            {/* Devotional Card */}
-            <motion.div
-              whileHover={{ y: -5, x: -5, boxShadow: "12px 12px 0px 0px rgba(0,0,0,1)" }}
-              whileTap={{ y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" }}
-              className="group bg-[#FFA500] border-4 border-black rounded-[2rem] p-8 md:p-10 cursor-pointer shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col justify-between relative overflow-hidden"
-              onClick={() => handlePlayCard("radio", "devotional")}
-            >
-              {/* Background graphic inside card */}
-              <div className="absolute -right-10 -bottom-10 text-[200px] text-black/10 font-black leading-none pointer-events-none group-hover:scale-110 transition-transform duration-500">
-                ॐ
-              </div>
-
-              <div className="relative z-10 text-left">
-                <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  Divine Bhakti
-                </div>
-                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">DEVOTIONAL <br/> Vibe</h2>
-                <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
-                  Mahakaal ki Bhasma Aarti se lekar Raghav ke soulful Bhajans tak. Pure devotion.
-                </p>
+            {/* Regional Stations */}
+            <div>
+              <div className="flex items-center gap-4 mb-8">
+                <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight text-black border-b-4 border-black pb-2 inline-block">Apni Maati</h2>
+                <div className="bg-[#E5FF00] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full">Regional</div>
               </div>
               
-              <div className="mt-12 flex items-center justify-between pt-6 border-t-4 border-black/20 relative z-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center group-hover:bg-white border-4 border-transparent group-hover:border-black transition-colors">
-                    <Play className="w-6 h-6 text-[#FFA500] group-hover:text-black ml-1" fill="currentColor" />
-                  </div>
-                  <span className="font-black text-black tracking-widest uppercase text-lg">Listen Now</span>
-                </div>
-                <div className="flex flex-col items-end">
-                   <span className="text-xs font-black text-black uppercase tracking-widest mb-1">Live Now</span>
-                   <div className="bg-white border-2 border-black px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
-                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                     {Math.floor(listeners * 0.7).toLocaleString()}
-                   </div>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {REGIONAL_STATIONS.map((station) => (
+                  <motion.div
+                    key={station.id}
+                    whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
+                    whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
+                    onClick={() => !station.comingSoon && handlePlayCard("radio", "regional", station.id, station.name)}
+                    className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
+                    style={{ backgroundColor: station.color }}
+                  >
+                    <div className="aspect-square border-b-4 border-black bg-white relative">
+                      {station.image ? (
+                        <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
+                      )}
+                      
+                      {station.comingSoon && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
+                          <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-4 bg-white flex flex-col justify-between flex-grow">
+                      <div>
+                        <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
+                        <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
+                      </div>
+                      
+                      {!station.comingSoon && (
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                             <span className="text-[10px] font-black">{station.listeners}</span>
+                          </div>
+                          <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
+                            <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Regional Card */}
-            <motion.div
-              whileHover={{ y: -5, x: -5, boxShadow: "12px 12px 0px 0px rgba(0,0,0,1)" }}
-              whileTap={{ y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" }}
-              className="group bg-[#00E5FF] border-4 border-black rounded-[2rem] p-8 md:p-10 cursor-pointer shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col justify-between relative overflow-hidden"
-              onClick={() => handlePlayCard("radio", "regional")}
-            >
-              {/* Background graphic inside card */}
-              <div className="absolute -right-10 -bottom-10 text-[240px] text-black/10 font-black font-serif leading-none pointer-events-none group-hover:scale-110 transition-transform duration-500">
-                R
-              </div>
-
-              <div className="relative z-10 text-left">
-                <div className="bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs px-4 py-1.5 rounded-full inline-block mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  Apni Maati
-                </div>
-                <h2 className="text-4xl md:text-6xl font-black font-rozha text-black mb-4 leading-tight">REGIONAL <br/> Vibe</h2>
-                <p className="text-black/80 font-bold text-base md:text-lg leading-snug max-w-[90%]">
-                  Bhojpuri ki mithas, Bagheli ki thaath, aur Awadhi ka ras. All local hits.
-                </p>
+            {/* Devotional Stations */}
+            <div>
+              <div className="flex items-center gap-4 mb-8">
+                <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight text-black border-b-4 border-black pb-2 inline-block">Divine Bhakti</h2>
+                <div className="bg-[#FFA500] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full">Devotional</div>
               </div>
               
-              <div className="mt-12 flex items-center justify-between pt-6 border-t-4 border-black/20 relative z-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center group-hover:bg-white border-4 border-transparent group-hover:border-black transition-colors">
-                    <Play className="w-6 h-6 text-[#00E5FF] group-hover:text-black ml-1" fill="currentColor" />
-                  </div>
-                  <span className="font-black text-black tracking-widest uppercase text-lg">Listen Now</span>
-                </div>
-                <div className="flex flex-col items-end">
-                   <span className="text-xs font-black text-black uppercase tracking-widest mb-1">Live Now</span>
-                   <div className="bg-white border-2 border-black px-3 py-1 rounded-full text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
-                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                     {Math.floor(listeners * 0.3).toLocaleString()}
-                   </div>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {DEVOTIONAL_STATIONS.map((station) => (
+                  <motion.div
+                    key={station.id}
+                    whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
+                    whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
+                    onClick={() => !station.comingSoon && handlePlayCard("radio", "devotional", station.id, station.name)}
+                    className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
+                    style={{ backgroundColor: station.color }}
+                  >
+                    <div className="aspect-square border-b-4 border-black bg-white relative">
+                      {station.image ? (
+                        <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
+                      )}
+                      
+                      {station.comingSoon && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
+                          <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-4 bg-white flex flex-col justify-between flex-grow">
+                      <div>
+                        <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
+                        <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
+                      </div>
+                      
+                      {!station.comingSoon && (
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                             <span className="text-[10px] font-black">{station.listeners}</span>
+                          </div>
+                          <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
+                            <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
+            </div>
 
           </div>
         </div>

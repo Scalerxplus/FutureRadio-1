@@ -48,3 +48,25 @@ export const dialectMarkers: DialectMarker[] = [
   { coordinates: [75.0, 21.0], name: "Khandeshi", speakers: "1.8M+", engagement: "90", type: "NODE", networkStatus: "DEPLOYABLE", color: "#E67E22", spread: { rx: 25, ry: 15, rotate: 0 }, majorCities: ["Jalgaon", "Dhule", "Nandurbar"], smartphonePenetration: 60 },
   { coordinates: [83.0, 23.0], name: "Surgujia", speakers: "1.7M+", engagement: "91", type: "NODE", networkStatus: "DEPLOYABLE", color: "#9B59B6", spread: { rx: 20, ry: 15, rotate: 10 }, majorCities: ["Ambikapur", "Surajpur", "Balrampur"], smartphonePenetration: 48 },
 ];
+export const REGIONAL_STATIONS = [
+  { id: 'bagheli', name: 'Bagheli Vibe', region: 'Vindhya Region', listeners: '2.1k', comingSoon: false, image: '/assets/stations/bagheli_artwork.png', color: '#9B59B6' },
+  { id: 'bhojpuri', name: 'Bhojpuri Vibe', region: 'Bihar & UP', listeners: '5.4k', comingSoon: true, image: '/assets/stations/bhojpuri_artwork.png', color: '#E74C3C' },
+  { id: 'awadhi', name: 'Awadhi Vibe', region: 'Awadh Region', listeners: '3.2k', comingSoon: true, image: '/assets/stations/awadhi_artwork.png', color: '#D35400' },
+  { id: 'maithili', name: 'Maithili Vibe', region: 'Mithila', listeners: '1.8k', comingSoon: true, image: '/assets/stations/maithili_artwork.png', color: '#F39C12' },
+  { id: 'bundeli', name: 'Bundeli Vibe', region: 'Bundelkhand', listeners: '1.9k', comingSoon: true, image: '/assets/stations/bundeli_artwork.png', color: '#E67E22' },
+];
+
+export const DEVOTIONAL_STATIONS = [
+  { id: 'shiva', name: 'Radio Mahakaal', region: 'Devotional', listeners: '10k+', comingSoon: true, image: '/assets/stations/shiva_artwork.png', color: '#2C3E50' },
+  { id: 'hanuman', name: 'Radio Mahabali', region: 'Devotional', listeners: '8k+', comingSoon: true, image: '/assets/stations/hanuman_artwork.png', color: '#E67E22' },
+  { id: 'ram', name: 'Radio Raghav', region: 'Devotional', listeners: '9k+', comingSoon: true, image: '/assets/stations/ram_artwork.png', color: '#F1C40F' },
+  { id: 'krishna', name: 'Radio Keshav', region: 'Devotional', listeners: '11k+', comingSoon: true, image: '/assets/stations/krishna_artwork.png', color: '#3498DB' },
+  { id: 'jagannath', name: 'Radio Jagannath', region: 'Devotional', listeners: '5k+', comingSoon: true, image: '/assets/stations/jagannath_artwork.png', color: '#000000' },
+  { id: 'ganesha', name: 'Radio EkDant', region: 'Devotional', listeners: '7k+', comingSoon: true, image: '/assets/stations/ganesha_artwork.png', color: '#E74C3C' },
+  { id: 'vishnu', name: 'Radio Vishnu', region: 'Devotional', listeners: '4k+', comingSoon: true, image: '/assets/stations/vishnu_artwork.png', color: '#F39C12' },
+  { id: 'laxmi', name: 'Radio Mahalakshmi', region: 'Devotional', listeners: '6k+', comingSoon: true, image: '/assets/stations/laxmi_artwork.png', color: '#E84393' },
+  { id: 'saraswati', name: 'Radio Saraswati', region: 'Devotional', listeners: '3k+', comingSoon: true, image: '/assets/stations/saraswati_artwork.png', color: '#FFFFFF' },
+  { id: 'durga', name: 'Radio Aadi Shakti', region: 'Devotional', listeners: '9k+', comingSoon: true, image: '/assets/stations/durga_artwork.png', color: '#C0392B' },
+  { id: 'satsang', name: 'Radio Satsang', region: 'Devotional', listeners: '12k+', comingSoon: true, image: '/assets/stations/satsang_artwork.png', color: '#16A085' },
+  { id: 'bhakti', name: 'Bhakti Radio', region: 'Devotional', listeners: '15k+', comingSoon: true, image: '/assets/stations/bhakti_artwork.png', color: '#8E44AD' },
+];

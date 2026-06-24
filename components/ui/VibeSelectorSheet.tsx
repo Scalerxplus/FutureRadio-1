@@ -5,28 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCityStore } from "@/lib/store";
 import { resetAndUnlockAudioForTransition } from "@/components/audio/useAudioStore";
 
-export const REGIONAL_STATIONS = [
-  { id: "bagheli", name: "Bagheli Vibe", region: "Vindhya Region", listeners: "2.1k", comingSoon: false },
-  { id: "bhojpuri", name: "Bhojpuri Vibe", region: "Bihar & UP", listeners: "5.4k", comingSoon: true },
-  { id: "awadhi", name: "Awadhi Vibe", region: "Awadh Region", listeners: "3.2k", comingSoon: true },
-  { id: "maithili", name: "Maithili Vibe", region: "Mithila", listeners: "1.8k", comingSoon: true },
-  { id: "bundeli", name: "Bundeli Vibe", region: "Bundelkhand", listeners: "1.9k", comingSoon: true },
-];
-
-export const DEVOTIONAL_STATIONS = [
-  { id: "shiva", name: "Radio Mahakaal", region: "Devotional", listeners: "10k+", comingSoon: true },
-  { id: "hanuman", name: "Radio Mahabali", region: "Devotional", listeners: "8k+", comingSoon: true },
-  { id: "ram", name: "Radio Raghav", region: "Devotional", listeners: "9k+", comingSoon: true },
-  { id: "krishna", name: "Radio Keshav", region: "Devotional", listeners: "11k+", comingSoon: true },
-  { id: "jagannath", name: "Radio Jagannath", region: "Devotional", listeners: "5k+", comingSoon: true },
-  { id: "ganesha", name: "Radio EkDant", region: "Devotional", listeners: "7k+", comingSoon: true },
-  { id: "vishnu", name: "Radio Vishnu", region: "Devotional", listeners: "4k+", comingSoon: true },
-  { id: "laxmi", name: "Radio Mahalakshmi", region: "Devotional", listeners: "6k+", comingSoon: true },
-  { id: "saraswati", name: "Radio Saraswati", region: "Devotional", listeners: "3k+", comingSoon: true },
-  { id: "durga", name: "Radio Aadi Shakti", region: "Devotional", listeners: "9k+", comingSoon: true },
-  { id: "satsang", name: "Radio Satsang", region: "Devotional", listeners: "12k+", comingSoon: true },
-  { id: "bhakti", name: "Bhakti Radio", region: "Devotional", listeners: "15k+", comingSoon: true },
-];
+import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS } from "@/lib/data";
 
 export default function VibeSelectorSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { cityName, setCityId, radioSection } = useCityStore();

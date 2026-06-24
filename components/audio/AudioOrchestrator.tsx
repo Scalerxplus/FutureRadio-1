@@ -275,25 +275,9 @@ export default function AudioOrchestrator() {
           setPhase("idle");
           mediaRefB.current?.pause();
           mediaRefC.current?.pause();
-          // Only play hardcoded fallback on Deck A if we are NOT currently playing the station transition jingle
-          if (mediaRefA.current && (!transitionAudioRef.current || transitionAudioRef.current.paused)) {
-            mediaRefA.current.src = "/audio/fallbacks/Future_Radio_1.mp3";
-            mediaRefA.current.play().catch(e => console.error(e));
-          } else if (mediaRefA.current) {
-            mediaRefA.current.volume = 0; // Ensure Deck A is quiet without pausing to preserve iOS unlock
-          }
+          setIsTuning(true); // Schedule is completely empty
         }
-        if (!isGeneratingRef.current) {
-          isGeneratingRef.current = true;
-          fetch(`/api/broadcast/generate-hour?city=${cityId}`, { method: "POST" })
-            .then(() => getBroadcastSchedule(cityId))
-            .then((newData) => {
-              setSchedule(newData);
-              isGeneratingRef.current = false;
-              activeBlockIdRef.current = null;
-            })
-            .catch(() => { isGeneratingRef.current = false; setIsTuning(false); });
-        }
+        // Removed destructive generate-hour call.
         return;
       }
 
@@ -310,6 +294,11 @@ export default function AudioOrchestrator() {
            const end = new Date(el.end_time).getTime();
            return serverNow.getTime() >= start && serverNow.getTime() < end;
          });
+
+         // Graceful gap healing: if in a gap, pick the next upcoming track
+         if (currentIndex === -1) {
+           currentIndex = schedule.findIndex(el => new Date(el.end_time).getTime() > serverNow.getTime());
+         }
          
          if (currentIndex !== -1) {
              activeBlockIdRef.current = schedule[currentIndex].id;
@@ -323,24 +312,10 @@ export default function AudioOrchestrator() {
           setPhase("idle");
           mediaRefB.current?.pause();
           mediaRefC.current?.pause();
-          if (mediaRefA.current) {
-            mediaRefA.current.src = "/audio/fallbacks/Future_Radio_1.mp3";
-            mediaRefA.current.volume = 1;
-            mediaRefA.current.play().catch(e => console.error(e));
-          }
+          setIsTuning(true); // Schedule is actually completely empty
         }
         
-        if (!isGeneratingRef.current) {
-          isGeneratingRef.current = true;
-          fetch(`/api/broadcast/generate-hour?city=${cityId}`, { method: "POST" })
-            .then(() => getBroadcastSchedule(cityId))
-            .then((newData) => {
-              setSchedule(newData);
-              isGeneratingRef.current = false;
-              activeBlockIdRef.current = null;
-            })
-            .catch(() => { isGeneratingRef.current = false; setIsTuning(false); });
-        }
+        // Removed destructive generate-hour call. The DB should only be populated by sync_vault.js.
         return;
       }
 

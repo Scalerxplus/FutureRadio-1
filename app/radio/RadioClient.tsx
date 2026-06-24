@@ -288,10 +288,10 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
           {/* Share Button */}
           <button
             onClick={handleShare}
-            className="p-2 transition text-lg w-8 text-gray-400 hover:text-white focus:outline-none hover:scale-110 active:scale-95 flex items-center justify-center"
+            className="w-[50px] h-[50px] md:w-[60px] md:h-[60px] bg-white border-[3px] border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:translate-y-2 active:shadow-none transition-all flex items-center justify-center text-black focus:outline-none"
             aria-label="Share Future Radio"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
             </svg>
           </button>
@@ -312,10 +312,12 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
           {/* Like Toggle */}
           <button
             onClick={handleLikeToggle}
-            className={`p-2 transition text-lg w-8 focus:outline-none ${isLiked ? "text-red-500 scale-110" : "text-gray-400 hover:text-white"}`}
+            className={`w-[50px] h-[50px] md:w-[60px] md:h-[60px] border-[3px] border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:translate-y-2 active:shadow-none transition-all flex items-center justify-center focus:outline-none ${isLiked ? "bg-[#FF6B6B]" : "bg-white"}`}
             aria-label="Like this song"
           >
-            {isLiked ? "❤️" : "🤍"}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-5 h-5 md:w-6 md:h-6 ${isLiked ? "fill-black text-black" : "fill-none text-black"}`}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+            </svg>
           </button>
         </div>
 
