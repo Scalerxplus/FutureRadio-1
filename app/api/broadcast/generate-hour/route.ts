@@ -475,11 +475,7 @@ export async function POST(request: Request) {
              const totalSongs = regionalCount + globalCount;
              const currentRegionalRatio = totalSongs === 0 ? 0 : (regionalCount / totalSongs);
              
-             let trackType = "global";
-             // If we are below the target ratio of regional tracks, we must force a regional track
-             if (currentRegionalRatio < targetRegionalRatio && cityId !== "news") {
-                 trackType = "regional";
-             }
+             let trackType = "regional";
              
              // 0.5 Try fetching newly added originals first (Force 2 per hour)
              if (!song && newOriginalsInjected < 2) {
@@ -495,20 +491,22 @@ export async function POST(request: Request) {
              // 1. Try fetching regional track if required
              if (!song && trackType === "regional") {
                  song = getOriginalForStation(cityId, playedSongs, !hasPlayedSpecialOriginal);
-                 // Note: In future when Supabase has target_stations, we will query curated_tracks here too
+                 if (!song) {
+                     song = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+                     if (song.id.startsWith("system-fallback")) song = null;
+                 }
+                 
                  if (song) {
                      regionalCount++;
                      const tLower = song.title.toLowerCase();
                      if (tLower.includes("dekhi leb") || tLower.includes("tain sun")) hasPlayedSpecialOriginal = true;
                  } else {
-                     // If we exhaust regional tracks, fallback to global to avoid empty airtime
                      trackType = "global";
                  }
              }
              
              // 2. Try fetching global track
              if (!song && trackType === "global") {
-                 // Fetch from originals to fill the hour
                  song = getOriginalForStation("global", playedSongs, !hasPlayedSpecialOriginal);
                  if (song) {
                      globalOriginalsInjected++;
@@ -516,10 +514,9 @@ export async function POST(request: Request) {
                      if (tLower.includes("dekhi leb") || tLower.includes("tain sun")) hasPlayedSpecialOriginal = true;
                  }
                  
-                 // If no original available, fetch from local/indie catalogue via getSong
                  if (!song) {
-                     // We pass 'global' to ensure the search queries pull from the broad indie catalogue
                      song = await getSong(getSearchQueryForGenre("global"), "global", playedSongs);
+                     if (song.id.startsWith("system-fallback")) song = null;
                  }
                  
                  if (song) {
@@ -529,7 +526,7 @@ export async function POST(request: Request) {
              
              // 3. Absolute Fallback
              if (!song) {
-                 song = await getSong(getSearchQueryForGenre(cityId), cityId, playedSongs);
+                 song = await getSong("fallback", cityId, playedSongs);
              }
              
              lastTrackEnergy = song.energyScore || 0.5;
