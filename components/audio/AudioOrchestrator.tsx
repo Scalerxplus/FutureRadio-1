@@ -51,13 +51,13 @@ export default function AudioOrchestrator() {
     let fallbackSrc = "";
 
     switch(deckType) {
-      case "A": targetRef = mediaRefA; fallbackSrc = "/audio/fallbacks/Future_Radio_2.mp3"; break;
-      case "B": targetRef = mediaRefB; fallbackSrc = "/audio/fallbacks/Future_Radio_8.mp3"; break;
-      case "C": targetRef = mediaRefC; fallbackSrc = "/audio/fallbacks/Future_Radio_Tuned_1.mp3"; break;
-      case "sweeper": targetRef = sweeperRef; fallbackSrc = "/audio/jingles/Generic_Sponsor_Break.mp3"; break;
+      case "A": targetRef = mediaRefA; fallbackSrc = "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3"; break;
+      case "B": targetRef = mediaRefB; fallbackSrc = "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3"; break;
+      case "C": targetRef = mediaRefC; fallbackSrc = "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_2.mp3"; break;
+      case "sweeper": targetRef = sweeperRef; fallbackSrc = "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3"; break;
     }
 
-    if (targetRef && targetRef.current && targetRef.current.src && !targetRef.current.src.includes(fallbackSrc)) {
+    if (targetRef && targetRef.current && targetRef.current.src && !targetRef.current.src.includes(encodeURI(fallbackSrc))) {
       console.warn(`[Auto-Heal] Silence/Error detected on Deck ${deckType}. Injecting fallback audio!`);
       targetRef.current.src = fallbackSrc;
       targetRef.current.play().catch(() => {});
@@ -246,7 +246,7 @@ export default function AudioOrchestrator() {
     
     if (isFirstLoadRef.current) {
       // First App Open: Premium Startup Jingle / Sonic Branding
-      transitionAudioRef.current.src = "/audio/jingles/Station_Jingle_chill.mp3"; // Using existing jingle as placeholder for the 2s startup sound
+      transitionAudioRef.current.src = "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3"; // Using existing jingle as placeholder for the 2s startup sound
       isFirstLoadRef.current = false;
     } else {
       // Channel Change: Play analog tuning/glitch sound effect
@@ -255,11 +255,11 @@ export default function AudioOrchestrator() {
         "/audio/Zappers/zapper_laser_02.mp3",
         "/audio/Zappers/zapper_transition_03.mp3"
       ];
-      transitionAudioRef.current.src = GLITCHES[Math.floor(Math.random() * GLITCHES.length)];
+      transitionAudioRef.current.src = GLITCHES[Math.floor(Math.random() * GLITCHES.length)] || "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3";
     }
     
     transitionAudioRef.current.onerror = () => {
-       transitionAudioRef.current!.src = "/audio/fallbacks/Future_Radio_1.mp3";
+       transitionAudioRef.current!.src = "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 02.mp3";
     };
     
     transitionAudioRef.current.play().catch(e => console.warn("Transition audio blocked:", e));
@@ -387,7 +387,7 @@ export default function AudioOrchestrator() {
           const nextDeck = nextDeckName === "A" ? mediaRefA.current : (nextDeckName === "B" ? mediaRefB.current : mediaRefC.current);
           const nextTargetUrl = nextElement.element_type === "song" ? nextElement.youtube_id : nextElement.media_url;
           
-          if (nextDeck && !nextDeck.src.endsWith(nextTargetUrl) && nextTargetUrl) {
+          if (nextDeck && !nextDeck.src.endsWith(encodeURI(nextTargetUrl)) && nextTargetUrl) {
               nextDeck.src = nextTargetUrl;
               nextDeck.preload = "auto";
               console.log(`[Smart Preload] Loading upcoming track into Deck ${nextDeckName} early.`);
@@ -514,7 +514,7 @@ export default function AudioOrchestrator() {
            setPhase("playing_jingle");
            const player = sweeperRef.current;
            if (player) {
-              if (!player.src.endsWith(currentElementToPlay.media_url)) player.src = currentElementToPlay.media_url;
+              if (!player.src.endsWith(encodeURI(currentElementToPlay.media_url))) player.src = currentElementToPlay.media_url;
               applyFadeIn(player, currentElementToPlay.element_type);
               if (offsetSeconds > 0.5) try { player.currentTime = offsetSeconds; } catch(e) {}
               // HARD STOP transition audio for Master Clock Sweepers to prevent parallel clashing
@@ -527,7 +527,7 @@ export default function AudioOrchestrator() {
            setPhase(currentElementToPlay.element_type === "jocktalk" ? "playing_jocktalk" : "playing_song");
            const targetUrl = currentElementToPlay.element_type === "song" ? currentElementToPlay.youtube_id : currentElementToPlay.media_url;
            if (primaryDeck) {
-              if (!primaryDeck.src.endsWith(targetUrl)) primaryDeck.src = targetUrl;
+              if (!primaryDeck.src.endsWith(encodeURI(targetUrl))) primaryDeck.src = targetUrl;
               applyFadeIn(primaryDeck, currentElementToPlay.element_type);
               if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
               // Fade out transition audio ONLY if it's a song, otherwise hard stop for jocktalk

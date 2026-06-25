@@ -258,7 +258,7 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
           title: "Future Radio Chill Mix (Backup)",
           artist: "System",
           durationSeconds: 339,
-          streamUrl: "/audio/fallbacks/Future_Radio_1.mp3",
+          streamUrl: "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3",
           permalink: "https://thefutureradio.com",
           license: "CC-BY",
           energyScore: 0.5

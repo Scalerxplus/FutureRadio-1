@@ -30,7 +30,7 @@ export async function fetchContextualAd(context: SspContext): Promise<SspAdDecis
   
   return new Promise((resolve) => {
     setTimeout(() => {
-      let adAudioUrl = "/audio/fallbacks/Generic_Sponsor_Break.mp3";
+      let adAudioUrl = "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 02.mp3";
       let campaignTitle = "Generic Sponsor Break";
       
       try {
