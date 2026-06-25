@@ -57,16 +57,16 @@ export const REGIONAL_STATIONS = [
 ];
 
 export const DEVOTIONAL_STATIONS = [
-  { id: 'shiva', name: 'Radio Mahakaal', region: 'Devotional', listeners: '10k+', comingSoon: true, image: '/assets/stations/shiva_artwork.png', color: '#2C3E50' },
-  { id: 'hanuman', name: 'Radio Mahabali', region: 'Devotional', listeners: '8k+', comingSoon: true, image: '/assets/stations/hanuman_artwork.png', color: '#E67E22' },
-  { id: 'ram', name: 'Radio Raghav', region: 'Devotional', listeners: '9k+', comingSoon: true, image: '/assets/stations/ram_artwork.png', color: '#F1C40F' },
-  { id: 'krishna', name: 'Radio Keshav', region: 'Devotional', listeners: '11k+', comingSoon: true, image: '/assets/stations/krishna_artwork.png', color: '#3498DB' },
-  { id: 'jagannath', name: 'Radio Jagannath', region: 'Devotional', listeners: '5k+', comingSoon: true, image: '/assets/stations/jagannath_artwork.png', color: '#000000' },
-  { id: 'ganesha', name: 'Radio EkDant', region: 'Devotional', listeners: '7k+', comingSoon: true, image: '/assets/stations/ganesha_artwork.png', color: '#E74C3C' },
-  { id: 'vishnu', name: 'Radio Vishnu', region: 'Devotional', listeners: '4k+', comingSoon: true, image: '/assets/stations/vishnu_artwork.png', color: '#F39C12' },
-  { id: 'laxmi', name: 'Radio Mahalakshmi', region: 'Devotional', listeners: '6k+', comingSoon: true, image: '/assets/stations/laxmi_artwork.png', color: '#E84393' },
-  { id: 'saraswati', name: 'Radio Saraswati', region: 'Devotional', listeners: '3k+', comingSoon: true, image: '/assets/stations/saraswati_artwork.png', color: '#FFFFFF' },
-  { id: 'durga', name: 'Radio Aadi Shakti', region: 'Devotional', listeners: '9k+', comingSoon: true, image: '/assets/stations/durga_artwork.png', color: '#C0392B' },
-  { id: 'satsang', name: 'Radio Satsang', region: 'Devotional', listeners: '12k+', comingSoon: true, image: '/assets/stations/satsang_artwork.png', color: '#16A085' },
-  { id: 'bhakti', name: 'Bhakti Radio', region: 'Devotional', listeners: '15k+', comingSoon: true, image: '/assets/stations/bhakti_artwork.png', color: '#8E44AD' },
+  { id: 'shiva', name: 'Shiv Dhun', region: 'Devotional', listeners: '10k+', comingSoon: true, image: '/assets/stations/shiva_artwork.png', color: '#2C3E50' },
+  { id: 'hanuman', name: 'Hanuman Dhun', region: 'Devotional', listeners: '8k+', comingSoon: true, image: '/assets/stations/hanuman_artwork.png', color: '#E67E22' },
+  { id: 'ram', name: 'Ram Dhun', region: 'Devotional', listeners: '9k+', comingSoon: true, image: '/assets/stations/ram_artwork.png', color: '#F1C40F' },
+  { id: 'krishna', name: 'Krishna Dhun', region: 'Devotional', listeners: '11k+', comingSoon: true, image: '/assets/stations/krishna_artwork.png', color: '#3498DB' },
+  { id: 'jagannath', name: 'Jagannath Dhun', region: 'Devotional', listeners: '5k+', comingSoon: true, image: '/assets/stations/jagannath_artwork.png', color: '#000000' },
+  { id: 'ganesha', name: 'Ganesh Dhun', region: 'Devotional', listeners: '7k+', comingSoon: true, image: '/assets/stations/ganesha_artwork.png', color: '#E74C3C' },
+  { id: 'vishnu', name: 'Vishnu Dhun', region: 'Devotional', listeners: '4k+', comingSoon: true, image: '/assets/stations/vishnu_artwork.png', color: '#F39C12' },
+  { id: 'laxmi', name: 'Laxmi Dhun', region: 'Devotional', listeners: '6k+', comingSoon: true, image: '/assets/stations/laxmi_artwork.png', color: '#E84393' },
+  { id: 'saraswati', name: 'Saraswati Dhun', region: 'Devotional', listeners: '3k+', comingSoon: true, image: '/assets/stations/saraswati_artwork.png', color: '#FFFFFF' },
+  { id: 'durga', name: 'Shakti Dhun', region: 'Devotional', listeners: '9k+', comingSoon: true, image: '/assets/stations/durga_artwork.png', color: '#C0392B' },
+  { id: 'satsang', name: 'Soulful Satsang', region: 'Devotional', listeners: '12k+', comingSoon: true, image: '/assets/stations/satsang_artwork.png', color: '#16A085' },
+  { id: 'bhakti', name: 'Bhakti Dhun', region: 'Devotional', listeners: '15k+', comingSoon: true, image: '/assets/stations/bhakti_artwork.png', color: '#8E44AD' },
 ];

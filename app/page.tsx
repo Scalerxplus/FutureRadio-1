@@ -43,7 +43,7 @@ export default function EntrySplashPage() {
       setCityId(stationId, `Future Radio - ${stationName}`);
     } else {
       const defaultId = section === "devotional" ? "shiva" : "bagheli";
-      const defaultName = section === "devotional" ? "Radio Mahakaal" : "Bagheli Vibe";
+      const defaultName = section === "devotional" ? "Shiv Dhun" : "Bagheli Vibe";
       setCityId(defaultId, `Future Radio - ${defaultName}`);
     }
     
@@ -134,7 +134,7 @@ export default function EntrySplashPage() {
             {/* Regional Stations */}
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight text-black border-b-4 border-black pb-2 inline-block">Apni Maati</h2>
+                <h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block">अपनी बोली, अपना रेडियो</h2>
                 <div className="bg-[#E5FF00] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full">Regional</div>
               </div>
               
@@ -188,7 +188,7 @@ export default function EntrySplashPage() {
             {/* Devotional Stations */}
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight text-black border-b-4 border-black pb-2 inline-block">Divine Bhakti</h2>
+                <h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block">अपनी भक्ति, अपनी धुन</h2>
                 <div className="bg-[#FFA500] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full">Devotional</div>
               </div>
               
