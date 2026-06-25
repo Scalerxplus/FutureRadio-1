@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node generate-manifest.mjs",
     "build": "next build",
     "ingest": "npx ts-node --compilerOptions {\\\"module\\\":\\\"commonjs\\\"} workers/ingestion_engine.ts",
     "start": "next start",
