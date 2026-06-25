@@ -5,6 +5,7 @@ import { Music, Mic2, AlertCircle, Trash2, Edit3, PlusCircle, Clock, Volume2, Ta
 import { updateScheduleElement } from "./actions";
 import LibraryPane from "@/components/admin/LibraryPane";
 import MixingConsole from "@/components/admin/MixingConsole";
+import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS } from "@/lib/data";
 
 export default function ScheduleClient({ initialSchedule, currentChannel }: { initialSchedule: any[], currentChannel: string }) {
   const [schedule, setSchedule] = useState(initialSchedule);
@@ -375,20 +376,14 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
               className="bg-[#111118] border border-[#2a2a35] text-white rounded-lg px-4 py-2 text-sm font-bold shadow-lg"
             >
               <optgroup label="Regional Stations">
-                <option value="hindi-belt">Future Radio - Hindi Belt</option>
-                <option value="bagheli">Future Radio - Bagheli</option>
-                <option value="bhojpuri">Future Radio - Bhojpuri</option>
-                <option value="awadhi">Future Radio - Awadhi</option>
-                <option value="maithili">Future Radio - Maithili</option>
-                <option value="bundeli">Future Radio - Bundeli</option>
+                {REGIONAL_STATIONS.map(s => (
+                  <option key={s.id} value={s.id}>Future Radio - {s.name.replace(' Vibe', '')}</option>
+                ))}
               </optgroup>
               <optgroup label="Devotional Stations">
-                <option value="hanuman">Devotional - Hanuman</option>
-                <option value="ram">Devotional - Ram</option>
-                <option value="shiva">Devotional - Shiva</option>
-                <option value="jagannath">Devotional - Jagannath</option>
-                <option value="krishna">Devotional - Krishna</option>
-                <option value="ganesha">Devotional - Ganesha</option>
+                {DEVOTIONAL_STATIONS.map(s => (
+                  <option key={s.id} value={s.id}>Devotional - {s.name}</option>
+                ))}
               </optgroup>
             </select>
           </div>
