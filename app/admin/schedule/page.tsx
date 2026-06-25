@@ -85,7 +85,7 @@ export default async function SchedulePage({
   const startOfTodayISO = new Date(startIST.getTime() - 5.5 * 60 * 60 * 1000).toISOString();
 
   const endIST = new Date(istDate);
-  endIST.setUTCHours(23, 59, 59, 999);
+  endIST.setUTCHours(23 + 24, 59, 59, 999); // Extend to the end of Tomorrow (48 hours total)
   const endOfTodayISO = new Date(endIST.getTime() - 5.5 * 60 * 60 * 1000).toISOString();
 
   let allDbSchedule: any[] = [];
@@ -117,33 +117,38 @@ export default async function SchedulePage({
     }
   }
 
-  // Group DB items by hour
+  // Group DB items by hour (0 to 47)
   const dbItemsByHour: Record<number, any[]> = {};
   if (allDbSchedule.length > 0) {
     allDbSchedule.forEach((item) => {
-      // Robust IST hour extraction without toLocaleString quirks
       const dateInIST = new Date(new Date(item.start_time).getTime() + 5.5 * 60 * 60 * 1000);
       const h = dateInIST.getUTCHours();
-      if (!dbItemsByHour[h]) dbItemsByHour[h] = [];
-      dbItemsByHour[h].push(item);
+      const isTomorrow = dateInIST.getUTCDate() !== startIST.getUTCDate();
+      const hourKey = h + (isTomorrow ? 24 : 0);
+      
+      if (!dbItemsByHour[hourKey]) dbItemsByHour[hourKey] = [];
+      dbItemsByHour[hourKey].push(item);
     });
   }
 
-  // Construct full 24-hour loop
+  // Construct full 48-hour loop
   const twentyFourHourSchedule = [];
-  for (let hour = 0; hour < 24; hour++) {
-    const show = getShowForHour(hour, currentChannel);
-    let elements = dbItemsByHour[hour] || [];
+  for (let hourKey = 0; hourKey < 48; hourKey++) {
+    const displayHour = hourKey % 24;
+    const show = getShowForHour(displayHour, currentChannel);
+    let elements = dbItemsByHour[hourKey] || [];
     const isActive = elements.length > 0;
     
     if (!isActive) {
-      elements = generateHotClockPlaceholders(hour, show);
+      elements = generateHotClockPlaceholders(hourKey, show);
     }
     
     twentyFourHourSchedule.push({
-      hour,
+      hour: hourKey,
+      displayHour,
       show,
       isActive,
+      isTomorrow: hourKey >= 24,
       elements
     });
   }

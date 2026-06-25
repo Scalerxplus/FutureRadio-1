@@ -422,8 +422,13 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
               <div className="flex items-center gap-3">
                 <Clock className={block.show.color} size={20} />
                 <h3 className={`text-lg font-bold ${block.show.color}`}>
-                  {block.hour.toString().padStart(2, '0')}:00 - {block.show.name}
+                  {block.displayHour.toString().padStart(2, '0')}:00 - {block.show.name}
                 </h3>
+                {block.isTomorrow && (
+                  <span className="ml-2 px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-brand-red/20 text-brand-red border border-brand-red/50">
+                    Tomorrow
+                  </span>
+                )}
                 {!block.isActive && (
                   <span className="ml-2 px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-gray-800 text-gray-400 border border-gray-700">
                     Placeholder Mode

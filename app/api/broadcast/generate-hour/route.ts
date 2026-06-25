@@ -63,30 +63,44 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
       staticGenre = globals[Math.floor(Math.random() * globals.length)];
   }
   
+  // Try dynamic first from 1_Station_Jingle
+  try {
+    const jinglesDir = path.join(process.cwd(), "public", "local_audio_vault", "regional", genre, "1_Station_Jingle");
+    if (fs.existsSync(jinglesDir)) {
+      const files = fs.readdirSync(jinglesDir).filter(f => f.endsWith(".mp3") || f.endsWith(".wav"));
+      if (files.length > 0) {
+        return `/local_audio_vault/regional/${genre}/1_Station_Jingle/${files[Math.floor(Math.random() * files.length)]}`;
+      }
+    }
+  } catch (e) {
+      console.error("[Master Clock] Error picking local sweeper", e);
+  }
+  
+  // Static Fallbacks
   const sweepers = [
-    `/audio/Sweepers/Sweeper_${staticGenre}_01.mp3`,
-    `/audio/Sweepers/Sweeper_${staticGenre}_02.mp3`,
-    `/audio/Sweepers/Sweeper_${staticGenre}_03.mp3`,
-    `/audio/Sweepers/Sweeper_${staticGenre}_04.mp3`,
+    `/local_audio_vault/regional/Sweepers/Sweeper_${staticGenre}_01.mp3`,
+    `/local_audio_vault/regional/Sweepers/Sweeper_${staticGenre}_02.mp3`,
+    `/local_audio_vault/regional/Sweepers/Sweeper_${staticGenre}_03.mp3`,
+    `/local_audio_vault/regional/Sweepers/Sweeper_${staticGenre}_04.mp3`,
   ];
   return sweepers[Math.floor(Math.random() * sweepers.length)];
 }
 
 function getJingleByGenre(genre: string, currentHour?: number) {
   try {
-    const jinglesDir = path.join(process.cwd(), "public", "audio", "jingles");
+    const jinglesDir = path.join(process.cwd(), "public", "local_audio_vault", "regional", genre, "1_Station_Jingle");
     if (fs.existsSync(jinglesDir)) {
       if (genre.toLowerCase() === "bagheli" && currentHour !== undefined) {
         const bagheliFiles = fs.readdirSync(jinglesDir).filter(f => f.toLowerCase().includes('bagheli') && f.endsWith(".mp3")).sort();
         if (bagheliFiles.length > 0) {
           const index = currentHour % bagheliFiles.length;
-          return `/audio/jingles/${bagheliFiles[index]}`;
+          return `/local_audio_vault/regional/${genre}/1_Station_Jingle/${bagheliFiles[index]}`;
         }
       }
 
       const files = fs.readdirSync(jinglesDir).filter(f => f.toLowerCase().includes(`station_jingle_`) && f.endsWith(".mp3"));
       if (files.length > 0) {
-        return `/audio/jingles/${files[Math.floor(Math.random() * files.length)]}`;
+        return `/local_audio_vault/regional/${genre}/1_Station_Jingle/${files[Math.floor(Math.random() * files.length)]}`;
       }
     }
   } catch (e) {}
@@ -205,11 +219,11 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
   }
 
   // --- LOCAL FILE SYSTEM AUDIO ENGINE ---
-  // The system looks in `public/audio/{cityId}/songs`
-  const baseAudioDir = path.join(process.cwd(), "public", "audio");
-  const targetDir = path.join(baseAudioDir, cityId, "songs");
-  const globalFallbackDir = path.join(baseAudioDir, "global", "songs");
-  const staticFallbackDir = path.join(baseAudioDir, "fallbacks");
+  // The system looks in `public/local_audio_vault/regional/{cityId}/5_Music`
+  const baseAudioDir = path.join(process.cwd(), "public", "local_audio_vault", "regional");
+  const targetDir = path.join(baseAudioDir, cityId, "5_Music");
+  const globalFallbackDir = path.join(process.cwd(), "public", "audio", "global", "songs");
+  const staticFallbackDir = path.join(process.cwd(), "public", "audio", "fallbacks");
 
   let files: string[] = [];
   let selectedDir = targetDir;
