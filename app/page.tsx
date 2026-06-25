@@ -124,7 +124,7 @@ export default function EntrySplashPage() {
             </h1>
             
             <p className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              Apni Maati, Apni Bhakti. <br className="md:hidden"/> Straight to your devices.
+              Sound of India, <br className="md:hidden"/> Straight to your devices.
             </p>
           </motion.div>
 
