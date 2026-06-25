@@ -44,6 +44,7 @@ export async function GET(request: Request) {
     const baseUrl = `${protocol}://${host}`;
 
     // Generate next 24 hours in batches of 6 to prevent Vercel 60s timeout
+    const genres = ["hindi", "malwi", "bagheli", "bundeli", "chhattisgarhi", "sarguja", "bastar", "raigarh", "punjabi", "news"];
     const batchSize = 6;
     for (let i = 0; i < 24; i += batchSize) {
       const batchPromises = [];
@@ -62,13 +63,15 @@ export async function GET(request: Request) {
         
         console.log(`[Daily Cron] Requesting generation for Hour ${hourStr} (${istIsoString})`);
         
-        batchPromises.push(
-          fetch(`${baseUrl}/api/broadcast/generate-hour?startTime=${encodeURIComponent(istIsoString)}`, { 
-            method: "POST" 
-          }).then(res => {
-            if (!res.ok) console.error(`[Daily Cron] Failed to generate hour ${hourStr}: ${res.statusText}`);
-          })
-        );
+        for (const genre of genres) {
+          batchPromises.push(
+            fetch(`${baseUrl}/api/broadcast/generate-hour?city=${genre}&startTime=${encodeURIComponent(istIsoString)}`, { 
+              method: "POST" 
+            }).then(res => {
+              if (!res.ok) console.error(`[Daily Cron] Failed to generate hour ${hourStr} for ${genre}: ${res.statusText}`);
+            })
+          );
+        }
       }
       // Wait for the batch of 6 hours to finish before starting the next batch
       await Promise.all(batchPromises);
