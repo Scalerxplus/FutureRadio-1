@@ -140,24 +140,26 @@ export default function EntrySplashPage() {
               
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {REGIONAL_STATIONS.map((station) => (
-                  <motion.div
-                    key={station.id}
-                    whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
-                    whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
-                    onClick={() => !station.comingSoon && handlePlayCard("radio", "regional", station.id, station.name)}
-                    className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
-                    style={{ backgroundColor: station.color }}
-                  >
-                    <div className="aspect-square border-b-4 border-black bg-white relative">
-                      {station.image ? (
-                        <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
-                      )}
-                      
-                      {station.comingSoon && (
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
-                          <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
+                  <Link href={`/regional/${station.id}`} key={station.id} passHref legacyBehavior>
+                    <motion.a
+                      whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
+                      whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
+                      onClick={(e) => {
+                        if (station.comingSoon) e.preventDefault();
+                      }}
+                      className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col block ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200 pointer-events-none' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
+                      style={{ backgroundColor: station.color }}
+                    >
+                      <div className="aspect-square border-b-4 border-black bg-white relative">
+                        {station.image ? (
+                          <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
+                        )}
+                        
+                        {station.comingSoon && (
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
+                            <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
                         </div>
                       )}
                     </div>
@@ -180,7 +182,8 @@ export default function EntrySplashPage() {
                         </div>
                       )}
                     </div>
-                  </motion.div>
+                    </motion.a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -194,47 +197,50 @@ export default function EntrySplashPage() {
               
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {DEVOTIONAL_STATIONS.map((station) => (
-                  <motion.div
-                    key={station.id}
-                    whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
-                    whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
-                    onClick={() => !station.comingSoon && handlePlayCard("radio", "devotional", station.id, station.name)}
-                    className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
-                    style={{ backgroundColor: station.color }}
-                  >
-                    <div className="aspect-square border-b-4 border-black bg-white relative">
-                      {station.image ? (
-                        <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
-                      )}
-                      
-                      {station.comingSoon && (
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
-                          <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="p-4 bg-white flex flex-col justify-between flex-grow">
-                      <div>
-                        <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
-                        <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
+                  <Link href={`/devotional/${station.id}`} key={station.id} passHref legacyBehavior>
+                    <motion.a
+                      whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
+                      whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
+                      onClick={(e) => {
+                        if (station.comingSoon) e.preventDefault();
+                      }}
+                      className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col block ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200 pointer-events-none' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
+                      style={{ backgroundColor: station.color }}
+                    >
+                      <div className="aspect-square border-b-4 border-black bg-white relative">
+                        {station.image ? (
+                          <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
+                        )}
+                        
+                        {station.comingSoon && (
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
+                            <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
+                          </div>
+                        )}
                       </div>
                       
-                      {!station.comingSoon && (
-                        <div className="mt-4 flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                             <span className="text-[10px] font-black">{station.listeners}</span>
-                          </div>
-                          <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
-                            <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
-                          </div>
+                      <div className="p-4 bg-white flex flex-col justify-between flex-grow">
+                        <div>
+                          <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
+                          <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
                         </div>
-                      )}
-                    </div>
-                  </motion.div>
+                        
+                        {!station.comingSoon && (
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                               <span className="text-[10px] font-black">{station.listeners}</span>
+                            </div>
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
+                              <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.a>
+                  </Link>
                 ))}
               </div>
             </div>

@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
+import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS } from '@/lib/data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: 'https://thefutureradio.com',
       lastModified: new Date(),
@@ -39,4 +40,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
   ];
+
+  const regionalRoutes: MetadataRoute.Sitemap = REGIONAL_STATIONS.map((station) => ({
+    url: `https://thefutureradio.com/regional/${station.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'always',
+    priority: 0.9,
+  }));
+
+  const devotionalRoutes: MetadataRoute.Sitemap = DEVOTIONAL_STATIONS.map((station) => ({
+    url: `https://thefutureradio.com/devotional/${station.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'always',
+    priority: 0.9,
+  }));
+
+  return [...staticRoutes, ...regionalRoutes, ...devotionalRoutes];
 }
