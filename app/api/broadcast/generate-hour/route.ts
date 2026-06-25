@@ -9,20 +9,15 @@ import * as mm from "music-metadata";
 import path from "path";
 import fs from "fs";
 import { getLiveWeather } from "@/lib/live-data";
+// @ts-ignore
+import audioManifest from "../../../../public/audio-manifest.json";
 
 export const maxDuration = 60;
 
-let _audioManifest: any = null;
-function getManifestFiles(dirPrefix: string): string[] {
+function getManifestFiles(dirPrefix: string): any[] {
   try {
-    if (!_audioManifest) {
-      const manifestPath = path.join(process.cwd(), 'public', 'audio-manifest.json');
-      _audioManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-    }
     const prefix = dirPrefix.replace(/\\/g, '/');
-    return _audioManifest.files
-      .filter((f: string) => f.startsWith(prefix))
-      .map((f: string) => f.replace(prefix, '').replace(/^\//, ''));
+    return audioManifest.files.filter((f: any) => f.path.startsWith(prefix));
   } catch (e) {
     return [];
   }
@@ -83,7 +78,8 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
   try {
     const files = getManifestFiles(`/local_audio_vault/regional/${genre}/1_Station_Jingle/`);
     if (files.length > 0) {
-      return `/local_audio_vault/regional/${genre}/1_Station_Jingle/${files[Math.floor(Math.random() * files.length)]}`;
+      const randFile = files[Math.floor(Math.random() * files.length)];
+      return randFile.path;
     }
   } catch (e) {
       console.error("[Master Clock] Error picking local sweeper", e);
@@ -104,20 +100,20 @@ function getJingleByGenre(genre: string, currentHour?: number) {
     const files = getManifestFiles(`/local_audio_vault/regional/${genre}/1_Station_Jingle/`);
     if (files.length > 0) {
       if (genre.toLowerCase() === "bagheli" && currentHour !== undefined) {
-        const bagheliFiles = files.filter(f => f.toLowerCase().includes('bagheli')).sort();
+        const bagheliFiles = files.filter(f => f.path.toLowerCase().includes('bagheli')).sort((a, b) => a.path.localeCompare(b.path));
         if (bagheliFiles.length > 0) {
           const index = currentHour % bagheliFiles.length;
-          return `/local_audio_vault/regional/${genre}/1_Station_Jingle/${bagheliFiles[index]}`;
+          return bagheliFiles[index].path;
         }
       }
 
-      const jingleFiles = files.filter(f => f.toLowerCase().includes(`station_jingle_`));
+      const jingleFiles = files.filter(f => f.path.toLowerCase().includes(`station_jingle_`));
       if (jingleFiles.length > 0) {
-        return `/local_audio_vault/regional/${genre}/1_Station_Jingle/${jingleFiles[Math.floor(Math.random() * jingleFiles.length)]}`;
+        return jingleFiles[Math.floor(Math.random() * jingleFiles.length)].path;
       }
       
       // Fallback to any file in that dir
-      return `/local_audio_vault/regional/${genre}/1_Station_Jingle/${files[Math.floor(Math.random() * files.length)]}`;
+      return files[Math.floor(Math.random() * files.length)].path;
     }
   } catch (e) {}
   
@@ -240,7 +236,7 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
   const globalFallbackPrefix = `/audio/global/songs/`;
   const staticFallbackPrefix = `/audio/fallbacks/`;
 
-  let files: string[] = getManifestFiles(targetPrefix);
+  let files: any[] = getManifestFiles(targetPrefix);
   let selectedDir = targetPrefix;
 
   // Fallback to Global Songs if dialect folder is missing or empty
@@ -272,7 +268,7 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
   }
 
   // Filter out played songs if we have enough tracks
-  let validFiles = files.filter(f => !playedSongs.has(f));
+  let validFiles = files.filter(f => !playedSongs.has(f.path));
   if (validFiles.length === 0) {
       playedSongs.clear(); // Reset history if we exhausted the library
       validFiles = files;
@@ -280,23 +276,14 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
 
   // Pick a random track
   const randomFile = validFiles[Math.floor(Math.random() * validFiles.length)];
-  const streamUrl = `${selectedDir}${randomFile}`;
+  const streamUrl = randomFile.path;
 
-  let durSeconds = 200; // default 3 min 20 sec
-  let trackTitle = randomFile.replace(/\.[^/.]+$/, "");
-  let trackArtist = "Future Radio Artist";
-
-  try {
-      const metadata = await mm.parseFile(path.join(selectedDir, randomFile));
-      durSeconds = metadata.format.duration || 200;
-      if (metadata.common.title) trackTitle = metadata.common.title;
-      if (metadata.common.artist) trackArtist = metadata.common.artist;
-  } catch(e) {
-      console.warn(`[Master Clock] Warning: Could not read metadata for song ${randomFile}. Error:`, e);
-  }
+  let durSeconds = randomFile.duration || 200;
+  let trackTitle = randomFile.title || "Future Radio Track";
+  let trackArtist = randomFile.artist || "Future Radio Artist";
 
   const track: LocalTrack = {
-      id: randomFile, // use filename as unique ID locally
+      id: randomFile.path, // use filename as unique ID locally
       title: trackTitle,
       artist: trackArtist,
       durationSeconds: durSeconds,
@@ -312,12 +299,12 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
 
 async function getLocalAudioDuration(urlPath: string) {
   try {
-    const filePath = path.join(process.cwd(), "public", urlPath);
-    const metadata = await mm.parseFile(filePath);
-    return Math.round((metadata.format.duration || 10) * 1000);
+    const file = audioManifest.files.find((f: any) => f.path === urlPath);
+    if (file && file.duration) {
+      return Math.round(file.duration * 1000);
+    }
+    return 10000;
   } catch (e) {
-    console.warn(`[Master Clock] Warning: Could not read duration for ${urlPath}, falling back to 10s. Error:`, e);
-    // Return 10 seconds for sweepers/jingles if missing
     return 10000;
   }
 }

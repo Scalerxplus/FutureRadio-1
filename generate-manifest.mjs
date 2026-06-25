@@ -1,31 +1,59 @@
 import fs from 'fs';
 import path from 'path';
+import * as mm from 'music-metadata';
 
-function scanDirectory(dir, baseDir) {
+async function scanDirectory(dir, baseDir) {
   let results = [];
   try {
     const list = fs.readdirSync(dir);
-    list.forEach(file => {
+    for (const file of list) {
       const fullPath = path.join(dir, file);
       const stat = fs.statSync(fullPath);
       if (stat && stat.isDirectory()) {
-        results = results.concat(scanDirectory(fullPath, baseDir));
+        results = results.concat(await scanDirectory(fullPath, baseDir));
       } else {
         if (file.endsWith('.mp3') || file.endsWith('.wav')) {
-          results.push(fullPath.replace(baseDir, '').replace(/\\/g, '/'));
+          const relativePath = fullPath.replace(baseDir, '').replace(/\\/g, '/');
+          
+          let duration = 200;
+          let title = file.replace(/\.[^/.]+$/, "");
+          let artist = "Future Radio";
+          
+          try {
+            const metadata = await mm.parseFile(fullPath);
+            duration = metadata.format.duration || 200;
+            if (metadata.common.title) title = metadata.common.title;
+            if (metadata.common.artist) artist = metadata.common.artist;
+          } catch(e) {}
+          
+          results.push({
+            path: relativePath,
+            duration: duration,
+            title: title,
+            artist: artist
+          });
         }
       }
-    });
+    }
   } catch(e) {}
   return results;
 }
 
-const baseVaultDir = path.join(process.cwd(), 'public', 'local_audio_vault');
-const baseAudioDir = path.join(process.cwd(), 'public', 'audio');
+async function run() {
+  const baseVaultDir = path.join(process.cwd(), 'public', 'local_audio_vault');
+  const baseAudioDir = path.join(process.cwd(), 'public', 'audio');
 
-const manifest = {
-  files: scanDirectory(baseVaultDir, path.join(process.cwd(), 'public')).concat(scanDirectory(baseAudioDir, path.join(process.cwd(), 'public')))
-};
+  const files = [];
+  const vaultFiles = await scanDirectory(baseVaultDir, path.join(process.cwd(), 'public'));
+  const audioFiles = await scanDirectory(baseAudioDir, path.join(process.cwd(), 'public'));
+  
+  files.push(...vaultFiles);
+  files.push(...audioFiles);
 
-fs.writeFileSync(path.join(process.cwd(), 'public', 'audio-manifest.json'), JSON.stringify(manifest, null, 2));
-console.log('Audio manifest generated successfully!');
+  const manifest = { files };
+
+  fs.writeFileSync(path.join(process.cwd(), 'public', 'audio-manifest.json'), JSON.stringify(manifest, null, 2));
+  console.log('Audio manifest generated successfully with metadata!');
+}
+
+run();

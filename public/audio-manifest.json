@@ -1,190 +1,1120 @@
 {
   "files": [
-    "/local_audio_vault/devotional/hanuman/5_Music/Hanuman Chalisa - Cinematic Version.mp3",
-    "/local_audio_vault/devotional/hanuman/5_Music/Hanuman Chalisa - Fearless Version.mp3",
-    "/local_audio_vault/devotional/hanuman/5_Music/Hanuman Chalisa - Traditional Version.mp3",
-    "/local_audio_vault/devotional/hanuman/5_Music/Shiva Panchakshara Stotram  (Om Namah Shivaya) Har Har Mahadev.mp3",
-    "/local_audio_vault/devotional/hanuman/5_Music/Shiva Panchakshara Stotram - Shiva Shambhoo Mix.mp3",
-    "/local_audio_vault/devotional/hanuman/5_Music/Sundar Kaand.mp3",
-    "/local_audio_vault/devotional/hanuman/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Baal Kaand.mp3",
-    "/local_audio_vault/devotional/hanuman/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Goswami Tulsidas.mp3",
-    "/local_audio_vault/devotional/ram/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Baal Kaand.mp3",
-    "/local_audio_vault/devotional/ram/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Goswami Tulsidas.mp3",
-    "/local_audio_vault/devotional/shiva/5_Music/Shiva Panchakshara Stotram  (Om Namah Shivaya) Har Har Mahadev.mp3",
-    "/local_audio_vault/devotional/shiva/5_Music/Shiva Panchakshara Stotram - Shiva Shambhoo Mix.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_01.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_02.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_03.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_04.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_01.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_02.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_03.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_04.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_01.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_02.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_03.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_04.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_01.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_02.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_03.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_04.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_01.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_02.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_03.mp3",
-    "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_04.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/FR Media Kit Promo 01.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/FR Media Kit Promo 02.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_indie_dance_1.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_indie_dance_2.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_metallic_1.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_metallic_2.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_progressive_1.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_progressive_2.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/Global Stage01.mp3",
-    "/local_audio_vault/regional/awadhi/3_Station_Promo/Global Stage02.mp3",
-    "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3",
-    "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 02.mp3",
-    "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli_Sweeper_01.mp3",
-    "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli_Sweeper_02.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/FR Media Kit Promo 01.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/FR Media Kit Promo 02.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Jingle.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Musical Promo Extended.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Musical Promo.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Song Promo.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/Global Stage01.mp3",
-    "/local_audio_vault/regional/bagheli/3_Station_Promo/Global Stage02.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_4.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/Dhan Dhan Nagar Ayodhya (Bagheli Sohar).wav",
-    "/local_audio_vault/regional/bagheli/5_Music/dhuaan_1.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/dhuaan_2.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/Hanuman Chalisa - Cinematic Version.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/Hanuman Chalisa - Fearless Version.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/Hanuman Chalisa - Traditional Version.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/main_tum_aur_hum_1.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/main_tum_aur_hum_2.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_1.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_2.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/Shiva Panchakshara Stotram  (Om Namah Shivaya) Har Har Mahadev.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/Shiva Panchakshara Stotram - Shiva Shambhoo Mix.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/Sundar Kaand.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/tain_sun_6.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/tain_sun_7.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/tain_sun_8.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Baal Kaand.mp3",
-    "/local_audio_vault/regional/bagheli/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Goswami Tulsidas.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_01.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_02.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_03.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_04.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_01.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_02.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_03.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_04.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_01.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_02.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_03.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_04.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_01.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_02.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_03.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_04.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_01.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_02.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_03.mp3",
-    "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_04.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/FR Media Kit Promo 01.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/FR Media Kit Promo 02.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_indie_dance_1.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_indie_dance_2.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_metallic_1.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_metallic_2.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_progressive_1.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_progressive_2.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/Global Stage01.mp3",
-    "/local_audio_vault/regional/bhojpuri/3_Station_Promo/Global Stage02.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_01.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_02.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_03.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_04.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_01.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_02.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_03.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_04.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_01.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_02.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_03.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_04.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_01.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_02.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_03.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_04.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_01.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_02.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_03.mp3",
-    "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_04.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/FR Media Kit Promo 01.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/FR Media Kit Promo 02.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_indie_dance_1.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_indie_dance_2.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_metallic_1.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_metallic_2.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_progressive_1.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_progressive_2.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/Global Stage01.mp3",
-    "/local_audio_vault/regional/bundeli/3_Station_Promo/Global Stage02.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_01.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_02.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_03.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_04.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_01.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_02.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_03.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_04.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_01.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_02.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_03.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_04.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_01.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_02.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_03.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_04.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_01.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_02.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_03.mp3",
-    "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_04.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_01.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_02.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_03.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_04.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_01.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_02.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_03.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_04.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_01.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_02.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_03.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_04.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_01.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_02.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_03.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_04.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_01.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_02.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_03.mp3",
-    "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_04.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/FR Media Kit Promo 01.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/FR Media Kit Promo 02.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/fr_indie_dance_1.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/fr_indie_dance_2.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/fr_metallic_1.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/fr_metallic_2.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/fr_progressive_1.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/fr_progressive_2.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/Global Stage01.mp3",
-    "/local_audio_vault/regional/maithili/3_Station_Promo/Global Stage02.mp3",
-    "/audio/bagheli/songs/Dhan Dhan Nagar Ayodhya (Bagheli Sohar).wav"
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/Hanuman Chalisa - Cinematic Version.mp3",
+      "duration": 228.672,
+      "title": "Hanuman Chalisa - Cinematic Version",
+      "artist": "Raja Rewawala"
+    },
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/Hanuman Chalisa - Fearless Version.mp3",
+      "duration": 258.912,
+      "title": "Hanuman Chalisa - Fearless Version",
+      "artist": "Raja Rewawala"
+    },
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/Hanuman Chalisa - Traditional Version.mp3",
+      "duration": 358.176,
+      "title": "Hanuman Chalisa - Grand Version",
+      "artist": "Raja Rewawala Ft. Goswami Tulsidas"
+    },
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/Shiva Panchakshara Stotram  (Om Namah Shivaya) Har Har Mahadev.mp3",
+      "duration": 269.88,
+      "title": "Shiva Panchakshara Stotram Remastered",
+      "artist": "Future Radio X Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/Shiva Panchakshara Stotram - Shiva Shambhoo Mix.mp3",
+      "duration": 293.472,
+      "title": "Shiva Panchakshara Stotram Remastered",
+      "artist": "Future Radio X Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/Sundar Kaand.mp3",
+      "duration": 968.64,
+      "title": "Sundarkaand Extended Version",
+      "artist": "Raja Rewawala"
+    },
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Baal Kaand.mp3",
+      "duration": 354.792,
+      "title": "बंदऊ गुरु पद पदम् परागा । (Extend)",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/devotional/hanuman/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Goswami Tulsidas.mp3",
+      "duration": 339.984,
+      "title": "बंदऊ गुरु पद पदम् परागा । (Extend)",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/devotional/ram/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Baal Kaand.mp3",
+      "duration": 354.792,
+      "title": "बंदऊ गुरु पद पदम् परागा । (Extend)",
+      "artist": "Goswai Tulsi Das"
+    },
+    {
+      "path": "/local_audio_vault/devotional/ram/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Goswami Tulsidas.mp3",
+      "duration": 339.984,
+      "title": "बंदऊ गुरु पद पदम् परागा । (Extend)",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/devotional/shiva/5_Music/Shiva Panchakshara Stotram  (Om Namah Shivaya) Har Har Mahadev.mp3",
+      "duration": 269.88,
+      "title": "Shiva Panchakshara Stotram Remastered",
+      "artist": "Future Radio X Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/devotional/shiva/5_Music/Shiva Panchakshara Stotram - Shiva Shambhoo Mix.mp3",
+      "duration": 293.472,
+      "title": "Shiva Panchakshara Stotram Remastered",
+      "artist": "Future Radio X Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_01.mp3",
+      "duration": 15.792,
+      "title": "Sweeper_chill_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_02.mp3",
+      "duration": 18.72,
+      "title": "Sweeper_chill_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_03.mp3",
+      "duration": 19.224,
+      "title": "Sweeper_chill_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_chill_04.mp3",
+      "duration": 19.032,
+      "title": "Sweeper_chill_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_01.mp3",
+      "duration": 13.32,
+      "title": "Sweeper_drive_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_02.mp3",
+      "duration": 13.8,
+      "title": "Sweeper_drive_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_03.mp3",
+      "duration": 13.512,
+      "title": "Sweeper_drive_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_drive_04.mp3",
+      "duration": 23.52,
+      "title": "Sweeper_drive_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_01.mp3",
+      "duration": 13.752,
+      "title": "Sweeper_news_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_02.mp3",
+      "duration": 14.544,
+      "title": "Sweeper_news_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_03.mp3",
+      "duration": 19.272,
+      "title": "Sweeper_news_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_news_04.mp3",
+      "duration": 23.112,
+      "title": "Sweeper_news_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_01.mp3",
+      "duration": 31.392,
+      "title": "Sweeper_party_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_02.mp3",
+      "duration": 36.912,
+      "title": "Sweeper_party_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_03.mp3",
+      "duration": 40.584,
+      "title": "Sweeper_party_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_party_04.mp3",
+      "duration": 29.904,
+      "title": "Sweeper_party_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_01.mp3",
+      "duration": 35.04,
+      "title": "Sweeper_romance_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_02.mp3",
+      "duration": 36.552,
+      "title": "Sweeper_romance_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_03.mp3",
+      "duration": 19.944,
+      "title": "Sweeper_romance_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/2_Station_ID/Sweeper_romance_04.mp3",
+      "duration": 24.864,
+      "title": "Sweeper_romance_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/FR Media Kit Promo 01.mp3",
+      "duration": 67.344,
+      "title": "FR Media Kit Promo 01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/FR Media Kit Promo 02.mp3",
+      "duration": 65.712,
+      "title": "FR Media Kit Promo 02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_indie_dance_1.mp3",
+      "duration": 60.264,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_indie_dance_2.mp3",
+      "duration": 89.88,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_metallic_1.mp3",
+      "duration": 85.824,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_metallic_2.mp3",
+      "duration": 177.864,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_progressive_1.mp3",
+      "duration": 122.352,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/fr_progressive_2.mp3",
+      "duration": 101.664,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/Global Stage01.mp3",
+      "duration": 37.392,
+      "title": "Global Stage01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/awadhi/3_Station_Promo/Global Stage02.mp3",
+      "duration": 37.92,
+      "title": "Global Stage02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3",
+      "duration": 56.424,
+      "title": "FR - Bagheli Jingle 01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 02.mp3",
+      "duration": 66.144,
+      "title": "FR - Bagheli Jingle 02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli_Sweeper_01.mp3",
+      "duration": 24.264,
+      "title": "फ्यूचर रेडियो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli_Sweeper_02.mp3",
+      "duration": 22.512,
+      "title": "फ्यूचर रेडियो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/FR Media Kit Promo 01.mp3",
+      "duration": 67.344,
+      "title": "FR Media Kit Promo 01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/FR Media Kit Promo 02.mp3",
+      "duration": 65.712,
+      "title": "FR Media Kit Promo 02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Jingle.mp3",
+      "duration": 130.104,
+      "title": "Future Radio Bagheli Jingle",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Musical Promo Extended.mp3",
+      "duration": 104.28,
+      "title": "Future Radio Bagheli Musical Promo Extended",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Musical Promo.mp3",
+      "duration": 39.84,
+      "title": "Future Radio Bagheli Musical Promo",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Song Promo.mp3",
+      "duration": 146.232,
+      "title": "Future Radio Bagheli Song Promo",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Global Stage01.mp3",
+      "duration": 37.392,
+      "title": "Global Stage01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Global Stage02.mp3",
+      "duration": 37.92,
+      "title": "Global Stage02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3",
+      "duration": 149.76,
+      "title": "छाले-खुद-सहन",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_4.mp3",
+      "duration": 153.192,
+      "title": "छाले-खुद-सहन",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Dhan Dhan Nagar Ayodhya (Bagheli Sohar).wav",
+      "duration": 309.72,
+      "title": "Dhan Dhan Nagar Ayodhya (Bagheli Sohar)",
+      "artist": "Future Radio"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/dhuaan_1.mp3",
+      "duration": 219.864,
+      "title": "लाइट बंद है",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/dhuaan_2.mp3",
+      "duration": 229.32,
+      "title": "लाइट बंद है",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Hanuman Chalisa - Cinematic Version.mp3",
+      "duration": 228.672,
+      "title": "Hanuman Chalisa - Cinematic Version",
+      "artist": "Raja Rewawala"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Hanuman Chalisa - Fearless Version.mp3",
+      "duration": 258.912,
+      "title": "Hanuman Chalisa - Fearless Version",
+      "artist": "Raja Rewawala"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Hanuman Chalisa - Traditional Version.mp3",
+      "duration": 358.176,
+      "title": "Hanuman Chalisa - Grand Version",
+      "artist": "Raja Rewawala Ft. Goswami Tulsidas"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/main_tum_aur_hum_1.mp3",
+      "duration": 119.04,
+      "title": "खिड़की की परछाई",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/main_tum_aur_hum_2.mp3",
+      "duration": 148.512,
+      "title": "खिड़की की परछाई",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_1.mp3",
+      "duration": 187.944,
+      "title": "पुरानी किताब़",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_2.mp3",
+      "duration": 160.032,
+      "title": "पुरानी किताब़",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Shiva Panchakshara Stotram  (Om Namah Shivaya) Har Har Mahadev.mp3",
+      "duration": 269.88,
+      "title": "Shiva Panchakshara Stotram Remastered",
+      "artist": "Future Radio X Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Shiva Panchakshara Stotram - Shiva Shambhoo Mix.mp3",
+      "duration": 293.472,
+      "title": "Shiva Panchakshara Stotram Remastered",
+      "artist": "Future Radio X Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Sundar Kaand.mp3",
+      "duration": 968.64,
+      "title": "Sundarkaand Extended Version",
+      "artist": "Raja Rewawala"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3",
+      "duration": 158.784,
+      "title": "कोरेक्स बोतल",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_6.mp3",
+      "duration": 151.224,
+      "title": "कोरेक्स बोतल",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_7.mp3",
+      "duration": 176.472,
+      "title": "कोरेक्स-क्रश",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_8.mp3",
+      "duration": 162.864,
+      "title": "कोरेक्स-क्रश",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Baal Kaand.mp3",
+      "duration": 354.792,
+      "title": "बंदऊ गुरु पद पदम् परागा । (Extend)",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Goswami Tulsidas.mp3",
+      "duration": 339.984,
+      "title": "बंदऊ गुरु पद पदम् परागा । (Extend)",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_01.mp3",
+      "duration": 15.792,
+      "title": "Sweeper_chill_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_02.mp3",
+      "duration": 18.72,
+      "title": "Sweeper_chill_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_03.mp3",
+      "duration": 19.224,
+      "title": "Sweeper_chill_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_chill_04.mp3",
+      "duration": 19.032,
+      "title": "Sweeper_chill_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_01.mp3",
+      "duration": 13.32,
+      "title": "Sweeper_drive_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_02.mp3",
+      "duration": 13.8,
+      "title": "Sweeper_drive_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_03.mp3",
+      "duration": 13.512,
+      "title": "Sweeper_drive_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_drive_04.mp3",
+      "duration": 23.52,
+      "title": "Sweeper_drive_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_01.mp3",
+      "duration": 13.752,
+      "title": "Sweeper_news_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_02.mp3",
+      "duration": 14.544,
+      "title": "Sweeper_news_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_03.mp3",
+      "duration": 19.272,
+      "title": "Sweeper_news_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_news_04.mp3",
+      "duration": 23.112,
+      "title": "Sweeper_news_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_01.mp3",
+      "duration": 31.392,
+      "title": "Sweeper_party_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_02.mp3",
+      "duration": 36.912,
+      "title": "Sweeper_party_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_03.mp3",
+      "duration": 40.584,
+      "title": "Sweeper_party_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_party_04.mp3",
+      "duration": 29.904,
+      "title": "Sweeper_party_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_01.mp3",
+      "duration": 35.04,
+      "title": "Sweeper_romance_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_02.mp3",
+      "duration": 36.552,
+      "title": "Sweeper_romance_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_03.mp3",
+      "duration": 19.944,
+      "title": "Sweeper_romance_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/2_Station_ID/Sweeper_romance_04.mp3",
+      "duration": 24.864,
+      "title": "Sweeper_romance_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/FR Media Kit Promo 01.mp3",
+      "duration": 67.344,
+      "title": "FR Media Kit Promo 01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/FR Media Kit Promo 02.mp3",
+      "duration": 65.712,
+      "title": "FR Media Kit Promo 02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_indie_dance_1.mp3",
+      "duration": 60.264,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_indie_dance_2.mp3",
+      "duration": 89.88,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_metallic_1.mp3",
+      "duration": 85.824,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_metallic_2.mp3",
+      "duration": 177.864,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_progressive_1.mp3",
+      "duration": 122.352,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/fr_progressive_2.mp3",
+      "duration": 101.664,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/Global Stage01.mp3",
+      "duration": 37.392,
+      "title": "Global Stage01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bhojpuri/3_Station_Promo/Global Stage02.mp3",
+      "duration": 37.92,
+      "title": "Global Stage02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_01.mp3",
+      "duration": 15.792,
+      "title": "Sweeper_chill_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_02.mp3",
+      "duration": 18.72,
+      "title": "Sweeper_chill_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_03.mp3",
+      "duration": 19.224,
+      "title": "Sweeper_chill_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_chill_04.mp3",
+      "duration": 19.032,
+      "title": "Sweeper_chill_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_01.mp3",
+      "duration": 13.32,
+      "title": "Sweeper_drive_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_02.mp3",
+      "duration": 13.8,
+      "title": "Sweeper_drive_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_03.mp3",
+      "duration": 13.512,
+      "title": "Sweeper_drive_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_drive_04.mp3",
+      "duration": 23.52,
+      "title": "Sweeper_drive_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_01.mp3",
+      "duration": 13.752,
+      "title": "Sweeper_news_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_02.mp3",
+      "duration": 14.544,
+      "title": "Sweeper_news_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_03.mp3",
+      "duration": 19.272,
+      "title": "Sweeper_news_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_news_04.mp3",
+      "duration": 23.112,
+      "title": "Sweeper_news_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_01.mp3",
+      "duration": 31.392,
+      "title": "Sweeper_party_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_02.mp3",
+      "duration": 36.912,
+      "title": "Sweeper_party_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_03.mp3",
+      "duration": 40.584,
+      "title": "Sweeper_party_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_party_04.mp3",
+      "duration": 29.904,
+      "title": "Sweeper_party_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_01.mp3",
+      "duration": 35.04,
+      "title": "Sweeper_romance_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_02.mp3",
+      "duration": 36.552,
+      "title": "Sweeper_romance_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_03.mp3",
+      "duration": 19.944,
+      "title": "Sweeper_romance_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/2_Station_ID/Sweeper_romance_04.mp3",
+      "duration": 24.864,
+      "title": "Sweeper_romance_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/FR Media Kit Promo 01.mp3",
+      "duration": 67.344,
+      "title": "FR Media Kit Promo 01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/FR Media Kit Promo 02.mp3",
+      "duration": 65.712,
+      "title": "FR Media Kit Promo 02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_indie_dance_1.mp3",
+      "duration": 60.264,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_indie_dance_2.mp3",
+      "duration": 89.88,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_metallic_1.mp3",
+      "duration": 85.824,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_metallic_2.mp3",
+      "duration": 177.864,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_progressive_1.mp3",
+      "duration": 122.352,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/fr_progressive_2.mp3",
+      "duration": 101.664,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/Global Stage01.mp3",
+      "duration": 37.392,
+      "title": "Global Stage01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/bundeli/3_Station_Promo/Global Stage02.mp3",
+      "duration": 37.92,
+      "title": "Global Stage02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_01.mp3",
+      "duration": 15.792,
+      "title": "Sweeper_chill_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_02.mp3",
+      "duration": 18.72,
+      "title": "Sweeper_chill_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_03.mp3",
+      "duration": 19.224,
+      "title": "Sweeper_chill_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_chill_04.mp3",
+      "duration": 19.032,
+      "title": "Sweeper_chill_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_01.mp3",
+      "duration": 13.32,
+      "title": "Sweeper_drive_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_02.mp3",
+      "duration": 13.8,
+      "title": "Sweeper_drive_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_03.mp3",
+      "duration": 13.512,
+      "title": "Sweeper_drive_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_drive_04.mp3",
+      "duration": 23.52,
+      "title": "Sweeper_drive_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_01.mp3",
+      "duration": 13.752,
+      "title": "Sweeper_news_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_02.mp3",
+      "duration": 14.544,
+      "title": "Sweeper_news_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_03.mp3",
+      "duration": 19.272,
+      "title": "Sweeper_news_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_news_04.mp3",
+      "duration": 23.112,
+      "title": "Sweeper_news_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_01.mp3",
+      "duration": 31.392,
+      "title": "Sweeper_party_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_02.mp3",
+      "duration": 36.912,
+      "title": "Sweeper_party_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_03.mp3",
+      "duration": 40.584,
+      "title": "Sweeper_party_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_party_04.mp3",
+      "duration": 29.904,
+      "title": "Sweeper_party_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_01.mp3",
+      "duration": 35.04,
+      "title": "Sweeper_romance_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_02.mp3",
+      "duration": 36.552,
+      "title": "Sweeper_romance_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_03.mp3",
+      "duration": 19.944,
+      "title": "Sweeper_romance_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/hindi-belt/2_Station_ID/Sweeper_romance_04.mp3",
+      "duration": 24.864,
+      "title": "Sweeper_romance_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_01.mp3",
+      "duration": 15.792,
+      "title": "Sweeper_chill_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_02.mp3",
+      "duration": 18.72,
+      "title": "Sweeper_chill_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_03.mp3",
+      "duration": 19.224,
+      "title": "Sweeper_chill_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_chill_04.mp3",
+      "duration": 19.032,
+      "title": "Sweeper_chill_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_01.mp3",
+      "duration": 13.32,
+      "title": "Sweeper_drive_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_02.mp3",
+      "duration": 13.8,
+      "title": "Sweeper_drive_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_03.mp3",
+      "duration": 13.512,
+      "title": "Sweeper_drive_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_drive_04.mp3",
+      "duration": 23.52,
+      "title": "Sweeper_drive_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_01.mp3",
+      "duration": 13.752,
+      "title": "Sweeper_news_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_02.mp3",
+      "duration": 14.544,
+      "title": "Sweeper_news_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_03.mp3",
+      "duration": 19.272,
+      "title": "Sweeper_news_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_news_04.mp3",
+      "duration": 23.112,
+      "title": "Sweeper_news_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_01.mp3",
+      "duration": 31.392,
+      "title": "Sweeper_party_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_02.mp3",
+      "duration": 36.912,
+      "title": "Sweeper_party_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_03.mp3",
+      "duration": 40.584,
+      "title": "Sweeper_party_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_party_04.mp3",
+      "duration": 29.904,
+      "title": "Sweeper_party_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_01.mp3",
+      "duration": 35.04,
+      "title": "Sweeper_romance_01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_02.mp3",
+      "duration": 36.552,
+      "title": "Sweeper_romance_02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_03.mp3",
+      "duration": 19.944,
+      "title": "Sweeper_romance_03",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/2_Station_ID/Sweeper_romance_04.mp3",
+      "duration": 24.864,
+      "title": "Sweeper_romance_04",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/FR Media Kit Promo 01.mp3",
+      "duration": 67.344,
+      "title": "FR Media Kit Promo 01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/FR Media Kit Promo 02.mp3",
+      "duration": 65.712,
+      "title": "FR Media Kit Promo 02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/fr_indie_dance_1.mp3",
+      "duration": 60.264,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/fr_indie_dance_2.mp3",
+      "duration": 89.88,
+      "title": "फ्यूचर रे-डी-यो",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/fr_metallic_1.mp3",
+      "duration": 85.824,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/fr_metallic_2.mp3",
+      "duration": 177.864,
+      "title": "Metallic Grinding",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/fr_progressive_1.mp3",
+      "duration": 122.352,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/fr_progressive_2.mp3",
+      "duration": 101.664,
+      "title": "चार नोट उड़ान",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/Global Stage01.mp3",
+      "duration": 37.392,
+      "title": "Global Stage01",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/local_audio_vault/regional/maithili/3_Station_Promo/Global Stage02.mp3",
+      "duration": 37.92,
+      "title": "Global Stage02",
+      "artist": "prameesh_mishra_pm"
+    },
+    {
+      "path": "/audio/bagheli/songs/Dhan Dhan Nagar Ayodhya (Bagheli Sohar).wav",
+      "duration": 309.72,
+      "title": "Dhan Dhan Nagar Ayodhya (Bagheli Sohar)",
+      "artist": "Future Radio"
+    }
   ]
 }
