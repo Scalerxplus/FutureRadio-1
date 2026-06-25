@@ -269,7 +269,9 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
       durSeconds = metadata.format.duration || 200;
       if (metadata.common.title) trackTitle = metadata.common.title;
       if (metadata.common.artist) trackArtist = metadata.common.artist;
-  } catch(e) {}
+  } catch(e) {
+      console.warn(`[Master Clock] Warning: Could not read metadata for song ${randomFile}. Error:`, e);
+  }
 
   const track: LocalTrack = {
       id: randomFile, // use filename as unique ID locally
@@ -292,8 +294,8 @@ async function getLocalAudioDuration(urlPath: string) {
     const metadata = await mm.parseFile(filePath);
     return Math.round((metadata.format.duration || 10) * 1000);
   } catch (e) {
-    // console.error("[Master Clock] Error reading audio duration", e);
-    // Return 3 seconds for Zappers, 10 seconds for sweepers if missing
+    console.warn(`[Master Clock] Warning: Could not read duration for ${urlPath}, falling back to 10s. Error:`, e);
+    // Return 10 seconds for sweepers/jingles if missing
     return 10000;
   }
 }

@@ -12,16 +12,15 @@ export async function POST(request: Request) {
 
     const supabase = createClient();
     
-    // Upsert into station_settings. We use id=1 so it's a true global setting override per city
+    // Upsert into station_settings. We use city_id as the unique constraint
     const { error } = await supabase
       .from("station_settings")
       .upsert({
-        id: 1, // Single global config row for now
         city_id: cityId,
         rj_prompt: rjPrompt,
         playlist_mood: playlistMood,
         updated_at: new Date().toISOString()
-      }, { onConflict: 'id' });
+      }, { onConflict: 'city_id' });
 
     if (error) {
       console.error("[Settings API] Failed to save settings:", error);

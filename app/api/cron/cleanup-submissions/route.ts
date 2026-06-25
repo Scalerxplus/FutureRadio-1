@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+export const dynamic = "force-dynamic";
+
 // Note: Ensure your Vercel project is configured with a CRON job pointing to this route
 // and you have a secure CRON_SECRET to prevent unauthorized execution.
 
