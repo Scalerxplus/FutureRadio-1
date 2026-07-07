@@ -43,15 +43,15 @@ export async function GET(request: Request) {
     const host = request.headers.get("host") || process.env.VERCEL_URL || "localhost:3000";
     const baseUrl = `${protocol}://${host}`;
 
-    // Generate next 24 hours in batches of 6 to prevent Vercel 60s timeout
+    // Generate next 48 hours in batches of 8 to prevent Vercel 60s timeout
     const genres = ["bagheli"];
-    const batchSize = 6;
-    for (let i = 0; i < 24; i += batchSize) {
+    const batchSize = 8;
+    for (let i = 0; i < 48; i += batchSize) {
       const batchPromises = [];
-      for (let j = 0; j < batchSize && (i + j) < 24; j++) {
+      for (let j = 0; j < batchSize && (i + j) < 48; j++) {
         const hourOffset = i + j;
         const targetIst = new Date(istTimeMs);
-        // Start from CURRENT hour (fixed +1 bug here too)
+        // Start from CURRENT hour
         targetIst.setUTCHours(targetIst.getUTCHours() + hourOffset, 0, 0, 0);
         
         const year = targetIst.getUTCFullYear();
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
           );
         }
       }
-      // Wait for the batch of 6 hours to finish before starting the next batch
+      // Wait for the batch of 8 hours to finish before starting the next batch
       await Promise.all(batchPromises);
     }
 

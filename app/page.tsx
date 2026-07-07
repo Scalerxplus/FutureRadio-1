@@ -109,10 +109,19 @@ export default function EntrySplashPage() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="flex flex-col items-center w-full"
           >
-            <h1 className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.2] md:leading-[1.1] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw]">
+            {/* SEO Hidden Elements (For Crawlers & Bots) */}
+            <h1 className="sr-only">
+              Hyperlocal devotional, regional and folk audio for Bharat’s dialect-first audience.
+            </h1>
+            <p className="sr-only">
+              Future Radio is a regional and devotional audio network where listeners discover bhajans, folk music and local-language streams in formats that feel familiar, daily and culturally rooted.
+            </p>
+
+            {/* Visible Hero Elements (UX Friendly) */}
+            <div aria-hidden="true" className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.2] md:leading-[1.1] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw] text-center">
               भारत का #1 <br />
               <span className="font-sans font-black tracking-tighter">
-                Virtual 
+                Virtual
                 <span className="relative inline-block mx-4 text-[#E5FF00] drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
                   &
                   <Speaker className="absolute -top-4 -left-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#FF69B4] transform -rotate-12 shadow-sm" strokeWidth={1.5} />
@@ -121,11 +130,11 @@ export default function EntrySplashPage() {
                 INDIE
               </span> <br />
               Radio नेटवर्क
-            </h1>
+            </div>
             
-            <p className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div aria-hidden="true" className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">
               Sound of India, <br className="md:hidden"/> Straight to your devices.
-            </p>
+            </div>
           </motion.div>
 
           {/* STATION CATALOGS (Neo-Brutalist Grid) */}
@@ -133,14 +142,15 @@ export default function EntrySplashPage() {
             
             {/* Regional Stations */}
             <div>
-              <div className="flex items-center gap-4 mb-8">
-                <h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block">अपनी बोली, अपना रेडियो</h2>
-                <div className="bg-[#E5FF00] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full">Regional</div>
+              <div className="flex items-center gap-4 mb-2">
+                <h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block">Explore Bagheli, Bhojpuri, Awadhi and more.</h2>
+                <div className="bg-[#E5FF00] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full hidden md:block">Regional</div>
               </div>
+              <p className="text-lg md:text-xl font-bold text-black/70 mb-8 max-w-2xl">Listen to authentic folk songs and hyper-local audio in the language people actually live in.</p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {REGIONAL_STATIONS.map((station) => (
-                  <Link href={`/regional/${station.id}`} key={station.id} passHref legacyBehavior>
+                  <Link href={`/${station.id}`} key={station.id} passHref legacyBehavior>
                     <motion.a
                       whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
                       whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
@@ -190,10 +200,11 @@ export default function EntrySplashPage() {
 
             {/* Devotional Stations */}
             <div>
-              <div className="flex items-center gap-4 mb-8">
-                <h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block">अपनी भक्ति, अपनी धुन</h2>
-                <div className="bg-[#FFA500] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full">Devotional</div>
+              <div className="flex items-center gap-4 mb-2">
+                <Link href="/devotional"><h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block hover:text-[#C0392B] transition-colors cursor-pointer">24/7 live streams for bhajans, aarti and pure devotion.</h2></Link>
+                <div className="bg-[#FFA500] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full hidden md:block">Devotional</div>
               </div>
+              <p className="text-lg md:text-xl font-bold text-black/70 mb-8 max-w-2xl">Deity-specific spiritual audio for your daily journey.</p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {DEVOTIONAL_STATIONS.map((station) => (

@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+// @ts-ignore
+import audioManifest from "../public/audio-manifest.json";
 
 /**
  * AgentX Programmatic SSP (Supply-Side Platform) Engine
@@ -34,14 +34,12 @@ export async function fetchContextualAd(context: SspContext): Promise<SspAdDecis
       let campaignTitle = "Generic Sponsor Break";
       
       try {
-        const commercialsDir = path.join(process.cwd(), "public", "audio", "Commercials");
-        if (fs.existsSync(commercialsDir)) {
-          const files = fs.readdirSync(commercialsDir).filter(f => f.endsWith(".mp3"));
-          if (files.length > 0) {
-            const randomFile = files[Math.floor(Math.random() * files.length)];
-            adAudioUrl = `/audio/Commercials/${randomFile}`;
-            campaignTitle = randomFile.replace(".mp3", "");
-          }
+        const prefix = `/local_audio_vault/regional/${context.cityId}/4_Commercial/`;
+        const files = audioManifest.files.filter((f: any) => f.path.startsWith(prefix));
+        if (files.length > 0) {
+          const randomFile = files[Math.floor(Math.random() * files.length)];
+          adAudioUrl = randomFile.path;
+          campaignTitle = randomFile.title || "Sponsor Break";
         }
       } catch (e) {
         console.error("[AgentX SSP] Error reading commercials directory", e);

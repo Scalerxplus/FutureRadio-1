@@ -1,0 +1,24 @@
+name: Auto-Schedule Radio Generations
+
+on:
+  schedule:
+    # Runs at 19:00 UTC every day (00:30 IST)
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+    # Allow manual triggering from GitHub UI
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Run Schedule Orchestrator
+        run: node scripts/github-scheduler.js

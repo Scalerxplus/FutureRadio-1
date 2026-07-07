@@ -265,16 +265,70 @@
       "artist": "prameesh_mishra_pm"
     },
     {
-      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli_Sweeper_01.mp3",
-      "duration": 24.264,
-      "title": "फ्यूचर रेडियो",
+      "path": "/local_audio_vault/regional/bagheli/1_Station_Jingle/Future Radio Bagheli Jingle.mp3",
+      "duration": 130.104,
+      "title": "Future Radio Bagheli Jingle",
       "artist": "prameesh_mishra_pm"
     },
     {
-      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli_Sweeper_02.mp3",
-      "duration": 22.512,
-      "title": "फ्यूचर रेडियो",
-      "artist": "prameesh_mishra_pm"
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli FM - Future Radio News Hour.mp3",
+      "duration": 54.864,
+      "title": "Bigheli FM - Future Radio",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli FM - Future Radio.mp3",
+      "duration": 61.104,
+      "title": "Bigheli FM - Future Radio",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Bagheli Promo - Creators Invitation.mp3",
+      "duration": 95.784,
+      "title": "Bageeli Radio",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Beej Jeker Sundar Hoie.mp3",
+      "duration": 85.632,
+      "title": "Beej Jeker Sundar Hoie",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/FUTURE RADIO - Khet Kharihaan.mp3",
+      "duration": 89.616,
+      "title": "FUTURE RADIO (Bagheli) (Edit)",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/Kisan Bhayon! (The Farmer's.mp3",
+      "duration": 87.24,
+      "title": "Kisan Bhayon! (The Farmer's",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/खरपतवार का ज्ञान.mp3",
+      "duration": 87.384,
+      "title": "खरपतवार का ज्ञान",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/2_Station_ID/राम का खेत खरिहान.mp3",
+      "duration": 99.624,
+      "title": "राम का खेत खरिहान",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Bagheli Promo - Schedule 1.mp3",
+      "duration": 182.544,
+      "title": "Bagheli Promo - Schedule",
+      "artist": "Media Mafias AI"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Bagheli Promo - Schedule 2.mp3",
+      "duration": 199.944,
+      "title": "Bagheli Promo - Schedule",
+      "artist": "Media Mafias AI"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/FR Media Kit Promo 01.mp3",
@@ -286,18 +340,6 @@
       "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/FR Media Kit Promo 02.mp3",
       "duration": 65.712,
       "title": "FR Media Kit Promo 02",
-      "artist": "prameesh_mishra_pm"
-    },
-    {
-      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Jingle.mp3",
-      "duration": 130.104,
-      "title": "Future Radio Bagheli Jingle",
-      "artist": "prameesh_mishra_pm"
-    },
-    {
-      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Future Radio Bagheli Musical Promo Extended.mp3",
-      "duration": 104.28,
-      "title": "Future Radio Bagheli Musical Promo Extended",
       "artist": "prameesh_mishra_pm"
     },
     {
@@ -313,28 +355,40 @@
       "artist": "prameesh_mishra_pm"
     },
     {
-      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Global Stage01.mp3",
-      "duration": 37.392,
-      "title": "Global Stage01",
-      "artist": "prameesh_mishra_pm"
+      "path": "/local_audio_vault/regional/bagheli/4_Commercial/KAPILA PASHU AHAAR - Future.mp3",
+      "duration": 105.552,
+      "title": "KAPILA PASHU AHAAR - Future",
+      "artist": "scalerxlab"
     },
     {
-      "path": "/local_audio_vault/regional/bagheli/3_Station_Promo/Global Stage02.mp3",
-      "duration": 37.92,
-      "title": "Global Stage02",
-      "artist": "prameesh_mishra_pm"
+      "path": "/local_audio_vault/regional/bagheli/4_Commercial/Sonalika - Khelihan Ka Raja.mp3",
+      "duration": 117.48,
+      "title": "Sonalika - Khelihan Ka Raja",
+      "artist": "scalerxlab"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Baal Kaand 05 - Ram Janm.mp3",
+      "duration": 472.272,
+      "title": "Baal Kaand 05 - Version 2",
+      "artist": "Goswami Tulsi Das"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Belanhai Bagheli Lokgeet.mp3",
+      "duration": 307.512,
+      "title": "Belanhai Bagheli Lokgeet",
+      "artist": "Future Radio Exclusive"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3",
       "duration": 149.76,
-      "title": "छाले-खुद-सहन",
-      "artist": "prameesh_mishra_pm"
+      "title": "Self Made",
+      "artist": "S. Deepak"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_4.mp3",
       "duration": 153.192,
-      "title": "छाले-खुद-सहन",
-      "artist": "prameesh_mishra_pm"
+      "title": "Self Made",
+      "artist": "S. Deepak"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/Dhan Dhan Nagar Ayodhya (Bagheli Sohar).wav",
@@ -371,6 +425,18 @@
       "duration": 358.176,
       "title": "Hanuman Chalisa - Grand Version",
       "artist": "Raja Rewawala Ft. Goswami Tulsidas"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Jagannath Pahimam - Lofi Mix.mp3",
+      "duration": 384.264,
+      "title": "Jagannath Raksha Stotra",
+      "artist": "Raja Rewawala"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Jagannath Pahimam - Unplugged.mp3",
+      "duration": 387.672,
+      "title": "Jagannath Raksha Stotra",
+      "artist": "Raja Rewawala"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/main_tum_aur_hum_1.mp3",
@@ -410,33 +476,33 @@
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/Sundar Kaand.mp3",
-      "duration": 968.64,
-      "title": "Sundarkaand Extended Version",
-      "artist": "Raja Rewawala"
+      "duration": 990.456,
+      "title": "Sundar Kaand - Ashok Vatika Prasang",
+      "artist": "Raja Rewawala/Goswami Tulsi Das"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3",
       "duration": 158.784,
-      "title": "कोरेक्स बोतल",
-      "artist": "prameesh_mishra_pm"
+      "title": "Corex",
+      "artist": "M. Prameesh"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_6.mp3",
       "duration": 151.224,
-      "title": "कोरेक्स बोतल",
-      "artist": "prameesh_mishra_pm"
+      "title": "Corex",
+      "artist": "M. Prameesh"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_7.mp3",
       "duration": 176.472,
-      "title": "कोरेक्स-क्रश",
-      "artist": "prameesh_mishra_pm"
+      "title": "Corex",
+      "artist": "M. Prameesh"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/tain_sun_8.mp3",
       "duration": 162.864,
-      "title": "कोरेक्स-क्रश",
-      "artist": "prameesh_mishra_pm"
+      "title": "Corex",
+      "artist": "M. Prameesh"
     },
     {
       "path": "/local_audio_vault/regional/bagheli/5_Music/बंदऊ गुरु पद पदम् परागा । Ram Charit Manas । Baal Kaand.mp3",

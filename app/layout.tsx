@@ -41,8 +41,8 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Future Radio | #1 Independent Regional & Devotional Audio Network",
-  description: "India's #1 network for Devotional Radio, Shiva Bhajan, Ramayan, Bhojpuri Music, Bagheli Lokgeet, and Awadhi songs. 100% autonomous virtual radio station.",
+  title: "Future Radio India | Regional, Devotional & Folk Audio Network",
+  description: "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, a regional audio network built for Bharat.",
   keywords: [
     "devotional radio", "shiva devotional songs", "shiva bhajan", "shiva mantra", "ramayan", "radio ramayan", "ram", "ganesh", "krishna", "hanuman chalisa", "sundar kand", "ramcharit manas",
     "regional radio", "folk music india", "bagheli lokgeet", "up ke lokgeet", "rewa ke lokgeet", "satna ke lokgeet", "bhojpuri folk music", "bhojpuri music", "awadhi", "bundeli", "braj",
@@ -122,14 +122,22 @@ export default function RootLayout({
               "@graph": [
                 {
                   "@type": "Organization",
-                  "name": "Future Radio",
+                  "name": "Future Radio India",
                   "url": "https://thefutureradio.com",
-                  "logo": "https://thefutureradio.com/icons/player-logo.png"
+                  "logo": "https://thefutureradio.com/icons/player-logo.png",
+                  "description": "Hyperlocal devotional, regional and folk audio for Bharat’s dialect-first audience."
                 },
                 {
                   "@type": "WebSite",
-                  "name": "Future Radio | Digital India's #1 Digital & Virtual Radio Network",
-                  "url": "https://thefutureradio.com"
+                  "name": "Future Radio India | Regional, Devotional & Folk Audio Network",
+                  "url": "https://thefutureradio.com",
+                  "description": "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, a regional audio network built for Bharat."
+                },
+                {
+                  "@type": "RadioChannel",
+                  "name": "Future Radio",
+                  "url": "https://thefutureradio.com",
+                  "genre": ["Devotional", "Regional Folk", "Indian Music", "Local News"]
                 }
               ]
             }

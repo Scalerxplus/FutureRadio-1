@@ -48,7 +48,7 @@ export default function PlayerBar() {
             </h4>
             <div className="flex items-center gap-2">
               <p className="text-sm text-black font-bold">
-                {currentBlock ? currentBlock.songArtist : "Tuning Ambient Live Beats..."}
+                {currentBlock ? currentBlock.songArtist : (!isPlaying ? "Ready - Press Play" : "Tuning Ambient Live Beats...")}
               </p>
               {currentBlock?.permalink && (
                 <a href={currentBlock.permalink} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-black text-white px-1 font-bold hover:underline whitespace-nowrap">

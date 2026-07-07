@@ -29,6 +29,18 @@ const globalPlayedSweepers = new Set<string>();
 const globalPlayedJingles = new Set<string>();
 
 async function getContextualSweeper(genre: string, targetEnergy?: number) {
+  // 1. Try dynamic first from 2_Station_ID
+  try {
+    const files = getManifestFiles(`/local_audio_vault/regional/${genre}/2_Station_ID/`);
+    if (files.length > 0) {
+      const randFile = files[Math.floor(Math.random() * files.length)];
+      return randFile.path;
+    }
+  } catch (e) {
+      console.error("[Master Clock] Error picking local sweeper", e);
+  }
+
+  // 2. Try DB Curated Sweepers
   try {
     const supabase = createClient();
     let query = supabase.from('curated_sweepers').select('media_url, energy_score');
@@ -43,10 +55,7 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
     const { data: sweepers } = await query;
     if (sweepers && sweepers.length > 0) {
       if (targetEnergy !== undefined) {
-        // Sort by how close they are to the target energy
         sweepers.sort((a, b) => Math.abs(a.energy_score - targetEnergy) - Math.abs(b.energy_score - targetEnergy));
-        
-        // Take from the top 3 closest matches randomly
         const topMatches = sweepers.slice(0, 3);
         const selected = topMatches[Math.floor(Math.random() * topMatches.length)];
         return selected.media_url;
@@ -74,18 +83,6 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
       staticGenre = globals[Math.floor(Math.random() * globals.length)];
   }
   
-  // Try dynamic first from 1_Station_Jingle
-  try {
-    const files = getManifestFiles(`/local_audio_vault/regional/${genre}/1_Station_Jingle/`);
-    if (files.length > 0) {
-      const randFile = files[Math.floor(Math.random() * files.length)];
-      return randFile.path;
-    }
-  } catch (e) {
-      console.error("[Master Clock] Error picking local sweeper", e);
-  }
-  
-  // Static Fallbacks
   const sweepers = [
     `/local_audio_vault/regional/Sweepers/Sweeper_${staticGenre}_01.mp3`,
     `/local_audio_vault/regional/Sweepers/Sweeper_${staticGenre}_02.mp3`,
@@ -93,6 +90,18 @@ async function getContextualSweeper(genre: string, targetEnergy?: number) {
     `/local_audio_vault/regional/Sweepers/Sweeper_${staticGenre}_04.mp3`,
   ];
   return sweepers[Math.floor(Math.random() * sweepers.length)];
+}
+
+async function getPromo(genre: string) {
+  try {
+    const files = getManifestFiles(`/local_audio_vault/regional/${genre}/3_Station_Promo/`);
+    if (files.length > 0) {
+      const randFile = files[Math.floor(Math.random() * files.length)];
+      return randFile.path;
+    }
+  } catch (e) {}
+  
+  return getContextualSweeper(genre);
 }
 
 function getJingleByGenre(genre: string, currentHour?: number) {
@@ -216,6 +225,16 @@ function getSearchQueryForGenre(genre: string, targetTimeIso?: string): { query:
   return { query: categoryArray[Math.floor(Math.random() * categoryArray.length)], derivedVibe: vibe };
 }
 
+function getBaseTitle(filename: string): string {
+    const parts = filename.split('/');
+    let name = parts[parts.length - 1];
+    name = name.replace(/\.[^/.]+$/, ""); // remove extension
+    name = name.replace(/[-_]\d+$/, ""); // remove suffixes like _1, _2
+    name = name.replace(/\s*\(.*?\)/g, ""); // remove (version)
+    name = name.replace(/\s*-\s*.*$/g, ""); // remove - version
+    return name.trim().toLowerCase();
+}
+
 async function getSong(vibeConfig: { query: string, derivedVibe: string } | string, cityId: string, playedSongs: Set<string>): Promise<LocalTrack> {
   const isFallbackCall = typeof vibeConfig === "string" && vibeConfig === "fallback";
   
@@ -253,12 +272,24 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
 
   // Generate Fallback Track Object
   if (files.length === 0) {
+      const allFiles = Object.values(manifestData).flat() as any[];
+      const cityFiles = allFiles.filter(f => f.path && f.path.includes(`/${cityId}/`) && f.path.includes("5_Music"));
+      const finalOptions = cityFiles.length > 0 ? cityFiles : allFiles.filter(f => f.path && f.path.includes("5_Music"));
+      
+      let randomTrackUrl = "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3";
+      let trackTitle = "Future Radio Chill Mix (Backup)";
+      if (finalOptions.length > 0) {
+         const randomFile = finalOptions[Math.floor(Math.random() * finalOptions.length)];
+         randomTrackUrl = randomFile.path;
+         trackTitle = randomFile.title || getBaseTitle(randomTrackUrl) + " (Backup)";
+      }
+
       const fallbackTrack: LocalTrack = {
           id: "system-fallback-" + Math.random().toString(36).substring(7),
-          title: "Future Radio Chill Mix (Backup)",
+          title: trackTitle,
           artist: "System",
-          durationSeconds: 339,
-          streamUrl: "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3",
+          durationSeconds: 300,
+          streamUrl: randomTrackUrl,
           permalink: "https://thefutureradio.com",
           license: "CC-BY",
           energyScore: 0.5
@@ -267,14 +298,24 @@ async function getSong(vibeConfig: { query: string, derivedVibe: string } | stri
       return fallbackTrack;
   }
 
-  // Filter out played songs if we have enough tracks
-  let validFiles = files.filter(f => !playedSongs.has(f.path));
+  // Generate Set of base titles that have been played recently
+  const playedBaseTitles = new Set<string>();
+  playedSongs.forEach(path => playedBaseTitles.add(getBaseTitle(path)));
+
+  // Filter out played songs and songs with similar titles if we have enough tracks
+  let validFiles = files.filter(f => !playedSongs.has(f.path) && !playedBaseTitles.has(getBaseTitle(f.path)));
+  
+  if (validFiles.length === 0) {
+      // If we are too strict and run out, just filter exact played songs
+      validFiles = files.filter(f => !playedSongs.has(f.path));
+  }
+  
   if (validFiles.length === 0) {
       playedSongs.clear(); // Reset history if we exhausted the library
       validFiles = files;
   }
 
-  // Pick a random track
+  // To ensure unique positioning/rotation, we randomly select from the remaining pool
   const randomFile = validFiles[Math.floor(Math.random() * validFiles.length)];
   const streamUrl = randomFile.path;
 
@@ -555,85 +596,99 @@ export async function POST(request: Request) {
     // Now assemble the precise hour schedule
     let jtCount = 0;
     let adCount = 0;
+    const AD_INTERVAL_MS = 11 * 60 * 1000;
+    let timeSinceLastAdMs = 0;
     
     for (let i = 0; i < prefetchSongs.length; i++) {
         // Add the song
         const s = prefetchSongs[i].song;
         addElement('song', prefetchSongs[i].duration, s.streamUrl, { title: s.title, artist: s.artist, trackId: s.id, permalink: s.permalink, coverArt: s.coverArt });
+        timeSinceLastAdMs += prefetchSongs[i].duration;
         
         // Add Sweeper
         if (prefetchSweepers[i]) {
             addElement('sweeper', prefetchSweepers[i].duration, prefetchSweepers[i].url, { title: "Radio Sweeper" });
+            timeSinceLastAdMs += prefetchSweepers[i].duration;
         }
         
-        // After every 2 songs, drop an Ad or a JT
-        if ((i + 1) % 2 === 0) {
-            if (adCount < NUM_ADS && jtCount < NUM_JTS) {
-                if ((i + 1) % 4 === 0) {
-                    // AD Insertion
-                    const sspContext = { cityId: cityId, liveWeather: liveWeather, timeOfDay: "evening" };
-                    const adDecision = await fetchContextualAd(sspContext);
-                    if (adDecision && adDecision.mediaUrl) {
-                        addElement('sweeper', adDecision.durationMs, adDecision.mediaUrl, { title: adDecision.campaignTitle, isAd: true });
-                    } else {
-                        const fillerSw = await getContextualSweeper(cityId, prefetchSongs[i].song.energyScore || 0.5);
-                        const dur = await getLocalAudioDuration(fillerSw);
-                        addElement('sweeper', dur, fillerSw, { title: "Ad Fallback Sweeper" });
-                    }
-                    adCount++;
+        // Check if we need to insert an Ad Block
+        if (adCount < NUM_ADS && timeSinceLastAdMs >= AD_INTERVAL_MS) {
+            // AD BLOCK (Promo -> Ad -> Promo)
+            
+            // Break Top Promo
+            const promo1 = await getPromo(cityId);
+            const p1Dur = await getLocalAudioDuration(promo1);
+            addElement('sweeper', p1Dur, promo1, { title: "Station Promo" });
+            
+            // Commercial Ad
+            const sspContext = { cityId: cityId, liveWeather: liveWeather, timeOfDay: "evening" };
+            const adDecision = await fetchContextualAd(sspContext);
+            if (adDecision && adDecision.mediaUrl) {
+                addElement('sweeper', adDecision.durationMs, adDecision.mediaUrl, { title: adDecision.campaignTitle, isAd: true });
+            } else {
+                const fillerSw = await getContextualSweeper(cityId, s.energyScore || 0.5);
+                const dur = await getLocalAudioDuration(fillerSw);
+                addElement('sweeper', dur, fillerSw, { title: "Ad Fallback Sweeper" });
+            }
+            
+            // Break End Promo
+            const promo2 = await getPromo(cityId);
+            const p2Dur = await getLocalAudioDuration(promo2);
+            addElement('sweeper', p2Dur, promo2, { title: "Station Promo" });
+            
+            adCount++;
+            timeSinceLastAdMs = 0;
+        } else if (jtCount < NUM_JTS && (i + 1) % 3 === 0) {
+            // JT Insertion
+            const targetSlot = jtCount + 1;
+            
+            if (cityId === "news") {
+                // --- GLOBAL NEWS BITES FOR NEWS STATION ---
+                const newsBite = await getGlobalNewsBite(targetSlot);
+                if (newsBite) {
+                    addElement('jocktalk', newsBite.durationMs, newsBite.mediaUrl, { 
+                        title: `${newsBite.providerName} (Live Audio Update)`, 
+                        rjName: "Global News Desk",
+                        isEmptyPlaceholder: false 
+                    });
                 } else {
-                    // JT Insertion
-                    const targetSlot = jtCount + 1;
-                    
-                    if (cityId === "news") {
-                        // --- GLOBAL NEWS BITES FOR NEWS STATION ---
-                        const newsBite = await getGlobalNewsBite(targetSlot);
-                        if (newsBite) {
-                            addElement('jocktalk', newsBite.durationMs, newsBite.mediaUrl, { 
-                                title: `${newsBite.providerName} (Live Audio Update)`, 
-                                rjName: "Global News Desk",
-                                isEmptyPlaceholder: false 
-                            });
-                        } else {
-                            const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
-                            const dur = await getLocalAudioDuration(fillerSw);
-                            addElement('sweeper', dur, fillerSw, { title: "News Sweeper Fallback" });
-                        }
-                    } else if (cityId === "global" || cityId === "drive") {
-                        // --- SHORT GLOBAL NEWS BITES FOR MUSIC STATIONS (1-2 MINS) ---
-                        const newsBite = await getShortGlobalNewsBite(targetSlot);
-                        if (newsBite) {
-                            addElement('jocktalk', newsBite.durationMs, newsBite.mediaUrl, { 
-                                title: `${newsBite.providerName} (Quick Global Update)`, 
-                                rjName: "Future Radio Global",
-                                isEmptyPlaceholder: false,
-                                permalink: newsBite.permalink
-                            });
-                        } else {
-                            const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
-                            const dur = await getLocalAudioDuration(fillerSw);
-                            addElement('sweeper', dur, fillerSw, { title: "Global Sweeper Fallback" });
-                        }
-                    } else {
-                        // --- MANUAL JOCKTALK FOR LOCAL MUSIC STATIONS ---
-                        const manualJt = manualJocktalks.find(j => j.slot_index === targetSlot);
-                        
-                        if (manualJt) {
-                            addElement('jocktalk', manualJt.duration_ms, manualJt.media_url, { 
-                                title: `Live Studio RJ (Segment ${targetSlot})`, 
-                                rjName: "Future Radio Live",
-                                isEmptyPlaceholder: false 
-                            });
-                        } else {
-                            // Fallback if RJ forgot to upload for this slot
-                            const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
-                            const dur = await getLocalAudioDuration(fillerSw);
-                            addElement('sweeper', dur, fillerSw, { title: "Station Sweeper (JT Fallback)" });
-                        }
-                    }
-                    jtCount++;
+                    const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
+                    const dur = await getLocalAudioDuration(fillerSw);
+                    addElement('sweeper', dur, fillerSw, { title: "News Sweeper Fallback" });
+                }
+            } else if (cityId === "global" || cityId === "drive") {
+                // --- SHORT GLOBAL NEWS BITES FOR MUSIC STATIONS (1-2 MINS) ---
+                const newsBite = await getShortGlobalNewsBite(targetSlot);
+                if (newsBite) {
+                    addElement('jocktalk', newsBite.durationMs, newsBite.mediaUrl, { 
+                        title: `${newsBite.providerName} (Quick Global Update)`, 
+                        rjName: "Future Radio Global",
+                        isEmptyPlaceholder: false,
+                        permalink: newsBite.permalink
+                    });
+                } else {
+                    const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
+                    const dur = await getLocalAudioDuration(fillerSw);
+                    addElement('sweeper', dur, fillerSw, { title: "Global Sweeper Fallback" });
+                }
+            } else {
+                // --- MANUAL JOCKTALK FOR LOCAL MUSIC STATIONS ---
+                const manualJt = manualJocktalks.find(j => j.slot_index === targetSlot);
+                
+                if (manualJt) {
+                    addElement('jocktalk', manualJt.duration_ms, manualJt.media_url, { 
+                        title: `Live Studio RJ (Segment ${targetSlot})`, 
+                        rjName: "Future Radio Live",
+                        isEmptyPlaceholder: false 
+                    });
+                } else {
+                    // Fallback if RJ forgot to upload for this slot
+                    const fillerSw = await getContextualSweeper(cityId, lastTrackEnergy);
+                    const dur = await getLocalAudioDuration(fillerSw);
+                    addElement('sweeper', dur, fillerSw, { title: "Station Sweeper (JT Fallback)" });
                 }
             }
+            jtCount++;
         }
     }
 

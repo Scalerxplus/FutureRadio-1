@@ -34,7 +34,8 @@ export default function AudioOrchestrator() {
   const keepAliveRef = useRef<HTMLAudioElement | null>(null);
 
   const [schedule, setSchedule] = useState<any[]>([]);
-  const [syncOffsetMs, setSyncOffsetMs] = useState<number>(0);
+  const [syncOffsetMs, setSyncOffsetMs] = useState(0);
+  const [manifestFiles, setManifestFiles] = useState<any[]>([]);
   const currentElementIdRef = useRef<string | null>(null);
   const isGeneratingRef = useRef<boolean>(false);
   const prefetchedUrlsRef = useRef<Set<string>>(new Set());
@@ -50,11 +51,21 @@ export default function AudioOrchestrator() {
     let targetRef: React.MutableRefObject<HTMLAudioElement | null> | null = null;
     let fallbackSrc = "";
 
+    const musicOptions = manifestFiles.filter(f => f.path.includes(`/${cityId}/`) && f.path.includes("5_Music"));
+    const sweeperOptions = manifestFiles.filter(f => f.path.includes(`/${cityId}/`) && (f.path.includes("1_Station_Jingle") || f.path.includes("2_Station_ID")));
+
+    const getRandomFile = (options: any[], defaultFallback: string) => {
+       if (options.length > 0) {
+           return options[Math.floor(Math.random() * options.length)].path;
+       }
+       return defaultFallback;
+    };
+
     switch(deckType) {
-      case "A": targetRef = mediaRefA; fallbackSrc = "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3"; break;
-      case "B": targetRef = mediaRefB; fallbackSrc = "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3"; break;
-      case "C": targetRef = mediaRefC; fallbackSrc = "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_2.mp3"; break;
-      case "sweeper": targetRef = sweeperRef; fallbackSrc = "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3"; break;
+      case "A": targetRef = mediaRefA; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3"); break;
+      case "B": targetRef = mediaRefB; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3"); break;
+      case "C": targetRef = mediaRefC; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_2.mp3"); break;
+      case "sweeper": targetRef = sweeperRef; fallbackSrc = getRandomFile(sweeperOptions, "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3"); break;
     }
 
     if (targetRef && targetRef.current && targetRef.current.src && !targetRef.current.src.includes(encodeURI(fallbackSrc))) {
@@ -110,6 +121,17 @@ export default function AudioOrchestrator() {
       if (sweeperRef.current) { sweeperRef.current.pause(); sweeperRef.current.src = ""; }
       if (transitionAudioRef.current) { transitionAudioRef.current.pause(); transitionAudioRef.current.src = ""; }
     };
+  }, []);
+
+  // 1.5 Fetch Audio Manifest for Dynamic Fallbacks
+  useEffect(() => {
+    fetch('/audio-manifest.json')
+      .then(res => res.json())
+      .then(data => {
+         const allFiles = Object.values(data).flat();
+         setManifestFiles(allFiles);
+      })
+      .catch(e => console.error("[AudioOrchestrator] Failed to load audio manifest for fallbacks", e));
   }, []);
 
   // --- MOBILE RESILIENCE: Handle Audio Context Suspension & Network Drops ---
@@ -342,7 +364,6 @@ export default function AudioOrchestrator() {
       let shouldAdvance = false;
       if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
          const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
-         // Dynamic advance threshold based on element type
          let advanceThreshold = 3.0; // 3s for songs
          if (activeElement.element_type === "sweeper" || activeElement.element_type === "station_id") advanceThreshold = 1.0;
          if (activeElement.element_type === "jocktalk") advanceThreshold = 0.2;
@@ -546,11 +567,14 @@ export default function AudioOrchestrator() {
       } else {
         if (!hasGesture || !isPlaying) return;
 
-        // --- HARDCODE EXCLUSIVITY RULE (MUTEX) WITH 1.5s CROSSFADE GRACE PERIOD ---
-        const CROSSFADE_GRACE_PERIOD = 1.5;
-        if (offsetSeconds > CROSSFADE_GRACE_PERIOD) {
-           // Ensure only active deck and active element are playing, hard-pause others
-           const isSweeperActive = (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id");
+        // --- HARDCODE EXCLUSIVITY RULE (MUTEX) WITH DYNAMIC CROSSFADE GRACE PERIOD ---
+        let gracePeriod = 3.5; // Allow full 3s fade out + 0.5s buffer for songs
+        if (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id") gracePeriod = 1.5;
+        if (currentElementToPlay.element_type === "jocktalk") gracePeriod = 0.5;
+          
+        if (offsetSeconds > gracePeriod) {
+             // Ensure only active deck and active element are playing, hard-pause others
+             const isSweeperActive = (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id");
            
            [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
               const deckName = ["A", "B", "C", "sweeper"][index];

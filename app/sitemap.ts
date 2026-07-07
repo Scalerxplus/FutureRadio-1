@@ -39,6 +39,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: 'https://thefutureradio.com/bagheli',
+      lastModified: new Date(),
+      changeFrequency: 'always',
+      priority: 0.9,
+    },
+    {
+      url: 'https://thefutureradio.com/bhojpuri',
+      lastModified: new Date(),
+      changeFrequency: 'always',
+      priority: 0.9,
+    },
+    {
+      url: 'https://thefutureradio.com/awadhi',
+      lastModified: new Date(),
+      changeFrequency: 'always',
+      priority: 0.9,
+    },
+    {
+      url: 'https://thefutureradio.com/devotional',
+      lastModified: new Date(),
+      changeFrequency: 'always',
+      priority: 0.9,
+    },
   ];
 
   const regionalRoutes: MetadataRoute.Sitemap = REGIONAL_STATIONS.map((station) => ({
