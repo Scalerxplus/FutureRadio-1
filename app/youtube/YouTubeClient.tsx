@@ -5,6 +5,27 @@ import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import { motion } from "framer-motion";
 import QRCode from "react-qr-code";
 
+// Helpers to clean raw metadata
+function formatTitle(title?: string): string {
+  if (!title) return "Connecting to Studio...";
+  // Remove extensions
+  let clean = title.replace(/\.mp[34]$|\.wav$/i, '');
+  // Remove common noise in parentheses like (Remastered), (Edit), (1), etc.
+  clean = clean.replace(/\((Remastered|Edit|Official|Audio|Video|Radio|\d+.*?)\)/gi, '');
+  // Clean up any remaining empty parentheses and trim
+  clean = clean.replace(/\(\s*\)/g, '').trim();
+  return clean || "Connecting to Studio...";
+}
+
+function formatArtist(artist?: string): string {
+  if (!artist) return "Future Radio";
+  const lower = artist.toLowerCase();
+  if (lower.includes('prameesh') || lower.includes('scalerxlab')) {
+    return "Future Radio";
+  }
+  return artist;
+}
+
 export default function YouTubeClient() {
   const { currentBlock, upcomingBlocks, phase, isPlaying, setIsPlaying } = useAudioStore();
   const [time, setTime] = useState(new Date());
@@ -134,10 +155,10 @@ export default function YouTubeClient() {
                 NOW PLAYING
               </p>
               <h1 className="text-5xl font-bold tracking-wide text-white text-center truncate w-full" style={{ textShadow: '0 0 15px rgba(255,255,255,0.4)' }}>
-                {currentBlock?.songTitle || "Connecting to Studio..."}
+                {formatTitle(currentBlock?.songTitle)}
               </h1>
               <p className="text-2xl text-white/60 tracking-wider truncate mt-3">
-                {currentBlock?.songArtist || "Future Radio India"}
+                {formatArtist(currentBlock?.songArtist)}
               </p>
             </div>
           </div>
@@ -179,8 +200,8 @@ export default function YouTubeClient() {
                       {i + 1}
                     </div>
                     <div className="overflow-hidden">
-                      <p className="text-2xl text-white truncate leading-tight tracking-wide">{block.songTitle}</p>
-                      <p className="text-lg text-white/50 truncate leading-tight mt-1">{block.songArtist}</p>
+                      <p className="text-2xl text-white truncate leading-tight tracking-wide">{formatTitle(block.songTitle)}</p>
+                      <p className="text-lg text-white/50 truncate leading-tight mt-1">{formatArtist(block.songArtist)}</p>
                     </div>
                   </div>
                 ))}
