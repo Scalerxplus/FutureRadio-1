@@ -7,7 +7,6 @@ import QRCode from "react-qr-code";
 
 export default function YouTubeClient() {
   const { currentBlock, upcomingBlocks, phase, isPlaying, setIsPlaying } = useAudioStore();
-  const [unlocked, setUnlocked] = useState(false);
   const [time, setTime] = useState(new Date());
 
   // Clock
@@ -16,21 +15,15 @@ export default function YouTubeClient() {
     return () => clearInterval(t);
   }, []);
 
-  // For puppeteer to unlock audio, we need a button to be clicked.
-  if (!unlocked) {
-    return (
-      <div 
-        className="w-screen h-screen bg-black flex items-center justify-center cursor-pointer text-white text-2xl font-bold"
-        onClick={() => {
-          unlockAudio();
-          setIsPlaying(true);
-          setUnlocked(true);
-        }}
-      >
-        CLICK TO START STREAM
-      </div>
-    );
-  }
+  // Auto-start stream
+  useEffect(() => {
+    // With --autoplay-policy=no-user-gesture-required in Puppeteer, this works automatically!
+    const timer = setTimeout(() => {
+      unlockAudio();
+      setIsPlaying(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [setIsPlaying]);
 
   return (
     <div className="w-[1920px] h-[1080px] overflow-hidden relative flex flex-col text-white font-sans" style={{
