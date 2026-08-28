@@ -73,11 +73,7 @@ async function startStream() {
   stream.pipe(ffmpeg.stdin);
 
   ffmpeg.stderr.on('data', (data) => {
-    // Only log errors or warnings to keep the console clean
-    const output = data.toString();
-    if (output.includes('Error') || output.includes('warning')) {
-        console.warn(`[FFmpeg] ${output}`);
-    }
+    console.log(`[FFmpeg] ${data.toString()}`);
   });
 
   ffmpeg.on('close', (code) => {
