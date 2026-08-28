@@ -22,7 +22,9 @@ RUN apt-get update && apt-get install -y \
     pulseaudio \
     chromium \
     --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && adduser root pulse-access \
+    && adduser root audio
 
 # Set up working directory
 WORKDIR /app
@@ -37,6 +39,7 @@ COPY . .
 # Set environment variables for Puppeteer to use the installed Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PULSE_SERVER=unix:/run/pulse/native
 
 # Ensure xvfb-run script is executable
 RUN chmod +x stream.js
