@@ -28,7 +28,7 @@ export default function AudioOrchestrator() {
   const mediaRefB = useRef<HTMLAudioElement | null>(null);
   const mediaRefC = useRef<HTMLAudioElement | null>(null);
   const activeDeckRef = useRef<"A" | "B" | "C">("A");
-  const sweeperRef = useRef<HTMLAudioElement | null>(null);
+  
   const transitionAudioRef = useRef<HTMLAudioElement | null>(null);
   const isFirstLoadRef = useRef<boolean>(true);
   const keepAliveRef = useRef<HTMLAudioElement | null>(null);
@@ -65,8 +65,7 @@ export default function AudioOrchestrator() {
       case "A": targetRef = mediaRefA; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3"); break;
       case "B": targetRef = mediaRefB; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3"); break;
       case "C": targetRef = mediaRefC; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_2.mp3"); break;
-      case "sweeper": targetRef = sweeperRef; fallbackSrc = getRandomFile(sweeperOptions, "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3"); break;
-    }
+          }
 
     if (targetRef && targetRef.current && targetRef.current.src && !targetRef.current.src.includes(encodeURI(fallbackSrc))) {
       console.warn(`[Auto-Heal] Silence/Error detected on Deck ${deckType}. Injecting fallback audio!`);
@@ -111,15 +110,13 @@ export default function AudioOrchestrator() {
       if (!mediaRefA.current) { mediaRefA.current = new Audio(); mediaRefA.current.crossOrigin = "anonymous"; }
       if (!mediaRefB.current) { mediaRefB.current = new Audio(); mediaRefB.current.crossOrigin = "anonymous"; }
       if (!mediaRefC.current) { mediaRefC.current = new Audio(); mediaRefC.current.crossOrigin = "anonymous"; }
-      if (!sweeperRef.current) { sweeperRef.current = new Audio(); sweeperRef.current.crossOrigin = "anonymous"; }
-      if (!transitionAudioRef.current) { transitionAudioRef.current = new Audio(); transitionAudioRef.current.crossOrigin = "anonymous"; }
+            if (!transitionAudioRef.current) { transitionAudioRef.current = new Audio(); transitionAudioRef.current.crossOrigin = "anonymous"; }
     }
     return () => {
       if (mediaRefA.current) { mediaRefA.current.pause(); mediaRefA.current.src = ""; }
       if (mediaRefB.current) { mediaRefB.current.pause(); mediaRefB.current.src = ""; }
       if (mediaRefC.current) { mediaRefC.current.pause(); mediaRefC.current.src = ""; }
-      if (sweeperRef.current) { sweeperRef.current.pause(); sweeperRef.current.src = ""; }
-      if (transitionAudioRef.current) { transitionAudioRef.current.pause(); transitionAudioRef.current.src = ""; }
+            if (transitionAudioRef.current) { transitionAudioRef.current.pause(); transitionAudioRef.current.src = ""; }
     };
   }, []);
 
@@ -245,7 +242,7 @@ export default function AudioOrchestrator() {
     if (!hasGesture || !isPlaying || !transitionAudioRef.current) return;
     
     // Quick fade out old audio instead of hard stop to prevent abrupt cuts
-    [sweeperRef, mediaRefA, mediaRefB, mediaRefC].forEach(ref => {
+    [mediaRefA, mediaRefB, mediaRefC].forEach(ref => {
       if (ref.current && !ref.current.paused) {
          const player = ref.current;
          let vol = player.volume;
@@ -343,13 +340,8 @@ export default function AudioOrchestrator() {
 
       const activeElement = schedule[currentIndex];
       
-      // Identify Active Deck based on continuous rotation (except sweepers)
-      let activeDeck: HTMLAudioElement | null = null;
-      if (activeElement.element_type === "sweeper" || activeElement.element_type === "station_id") {
-         activeDeck = sweeperRef.current;
-      } else {
-         activeDeck = activeDeckRef.current === "A" ? mediaRefA.current : (activeDeckRef.current === "B" ? mediaRefB.current : mediaRefC.current);
-      }
+      // Identify Active Deck based on continuous rotation (apply to all elements)
+      let activeDeck: HTMLAudioElement | null = activeDeckRef.current === "A" ? mediaRefA.current : (activeDeckRef.current === "B" ? mediaRefB.current : mediaRefC.current);
 
       let offsetSeconds = (Date.now() - transitionTimeRef.current) / 1000;
       let pseudoRemainingSeconds = (activeElement.duration_ms / 1000) - offsetSeconds;
@@ -365,7 +357,7 @@ export default function AudioOrchestrator() {
       if (isPlaying && activeDeck && activeDeck.duration && !isNaN(activeDeck.duration)) {
          const remainingTimeOnDeck = activeDeck.duration - activeDeck.currentTime;
          let advanceThreshold = 3.0; // 3s for songs
-         if (activeElement.element_type === "sweeper" || activeElement.element_type === "station_id") advanceThreshold = 1.0;
+         if (activeElement.element_type === "sweeper" || activeElement.element_type === "station_id") advanceThreshold = 1.5; // Natural crossfade for promos
          if (activeElement.element_type === "jocktalk") advanceThreshold = 0.2;
          
          if ((remainingTimeOnDeck <= advanceThreshold && remainingTimeOnDeck > 0) || activeDeck.ended) {
@@ -403,7 +395,7 @@ export default function AudioOrchestrator() {
       }
 
       // --- NEXT DECK AHEAD-OF-TIME (AOT) HTML5 PRELOADING ---
-      if (nextElement && nextElement.element_type !== "sweeper" && nextElement.element_type !== "station_id") {
+      if (nextElement) {
           const nextDeckName = activeDeckRef.current === "A" ? "B" : (activeDeckRef.current === "B" ? "C" : "A");
           const nextDeck = nextDeckName === "A" ? mediaRefA.current : (nextDeckName === "B" ? mediaRefB.current : mediaRefC.current);
           const nextTargetUrl = nextElement.element_type === "song" ? nextElement.youtube_id : nextElement.media_url;
@@ -421,10 +413,8 @@ export default function AudioOrchestrator() {
       if (currentElementIdRef.current !== currentElementToPlay.id) {
         currentElementIdRef.current = currentElementToPlay.id;
 
-        // Toggle 3-Deck Rotation for main media (not sweepers)
-        if (currentElementToPlay.element_type !== "sweeper" && currentElementToPlay.element_type !== "station_id") {
-          activeDeckRef.current = activeDeckRef.current === "A" ? "B" : (activeDeckRef.current === "B" ? "C" : "A");
-        }
+        // Toggle 3-Deck Rotation for all media
+        activeDeckRef.current = activeDeckRef.current === "A" ? "B" : (activeDeckRef.current === "B" ? "C" : "A");
 
         const mockBlock: PlaylistBlock = {
           blockId: currentElementToPlay.id,
@@ -466,9 +456,9 @@ export default function AudioOrchestrator() {
         const prevElement = currentIndex > 0 ? schedule[currentIndex - 1] : null;
 
         // --- HYBRID CROSSFADE & EXCLUSIVITY ENGINE ---
-        [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
-           const deckName = ["A", "B", "C", "sweeper"][index];
-           if ((deckName !== activeDeckRef.current && deckName !== "sweeper") || (deckName === "sweeper" && currentElementToPlay.element_type !== "sweeper" && currentElementToPlay.element_type !== "station_id")) {
+        [mediaRefA, mediaRefB, mediaRefC].forEach((ref, index) => {
+           const deckName = ["A", "B", "C"][index];
+           if (deckName !== activeDeckRef.current) {
                if (ref.current && !ref.current.paused) {
                    const player = ref.current;
                    const isEnteringJock = currentElementToPlay.element_type === "jocktalk";
@@ -531,38 +521,24 @@ export default function AudioOrchestrator() {
             }, stepTime);
         };
 
-        if (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id") {
-           setPhase("playing_jingle");
-           const player = sweeperRef.current;
-           if (player) {
-              if (!player.src.endsWith(encodeURI(currentElementToPlay.media_url))) player.src = currentElementToPlay.media_url;
-              applyFadeIn(player, currentElementToPlay.element_type);
-              if (offsetSeconds > 0.5) try { player.currentTime = offsetSeconds; } catch(e) {}
-              // HARD STOP transition audio for Master Clock Sweepers to prevent parallel clashing
-              if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
-                 transitionAudioRef.current.volume = 0;
-              }
-              player.play().then(() => setIsTuning(false)).catch(e => handleMediaError("sweeper"));
-           }
-        } else {
-           setPhase(currentElementToPlay.element_type === "jocktalk" ? "playing_jocktalk" : "playing_song");
-           const targetUrl = currentElementToPlay.element_type === "song" ? currentElementToPlay.youtube_id : currentElementToPlay.media_url;
-           if (primaryDeck) {
-              if (!primaryDeck.src.endsWith(encodeURI(targetUrl))) primaryDeck.src = targetUrl;
-              applyFadeIn(primaryDeck, currentElementToPlay.element_type);
-              if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
-              // Fade out transition audio ONLY if it's a song, otherwise hard stop for jocktalk
-              if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
-                 const tAudio = transitionAudioRef.current;
-                 if (currentElementToPlay.element_type === "jocktalk") {
-                     tAudio.volume = 0;
-                 } else {
-                     let vol = tAudio.volume;
-                     const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.volume = 0; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
-                 }
-              }
-              primaryDeck.play().then(() => setIsTuning(false)).catch(e => handleMediaError(activeDeckRef.current));
-           }
+        setPhase(currentElementToPlay.element_type === "jocktalk" ? "playing_jocktalk" : (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id" ? "playing_jingle" : "playing_song"));
+        const targetUrl = currentElementToPlay.element_type === "song" ? currentElementToPlay.youtube_id : currentElementToPlay.media_url;
+        if (primaryDeck) {
+             if (!primaryDeck.src.endsWith(encodeURI(targetUrl))) primaryDeck.src = targetUrl;
+             applyFadeIn(primaryDeck, currentElementToPlay.element_type);
+             if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
+             
+             // Transition audio fade out or hard stop
+             if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
+                const tAudio = transitionAudioRef.current;
+                if (currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id") {
+                    tAudio.volume = 0;
+                } else {
+                    let vol = tAudio.volume;
+                    const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.volume = 0; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+                }
+             }
+             primaryDeck.play().then(() => setIsTuning(false)).catch(e => handleMediaError(activeDeckRef.current));
         }
       } else {
         if (!hasGesture || !isPlaying) return;
@@ -574,13 +550,10 @@ export default function AudioOrchestrator() {
           
         if (offsetSeconds > gracePeriod) {
              // Ensure only active deck and active element are playing, hard-pause others
-             const isSweeperActive = (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id");
            
-           [mediaRefA, mediaRefB, mediaRefC, sweeperRef].forEach((ref, index) => {
-              const deckName = ["A", "B", "C", "sweeper"][index];
-              const isThisDeckSupposedToPlay = isSweeperActive 
-                  ? deckName === "sweeper" 
-                  : deckName === activeDeckRef.current;
+           [mediaRefA, mediaRefB, mediaRefC].forEach((ref, index) => {
+              const deckName = ["A", "B", "C"][index];
+              const isThisDeckSupposedToPlay = deckName === activeDeckRef.current;
                   
               if (!isThisDeckSupposedToPlay && ref.current && !ref.current.paused) {
                   ref.current.volume = 0; // Mute instead of pause to keep iOS unlocked
@@ -615,8 +588,7 @@ export default function AudioOrchestrator() {
       if (mediaRefA.current) mediaRefA.current.pause();
       if (mediaRefB.current) mediaRefB.current.pause();
       if (mediaRefC.current) mediaRefC.current.pause();
-      if (sweeperRef.current) sweeperRef.current.pause();
-    }
+          }
   }, [isPlaying]);
 
 
@@ -627,7 +599,7 @@ export default function AudioOrchestrator() {
       <audio id="media-player-a" ref={mediaRefA} crossOrigin="anonymous" onError={() => handleMediaError("A")} />
       <audio id="media-player-b" ref={mediaRefB} crossOrigin="anonymous" onError={() => handleMediaError("B")} />
       <audio id="media-player-c" ref={mediaRefC} crossOrigin="anonymous" onError={() => handleMediaError("C")} />
-      <audio id="sweeper-player" ref={sweeperRef} crossOrigin="anonymous" onError={() => handleMediaError("sweeper")} />
-    </>
+          </>
   );
 }
+

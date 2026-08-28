@@ -63,6 +63,8 @@ export async function POST(request: Request) {
          metadata.isCapped = true; 
       }
 
+      if (finalDurationMs <= 0) return null;
+
       const blockId = crypto.randomUUID();
       schedule.push({
         id: blockId,
@@ -173,14 +175,17 @@ export async function POST(request: Request) {
             let artist = file.artist || "Future Radio";
             
             // Add to schedule
-            addElement(step.type, dur, file.path, { 
+            const added = addElement(step.type, dur, file.path, { 
                 title: title,
                 artist: artist,
                 coverArt: file.coverArt || null
             });
+            
+            if (!added) break; // Reached targetEndTime perfectly
         } else {
             // Failsafe: if missing folder
-            addElement('sweeper', 30000, "fallback.mp3", { title: "Station Filler" });
+            const added = addElement('sweeper', 30000, "fallback.mp3", { title: "Station Filler" });
+            if (!added) break;
         }
         
         seqIndex++;
@@ -192,7 +197,7 @@ export async function POST(request: Request) {
       .delete()
       .eq("city_id", cityId)
       .gte("start_time", new Date(startTime.getTime()).toISOString())
-      .lt("start_time", new Date(targetEndTime).toISOString());
+      .lt("start_time", new Date(startTime.getTime() + TARGET_HOUR_MS).toISOString());
 
     const { error } = await supabase.from("broadcast_schedule").insert(schedule);
 
