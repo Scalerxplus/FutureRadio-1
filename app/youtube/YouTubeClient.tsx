@@ -29,17 +29,17 @@ export default function YouTubeClient() {
     <div className="w-[1920px] h-[1080px] overflow-hidden flex text-black font-khand font-black uppercase">
       
       {/* Left Sidebar: Stacked Logos */}
-      <div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center pt-16 pb-16 gap-16 shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
-        <div className="w-56 h-56 p-4 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] bg-white flex items-center justify-center">
-          <img src="/Logo Main.png" alt="Media Mafias" className="w-full h-full object-contain" />
+      <div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
+        <div className="w-64 h-64 flex items-center justify-center">
+          <img src="/Logo Main.png" alt="Media Mafias" className="w-full h-full object-contain drop-shadow-xl" />
         </div>
 
-        <div className="w-56 h-56 p-4 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] bg-[#eaff04] flex items-center justify-center">
-          <h1 className="text-6xl tracking-widest leading-none text-center">FUTURE<br/>RADIO</h1>
+        <div className="w-72 h-48 flex items-center justify-center">
+          <img src="/logo-transparent.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-xl scale-125" />
         </div>
 
-        <div className="w-56 h-56 p-4 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] bg-white flex items-center justify-center">
-          <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="w-full h-full object-contain" />
+        <div className="w-64 h-64 flex items-center justify-center">
+          <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-xl scale-110" />
         </div>
       </div>
 
@@ -66,36 +66,28 @@ export default function YouTubeClient() {
         {/* Center Content Container */}
         <div className="flex-1 flex px-16 pt-24 pb-32 gap-16 z-10 items-center justify-center">
           
-          {/* Left: Now Playing (Vinyl & Title) */}
+          {/* Left: Now Playing (Album Art & Title) */}
           <div className="flex-1 flex flex-col justify-center items-center relative mt-8">
             
-            {/* Ultra Realistic 3D Vinyl */}
+            {/* Glowing Pulsating Album Art */}
             <motion.div 
-              animate={{ rotate: isPlaying ? 360 : 0 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="w-[560px] h-[560px] rounded-full relative flex items-center justify-center shadow-[20px_20px_0_0_rgba(0,0,0,1)] border-8 border-black bg-neutral-900"
-              style={{
-                background: `
-                  radial-gradient(circle at center, #111 20%, #222 25%, #111 30%, #333 35%, #111 40%, #222 45%, #111 50%, #333 55%, #111 60%, #222 65%, #111 70%),
-                  conic-gradient(from 0deg, #111, #444, #111, #555, #111)
-                `,
-                backgroundBlendMode: 'overlay'
-              }}
+              animate={isPlaying ? { 
+                scale: [1, 1.05, 1],
+                boxShadow: [
+                  "0px 0px 0px 0px rgba(0, 0, 0, 1)",
+                  "0px 0px 40px 20px rgba(234, 255, 4, 0.8)",
+                  "0px 0px 0px 0px rgba(0, 0, 0, 1)"
+                ]
+              } : {}}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="w-[520px] h-[520px] bg-neutral-900 border-8 border-black relative overflow-hidden shadow-[16px_16px_0_0_rgba(0,0,0,1)]"
             >
-              {/* Vinyl Specular Highlight */}
-              <div className="absolute inset-0 rounded-full" style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.1) 100%)',
-                mixBlendMode: 'screen',
-                pointerEvents: 'none'
-              }}></div>
-
-              {/* Bright Yellow Center Label with Future Radio Icon */}
-              <div className="w-[260px] h-[260px] rounded-full overflow-hidden z-10 border-[12px] border-black relative bg-[#eaff04] flex flex-col items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-                <img src="/icons/icon-512x512.png" alt="Future Radio" className="w-[160px] h-[160px] object-contain drop-shadow-md" />
-                
-                {/* Spindle hole */}
-                <div className="w-8 h-8 rounded-full bg-black border-4 border-white shadow-inner absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"></div>
-              </div>
+              <img 
+                src={currentBlock?.coverArt || "/icons/icon-512x512.png"} 
+                alt="Album Art" 
+                className="w-full h-full object-cover"
+                onError={(e) => { e.currentTarget.src = "/icons/icon-512x512.png"; }}
+              />
             </motion.div>
 
             {/* Brutalist Now Playing Tag */}
