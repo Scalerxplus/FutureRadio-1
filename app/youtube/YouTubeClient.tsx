@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAudioStore } from "@/components/audio/useAudioStore";
+import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import { motion } from "framer-motion";
 import QRCode from "react-qr-code";
 
 export default function YouTubeClient() {
-  const { currentBlock, upcomingBlocks, phase, isPlaying } = useAudioStore();
+  const { currentBlock, upcomingBlocks, phase, isPlaying, setIsPlaying } = useAudioStore();
   const [unlocked, setUnlocked] = useState(false);
   const [time, setTime] = useState(new Date());
 
@@ -17,14 +17,13 @@ export default function YouTubeClient() {
   }, []);
 
   // For puppeteer to unlock audio, we need a button to be clicked.
-  // We can just make the whole screen a button until unlocked.
   if (!unlocked) {
     return (
       <div 
         className="w-screen h-screen bg-black flex items-center justify-center cursor-pointer text-white text-2xl font-bold"
         onClick={() => {
-          // The audio store takes care of unlocking audio on first click,
-          // but we just need to register the user interaction.
+          unlockAudio();
+          setIsPlaying(true);
           setUnlocked(true);
         }}
       >
