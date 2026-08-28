@@ -26,165 +26,168 @@ export default function YouTubeClient() {
   }, [setIsPlaying]);
 
   return (
-    <div className="w-[1920px] h-[1080px] overflow-hidden relative flex flex-col text-black font-khand bg-[#FFD1DC] font-black uppercase">
+    <div className="w-[1920px] h-[1080px] overflow-hidden flex text-black font-khand font-black uppercase">
       
-      {/* Brutalist Grid Background Overlay */}
-      <div className="absolute inset-0 pointer-events-none opacity-20" style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 1) 2px, transparent 2px), linear-gradient(90deg, rgba(0, 0, 0, 1) 2px, transparent 2px)`,
-        backgroundSize: '40px 40px'
-      }}></div>
-
-      {/* Top Bar: Floating Logos & Time */}
-      <div className="absolute top-0 w-full px-12 pt-12 flex justify-between items-start z-50 pointer-events-none">
-        {/* Top Left Logos (Stacked vertically) */}
-        <div className="flex flex-col gap-4">
-          <div className="bg-white border-4 border-black p-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center justify-center w-64 h-24">
-            <img src="/Logo Main.png" alt="Media Mafias" className="h-full object-contain" />
-          </div>
-          <div className="bg-white border-4 border-black p-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center justify-center w-64 h-24">
-            <h1 className="text-4xl tracking-widest leading-none text-black text-center">FUTURE<br/>RADIO</h1>
-          </div>
-          <div className="bg-white border-4 border-black p-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center justify-center w-64 h-24">
-            <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="h-full object-contain" />
-          </div>
+      {/* Left Sidebar: Stacked Logos */}
+      <div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center pt-16 pb-16 gap-16 shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
+        <div className="w-56 h-56 p-4 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] bg-white flex items-center justify-center">
+          <img src="/Logo Main.png" alt="Media Mafias" className="w-full h-full object-contain" />
         </div>
 
+        <div className="w-56 h-56 p-4 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] bg-[#eaff04] flex items-center justify-center">
+          <h1 className="text-6xl tracking-widest leading-none text-center">FUTURE<br/>RADIO</h1>
+        </div>
+
+        <div className="w-56 h-56 p-4 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] bg-white flex items-center justify-center">
+          <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="w-full h-full object-contain" />
+        </div>
+      </div>
+
+      {/* Main Content Area (Purple Background) */}
+      <div className="flex-1 h-full bg-[#c4b5fd] relative flex flex-col overflow-hidden">
+        
+        {/* Brutalist Grid Background Overlay */}
+        <div className="absolute inset-0 pointer-events-none opacity-20" style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 1) 2px, transparent 2px), linear-gradient(90deg, rgba(0, 0, 0, 1) 2px, transparent 2px)`,
+          backgroundSize: '40px 40px'
+        }}></div>
+
         {/* Top Right: Clock & Live Badge */}
-        <div className="flex flex-col items-end gap-4">
-          <div className="text-6xl tracking-wider text-black bg-white border-4 border-black px-8 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] font-mono">
+        <div className="absolute top-12 right-12 flex flex-col items-end gap-6 z-20">
+          <div className="text-6xl tracking-wider text-black bg-white border-8 border-black px-8 py-3 shadow-[8px_8px_0_0_rgba(0,0,0,1)] font-mono">
             {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </div>
           <div className="flex items-center gap-3 bg-black px-6 py-2 border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
             <div className="w-5 h-5 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
-            <p className="text-3xl font-bold tracking-widest text-[#98FB98] mt-1">LIVE 24/7</p>
+            <p className="text-3xl font-bold tracking-widest text-[#eaff04] mt-1">LIVE 24/7</p>
           </div>
         </div>
-      </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex px-12 pt-12 pb-32 gap-12 z-10 items-center">
-        
-        {/* Left: Now Playing (Vinyl & Title) */}
-        <div className="flex-1 flex flex-col justify-center items-center relative mt-16 ml-32">
+        {/* Center Content Container */}
+        <div className="flex-1 flex px-16 pt-24 pb-32 gap-16 z-10 items-center justify-center">
           
-          {/* Ultra Realistic 3D Vinyl */}
-          <motion.div 
-            animate={{ rotate: isPlaying ? 360 : 0 }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="w-[560px] h-[560px] rounded-full relative flex items-center justify-center shadow-[20px_20px_0_0_rgba(0,0,0,1)] border-8 border-black bg-neutral-900"
-            style={{
-              background: `
-                radial-gradient(circle at center, #111 20%, #222 25%, #111 30%, #333 35%, #111 40%, #222 45%, #111 50%, #333 55%, #111 60%, #222 65%, #111 70%),
-                conic-gradient(from 0deg, #111, #444, #111, #555, #111)
-              `,
-              backgroundBlendMode: 'overlay'
-            }}
+          {/* Left: Now Playing (Vinyl & Title) */}
+          <div className="flex-1 flex flex-col justify-center items-center relative mt-8">
+            
+            {/* Ultra Realistic 3D Vinyl */}
+            <motion.div 
+              animate={{ rotate: isPlaying ? 360 : 0 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              className="w-[560px] h-[560px] rounded-full relative flex items-center justify-center shadow-[20px_20px_0_0_rgba(0,0,0,1)] border-8 border-black bg-neutral-900"
+              style={{
+                background: `
+                  radial-gradient(circle at center, #111 20%, #222 25%, #111 30%, #333 35%, #111 40%, #222 45%, #111 50%, #333 55%, #111 60%, #222 65%, #111 70%),
+                  conic-gradient(from 0deg, #111, #444, #111, #555, #111)
+                `,
+                backgroundBlendMode: 'overlay'
+              }}
+            >
+              {/* Vinyl Specular Highlight */}
+              <div className="absolute inset-0 rounded-full" style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.1) 100%)',
+                mixBlendMode: 'screen',
+                pointerEvents: 'none'
+              }}></div>
+
+              {/* Bright Yellow Center Label with Future Radio Icon */}
+              <div className="w-[260px] h-[260px] rounded-full overflow-hidden z-10 border-[12px] border-black relative bg-[#eaff04] flex flex-col items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                <img src="/icons/icon-512x512.png" alt="Future Radio" className="w-[160px] h-[160px] object-contain drop-shadow-md" />
+                
+                {/* Spindle hole */}
+                <div className="w-8 h-8 rounded-full bg-black border-4 border-white shadow-inner absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"></div>
+              </div>
+            </motion.div>
+
+            {/* Brutalist Now Playing Tag */}
+            <div className="mt-16 text-center bg-white border-8 border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-[#eaff04] px-8 py-1 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+                <h2 className="text-3xl tracking-widest mt-1">NOW PLAYING</h2>
+              </div>
+              <h1 className="text-6xl truncate text-black mt-4">
+                {currentBlock?.songTitle || "Connecting..."}
+              </h1>
+              <p className="text-3xl text-gray-700 truncate mt-4 bg-[#c4b5fd] border-2 border-black inline-block px-4 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+                {currentBlock?.songArtist || "Future Radio"}
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Up Next & QR & Visualizer */}
+          <div className="w-[640px] flex flex-col gap-10 h-[840px]">
+            
+            {/* Visualizer */}
+            <div className="h-72 bg-white border-8 border-black p-8 flex flex-col justify-between shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
+              <div className="absolute -top-6 -left-6 bg-black text-[#eaff04] px-6 py-1 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] z-10 rotate-[-4deg]">
+                <h3 className="text-3xl tracking-widest mt-1">AUDIO STREAM</h3>
+              </div>
+              <div className="flex-1 flex items-end gap-3 overflow-hidden justify-between mt-6 px-4">
+                {[...Array(18)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    animate={{
+                      height: isPlaying ? ["20%", `${Math.random() * 80 + 20}%`, "20%"] : "10%"
+                    }}
+                    transition={{
+                      duration: Math.random() * 0.4 + 0.2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: Math.random() * 0.5
+                    }}
+                    className="w-6 bg-[#c4b5fd] border-4 border-black"
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Up Next */}
+            <div className="flex-1 bg-white border-8 border-black p-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)] overflow-hidden flex flex-col relative">
+              <div className="absolute -top-6 right-8 bg-black text-white px-6 py-1 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] z-10 rotate-[3deg]">
+                <h3 className="text-3xl tracking-widest mt-1">UP NEXT</h3>
+              </div>
+              <div className="flex flex-col gap-6 flex-1 overflow-hidden mt-6">
+                {upcomingBlocks.slice(0, 3).map((block, i) => (
+                  <div key={i} className="flex items-center gap-6 bg-[#eaff04] p-3 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:translate-x-2 transition-transform">
+                    <div className="w-16 h-16 bg-white border-4 border-black flex-shrink-0 flex items-center justify-center font-bold text-3xl">
+                      #{i + 1}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-3xl text-black truncate leading-none mb-1">{block.songTitle}</p>
+                      <p className="text-xl text-gray-800 truncate leading-none">{block.songArtist}</p>
+                    </div>
+                  </div>
+                ))}
+                {upcomingBlocks.length === 0 && (
+                  <div className="text-black text-4xl flex h-full items-center justify-center">QUEUE IS EMPTY</div>
+                )}
+              </div>
+            </div>
+
+            {/* QR Code */}
+            <div className="h-48 bg-black border-8 border-black p-6 flex items-center gap-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)]">
+              <div className="bg-white p-2 border-4 border-[#eaff04] shadow-[4px_4px_0_0_#eaff04] flex-shrink-0">
+                <QRCode value="https://www.thefutureradio.com" size={110} />
+              </div>
+              <div className="text-[#eaff04]">
+                <h3 className="text-5xl mb-2">LISTEN ON MOBILE</h3>
+                <p className="text-2xl text-gray-300">SCAN TO VISIT THEFUTURERADIO.COM</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Scrolling Ticker Bottom Bar */}
+        <div className="h-24 bg-[#eaff04] w-full flex items-center overflow-hidden z-20 border-t-8 border-black shadow-[0_-12px_0_0_rgba(0,0,0,1)] absolute bottom-0">
+          <motion.div
+            animate={{ x: [1560, -3000] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="whitespace-nowrap text-5xl text-black pt-2"
           >
-            {/* Vinyl Specular Highlight */}
-            <div className="absolute inset-0 rounded-full" style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.1) 100%)',
-              mixBlendMode: 'screen',
-              pointerEvents: 'none'
-            }}></div>
-
-            {/* Bright Center Label with Future Radio Icon */}
-            <div className="w-[300px] h-[300px] rounded-full overflow-hidden z-10 border-[12px] border-black relative bg-[#98FB98] flex flex-col items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-              <img src="/icons/icon-512x512.png" alt="Future Radio" className="w-[180px] h-[180px] object-contain drop-shadow-md" />
-              
-              {/* Spindle hole */}
-              <div className="w-8 h-8 rounded-full bg-black border-4 border-white shadow-inner absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"></div>
-            </div>
+            ✦ YOU ARE LISTENING TO FUTURE RADIO ✦ 100% AUTONOMOUS STREAMING ✦ REGIONAL, DEVOTIONAL & INDIE ✦ LIVE 24/7 ✦ SCAN THE QR CODE TO LISTEN ON YOUR PHONE ✦ SUBSCRIBE TO MEDIA MAFIAS! ✦
           </motion.div>
-
-          {/* Brutalist Now Playing Tag */}
-          <div className="mt-16 text-center bg-white border-8 border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
-            <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-[#98FB98] px-6 py-1 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-              <h2 className="text-2xl tracking-widest mt-1">NOW PLAYING</h2>
-            </div>
-            <h1 className="text-6xl truncate text-black mt-4">
-              {currentBlock?.songTitle || "Connecting..."}
-            </h1>
-            <p className="text-3xl text-gray-700 truncate mt-4 bg-[#FFD1DC] border-2 border-black inline-block px-4 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-              {currentBlock?.songArtist || "Future Radio"}
-            </p>
-          </div>
         </div>
 
-        {/* Right: Up Next & QR & Visualizer */}
-        <div className="w-[640px] flex flex-col gap-8 h-[800px]">
-          
-          {/* Visualizer */}
-          <div className="h-72 bg-[#98FB98] border-8 border-black p-8 flex flex-col justify-between shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
-            <div className="absolute -top-5 -left-5 bg-black text-[#FFD1DC] px-4 py-1 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] z-10 rotate-[-5deg]">
-              <h3 className="text-2xl tracking-widest">AUDIO STREAM</h3>
-            </div>
-            <div className="flex-1 flex items-end gap-3 overflow-hidden justify-between mt-6 px-4">
-              {[...Array(18)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  animate={{
-                    height: isPlaying ? ["20%", `${Math.random() * 80 + 20}%`, "20%"] : "10%"
-                  }}
-                  transition={{
-                    duration: Math.random() * 0.4 + 0.2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: Math.random() * 0.5
-                  }}
-                  className="w-6 bg-black border-2 border-black"
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Up Next */}
-          <div className="flex-1 bg-white border-8 border-black p-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)] overflow-hidden flex flex-col relative">
-            <div className="absolute -top-5 right-10 bg-black text-white px-4 py-1 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] z-10 rotate-[2deg]">
-              <h3 className="text-2xl tracking-widest">UP NEXT</h3>
-            </div>
-            <div className="flex flex-col gap-6 flex-1 overflow-hidden mt-6">
-              {upcomingBlocks.slice(0, 3).map((block, i) => (
-                <div key={i} className="flex items-center gap-6 bg-[#FFD1DC] p-3 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:translate-x-2 transition-transform">
-                  <div className="w-16 h-16 bg-white border-4 border-black flex-shrink-0 flex items-center justify-center font-bold text-2xl">
-                    #{i + 1}
-                  </div>
-                  <div className="overflow-hidden">
-                    <p className="text-3xl text-black truncate leading-none mb-1">{block.songTitle}</p>
-                    <p className="text-xl text-gray-800 truncate leading-none">{block.songArtist}</p>
-                  </div>
-                </div>
-              ))}
-              {upcomingBlocks.length === 0 && (
-                <div className="text-black text-3xl flex h-full items-center justify-center">QUEUE IS EMPTY</div>
-              )}
-            </div>
-          </div>
-
-          {/* QR Code */}
-          <div className="h-48 bg-black border-8 border-black p-6 flex items-center gap-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)]">
-            <div className="bg-white p-2 border-4 border-[#98FB98] shadow-[4px_4px_0_0_#98FB98] flex-shrink-0">
-              <QRCode value="https://www.thefutureradio.com" size={110} />
-            </div>
-            <div className="text-[#FFD1DC]">
-              <h3 className="text-5xl mb-2">LISTEN ON MOBILE</h3>
-              <p className="text-2xl text-gray-300">SCAN TO VISIT THEFUTURERADIO.COM</p>
-            </div>
-          </div>
-
-        </div>
       </div>
-
-      {/* Scrolling Ticker Bottom Bar */}
-      <div className="h-24 bg-[#98FB98] w-full flex items-center overflow-hidden z-20 border-t-8 border-black shadow-[0_-12px_0_0_rgba(0,0,0,1)]">
-        <motion.div
-          animate={{ x: [1920, -3000] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="whitespace-nowrap text-5xl text-black"
-        >
-          ✦ YOU ARE LISTENING TO FUTURE RADIO ✦ REGIONAL, DEVOTIONAL & INDIE ✦ LIVE 24/7 ✦ SCAN THE QR CODE TO LISTEN ON YOUR PHONE ✦ SUBSCRIBE TO MEDIA MAFIAS! ✦
-        </motion.div>
-      </div>
-
     </div>
   );
 }
