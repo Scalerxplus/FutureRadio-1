@@ -17,13 +17,11 @@ async function scanDirectory(dir, baseDir) {
           
           let duration = 200;
           let title = file.replace(/\.[^/.]+$/, "");
-          let artist = "Future Radio";
+          let artist = fullPath.includes('5_Music') ? "Media Mafias" : "TheFutureRadioNetwork";
           
           try {
             const metadata = await mm.parseFile(fullPath);
             duration = metadata.format.duration || 200;
-            if (metadata.common.title) title = metadata.common.title;
-            if (metadata.common.artist) artist = metadata.common.artist;
           } catch(e) {}
           
           results.push({
