@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  future-radio-streamer:
+    build: .
+    container_name: future-radio-streamer
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - /dev/shm:/dev/shm # Fix for Puppeteer memory limits

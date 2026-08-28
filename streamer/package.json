@@ -1,0 +1,14 @@
+{
+  "name": "future-radio-streamer",
+  "version": "1.0.0",
+  "description": "Headless YouTube RTMP Streamer for Future Radio",
+  "main": "stream.js",
+  "scripts": {
+    "start": "xvfb-run --server-args=\"-screen 0 1920x1080x24\" node stream.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "puppeteer-core": "^22.0.0",
+    "puppeteer-stream": "^2.1.1"
+  }
+}
