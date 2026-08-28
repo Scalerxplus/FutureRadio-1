@@ -33,16 +33,15 @@ export default function YouTubeClient() {
   // Hardware-accelerated CSS animations for buttery smooth UI in Puppeteer
   const globalStyles = `
     @keyframes eqPulse {
-      0%, 100% { height: 10%; background-color: #8b5cf6; }
-      50% { height: var(--eq-h); background-color: #06b6d4; }
+      0%, 100% { height: 10%; background-color: #000; }
+      50% { height: var(--eq-h); background-color: #fff; }
     }
     .eq-bar {
-      width: 1rem;
-      border-top-left-radius: 9999px;
-      border-top-right-radius: 9999px;
-      box-shadow: 0 0 15px rgba(139,92,246,0.6);
-      background-color: #333;
-      transition: height 0.3s ease, background-color 0.3s ease;
+      width: 1.25rem;
+      border: 3px solid #000;
+      box-shadow: 4px 4px 0px rgba(0,0,0,1);
+      background-color: #000;
+      transition: height 0.1s ease;
       height: 5%;
     }
     .eq-bar.playing {
@@ -56,6 +55,13 @@ export default function YouTubeClient() {
     .smooth-spin {
       animation: smoothSpin 4s linear infinite;
     }
+    @keyframes spinReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    .spin-reverse {
+      animation: spinReverse 8s linear infinite;
+    }
   `;
 
   // Clock
@@ -66,7 +72,6 @@ export default function YouTubeClient() {
 
   // Auto-start stream
   useEffect(() => {
-    // With --autoplay-policy=no-user-gesture-required in Puppeteer, this works automatically!
     const timer = setTimeout(() => {
       unlockAudio();
       setIsPlaying(true);
@@ -75,41 +80,41 @@ export default function YouTubeClient() {
   }, [setIsPlaying]);
 
   return (
-    <div className="w-[1920px] h-[1080px] overflow-hidden flex font-khand text-white relative bg-[#050510]">
+    <div className="w-[1920px] h-[1080px] overflow-hidden flex font-khand text-black relative bg-[#C4B5FD] selection:bg-black selection:text-[#E5FF00]">
+      <style>{globalStyles}</style>
       
-      {/* Deep Space / Atmospheric Background */}
-      <div className="absolute inset-0 z-0" style={{
-        background: 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050510 80%)',
-      }}></div>
+      {/* Neo-Brutalist Background Watermarks */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Massive Flat Om */}
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[-10%] right-[-5%] text-[60vw] leading-none text-black/[0.03] font-black select-none"
+        >
+          ॐ
+        </motion.div>
+        {/* Massive Flat Swastika */}
+        <motion.div 
+          animate={{ rotate: -360 }}
+          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-[-10%] left-[-10%] text-[50vw] leading-none text-white/[0.15] font-black select-none"
+        >
+          卐
+        </motion.div>
+        {/* Subtle noise for texture */}
+        <div className="absolute inset-0 opacity-[0.08] bg-[url('/textures/noise.png')] mix-blend-overlay" />
+      </div>
 
-      {/* Floating Particles / Ambient Noise Overlay */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{
-        backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)',
-        backgroundSize: '80px 80px'
-      }}></div>
-
-      {/* Animated Subtle Ambient Glows */}
-      <motion.div 
-        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }} 
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-purple-600/20 rounded-full blur-[120px] z-0" 
-      />
-      <motion.div 
-        animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.1, 1] }} 
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 5 }}
-        className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-cyan-600/20 rounded-full blur-[100px] z-0" 
-      />
-
-      {/* Left Sidebar: Glassmorphism Logos */}
-      <div className="w-[360px] h-full bg-black/40 backdrop-blur-2xl border-r border-white/10 z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_30px_rgba(0,0,0,0.5)]">
-        <div className="w-56 h-56 flex items-center justify-center p-2">
-          <img src="/icons/media-mafias-logo.png" alt="Media Mafias" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+      {/* Left Sidebar: Brutalist Logos */}
+      <div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
+        <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#E5FF00] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
+          <img src="/icons/media-mafias-logo.png" alt="Media Mafias" className="w-full h-full object-contain" />
         </div>
-        <div className="w-56 h-56 flex items-center justify-center p-2">
-          <img src="/icons/future-radio-logo.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+        <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#FF69B4] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
+          <img src="/icons/future-radio-logo.png" alt="Future Radio" className="w-full h-full object-contain" />
         </div>
-        <div className="w-56 h-56 flex items-center justify-center p-2">
-          <img src="/icons/bagheli-logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+        <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#00E5FF] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
+          <img src="/icons/bagheli-logo.png" alt="Bagheli Logo" className="w-full h-full object-contain" />
         </div>
       </div>
 
@@ -119,19 +124,17 @@ export default function YouTubeClient() {
         {/* Top Header: Clock & ON AIR Badge */}
         <div className="flex justify-between items-start w-full">
           <div></div> {/* Spacer */}
-          <div className="flex items-center gap-8">
-            <div className="text-5xl tracking-widest text-white/80 font-mono drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
-              {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          <div className="flex items-center">
+            <div className="bg-white border-4 border-black px-6 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center">
+              <div className="text-5xl font-black font-khand tracking-widest text-black">
+                {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+              </div>
             </div>
             
-            {/* ON AIR Neon Sign */}
-            <div className="flex items-center gap-4 bg-red-950/40 backdrop-blur-md px-8 py-3 rounded-xl border border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
-              <motion.div 
-                animate={{ opacity: [1, 0.4, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-4 h-4 bg-red-500 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.8)]"
-              />
-              <p className="text-4xl font-bold tracking-[0.2em] text-red-400 mt-1" style={{ textShadow: '0 0 10px rgba(239,68,68,0.8)' }}>
+            {/* ON AIR Neo-Brutalist Badge */}
+            <div className="bg-[#E5FF00] border-4 border-black px-8 py-3 ml-8 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center gap-4">
+              <div className="w-5 h-5 bg-red-500 border-2 border-black rounded-full animate-pulse shadow-[2px_2px_0_0_rgba(0,0,0,1)]" />
+              <p className="text-4xl font-black font-khand tracking-widest text-black mt-1">
                 ON AIR
               </p>
             </div>
@@ -139,32 +142,21 @@ export default function YouTubeClient() {
         </div>
 
         {/* Center Content: Visuals & Panels */}
-        <div className="flex-1 flex gap-12 mt-8 items-center justify-center">
+        <div className="flex-1 flex gap-16 mt-12 items-center justify-center">
           
           {/* Left: Dynamic Bagheli Artwork Visual */}
           <div className="flex-1 flex flex-col justify-center items-center">
             
-            {/* Rotating RGB Neon Circular Frame */}
-            <div className="relative w-[550px] h-[550px] flex items-center justify-center">
+            {/* Neo-Brutalist Circular Frame */}
+            <div className="relative w-[500px] h-[500px] flex items-center justify-center mt-[-60px]">
               
-              {/* Rotating RGB Glow (Blurred for Neon Effect) */}
+              {/* Rotating Outer Dashed Ring for motion */}
               <div 
-                className={`absolute inset-[-15px] rounded-full blur-[20px] opacity-80 ${isPlaying ? 'smooth-spin' : ''}`}
-                style={{
-                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
-                }}
+                className={`absolute inset-[-24px] rounded-full border-[12px] border-dashed border-black ${isPlaying ? 'spin-reverse' : ''}`}
               />
               
-              {/* Rotating RGB Border */}
-              <div 
-                className={`absolute inset-[-6px] rounded-full ${isPlaying ? 'smooth-spin' : ''}`}
-                style={{
-                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
-                }}
-              />
-
-              {/* Center Image Container (Perfect Circle) */}
-              <div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10">
+              {/* Center Image Container */}
+              <div className="w-full h-full rounded-full overflow-hidden bg-white relative z-10 border-[12px] border-black shadow-[24px_24px_0_0_rgba(0,0,0,1)]">
                 <img 
                   src="/images/stations/bagheli_artwork.png" 
                   alt="Bagheli Vibes" 
@@ -173,29 +165,29 @@ export default function YouTubeClient() {
               </div>
             </div>
 
-            {/* Now Playing Info (Glass Card) */}
-            <div className="mt-12 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 w-full max-w-2xl shadow-2xl flex flex-col items-center">
-              <p className="text-cyan-400 text-2xl tracking-[0.3em] font-medium uppercase mb-4 shadow-cyan-400/50 drop-shadow-md">
+            {/* Now Playing Info (Solid Card) */}
+            <div className="mt-20 bg-[#00E5FF] border-[6px] border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] flex flex-col items-center">
+              <div className="bg-black text-[#E5FF00] px-4 py-1 font-bold text-xl uppercase mb-4 shadow-[4px_4px_0_0_rgba(255,255,255,1)] transform -rotate-2">
                 NOW PLAYING
-              </p>
-              <h1 className="text-5xl font-bold tracking-wide text-white text-center truncate w-full" style={{ textShadow: '0 0 15px rgba(255,255,255,0.4)' }}>
+              </div>
+              <h1 className="text-5xl font-black font-khand tracking-tight uppercase text-black text-center truncate w-full">
                 {formatTitle(currentBlock?.songTitle)}
               </h1>
-              <p className="text-2xl text-white/60 tracking-wider truncate mt-3">
+              <p className="text-3xl font-bold font-khand uppercase text-black/70 tracking-widest truncate mt-2">
                 {formatArtist(currentBlock?.songArtist)}
               </p>
             </div>
           </div>
 
-          {/* Right: Glassmorphism Panels (Visualizer & Up Next) */}
-          <div className="w-[500px] flex flex-col gap-8 h-[800px]">
+          {/* Right: Solid Panels (Visualizer & Up Next) */}
+          <div className="w-[500px] flex flex-col gap-12 h-[800px] mt-[-40px]">
             
-            {/* Neon Visualizer Panel */}
-            <div className="h-64 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
-              <h3 className="text-2xl tracking-[0.2em] text-white/80 uppercase">Audio Stream</h3>
+            {/* Brutalist Equalizer Panel */}
+            <div className="h-[280px] bg-[#FF69B4] border-[6px] border-black p-8 flex flex-col justify-between shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative overflow-hidden">
+              <h3 className="text-3xl font-black font-khand text-black uppercase bg-white border-2 border-black px-3 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)] inline-block w-fit">Audio Stream</h3>
               
-              <div className="flex-1 flex items-end gap-2 overflow-hidden justify-between mt-8 px-2">
-                {[...Array(16)].map((_, i) => (
+              <div className="flex-1 flex items-end gap-3 overflow-hidden justify-between mt-8 px-2 border-b-[6px] border-black">
+                {[...Array(14)].map((_, i) => (
                   <div
                     key={i}
                     className={`eq-bar ${isPlaying ? 'playing' : ''}`}
@@ -210,22 +202,22 @@ export default function YouTubeClient() {
             </div>
 
             {/* Up Next Panel */}
-            <div className="flex-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl flex flex-col">
-              <h3 className="text-2xl tracking-[0.2em] text-white/80 uppercase mb-6">Up Next</h3>
+            <div className="flex-1 bg-[#E5FF00] border-[6px] border-black p-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)] flex flex-col">
+              <h3 className="text-3xl font-black font-khand text-black uppercase mb-6 bg-white border-2 border-black px-3 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)] inline-block w-fit">Up Next</h3>
               <div className="flex flex-col gap-5 flex-1 overflow-hidden">
                 {upcomingBlocks.slice(0, 4).map((block, i) => (
-                  <div key={i} className="flex items-center gap-5 bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-cyan-500 rounded-lg flex items-center justify-center font-bold text-xl shadow-lg">
+                  <div key={i} className="flex items-center gap-4 bg-white p-3 border-[4px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
+                    <div className="w-12 h-12 min-w-[48px] bg-black text-[#E5FF00] flex items-center justify-center font-black text-3xl font-khand border-2 border-black">
                       {i + 1}
                     </div>
                     <div className="overflow-hidden">
-                      <p className="text-2xl text-white truncate leading-tight tracking-wide">{formatTitle(block.songTitle)}</p>
-                      <p className="text-lg text-white/50 truncate leading-tight mt-1">{formatArtist(block.songArtist)}</p>
+                      <p className="text-2xl text-black font-black font-khand uppercase truncate leading-tight">{formatTitle(block.songTitle)}</p>
+                      <p className="text-lg font-bold text-black/60 uppercase truncate leading-tight mt-1">{formatArtist(block.songArtist)}</p>
                     </div>
                   </div>
                 ))}
                 {upcomingBlocks.length === 0 && (
-                  <div className="text-white/40 text-2xl flex h-full items-center justify-center tracking-widest">
+                  <div className="text-black/40 font-black text-3xl flex h-full items-center justify-center tracking-widest uppercase text-center border-4 border-dashed border-black/20 p-4">
                     QUEUE IS EMPTY
                   </div>
                 )}
@@ -237,21 +229,23 @@ export default function YouTubeClient() {
 
       </div>
 
-      {/* Sleek Dark Ticker */}
-      <div className="absolute bottom-0 w-full h-16 bg-black/80 backdrop-blur-2xl border-t border-white/10 z-40 flex items-center overflow-hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+      {/* Brutalist Ticker */}
+      <div className="absolute bottom-0 w-full h-16 bg-white border-t-[8px] border-black z-40 flex items-center overflow-hidden">
         <motion.div
-          animate={{ x: [1920, -3000] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="whitespace-nowrap text-3xl tracking-[0.2em] text-white/70 font-light pt-1"
+          animate={{ x: [0, -3000] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="whitespace-nowrap text-3xl font-black font-khand tracking-[0.1em] text-black pt-2 flex items-center"
         >
-          <span className="text-cyan-400 font-bold mx-8">✦</span>
-          YOU ARE LISTENING TO FUTURE RADIO
-          <span className="text-purple-400 font-bold mx-8">✦</span>
-          100% AUTONOMOUS PREMIUM FOLK RADIO
-          <span className="text-cyan-400 font-bold mx-8">✦</span>
-          LIVE 24/7
-          <span className="text-purple-400 font-bold mx-8">✦</span>
-          SUBSCRIBE TO MEDIA MAFIAS!
+          {[...Array(6)].map((_, i) => (
+            <React.Fragment key={i}>
+              <span className="text-[#FF69B4] mx-8 text-4xl">✦</span>
+              YOU ARE LISTENING TO FUTURE RADIO
+              <span className="text-[#00E5FF] mx-8 text-4xl">✦</span>
+              100% AUTONOMOUS PREMIUM FOLK RADIO
+              <span className="text-[#E5FF00] mx-8 text-4xl">✦</span>
+              LIVE 24/7
+            </React.Fragment>
+          ))}
         </motion.div>
       </div>
 
