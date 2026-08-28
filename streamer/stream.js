@@ -26,8 +26,7 @@ async function startStream() {
       '--autoplay-policy=no-user-gesture-required',
       '--window-size=1920,1080',
       '--disable-gpu', // Use CPU for rendering
-      '--hide-scrollbars',
-      '--mute-audio' // Mute host audio out to prevent loopback issues, puppeteer-stream still captures tab audio
+      '--hide-scrollbars'
     ]
   });
 
