@@ -147,16 +147,25 @@ export default function YouTubeClient() {
           {/* Left: Dynamic Bagheli Artwork Visual */}
           <div className="flex-1 flex flex-col justify-center items-center">
             
-            {/* Neo-Brutalist Circular Frame */}
+            {/* Circular Frame with RGB Border */}
             <div className="relative w-[500px] h-[500px] flex items-center justify-center mt-[-60px]">
               
-              {/* Rotating Outer Dashed Ring for motion */}
+              {/* Glowing RGB Border (Similar to Radio Player) */}
               <div 
-                className={`absolute inset-[-24px] rounded-full border-[12px] border-dashed border-black ${isPlaying ? 'spin-reverse' : ''}`}
+                className={`absolute inset-[-12px] rounded-full blur-[15px] opacity-70 ${isPlaying ? 'smooth-spin' : ''}`}
+                style={{
+                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
+                }}
+              />
+              <div 
+                className={`absolute inset-[-4px] rounded-full ${isPlaying ? 'smooth-spin' : ''}`}
+                style={{
+                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
+                }}
               />
               
               {/* Center Image Container */}
-              <div className="w-full h-full rounded-full overflow-hidden bg-white relative z-10 border-[12px] border-black shadow-[24px_24px_0_0_rgba(0,0,0,1)]">
+              <div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10 border-4 border-black">
                 <img 
                   src="/images/stations/bagheli_artwork.png" 
                   alt="Bagheli Vibes" 
