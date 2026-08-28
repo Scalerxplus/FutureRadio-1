@@ -46,6 +46,27 @@ async function startStream() {
   await page.mouse.click(960, 540);
   await new Promise(r => setTimeout(r, 2000));
   
+  // Try to find and click the Play Radio button
+  try {
+    const playBtn = await page.$('button[aria-label="Play Radio"]');
+    if (playBtn) {
+      console.log("Found Play Radio button, clicking it...");
+      await playBtn.click();
+      await new Promise(r => setTimeout(r, 1000));
+    }
+  } catch(e) {}
+
+  // Also try clicking anywhere that says "Bagheli Vibe" or "Bagheli" if it's a tab
+  try {
+    await page.evaluate(() => {
+      const elements = Array.from(document.querySelectorAll('button, div, span'));
+      const bagheliEl = elements.find(el => el.textContent && el.textContent.toLowerCase().includes('bagheli vibe'));
+      if (bagheliEl && typeof bagheliEl.click === 'function') {
+        bagheliEl.click();
+      }
+    });
+  } catch(e) {}
+  
   console.log("Spawning FFmpeg for X11 grab...");
   const display = process.env.DISPLAY || ':99';
   const ffmpegArgs = [
