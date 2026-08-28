@@ -26,179 +26,182 @@ export default function YouTubeClient() {
   }, [setIsPlaying]);
 
   return (
-    <div className="w-[1920px] h-[1080px] overflow-hidden flex text-black font-khand font-black uppercase">
+    <div className="w-[1920px] h-[1080px] overflow-hidden flex font-khand text-white relative bg-[#050510]">
       
-      {/* Left Sidebar: Stacked Logos */}
-      <div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
-        <div className="w-64 h-64 flex items-center justify-center">
-          <img src="/Logo Main.png" alt="Media Mafias" className="w-full h-full object-contain drop-shadow-xl" />
-        </div>
+      {/* Deep Space / Atmospheric Background */}
+      <div className="absolute inset-0 z-0" style={{
+        background: 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050510 80%)',
+      }}></div>
 
+      {/* Floating Particles / Ambient Noise Overlay */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{
+        backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)',
+        backgroundSize: '80px 80px'
+      }}></div>
+
+      {/* Animated Subtle Ambient Glows */}
+      <motion.div 
+        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }} 
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-purple-600/20 rounded-full blur-[120px] z-0" 
+      />
+      <motion.div 
+        animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.1, 1] }} 
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+        className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-cyan-600/20 rounded-full blur-[100px] z-0" 
+      />
+
+      {/* Left Sidebar: Glassmorphism Logos */}
+      <div className="w-[360px] h-full bg-black/40 backdrop-blur-2xl border-r border-white/10 z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_30px_rgba(0,0,0,0.5)]">
+        <div className="w-64 h-64 flex items-center justify-center">
+          <img src="/Logo Main.png" alt="Media Mafias" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+        </div>
         <div className="w-72 h-48 flex items-center justify-center">
-          <img src="/logo-transparent.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-xl scale-125" />
+          <img src="/logo-transparent.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-125" />
         </div>
-
         <div className="w-64 h-64 flex items-center justify-center">
-          <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-xl scale-110" />
+          <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-110" />
         </div>
       </div>
 
-      {/* Main Content Area (Purple Background) */}
-      <div className="flex-1 h-full bg-[#c4b5fd] relative flex flex-col overflow-hidden">
+      {/* Main Content Area */}
+      <div className="flex-1 h-full relative flex flex-col z-10 p-12">
         
-        {/* Brutalist Grid Background Overlay */}
-        <div className="absolute inset-0 pointer-events-none opacity-20" style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 1) 2px, transparent 2px), linear-gradient(90deg, rgba(0, 0, 0, 1) 2px, transparent 2px)`,
-          backgroundSize: '40px 40px'
-        }}></div>
-
-        {/* Top Right: Clock & Live Badge */}
-        <div className="absolute top-12 right-12 flex flex-col items-end gap-6 z-20">
-          <div className="text-6xl tracking-wider text-black bg-white border-8 border-black px-8 py-3 shadow-[8px_8px_0_0_rgba(0,0,0,1)] font-mono">
-            {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-          </div>
-          <div className="flex items-center gap-3 bg-black px-6 py-2 border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
-            <div className="w-5 h-5 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
-            <p className="text-3xl font-bold tracking-widest text-[#eaff04] mt-1">LIVE 24/7</p>
+        {/* Top Header: Clock & ON AIR Badge */}
+        <div className="flex justify-between items-start w-full">
+          <div></div> {/* Spacer */}
+          <div className="flex items-center gap-8">
+            <div className="text-5xl tracking-widest text-white/80 font-mono drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+              {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            </div>
+            
+            {/* ON AIR Neon Sign */}
+            <div className="flex items-center gap-4 bg-red-950/40 backdrop-blur-md px-8 py-3 rounded-xl border border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+              <motion.div 
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-4 h-4 bg-red-500 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.8)]"
+              />
+              <p className="text-4xl font-bold tracking-[0.2em] text-red-400 mt-1" style={{ textShadow: '0 0 10px rgba(239,68,68,0.8)' }}>
+                ON AIR
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Center Content Container */}
-        <div className="flex-1 flex px-16 pt-24 pb-32 gap-16 z-10 items-center justify-center">
+        {/* Center Content: Visuals & Panels */}
+        <div className="flex-1 flex gap-12 mt-8 items-center justify-center">
           
-          {/* Left: Now Playing (Album Art & Title) */}
-          <div className="flex-1 flex flex-col justify-center items-center relative mt-8">
+          {/* Left: Dynamic Bagheli Artwork Visual */}
+          <div className="flex-1 flex flex-col justify-center items-center">
             
-            {/* Dynamic Animated Typography Element instead of Vinyl/Album Art */}
+            {/* Pulsating Glowing Artwork */}
             <motion.div 
               animate={isPlaying ? { 
-                scale: [1, 1.05, 1],
-                rotate: [-2, 2, -2],
+                scale: [1, 1.03, 1],
                 boxShadow: [
-                  "16px 16px 0px 0px rgba(0, 0, 0, 1)",
-                  "24px 24px 0px 0px rgba(0, 0, 0, 1)",
-                  "16px 16px 0px 0px rgba(0, 0, 0, 1)"
+                  "0px 0px 30px 10px rgba(139, 92, 246, 0.2)",
+                  "0px 0px 80px 20px rgba(139, 92, 246, 0.6)",
+                  "0px 0px 30px 10px rgba(139, 92, 246, 0.2)"
                 ]
               } : {}}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="w-[520px] h-[520px] bg-[#eaff04] border-[12px] border-black relative flex flex-col justify-center items-center shadow-[16px_16px_0_0_rgba(0,0,0,1)] overflow-hidden"
+              className="w-[600px] h-[600px] rounded-3xl relative overflow-hidden bg-black/50 border border-white/10"
             >
-              {/* Subtle animated brutalist background pattern */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
-                backgroundImage: 'radial-gradient(circle at center, black 4px, transparent 4px)',
-                backgroundSize: '24px 24px'
-              }}></div>
-              
-              {/* Animated Text Content */}
-              <div className="z-10 flex flex-col items-center">
-                <motion.h1 
-                  animate={isPlaying ? { color: ["#000000", "#5b21b6", "#000000"] } : {}}
-                  transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                  className="text-8xl tracking-tighter leading-none text-center"
-                >
-                  BAGHELI
-                </motion.h1>
-                <motion.div
-                  animate={isPlaying ? { scale: [1, 1.1, 1] } : {}}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <h1 className="text-[140px] leading-none text-white drop-shadow-[8px_8px_0_rgba(0,0,0,1)]" style={{ WebkitTextStroke: '4px black' }}>
-                    VIBES
-                  </h1>
-                </motion.div>
-              </div>
+              <img 
+                src="/images/stations/bagheli_artwork.png" 
+                alt="Bagheli Vibes" 
+                className="w-full h-full object-cover scale-[1.02]"
+              />
             </motion.div>
 
-            {/* Brutalist Now Playing Tag */}
-            <div className="mt-16 text-center bg-white border-8 border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
-              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-[#eaff04] px-8 py-1 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-                <h2 className="text-3xl tracking-widest mt-1">NOW PLAYING</h2>
-              </div>
-              <h1 className="text-6xl truncate text-black mt-4">
-                {currentBlock?.songTitle || "Connecting..."}
+            {/* Now Playing Info (Glass Card) */}
+            <div className="mt-12 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 w-full max-w-2xl shadow-2xl flex flex-col items-center">
+              <p className="text-cyan-400 text-2xl tracking-[0.3em] font-medium uppercase mb-4 shadow-cyan-400/50 drop-shadow-md">
+                NOW PLAYING
+              </p>
+              <h1 className="text-5xl font-bold tracking-wide text-white text-center truncate w-full" style={{ textShadow: '0 0 15px rgba(255,255,255,0.4)' }}>
+                {currentBlock?.songTitle || "Connecting to Studio..."}
               </h1>
-              <p className="text-3xl text-gray-700 truncate mt-4 bg-[#c4b5fd] border-2 border-black inline-block px-4 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-                {currentBlock?.songArtist || "Future Radio"}
+              <p className="text-2xl text-white/60 tracking-wider truncate mt-3">
+                {currentBlock?.songArtist || "Future Radio India"}
               </p>
             </div>
           </div>
 
-          {/* Right: Up Next & QR & Visualizer */}
-          <div className="w-[640px] flex flex-col gap-10 h-[840px]">
+          {/* Right: Glassmorphism Panels (Visualizer & Up Next) */}
+          <div className="w-[500px] flex flex-col gap-8 h-[800px]">
             
-            {/* Visualizer */}
-            <div className="h-72 bg-white border-8 border-black p-8 flex flex-col justify-between shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
-              <div className="absolute -top-6 -left-6 bg-black text-[#eaff04] px-6 py-1 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] z-10 rotate-[-4deg]">
-                <h3 className="text-3xl tracking-widest mt-1">AUDIO STREAM</h3>
-              </div>
-              <div className="flex-1 flex items-end gap-3 overflow-hidden justify-between mt-6 px-4">
-                {[...Array(18)].map((_, i) => (
+            {/* Neon Visualizer Panel */}
+            <div className="h-64 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+              <h3 className="text-2xl tracking-[0.2em] text-white/80 uppercase">Audio Stream</h3>
+              
+              <div className="flex-1 flex items-end gap-2 overflow-hidden justify-between mt-8 px-2">
+                {[...Array(16)].map((_, i) => (
                   <motion.div
                     key={i}
                     animate={{
-                      height: isPlaying ? ["20%", `${Math.random() * 80 + 20}%`, "20%"] : "10%"
+                      height: isPlaying ? ["10%", `${Math.random() * 80 + 20}%`, "10%"] : "5%",
+                      backgroundColor: isPlaying ? ["#8b5cf6", "#06b6d4", "#8b5cf6"] : "#333"
                     }}
                     transition={{
-                      duration: Math.random() * 0.4 + 0.2,
+                      duration: Math.random() * 0.4 + 0.3,
                       repeat: Infinity,
                       ease: "easeInOut",
                       delay: Math.random() * 0.5
                     }}
-                    className="w-6 bg-[#c4b5fd] border-4 border-black"
+                    className="w-4 rounded-t-full shadow-[0_0_15px_rgba(139,92,246,0.6)]"
                   />
                 ))}
               </div>
             </div>
 
-            {/* Up Next */}
-            <div className="flex-1 bg-white border-8 border-black p-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)] overflow-hidden flex flex-col relative">
-              <div className="absolute -top-6 right-8 bg-black text-white px-6 py-1 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] z-10 rotate-[3deg]">
-                <h3 className="text-3xl tracking-widest mt-1">UP NEXT</h3>
-              </div>
-              <div className="flex flex-col gap-6 flex-1 overflow-hidden mt-6">
-                {upcomingBlocks.slice(0, 3).map((block, i) => (
-                  <div key={i} className="flex items-center gap-6 bg-[#eaff04] p-3 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:translate-x-2 transition-transform">
-                    <div className="w-16 h-16 bg-white border-4 border-black flex-shrink-0 flex items-center justify-center font-bold text-3xl">
-                      #{i + 1}
+            {/* Up Next Panel */}
+            <div className="flex-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl flex flex-col">
+              <h3 className="text-2xl tracking-[0.2em] text-white/80 uppercase mb-6">Up Next</h3>
+              <div className="flex flex-col gap-5 flex-1 overflow-hidden">
+                {upcomingBlocks.slice(0, 4).map((block, i) => (
+                  <div key={i} className="flex items-center gap-5 bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-cyan-500 rounded-lg flex items-center justify-center font-bold text-xl shadow-lg">
+                      {i + 1}
                     </div>
                     <div className="overflow-hidden">
-                      <p className="text-3xl text-black truncate leading-none mb-1">{block.songTitle}</p>
-                      <p className="text-xl text-gray-800 truncate leading-none">{block.songArtist}</p>
+                      <p className="text-2xl text-white truncate leading-tight tracking-wide">{block.songTitle}</p>
+                      <p className="text-lg text-white/50 truncate leading-tight mt-1">{block.songArtist}</p>
                     </div>
                   </div>
                 ))}
                 {upcomingBlocks.length === 0 && (
-                  <div className="text-black text-4xl flex h-full items-center justify-center">QUEUE IS EMPTY</div>
+                  <div className="text-white/40 text-2xl flex h-full items-center justify-center tracking-widest">
+                    QUEUE IS EMPTY
+                  </div>
                 )}
-              </div>
-            </div>
-
-            {/* QR Code */}
-            <div className="h-48 bg-black border-8 border-black p-6 flex items-center gap-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)]">
-              <div className="bg-white p-2 border-4 border-[#eaff04] shadow-[4px_4px_0_0_#eaff04] flex-shrink-0">
-                <QRCode value="https://www.thefutureradio.com" size={110} />
-              </div>
-              <div className="text-[#eaff04]">
-                <h3 className="text-5xl mb-2">LISTEN ON MOBILE</h3>
-                <p className="text-2xl text-gray-300">SCAN TO VISIT THEFUTURERADIO.COM</p>
               </div>
             </div>
 
           </div>
         </div>
 
-        {/* Scrolling Ticker Bottom Bar */}
-        <div className="h-24 bg-[#eaff04] w-full flex items-center overflow-hidden z-20 border-t-8 border-black shadow-[0_-12px_0_0_rgba(0,0,0,1)] absolute bottom-0">
-          <motion.div
-            animate={{ x: [1560, -3000] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="whitespace-nowrap text-5xl text-black pt-2"
-          >
-            ✦ YOU ARE LISTENING TO FUTURE RADIO ✦ 100% AUTONOMOUS STREAMING ✦ REGIONAL, DEVOTIONAL & INDIE ✦ LIVE 24/7 ✦ SCAN THE QR CODE TO LISTEN ON YOUR PHONE ✦ SUBSCRIBE TO MEDIA MAFIAS! ✦
-          </motion.div>
-        </div>
-
       </div>
+
+      {/* Sleek Dark Ticker */}
+      <div className="absolute bottom-0 w-full h-16 bg-black/80 backdrop-blur-2xl border-t border-white/10 z-40 flex items-center overflow-hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+        <motion.div
+          animate={{ x: [1920, -3000] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="whitespace-nowrap text-3xl tracking-[0.2em] text-white/70 font-light pt-1"
+        >
+          <span className="text-cyan-400 font-bold mx-8">✦</span>
+          YOU ARE LISTENING TO FUTURE RADIO
+          <span className="text-purple-400 font-bold mx-8">✦</span>
+          100% AUTONOMOUS PREMIUM FOLK RADIO
+          <span className="text-cyan-400 font-bold mx-8">✦</span>
+          LIVE 24/7
+          <span className="text-purple-400 font-bold mx-8">✦</span>
+          SUBSCRIBE TO MEDIA MAFIAS!
+        </motion.div>
+      </div>
+
     </div>
   );
 }
