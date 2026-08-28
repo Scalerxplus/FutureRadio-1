@@ -39,8 +39,11 @@ async function startStream() {
   page.on('console', msg => console.log('PAGE LOG:', msg.text()));
   page.on('pageerror', err => console.log('PAGE ERROR:', err.toString()));
 
-  console.log(`Navigating to ${TARGET_URL}...`);
-  await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
+  const timestampUrl = `${TARGET_URL}?t=${Date.now()}`;
+  console.log(`Navigating to ${timestampUrl}...`);
+
+  // Navigate to URL
+  await page.goto(timestampUrl, { waitUntil: 'networkidle2' });
 
   // Auto-click the center of the page to trigger unlock audio gestures
   console.log("Simulating user interaction to unlock audio engine...");
