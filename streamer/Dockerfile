@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     procps \
     ffmpeg \
     xvfb \
+    xauth \
     dbus \
     dbus-x11 \
     libx11-xcb1 \
