@@ -34,36 +34,44 @@ export default function YouTubeClient() {
         backgroundSize: '40px 40px'
       }}></div>
 
-      {/* Top Bar: Logos & Time */}
-      <div className="w-full h-32 px-12 flex justify-between items-center z-10 bg-[#FFD1DC] border-b-8 border-black shadow-[0_12px_0_0_rgba(0,0,0,1)]">
-        <div className="flex items-center space-x-6">
-          <div className="bg-white border-4 border-black p-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
-            <img src="/Logo Main.png" alt="Media Mafias" className="h-16 object-contain" />
+      {/* Top Bar: Floating Logos & Time */}
+      <div className="absolute top-0 w-full px-12 pt-12 flex justify-between items-start z-50 pointer-events-none">
+        {/* Top Left Logos (Stacked vertically) */}
+        <div className="flex flex-col gap-4">
+          <div className="bg-white border-4 border-black p-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center justify-center w-64 h-24">
+            <img src="/Logo Main.png" alt="Media Mafias" className="h-full object-contain" />
           </div>
-          <div className="flex flex-col justify-center bg-black text-white px-6 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] translate-y-[-4px]">
-            <h1 className="text-4xl tracking-widest leading-none">Future Radio</h1>
-            <div className="flex items-center gap-3 mt-1">
-              <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
-              <p className="text-xl font-bold tracking-widest text-[#98FB98]">LIVE 24/7</p>
-            </div>
+          <div className="bg-white border-4 border-black p-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center justify-center w-64 h-24">
+            <h1 className="text-4xl tracking-widest leading-none text-black text-center">FUTURE<br/>RADIO</h1>
+          </div>
+          <div className="bg-white border-4 border-black p-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center justify-center w-64 h-24">
+            <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="h-full object-contain" />
           </div>
         </div>
-        <div className="text-6xl tracking-wider text-black bg-white border-4 border-black px-8 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] font-mono translate-y-[-4px]">
-          {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+
+        {/* Top Right: Clock & Live Badge */}
+        <div className="flex flex-col items-end gap-4">
+          <div className="text-6xl tracking-wider text-black bg-white border-4 border-black px-8 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] font-mono">
+            {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          </div>
+          <div className="flex items-center gap-3 bg-black px-6 py-2 border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
+            <div className="w-5 h-5 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
+            <p className="text-3xl font-bold tracking-widest text-[#98FB98] mt-1">LIVE 24/7</p>
+          </div>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex p-12 gap-12 z-10 items-center">
+      <div className="flex-1 flex px-12 pt-12 pb-32 gap-12 z-10 items-center">
         
         {/* Left: Now Playing (Vinyl & Title) */}
-        <div className="flex-1 flex flex-col justify-center items-center relative">
+        <div className="flex-1 flex flex-col justify-center items-center relative mt-16 ml-32">
           
           {/* Ultra Realistic 3D Vinyl */}
           <motion.div 
             animate={{ rotate: isPlaying ? 360 : 0 }}
             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="w-[520px] h-[520px] rounded-full relative flex items-center justify-center shadow-[16px_16px_0_0_rgba(0,0,0,1)] border-8 border-black bg-neutral-900"
+            className="w-[560px] h-[560px] rounded-full relative flex items-center justify-center shadow-[20px_20px_0_0_rgba(0,0,0,1)] border-8 border-black bg-neutral-900"
             style={{
               background: `
                 radial-gradient(circle at center, #111 20%, #222 25%, #111 30%, #333 35%, #111 40%, #222 45%, #111 50%, #333 55%, #111 60%, #222 65%, #111 70%),
@@ -79,23 +87,24 @@ export default function YouTubeClient() {
               pointerEvents: 'none'
             }}></div>
 
-            {/* Bright Center Label for Logo contrast */}
-            <div className="w-72 h-72 rounded-full overflow-hidden z-10 border-8 border-black relative bg-[#98FB98] flex flex-col items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-              <img src="/Logo Main.png" alt="Future Radio" className="w-3/4 opacity-90 mix-blend-multiply" />
+            {/* Bright Center Label with Future Radio Icon */}
+            <div className="w-[300px] h-[300px] rounded-full overflow-hidden z-10 border-[12px] border-black relative bg-[#98FB98] flex flex-col items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+              <img src="/icons/icon-512x512.png" alt="Future Radio" className="w-[180px] h-[180px] object-contain drop-shadow-md" />
               
-              <div className="w-6 h-6 rounded-full bg-black border-4 border-[#FFD1DC] shadow-inner absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"></div>
+              {/* Spindle hole */}
+              <div className="w-8 h-8 rounded-full bg-black border-4 border-white shadow-inner absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"></div>
             </div>
           </motion.div>
 
           {/* Brutalist Now Playing Tag */}
-          <div className="mt-12 text-center bg-white border-8 border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
+          <div className="mt-16 text-center bg-white border-8 border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative">
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-[#98FB98] px-6 py-1 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-              <h2 className="text-2xl tracking-widest">NOW PLAYING</h2>
+              <h2 className="text-2xl tracking-widest mt-1">NOW PLAYING</h2>
             </div>
-            <h1 className="text-6xl truncate text-black mt-2">
+            <h1 className="text-6xl truncate text-black mt-4">
               {currentBlock?.songTitle || "Connecting..."}
             </h1>
-            <p className="text-3xl text-gray-700 truncate mt-2 bg-[#FFD1DC] border-2 border-black inline-block px-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+            <p className="text-3xl text-gray-700 truncate mt-4 bg-[#FFD1DC] border-2 border-black inline-block px-4 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
               {currentBlock?.songArtist || "Future Radio"}
             </p>
           </div>
