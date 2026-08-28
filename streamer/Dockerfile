@@ -21,6 +21,9 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
     pulseaudio \
     chromium \
+    fonts-indic \
+    fonts-noto \
+    fonts-noto-cjk \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && adduser root pulse-access \
