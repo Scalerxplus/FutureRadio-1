@@ -25,6 +25,9 @@ async function startStream() {
       '--disable-setuid-sandbox',
       '--autoplay-policy=no-user-gesture-required',
       '--window-size=1920,1080',
+      '--window-position=0,0',
+      '--start-fullscreen',
+      '--kiosk',
       '--disable-gpu', // Use CPU for rendering
       '--hide-scrollbars'
     ]
@@ -43,16 +46,20 @@ async function startStream() {
   await page.mouse.click(960, 540);
   await new Promise(r => setTimeout(r, 2000));
   
-  await page.screenshot({path: 'debug.png'});
-  console.log("Screenshot saved to debug.png");
-
-  console.log("Capturing stream via puppeteer-stream...");
-  const stream = await getStream(page, { audio: true, video: true, frameSize: 1000 });
-  
-  console.log("Spawning FFmpeg...");
+  console.log("Spawning FFmpeg for X11 grab...");
+  const display = process.env.DISPLAY || ':99';
   const ffmpegArgs = [
     '-loglevel', 'info',
-    '-i', '-', // Read from stdin
+    
+    // Video input
+    '-f', 'x11grab',
+    '-video_size', '1920x1080',
+    '-framerate', '30',
+    '-i', display,
+    
+    // Audio input
+    '-f', 'pulse',
+    '-i', 'default',
     
     // Video Encoding
     '-c:v', 'libx264',
@@ -61,37 +68,36 @@ async function startStream() {
     '-maxrate', '3000k',
     '-bufsize', '6000k',
     '-pix_fmt', 'yuv420p',
-    '-g', '50', // Keyframe interval (2 seconds for 25fps)
-    '-r', '25', // Frame rate
+    '-g', '60', // Keyframe interval (2s for 30fps)
     
     // Audio Encoding
     '-c:a', 'aac',
     '-b:a', '128k',
     '-ar', '44100',
     
-    // Output Format
+    // Output format
     '-f', 'flv',
     RTMP_URL
   ];
 
   const ffmpeg = spawn('ffmpeg', ffmpegArgs);
+  console.log("STREAM IS LIVE!");
 
-  // Pipe the browser stream directly into FFmpeg
-  stream.pipe(ffmpeg.stdin);
+  ffmpeg.stdout.on('data', (data) => {
+    console.log(`[FFmpeg] ${data.toString()}`);
+  });
 
   ffmpeg.stderr.on('data', (data) => {
     console.log(`[FFmpeg] ${data.toString()}`);
   });
 
   ffmpeg.on('close', (code) => {
-    console.log(`FFmpeg exited with code ${code}. Re-spawning in 10s...`);
+    console.log(`[FFmpeg] Process exited with code ${code}. Re-spawning in 10s...`);
     setTimeout(() => {
-        stream.destroy();
         browser.close();
         startStream();
     }, 10000);
   });
-
   console.log("STREAM IS LIVE!");
 }
 
