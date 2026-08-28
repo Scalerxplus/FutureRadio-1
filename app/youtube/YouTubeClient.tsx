@@ -95,25 +95,38 @@ export default function YouTubeClient() {
           {/* Left: Dynamic Bagheli Artwork Visual */}
           <div className="flex-1 flex flex-col justify-center items-center">
             
-            {/* Pulsating Glowing Artwork */}
-            <motion.div 
-              animate={isPlaying ? { 
-                scale: [1, 1.03, 1],
-                boxShadow: [
-                  "0px 0px 30px 10px rgba(139, 92, 246, 0.2)",
-                  "0px 0px 80px 20px rgba(139, 92, 246, 0.6)",
-                  "0px 0px 30px 10px rgba(139, 92, 246, 0.2)"
-                ]
-              } : {}}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="w-[600px] h-[600px] rounded-3xl relative overflow-hidden bg-black/50 border border-white/10"
-            >
-              <img 
-                src="/images/stations/bagheli_artwork.png" 
-                alt="Bagheli Vibes" 
-                className="w-full h-full object-cover scale-[1.02]"
+            {/* Rotating RGB Neon Circular Frame */}
+            <div className="relative w-[550px] h-[550px] flex items-center justify-center">
+              
+              {/* Rotating RGB Glow (Blurred for Neon Effect) */}
+              <motion.div 
+                animate={isPlaying ? { rotate: 360 } : {}}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-[-15px] rounded-full blur-[20px] opacity-80"
+                style={{
+                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
+                }}
               />
-            </motion.div>
+              
+              {/* Rotating RGB Border */}
+              <motion.div 
+                animate={isPlaying ? { rotate: 360 } : {}}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-[-6px] rounded-full"
+                style={{
+                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
+                }}
+              />
+
+              {/* Center Image Container (Perfect Circle) */}
+              <div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10">
+                <img 
+                  src="/images/stations/bagheli_artwork.png" 
+                  alt="Bagheli Vibes" 
+                  className="w-full h-full object-cover scale-105"
+                />
+              </div>
+            </div>
 
             {/* Now Playing Info (Glass Card) */}
             <div className="mt-12 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 w-full max-w-2xl shadow-2xl flex flex-col items-center">
