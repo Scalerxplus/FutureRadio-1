@@ -54,13 +54,13 @@ export default function YouTubeClient() {
       {/* Left Sidebar: Glassmorphism Logos */}
       <div className="w-[360px] h-full bg-black/40 backdrop-blur-2xl border-r border-white/10 z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_30px_rgba(0,0,0,0.5)]">
         <div className="w-64 h-64 flex items-center justify-center">
-          <img src="/Logo Main.png" alt="Media Mafias" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+          <img src="/icons/Media Mafias Logo.png" alt="Media Mafias" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
         </div>
         <div className="w-72 h-48 flex items-center justify-center">
-          <img src="/logo-transparent.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-125" />
+          <img src="/icons/Future Radio Logo.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-125" />
         </div>
         <div className="w-64 h-64 flex items-center justify-center">
-          <img src="/Bagheli_Logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-110" />
+          <img src="/icons/Bagheli Logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-110" />
         </div>
       </div>
 
