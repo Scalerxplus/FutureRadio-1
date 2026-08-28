@@ -109,9 +109,9 @@ async function startStream() {
     // Video Encoding
     '-c:v', 'libx264',
     '-preset', 'veryfast',
-    '-b:v', '3000k',
-    '-maxrate', '3000k',
-    '-bufsize', '6000k',
+    '-b:v', '4500k',
+    '-maxrate', '4500k',
+    '-bufsize', '9000k',
     '-pix_fmt', 'yuv420p',
     '-g', '60', // Keyframe interval (2s for 30fps)
     
