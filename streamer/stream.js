@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer-core');
 const { getStream } = require('puppeteer-stream');
 const { spawn } = require('child_process');
 
-const TARGET_URL = process.env.TARGET_URL || 'https://futureradio.vercel.app';
+const TARGET_URL = process.env.TARGET_URL || 'https://www.thefutureradio.com/radio';
 const YOUTUBE_RTMP_KEY = process.env.YOUTUBE_RTMP_KEY;
 
 if (!YOUTUBE_RTMP_KEY) {
