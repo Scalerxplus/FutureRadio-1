@@ -31,6 +31,7 @@
     "node-edge-tts": "^1.2.10",
     "react": "^18",
     "react-dom": "^18",
+    "react-qr-code": "^2.2.0",
     "react-simple-maps": "^3.0.0",
     "xstate": "^5.31.1",
     "yt-search": "^2.13.1",

@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer-core');
 const { getStream } = require('puppeteer-stream');
 const { spawn } = require('child_process');
 
-const TARGET_URL = process.env.TARGET_URL || 'https://www.thefutureradio.com/radio';
+const TARGET_URL = process.env.TARGET_URL || 'https://www.thefutureradio.com/youtube';
 const YOUTUBE_RTMP_KEY = process.env.YOUTUBE_RTMP_KEY;
 
 if (!YOUTUBE_RTMP_KEY) {
@@ -42,55 +42,11 @@ async function startStream() {
   console.log(`Navigating to ${TARGET_URL}...`);
   await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
 
-  // Inject a premium animated background and scale the radio player
-  console.log("Injecting premium visual styles...");
-  await page.addStyleTag({
-    content: `
-      body {
-        background: linear-gradient(-45deg, #FFB6C1, #98FB98, #FFD1DC, #FFFDD0) !important;
-        background-size: 400% 400% !important;
-        animation: gradientBG 15s ease infinite !important;
-      }
-      @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-      /* Optional: scale up the main player slightly to fill 1080p better */
-      .max-w-\\[420px\\] {
-        transform: scale(1.15);
-        transform-origin: center center;
-        box-shadow: 20px 20px 0px 0px rgba(0,0,0,1) !important;
-      }
-    `
-  });
-
-  // Auto-click the center of the page to trigger any unlock audio gestures
+  // Auto-click the center of the page to trigger unlock audio gestures
   console.log("Simulating user interaction to unlock audio engine...");
   await page.mouse.click(960, 540);
   await new Promise(r => setTimeout(r, 2000));
-  
-  // Try to find and click the Play Radio button
-  try {
-    const playBtn = await page.$('button[aria-label="Play Radio"]');
-    if (playBtn) {
-      console.log("Found Play Radio button, clicking it...");
-      await playBtn.click();
-      await new Promise(r => setTimeout(r, 1000));
-    }
-  } catch(e) {}
 
-  // Also try clicking anywhere that says "Bagheli Vibe" or "Bagheli" if it's a tab
-  try {
-    await page.evaluate(() => {
-      const elements = Array.from(document.querySelectorAll('button, div, span'));
-      const bagheliEl = elements.find(el => el.textContent && el.textContent.toLowerCase().includes('bagheli vibe'));
-      if (bagheliEl && typeof bagheliEl.click === 'function') {
-        bagheliEl.click();
-      }
-    });
-  } catch(e) {}
-  
   console.log("Spawning FFmpeg for X11 grab...");
   const display = process.env.DISPLAY || ':99';
   const ffmpegArgs = [
