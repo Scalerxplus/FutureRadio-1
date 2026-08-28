@@ -69,25 +69,44 @@ export default function YouTubeClient() {
           {/* Left: Now Playing (Album Art & Title) */}
           <div className="flex-1 flex flex-col justify-center items-center relative mt-8">
             
-            {/* Glowing Pulsating Album Art */}
+            {/* Dynamic Animated Typography Element instead of Vinyl/Album Art */}
             <motion.div 
               animate={isPlaying ? { 
                 scale: [1, 1.05, 1],
+                rotate: [-2, 2, -2],
                 boxShadow: [
-                  "0px 0px 0px 0px rgba(0, 0, 0, 1)",
-                  "0px 0px 40px 20px rgba(234, 255, 4, 0.8)",
-                  "0px 0px 0px 0px rgba(0, 0, 0, 1)"
+                  "16px 16px 0px 0px rgba(0, 0, 0, 1)",
+                  "24px 24px 0px 0px rgba(0, 0, 0, 1)",
+                  "16px 16px 0px 0px rgba(0, 0, 0, 1)"
                 ]
               } : {}}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="w-[520px] h-[520px] bg-neutral-900 border-8 border-black relative overflow-hidden shadow-[16px_16px_0_0_rgba(0,0,0,1)]"
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="w-[520px] h-[520px] bg-[#eaff04] border-[12px] border-black relative flex flex-col justify-center items-center shadow-[16px_16px_0_0_rgba(0,0,0,1)] overflow-hidden"
             >
-              <img 
-                src={currentBlock?.coverArt || "/icons/icon-512x512.png"} 
-                alt="Album Art" 
-                className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.src = "/icons/icon-512x512.png"; }}
-              />
+              {/* Subtle animated brutalist background pattern */}
+              <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
+                backgroundImage: 'radial-gradient(circle at center, black 4px, transparent 4px)',
+                backgroundSize: '24px 24px'
+              }}></div>
+              
+              {/* Animated Text Content */}
+              <div className="z-10 flex flex-col items-center">
+                <motion.h1 
+                  animate={isPlaying ? { color: ["#000000", "#5b21b6", "#000000"] } : {}}
+                  transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                  className="text-8xl tracking-tighter leading-none text-center"
+                >
+                  BAGHELI
+                </motion.h1>
+                <motion.div
+                  animate={isPlaying ? { scale: [1, 1.1, 1] } : {}}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <h1 className="text-[140px] leading-none text-white drop-shadow-[8px_8px_0_rgba(0,0,0,1)]" style={{ WebkitTextStroke: '4px black' }}>
+                    VIBES
+                  </h1>
+                </motion.div>
+              </div>
             </motion.div>
 
             {/* Brutalist Now Playing Tag */}
