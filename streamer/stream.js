@@ -32,6 +32,10 @@ async function startStream() {
   });
 
   const page = await browser.newPage();
+  
+  page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+  page.on('pageerror', err => console.log('PAGE ERROR:', err.toString()));
+
   console.log(`Navigating to ${TARGET_URL}...`);
   await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
 
@@ -39,12 +43,16 @@ async function startStream() {
   console.log("Simulating user interaction to unlock audio engine...");
   await page.mouse.click(960, 540);
   await new Promise(r => setTimeout(r, 2000));
+  
+  await page.screenshot({path: 'debug.png'});
+  console.log("Screenshot saved to debug.png");
 
   console.log("Capturing stream via puppeteer-stream...");
   const stream = await getStream(page, { audio: true, video: true, frameSize: 1000 });
   
   console.log("Spawning FFmpeg...");
   const ffmpegArgs = [
+    '-loglevel', 'info',
     '-i', '-', // Read from stdin
     
     // Video Encoding
