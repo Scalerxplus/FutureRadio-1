@@ -30,6 +30,34 @@ export default function YouTubeClient() {
   const { currentBlock, upcomingBlocks, phase, isPlaying, setIsPlaying } = useAudioStore();
   const [time, setTime] = useState(new Date());
 
+  // Hardware-accelerated CSS animations for buttery smooth UI in Puppeteer
+  const globalStyles = `
+    @keyframes eqPulse {
+      0%, 100% { height: 10%; background-color: #8b5cf6; }
+      50% { height: var(--eq-h); background-color: #06b6d4; }
+    }
+    .eq-bar {
+      width: 1rem;
+      border-top-left-radius: 9999px;
+      border-top-right-radius: 9999px;
+      box-shadow: 0 0 15px rgba(139,92,246,0.6);
+      background-color: #333;
+      transition: height 0.3s ease, background-color 0.3s ease;
+      height: 5%;
+    }
+    .eq-bar.playing {
+      animation: eqPulse var(--eq-d) ease-in-out infinite;
+      animation-delay: var(--eq-del);
+    }
+    @keyframes smoothSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .smooth-spin {
+      animation: smoothSpin 4s linear infinite;
+    }
+  `;
+
   // Clock
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
@@ -74,14 +102,14 @@ export default function YouTubeClient() {
 
       {/* Left Sidebar: Glassmorphism Logos */}
       <div className="w-[360px] h-full bg-black/40 backdrop-blur-2xl border-r border-white/10 z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_30px_rgba(0,0,0,0.5)]">
-        <div className="w-64 h-64 flex items-center justify-center">
+        <div className="w-56 h-56 flex items-center justify-center p-2">
           <img src="/icons/media-mafias-logo.png" alt="Media Mafias" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
         </div>
-        <div className="w-72 h-48 flex items-center justify-center">
-          <img src="/icons/future-radio-logo.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-125" />
+        <div className="w-56 h-56 flex items-center justify-center p-2">
+          <img src="/icons/future-radio-logo.png" alt="Future Radio" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
         </div>
-        <div className="w-64 h-64 flex items-center justify-center">
-          <img src="/icons/bagheli-logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-110" />
+        <div className="w-56 h-56 flex items-center justify-center p-2">
+          <img src="/icons/bagheli-logo.png" alt="Bagheli Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
         </div>
       </div>
 
@@ -120,20 +148,16 @@ export default function YouTubeClient() {
             <div className="relative w-[550px] h-[550px] flex items-center justify-center">
               
               {/* Rotating RGB Glow (Blurred for Neon Effect) */}
-              <motion.div 
-                animate={isPlaying ? { rotate: 360 } : {}}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[-15px] rounded-full blur-[20px] opacity-80"
+              <div 
+                className={`absolute inset-[-15px] rounded-full blur-[20px] opacity-80 ${isPlaying ? 'smooth-spin' : ''}`}
                 style={{
                   background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
                 }}
               />
               
               {/* Rotating RGB Border */}
-              <motion.div 
-                animate={isPlaying ? { rotate: 360 } : {}}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[-6px] rounded-full"
+              <div 
+                className={`absolute inset-[-6px] rounded-full ${isPlaying ? 'smooth-spin' : ''}`}
                 style={{
                   background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
                 }}
@@ -172,19 +196,14 @@ export default function YouTubeClient() {
               
               <div className="flex-1 flex items-end gap-2 overflow-hidden justify-between mt-8 px-2">
                 {[...Array(16)].map((_, i) => (
-                  <motion.div
+                  <div
                     key={i}
-                    animate={{
-                      height: isPlaying ? ["10%", `${Math.random() * 80 + 20}%`, "10%"] : "5%",
-                      backgroundColor: isPlaying ? ["#8b5cf6", "#06b6d4", "#8b5cf6"] : "#333"
-                    }}
-                    transition={{
-                      duration: Math.random() * 0.4 + 0.3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: Math.random() * 0.5
-                    }}
-                    className="w-4 rounded-t-full shadow-[0_0_15px_rgba(139,92,246,0.6)]"
+                    className={`eq-bar ${isPlaying ? 'playing' : ''}`}
+                    style={{
+                      '--eq-h': `${Math.floor(Math.random() * 70 + 20)}%`,
+                      '--eq-d': `${(Math.random() * 0.4 + 0.3).toFixed(2)}s`,
+                      '--eq-del': `${(Math.random() * 0.5).toFixed(2)}s`
+                    } as React.CSSProperties}
                   />
                 ))}
               </div>
