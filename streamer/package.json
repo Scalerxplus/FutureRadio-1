@@ -4,7 +4,7 @@
   "description": "Headless YouTube RTMP Streamer for Future Radio",
   "main": "stream.js",
   "scripts": {
-    "start": "rm -f /tmp/.X99-lock && xvfb-run --server-args=\"-screen 0 1920x1080x24\" node stream.js"
+    "start": "rm -f /tmp/.X99-lock && pulseaudio -D --system --disallow-exit --disallow-module-loading || true && xvfb-run --server-args=\"-screen 0 1920x1080x24\" node stream.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
