@@ -123,7 +123,17 @@ export default function YouTubeClient() {
         
         {/* Top Header: Clock & ON AIR Badge */}
         <div className="flex justify-between items-start w-full">
-          <div></div> {/* Spacer */}
+          {/* QR Code */}
+          <div className="bg-white border-4 border-black p-3 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex gap-4 items-center">
+            <div className="border-2 border-black p-1 bg-white">
+              <QRCode value="https://thefutureradio.com" size={72} bgColor="#ffffff" fgColor="#000000" level="H" />
+            </div>
+            <div className="flex flex-col pr-2">
+              <p className="text-2xl font-black font-khand uppercase leading-none tracking-wide">Scan to</p>
+              <p className="text-4xl font-black font-khand uppercase text-[#FF69B4] leading-none tracking-wide mt-1">Listen</p>
+              <p className="text-2xl font-black font-khand uppercase leading-none tracking-wide mt-1">Live</p>
+            </div>
+          </div>
           <div className="flex items-center">
             <div className="bg-white border-4 border-black px-6 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center">
               <div className="text-5xl font-black font-khand tracking-widest text-black">
