@@ -17,7 +17,7 @@ export default function EntrySplashPage() {
   const { setRadioSection, setCityId } = useCityStore();
   const { isPlaying, setIsPlaying } = useAudioStore();
   const [mounted, setMounted] = useState(false);
-  const [listeners, setListeners] = useState(10438);
+  const [listeners, setListeners] = useState(5638);
 
   const containerRef = useRef(null);
 
@@ -359,26 +359,30 @@ export default function EntrySplashPage() {
             <div className="flex flex-col items-start">
               <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight mb-4 text-[#E5FF00] drop-shadow-[2px_2px_0px_rgba(255,255,255,0.2)]">The Future Radio Network</h2>
               <p className="text-white/80 font-bold mb-6 max-w-sm">
-                India's premier autonomous AI-powered regional, devotional, and independent audio network. Broadcasting raw culture 24/7.
+                India's premier autonomous AI-powered regional, devotional, and independent radio network. Broadcasting raw culture 24/7.
               </p>
-              <div className="bg-white text-black font-black text-xs px-3 py-1 uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(229,255,0,1)] transform -rotate-1 hover:rotate-0 transition-transform">
-                UDYAM-MP-38-0052942
-              </div>
             </div>
             
             {/* ScalerX Lab */}
             <div className="flex flex-col items-start">
-              <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#00E5FF]">A ScalerX Lab Platform</h3>
-              <p className="text-white/80 font-bold mb-4">
-                Incubated, engineered, and powered by <strong className="text-white">ScalerX Lab</strong>. We push the boundaries of generative AI and autonomous media distribution to redefine how India consumes local audio.
+              <a href="https://scalerxlab.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#00E5FF]">A ScalerX Lab Platform</h3>
+              </a>
+              <p className="text-white/80 font-bold mb-6">
+                Incubated, engineered, and powered by <a href="https://scalerxlab.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">ScalerX Lab</a>. We push the boundaries of generative AI and autonomous media distribution to redefine how India consumes local audio.
               </p>
+              <div className="bg-white text-black font-black text-xs px-3 py-1 uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(0,229,255,1)] transform -rotate-1 hover:rotate-0 transition-transform">
+                UDYAM-MP-38-0052942
+              </div>
             </div>
 
             {/* Media Mafias */}
             <div className="flex flex-col items-start">
-              <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#FF69B4]">Curated by Media Mafias</h3>
+              <a href="https://mediamafias.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#FF69B4]">Curated by Media Mafias</h3>
+              </a>
               <p className="text-white/80 font-bold">
-                Handpicked underground talent, raw regional stories, and pure spiritual streams curated by the <strong className="text-white">Media Mafias</strong> collective. Where the underground becomes mainstream.
+                Handpicked underground talent, raw regional stories, and pure spiritual streams curated by the <a href="https://mediamafias.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">Media Mafias</a> collective. Where the underground becomes mainstream.
               </p>
             </div>
 

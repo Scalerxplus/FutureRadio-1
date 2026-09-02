@@ -50,10 +50,9 @@ export const dialectMarkers: DialectMarker[] = [
 ];
 export const REGIONAL_STATIONS = [
   { id: 'bagheli', name: 'Bagheli Vibe', region: 'Vindhya Region', listeners: '2.1k', comingSoon: false, image: '/assets/stations/bagheli_artwork.png', color: '#9B59B6' },
-  { id: 'bhojpuri', name: 'Bhojpuri Vibe', region: 'Bihar & UP', listeners: '5.4k', comingSoon: true, image: '/assets/stations/bhojpuri_artwork.png', color: '#E74C3C' },
   { id: 'awadhi', name: 'Awadhi Vibe', region: 'Awadh Region', listeners: '3.2k', comingSoon: true, image: '/assets/stations/awadhi_artwork.png', color: '#D35400' },
-  { id: 'maithili', name: 'Maithili Vibe', region: 'Mithila', listeners: '1.8k', comingSoon: true, image: '/assets/stations/maithili_artwork.png', color: '#F39C12' },
   { id: 'bundeli', name: 'Bundeli Vibe', region: 'Bundelkhand', listeners: '1.9k', comingSoon: true, image: '/assets/stations/bundeli_artwork.png', color: '#E67E22' },
+  { id: 'chhattisgarhi', name: 'Chhattisgarhi Vibe', region: 'Chhattisgarh', listeners: '2.4k', comingSoon: true, image: '/assets/stations/chhattisgarhi_artwork.png', color: '#8E44AD' },
 ];
 
 export const DEVOTIONAL_STATIONS = [
