@@ -121,13 +121,13 @@ export default function EntrySplashPage() {
             <div aria-hidden="true" className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.2] md:leading-[1.1] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw] text-center">
               भारत का #1 <br />
               <span className="font-sans font-black tracking-tighter">
-                Virtual
+                Indie
                 <span className="relative inline-block mx-4 text-[#E5FF00] drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
                   &
                   <Speaker className="absolute -top-4 -left-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#FF69B4] transform -rotate-12 shadow-sm" strokeWidth={1.5} />
                   <Speaker className="absolute -top-4 -right-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#00E5FF] transform rotate-12 shadow-sm" strokeWidth={1.5} />
                 </span> 
-                INDIE
+                FOLK
               </span> <br />
               Radio नेटवर्क
             </div>

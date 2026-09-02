@@ -42,7 +42,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
   title: "Future Radio India | Regional, Devotional & Folk Audio Network",
-  description: "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, a regional audio network built for Bharat.",
+  description: "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, an Indie & Folk audio network built for Bharat.",
   keywords: [
     "devotional radio", "shiva devotional songs", "shiva bhajan", "shiva mantra", "ramayan", "radio ramayan", "ram", "ganesh", "krishna", "hanuman chalisa", "sundar kand", "ramcharit manas",
     "regional radio", "folk music india", "bagheli lokgeet", "up ke lokgeet", "rewa ke lokgeet", "satna ke lokgeet", "bhojpuri folk music", "bhojpuri music", "awadhi", "bundeli", "braj",
@@ -168,7 +168,7 @@ export default function RootLayout({
               "name": "Future Radio",
               "url": "https://thefutureradio.com",
               "logo": "https://thefutureradio.com/logo-badge.png",
-              "description": "India's first 100% autonomous, AI-powered virtual radio station. The New-age radio station.",
+              "description": "India's first 100% autonomous, AI-powered Indie & Folk radio station. The New-age radio station.",
               "sameAs": [
                 "https://thefutureradio.com"
               ]
