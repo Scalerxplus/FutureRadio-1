@@ -69,9 +69,9 @@ async function startStream() {
     // Video Encoding
     '-c:v', 'libx264',
     '-preset', 'veryfast',
-    '-b:v', '6800k',
-    '-maxrate', '6800k',
-    '-bufsize', '13600k',
+    '-b:v', '4000k',
+    '-maxrate', '4000k',
+    '-bufsize', '8000k',
     '-pix_fmt', 'yuv420p',
     '-g', '60', // Keyframe interval (2s for 30fps)
     
@@ -88,7 +88,7 @@ async function startStream() {
       '-f', 'tee',
       '-map', '0:v',
       '-map', '1:a',
-      `[f=flv]${RTMP_URL}|[f=flv]${FB_RTMP_URL}`
+      `[f=fifo:fifo_format=flv:drop_pkts_on_overflow=1:attempt_recovery=1:recovery_wait_time=1]${RTMP_URL}|[f=fifo:fifo_format=flv:drop_pkts_on_overflow=1:attempt_recovery=1:recovery_wait_time=1]${FB_RTMP_URL}`
     );
   } else {
     ffmpegArgs.push(
