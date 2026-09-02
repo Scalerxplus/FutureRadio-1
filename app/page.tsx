@@ -9,7 +9,7 @@ import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 import { Header } from "@/components/layout/Header";
 import { Play, Radio, Heart, Users, ArrowRight, Activity, Globe, Speaker } from "lucide-react";
-import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS } from "@/lib/data";
+import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS, INDIE_STATIONS } from "@/lib/data";
 
 export default function EntrySplashPage() {
   const router = useRouter();
@@ -209,6 +209,64 @@ export default function EntrySplashPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {DEVOTIONAL_STATIONS.map((station) => (
                   <Link href={`/devotional/${station.id}`} key={station.id} passHref legacyBehavior>
+                    <motion.a
+                      whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
+                      whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
+                      onClick={(e) => {
+                        if (station.comingSoon) e.preventDefault();
+                      }}
+                      className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col block ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200 pointer-events-none' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
+                      style={{ backgroundColor: station.color }}
+                    >
+                      <div className="aspect-square border-b-4 border-black bg-white relative">
+                        {station.image ? (
+                          <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
+                        )}
+                        
+                        {station.comingSoon && (
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
+                            <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="p-4 bg-white flex flex-col justify-between flex-grow">
+                        <div>
+                          <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
+                          <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
+                        </div>
+                        
+                        {!station.comingSoon && (
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                               <span className="text-[10px] font-black">{station.listeners}</span>
+                            </div>
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
+                              <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.a>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Indie Stations */}
+            <div className="mt-16">
+              <div className="flex items-center gap-4 mb-2">
+                <Link href="/indie"><h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block hover:text-[#FF69B4] transition-colors cursor-pointer">Underground, alternative, and raw talent.</h2></Link>
+                <div className="bg-[#FF69B4] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full hidden md:block">Indie</div>
+              </div>
+              <p className="text-lg md:text-xl font-bold text-black/70 mb-8 max-w-2xl">Discover India's vibrant independent music scene.</p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {INDIE_STATIONS.map((station) => (
+                  <Link href={`/indie/${station.id}`} key={station.id} passHref legacyBehavior>
                     <motion.a
                       whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
                       whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
