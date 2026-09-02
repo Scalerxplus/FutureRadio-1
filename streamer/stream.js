@@ -5,6 +5,7 @@ const { spawn } = require('child_process');
 
 const TARGET_URL = process.env.TARGET_URL || 'https://www.thefutureradio.com/youtube';
 const YOUTUBE_RTMP_KEY = process.env.YOUTUBE_RTMP_KEY;
+const FACEBOOK_RTMP_KEY = process.env.FACEBOOK_RTMP_KEY;
 
 if (!YOUTUBE_RTMP_KEY) {
   console.error("FATAL: YOUTUBE_RTMP_KEY environment variable is not set!");
@@ -77,12 +78,24 @@ async function startStream() {
     // Audio Encoding
     '-c:a', 'aac',
     '-b:a', '128k',
-    '-ar', '44100',
-    
-    // Output format
-    '-f', 'flv',
-    RTMP_URL
+    '-ar', '44100'
   ];
+
+  if (FACEBOOK_RTMP_KEY) {
+    console.log("FACEBOOK_RTMP_KEY detected. Enabling Simulcast to Facebook via tee muxer...");
+    const FB_RTMP_URL = `rtmps://live-api-s.facebook.com:443/rtmp/${FACEBOOK_RTMP_KEY}`;
+    ffmpegArgs.push(
+      '-f', 'tee',
+      '-map', '0:v',
+      '-map', '1:a',
+      `[f=flv]${RTMP_URL}|[f=flv]${FB_RTMP_URL}`
+    );
+  } else {
+    ffmpegArgs.push(
+      '-f', 'flv',
+      RTMP_URL
+    );
+  }
 
   const ffmpeg = spawn('ffmpeg', ffmpegArgs);
   console.log("STREAM IS LIVE!");
