@@ -61,6 +61,30 @@ export default function BagheliCampaignPage() {
     <div className="min-h-screen bg-[#F1F0EA] text-black font-sans selection:bg-[#E5FF00] selection:text-black overflow-x-hidden pt-24 pb-24">
       <Header />
       
+      {/* ── SEO HIDDEN CONTENT ── */}
+      <div className="sr-only">
+        <h2>The #1 Local Radio Station for Vindhya and Awadh</h2>
+        <p>
+          Welcome to Future Radio Bagheli, your ultimate destination for authentic regional audio. We are the premier 
+          <strong>Rewa radio station</strong> and <strong>Satna radio station</strong>, bringing you closer to your roots. 
+          Whether you are searching for a <strong>Maihar Radio Station</strong>, <strong>Shahdol Radio Station</strong>, 
+          <strong>Sidhi Radio Station</strong>, or <strong>Umaria Radio Station</strong>, our 24/7 broadcast covers the entire Vindhya region.
+        </p>
+        <p>
+          Immerse yourself in our massive collection of <strong>Bagheli Lokgeet</strong> and <strong>Bagheli Gaane</strong>. 
+          We feature traditional classics like <strong>Sohar</strong>, <strong>Dadar Song</strong>, and <strong>Kajari Folk Song Sawan Geet</strong>. 
+          Celebrate the monsoon with authentic <strong>Kajri</strong> and <strong>Hinduli lokgeet</strong>. Our library perfectly captures the essence of 
+          <strong>Rewa Satna ka logeet</strong> and <strong>Awadhi Lokgeet</strong>.
+        </p>
+        <p>
+          Looking for something fresh? Tune in for <strong>Modern Lokgeet</strong> and the latest <strong>Naye Bagheli Gaane</strong>. 
+          Future Radio is redefining the local listening experience, acting as the definitive <strong>Radio in Rewa</strong>, 
+          <strong>Radio in Satna</strong>, <strong>Radio in Sidhi</strong>, and <strong>Radio in Shahdol</strong>. We even reach audiences looking for 
+          <strong>Radio in Prayagraj</strong> and <strong>Radio in Mirzapur</strong>, connecting the entire Hindi and regional belt through 
+          autonomous, AI-powered broadcasting.
+        </p>
+      </div>
+      
       {/* ── HERO SECTION ── */}
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-16 flex flex-col md:flex-row items-center gap-12">
         <div className="flex-1 text-left">
