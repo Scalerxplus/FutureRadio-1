@@ -64,7 +64,8 @@ async function startStream() {
     
     // Audio input
     '-f', 'pulse',
-    '-i', 'default',
+    '-i', 'default'
+  ];
     
   if (FACEBOOK_RTMP_KEY) {
     console.log("FACEBOOK_RTMP_KEY detected. Enabling Dual Encode Simulcast...");
