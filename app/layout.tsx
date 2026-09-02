@@ -129,9 +129,9 @@ export default function RootLayout({
                 },
                 {
                   "@type": "WebSite",
-                  "name": "Future Radio India | Regional, Devotional & Folk Audio Network",
-                  "url": "https://thefutureradio.com",
-                  "description": "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, a regional audio network built for Bharat."
+                  "name": "Future Radio India | Regional, Devotional & Folk Radio Network",
+                  "url": "https://www.thefutureradio.com",
+                  "description": "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, a regional radio network built for Bharat."
                 },
                 {
                   "@type": "RadioChannel",

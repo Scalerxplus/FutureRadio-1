@@ -114,7 +114,7 @@ export default function EntrySplashPage() {
               Hyperlocal devotional, regional and folk audio for Bharat’s dialect-first audience.
             </h1>
             <p className="sr-only">
-              Future Radio is a regional and devotional audio network where listeners discover bhajans, folk music and local-language streams in formats that feel familiar, daily and culturally rooted.
+              Future Radio is a regional and devotional radio network where listeners discover bhajans, folk music and local-language streams in formats that feel familiar, daily and culturally rooted.
             </p>
 
             {/* Visible Hero Elements (UX Friendly) */}

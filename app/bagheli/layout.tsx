@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     canonical: "https://thefutureradio.com/bagheli",
   },
   openGraph: {
-    title: "Bagheli Radio Station | Vindhya's #1 Local Audio Network",
+    title: "Bagheli Radio Station | Vindhya's #1 Local Radio Network",
     description: "Stream Bagheli Lokgeet, Naye Bagheli Gaane, Sohar, and Kajari 24/7. Your local radio station for Rewa, Satna, and Sidhi.",
     url: "https://thefutureradio.com/bagheli",
     siteName: "Future Radio",
