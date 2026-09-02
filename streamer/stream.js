@@ -66,34 +66,28 @@ async function startStream() {
     '-f', 'pulse',
     '-i', 'default',
     
-    // Video Encoding
-    '-c:v', 'libx264',
-    '-preset', 'veryfast',
-    '-b:v', '4000k',
-    '-maxrate', '4000k',
-    '-bufsize', '8000k',
-    '-pix_fmt', 'yuv420p',
-    '-g', '60', // Keyframe interval (2s for 30fps)
-    
-    // Audio Encoding
-    '-c:a', 'aac',
-    '-b:a', '128k',
-    '-ar', '44100'
-  ];
-
   if (FACEBOOK_RTMP_KEY) {
-    console.log("FACEBOOK_RTMP_KEY detected. Enabling Simulcast to Facebook via tee muxer...");
+    console.log("FACEBOOK_RTMP_KEY detected. Enabling Dual Encode Simulcast...");
     const FB_RTMP_URL = `rtmps://live-api-s.facebook.com:443/rtmp/${FACEBOOK_RTMP_KEY}`;
     ffmpegArgs.push(
-      '-f', 'tee',
-      '-map', '0:v',
-      '-map', '1:a',
-      `[f=flv]${RTMP_URL}|[f=flv]${FB_RTMP_URL}`
+      // Output 1: YouTube
+      '-map', '0:v', '-map', '1:a',
+      '-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '4000k', '-maxrate', '4000k', '-bufsize', '8000k', '-pix_fmt', 'yuv420p', '-g', '60',
+      '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
+      '-f', 'flv', RTMP_URL,
+
+      // Output 2: Facebook
+      '-map', '0:v', '-map', '1:a',
+      '-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '4000k', '-maxrate', '4000k', '-bufsize', '8000k', '-pix_fmt', 'yuv420p', '-g', '60',
+      '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
+      '-f', 'flv', FB_RTMP_URL
     );
   } else {
     ffmpegArgs.push(
-      '-f', 'flv',
-      RTMP_URL
+      '-map', '0:v', '-map', '1:a',
+      '-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '4000k', '-maxrate', '4000k', '-bufsize', '8000k', '-pix_fmt', 'yuv420p', '-g', '60',
+      '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
+      '-f', 'flv', RTMP_URL
     );
   }
 
