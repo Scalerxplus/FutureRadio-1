@@ -351,23 +351,50 @@ export default function EntrySplashPage() {
           </div>
         </div>
 
-        {/* MASSIVE NEO-BRUTALIST SCROLLER */}
-        <div className="w-full bg-black border-y-[6px] border-black mt-auto py-2 overflow-hidden relative z-20">
-          <motion.div 
-            animate={{ x: [0, -2000] }}
-            transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
-            className="whitespace-nowrap flex items-center gap-10 font-khand font-black text-xl md:text-3xl uppercase text-white"
-          >
-            {[...stations, ...stations, ...stations, ...stations].map((station, i) => (
-              <div key={i} className="flex items-center gap-12">
-                <span className="hover:text-[#E5FF00] transition-colors cursor-default drop-shadow-[2px_2px_0px_rgba(255,255,255,0.3)]">
-                  {station}
-                </span>
-                <span className="text-[#E5FF00]">✦</span>
+        {/* NEO-BRUTALIST FOOTER */}
+        <footer className="w-full bg-black text-white border-t-8 border-black mt-auto py-16 px-6 relative z-20">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            
+            {/* Network Info */}
+            <div className="flex flex-col items-start">
+              <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight mb-4 text-[#E5FF00] drop-shadow-[2px_2px_0px_rgba(255,255,255,0.2)]">The Future Radio Network</h2>
+              <p className="text-white/80 font-bold mb-6 max-w-sm">
+                India's premier autonomous AI-powered regional, devotional, and independent audio network. Broadcasting raw culture 24/7.
+              </p>
+              <div className="bg-white text-black font-black text-xs px-3 py-1 uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(229,255,0,1)] transform -rotate-1 hover:rotate-0 transition-transform">
+                UDYAM-MP-38-0052942
               </div>
-            ))}
-          </motion.div>
-        </div>
+            </div>
+            
+            {/* ScalerX Lab */}
+            <div className="flex flex-col items-start">
+              <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#00E5FF]">A ScalerX Lab Platform</h3>
+              <p className="text-white/80 font-bold mb-4">
+                Incubated, engineered, and powered by <strong className="text-white">ScalerX Lab</strong>. We push the boundaries of generative AI and autonomous media distribution to redefine how India consumes local audio.
+              </p>
+            </div>
+
+            {/* Media Mafias */}
+            <div className="flex flex-col items-start">
+              <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#FF69B4]">Curated by Media Mafias</h3>
+              <p className="text-white/80 font-bold">
+                Handpicked underground talent, raw regional stories, and pure spiritual streams curated by the <strong className="text-white">Media Mafias</strong> collective. Where the underground becomes mainstream.
+              </p>
+            </div>
+
+          </div>
+          
+          <div className="max-w-7xl mx-auto mt-16 pt-8 border-t-4 border-white/20 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="font-black text-white/50 text-sm uppercase tracking-wide">
+              &copy; {new Date().getFullYear()} The Future Radio Network. All rights reserved.
+            </div>
+            <div className="flex items-center gap-6 text-white/50 font-bold text-sm uppercase">
+              <Link href="/privacy" className="hover:text-[#E5FF00] transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-[#FF69B4] transition-colors">Terms</Link>
+              <Link href="/partner" className="hover:text-[#00E5FF] transition-colors">Partner With Us</Link>
+            </div>
+          </div>
+        </footer>
 
       </main>
     </div>
