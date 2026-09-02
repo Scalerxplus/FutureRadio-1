@@ -88,7 +88,7 @@ async function startStream() {
       '-f', 'tee',
       '-map', '0:v',
       '-map', '1:a',
-      `[f=fifo:fifo_format=flv:drop_pkts_on_overflow=1:attempt_recovery=1:recovery_wait_time=1]${RTMP_URL}|[f=fifo:fifo_format=flv:drop_pkts_on_overflow=1:attempt_recovery=1:recovery_wait_time=1]${FB_RTMP_URL}`
+      `[f=flv]${RTMP_URL}|[f=flv]${FB_RTMP_URL}`
     );
   } else {
     ffmpegArgs.push(
