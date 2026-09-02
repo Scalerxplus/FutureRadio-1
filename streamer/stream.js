@@ -53,64 +53,53 @@ async function startStream() {
 
   console.log("Spawning FFmpeg for X11 grab...");
   const display = process.env.DISPLAY || ':99';
-  const ffmpegArgs = [
-    '-loglevel', 'info',
-    
-    // Video input
-    '-f', 'x11grab',
-    '-video_size', '1920x1080',
-    '-framerate', '30',
-    '-i', display,
-    
-    // Audio input
-    '-f', 'pulse',
-    '-i', 'default'
-  ];
-    
+  const spawnFFmpeg = (platformName, outputUrl) => {
+    const ffmpegArgs = [
+      '-loglevel', 'info',
+      // Video input
+      '-f', 'x11grab',
+      '-video_size', '1920x1080',
+      '-framerate', '30',
+      '-i', display,
+      // Audio input
+      '-f', 'pulse',
+      '-i', 'default',
+      // Encode
+      '-map', '0:v', '-map', '1:a',
+      '-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '4000k', '-maxrate', '4000k', '-bufsize', '8000k', '-pix_fmt', 'yuv420p', '-g', '60',
+      '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
+      '-f', 'flv', outputUrl
+    ];
+
+    const ffmpeg = spawn('ffmpeg', ffmpegArgs);
+    console.log(`[${platformName}] STREAM PROCESS STARTED!`);
+
+    ffmpeg.stdout.on('data', (data) => {
+      // Uncomment for verbose logging
+      // console.log(`[FFmpeg-${platformName}] ${data.toString()}`);
+    });
+
+    ffmpeg.stderr.on('data', (data) => {
+      console.log(`[FFmpeg-${platformName}] ${data.toString()}`);
+    });
+
+    ffmpeg.on('close', (code) => {
+      console.log(`[FFmpeg-${platformName}] Process exited with code ${code}. Re-spawning isolated stream in 10s...`);
+      setTimeout(() => {
+          spawnFFmpeg(platformName, outputUrl);
+      }, 10000);
+    });
+  };
+
+  // 1. Spawn YouTube Stream
+  spawnFFmpeg('YouTube', RTMP_URL);
+
+  // 2. Spawn Facebook Stream (Isolated)
   if (FACEBOOK_RTMP_KEY) {
-    console.log("FACEBOOK_RTMP_KEY detected. Enabling Dual Encode Simulcast...");
+    console.log("FACEBOOK_RTMP_KEY detected. Enabling Isolated Simulcast to Facebook...");
     const FB_RTMP_URL = `rtmps://live-api-s.facebook.com:443/rtmp/${FACEBOOK_RTMP_KEY}`;
-    ffmpegArgs.push(
-      // Output 1: YouTube
-      '-map', '0:v', '-map', '1:a',
-      '-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '4000k', '-maxrate', '4000k', '-bufsize', '8000k', '-pix_fmt', 'yuv420p', '-g', '60',
-      '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
-      '-f', 'flv', RTMP_URL,
-
-      // Output 2: Facebook
-      '-map', '0:v', '-map', '1:a',
-      '-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '4000k', '-maxrate', '4000k', '-bufsize', '8000k', '-pix_fmt', 'yuv420p', '-g', '60',
-      '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
-      '-f', 'flv', FB_RTMP_URL
-    );
-  } else {
-    ffmpegArgs.push(
-      '-map', '0:v', '-map', '1:a',
-      '-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '4000k', '-maxrate', '4000k', '-bufsize', '8000k', '-pix_fmt', 'yuv420p', '-g', '60',
-      '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
-      '-f', 'flv', RTMP_URL
-    );
+    spawnFFmpeg('Facebook', FB_RTMP_URL);
   }
-
-  const ffmpeg = spawn('ffmpeg', ffmpegArgs);
-  console.log("STREAM IS LIVE!");
-
-  ffmpeg.stdout.on('data', (data) => {
-    console.log(`[FFmpeg] ${data.toString()}`);
-  });
-
-  ffmpeg.stderr.on('data', (data) => {
-    console.log(`[FFmpeg] ${data.toString()}`);
-  });
-
-  ffmpeg.on('close', (code) => {
-    console.log(`[FFmpeg] Process exited with code ${code}. Re-spawning in 10s...`);
-    setTimeout(() => {
-        browser.close();
-        startStream();
-    }, 10000);
-  });
-  console.log("STREAM IS LIVE!");
 }
 
 startStream().catch(err => {
