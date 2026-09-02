@@ -41,16 +41,16 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Future Radio India | Regional, Devotional & Folk Audio Network",
-  description: "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, an Indie & Folk audio network built for Bharat.",
+  title: "Future Radio India | Regional, Devotional & Folk Radio Network",
+  description: "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, an Indie & Folk radio network built for Bharat.",
   keywords: [
     "devotional radio", "shiva devotional songs", "shiva bhajan", "shiva mantra", "ramayan", "radio ramayan", "ram", "ganesh", "krishna", "hanuman chalisa", "sundar kand", "ramcharit manas",
     "regional radio", "folk music india", "bagheli lokgeet", "up ke lokgeet", "rewa ke lokgeet", "satna ke lokgeet", "bhojpuri folk music", "bhojpuri music", "awadhi", "bundeli", "braj",
     "radio", "internet radio india", "future radio", "ai radio station", "new stations", "new structure", "new business model", "autonomous radio", "indie music"
   ],
   openGraph: {
-    title: "Future Radio | #1 Devotional, Regional & Folk Audio Network",
-    description: "Stream Shiva Bhajans, Hanuman Chalisa, Bagheli Lokgeet, Bhojpuri Music, and Regional Folk songs 24/7. The ultimate autonomous audio network.",
+    title: "Future Radio | #1 Devotional, Regional & Folk Radio Network",
+    description: "Stream Shiva Bhajans, Hanuman Chalisa, Bagheli Lokgeet, Bhojpuri Music, and Regional Folk songs 24/7. The ultimate autonomous radio network.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",
     images: [
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Radio | #1 Devotional, Regional & Folk Audio Network",
+    title: "Future Radio | #1 Devotional, Regional & Folk Radio Network",
     description: "Stream Shiva Bhajans, Bagheli Lokgeet, and Bhojpuri Music 24/7.",
     images: ["/og-image.jpg"],
   },
