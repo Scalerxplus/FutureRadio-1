@@ -49,14 +49,15 @@ export const dialectMarkers: DialectMarker[] = [
   { coordinates: [83.0, 23.0], name: "Surgujia", speakers: "1.7M+", engagement: "91", type: "NODE", networkStatus: "DEPLOYABLE", color: "#9B59B6", spread: { rx: 20, ry: 15, rotate: 10 }, majorCities: ["Ambikapur", "Surajpur", "Balrampur"], smartphonePenetration: 48 },
 ];
 export const REGIONAL_STATIONS = [
-  { id: 'bagheli', name: 'Bagheli Vibe', region: 'Vindhya Region', listeners: '2.1k', comingSoon: false, image: '/assets/stations/bagheli_artwork.png', color: '#9B59B6' },
-  { id: 'awadhi', name: 'Awadhi Vibe', region: 'Awadh Region', listeners: '3.2k', comingSoon: true, image: '/assets/stations/awadhi_artwork.png', color: '#D35400' },
-  { id: 'bundeli', name: 'Bundeli Vibe', region: 'Bundelkhand', listeners: '1.9k', comingSoon: true, image: '/assets/stations/bundeli_artwork.png', color: '#E67E22' },
-  { id: 'chhattisgarhi', name: 'Chhattisgarhi Vibe', region: 'Chhattisgarh', listeners: '2.4k', comingSoon: true, image: '/assets/stations/chhattisgarhi_artwork.png', color: '#8E44AD' },
+  { id: 'bagheli', name: 'Bagheli Vibes', region: 'Vindhya Region', listeners: '2.1k', comingSoon: false, image: '/assets/stations/bagheli_artwork.png', color: '#9B59B6' },
+  { id: 'awadhi', name: 'Awadhi Vibes', region: 'Awadh Region', listeners: '3.2k', comingSoon: true, image: '/assets/stations/awadhi_artwork.png', color: '#D35400' },
+  { id: 'bundeli', name: 'Bundeli Vibes', region: 'Bundelkhand', listeners: '1.9k', comingSoon: true, image: '/assets/stations/bundeli_artwork.png', color: '#E67E22' },
+  { id: 'chhattisgarhi', name: 'Chhattisgarhi Vibes', region: 'Chhattisgarh', listeners: '2.4k', comingSoon: true, image: '/assets/stations/chhattisgarhi_artwork.png', color: '#8E44AD' },
 ];
 
 export const DEVOTIONAL_STATIONS = [
   { id: 'bhakti', name: 'Bhakti Vibes', region: 'Devotional', listeners: '15k+', comingSoon: false, image: '/assets/stations/bhakti_artwork.jpg', color: '#8E44AD' },
+  { id: 'satsang', name: 'Satsang Vibes', region: 'Devotional', listeners: '12k+', comingSoon: true, image: '/assets/stations/satsang_artwork.png', color: '#16A085' },
 ];
 
 export const INDIE_STATIONS = [
