@@ -427,6 +427,12 @@
       "artist": "Media Mafias"
     },
     {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Badariya Kari Re Hari.mp3",
+      "duration": 273.432,
+      "title": "Badariya Kari Re Hari",
+      "artist": "Media Mafias"
+    },
+    {
       "path": "/local_audio_vault/regional/bagheli/5_Music/Bagiya Ma Aaye Bhagwan - Kajari.mp3",
       "duration": 319.392,
       "title": "Bagiya Ma Aaye Bhagwan - Kajari",
@@ -448,6 +454,12 @@
       "path": "/local_audio_vault/regional/bagheli/5_Music/Daras Ki Ta Bera Bhai.mp3",
       "duration": 353.856,
       "title": "Daras Ki Ta Bera Bhai",
+      "artist": "Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Dekhi Leb.mp3",
+      "duration": 153.192,
+      "title": "Dekhi Leb",
       "artist": "Media Mafias"
     },
     {
@@ -481,6 +493,12 @@
       "artist": "Media Mafias"
     },
     {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Janme Hain Krishna Murari - Sohar Geet.mp3",
+      "duration": 219.792,
+      "title": "Janme Hain Krishna Murari - Sohar Geet",
+      "artist": "Media Mafias"
+    },
+    {
       "path": "/local_audio_vault/regional/bagheli/5_Music/Kanha - Hinduli.mp3",
       "duration": 372.336,
       "title": "Kanha - Hinduli",
@@ -505,9 +523,9 @@
       "artist": "Media Mafias"
     },
     {
-      "path": "/local_audio_vault/regional/bagheli/5_Music/Lakhan Lutai Deb - Dadra.mp3",
+      "path": "/local_audio_vault/regional/bagheli/5_Music/Lakhan Lutai Deb - Sohar Dadra Female Version.mp3",
       "duration": 293.904,
-      "title": "Lakhan Lutai Deb - Dadra",
+      "title": "Lakhan Lutai Deb - Sohar Dadra Female Version",
       "artist": "Media Mafias"
     },
     {
@@ -541,21 +559,15 @@
       "artist": "Media Mafias"
     },
     {
-      "path": "/local_audio_vault/regional/bagheli/5_Music/Shiva Panchakshara Stotram Remastered.mp3",
-      "duration": 293.472,
-      "title": "Shiva Panchakshara Stotram Remastered",
-      "artist": "Media Mafias"
-    },
-    {
-      "path": "/local_audio_vault/regional/bagheli/5_Music/Shiva Panchakshara Stotram.mp3",
-      "duration": 338.064,
-      "title": "Shiva Panchakshara Stotram",
-      "artist": "Media Mafias"
-    },
-    {
       "path": "/local_audio_vault/regional/bagheli/5_Music/Shyama Aan Baso.mp3",
       "duration": 228.504,
       "title": "Shyama Aan Baso",
+      "artist": "Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/एही अँगना म लाखन लुटाई देब - Sohar Dadra Male Version.mp3",
+      "duration": 291.528,
+      "title": "एही अँगना म लाखन लुटाई देब - Sohar Dadra Male Version",
       "artist": "Media Mafias"
     },
     {
@@ -565,27 +577,9 @@
       "artist": "Media Mafias"
     },
     {
-      "path": "/local_audio_vault/regional/bagheli/5_Music/गुलाबी चुनरिया - Dadra.mp3",
-      "duration": 394.584,
-      "title": "गुलाबी चुनरिया - Dadra",
-      "artist": "Media Mafias"
-    },
-    {
       "path": "/local_audio_vault/regional/bagheli/5_Music/चुनरिया भींजै - Gailhai.mp3",
       "duration": 268.176,
       "title": "चुनरिया भींजै - Gailhai",
-      "artist": "Media Mafias"
-    },
-    {
-      "path": "/local_audio_vault/regional/bagheli/5_Music/छाले-खुद-सहन.mp3",
-      "duration": 153.192,
-      "title": "छाले-खुद-सहन",
-      "artist": "Media Mafias"
-    },
-    {
-      "path": "/local_audio_vault/regional/bagheli/5_Music/जगन्नाथ - Mahamantra.mp3",
-      "duration": 376.032,
-      "title": "जगन्नाथ - Mahamantra",
       "artist": "Media Mafias"
     },
     {
@@ -616,6 +610,12 @@
       "path": "/local_audio_vault/regional/bagheli/5_Music/वह शक्ति हमें दो दयानिधे.mp3",
       "duration": 249.6,
       "title": "वह शक्ति हमें दो दयानिधे",
+      "artist": "Media Mafias"
+    },
+    {
+      "path": "/local_audio_vault/regional/bagheli/5_Music/हमरी गुलाबी चुनरिया.mp3",
+      "duration": 257.04,
+      "title": "हमरी गुलाबी चुनरिया",
       "artist": "Media Mafias"
     },
     {
