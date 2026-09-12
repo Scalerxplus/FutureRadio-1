@@ -83,14 +83,14 @@ export async function POST(request: Request) {
     // Initialize state
     const playedSongs = new Set<string>();
     
-    // Fetch global 6-hour cooldown history for music
+    // Fetch global 2.5-hour cooldown history for music (matches ~42 song library size)
     try {
-        const sixHoursAgo = new Date(Date.now() - 6 * 3600 * 1000).toISOString();
+        const cooldownAgo = new Date(Date.now() - 2.5 * 3600 * 1000).toISOString();
         const { data: recentHistory } = await supabase
             .from("broadcast_schedule")
             .select("youtube_id")
             .eq("element_type", "song")
-            .gte("start_time", sixHoursAgo);
+            .gte("start_time", cooldownAgo);
             
         if (recentHistory) {
             recentHistory.forEach(row => {
