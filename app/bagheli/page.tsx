@@ -25,7 +25,7 @@ export default function BagheliCampaignPage() {
 
   const handleTuneIn = () => {
     unlockAudio();
-    setCityId("bagheli", "Future Radio - Bagheli");
+    setCityId("bagheli_2", "Future Radio - Bagheli");
     setIsPlaying(true);
     router.push("/radio");
   };
