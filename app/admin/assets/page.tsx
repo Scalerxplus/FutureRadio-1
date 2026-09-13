@@ -124,7 +124,7 @@ export default function AssetManagerPage() {
           >
             <option value="global">Global (All Stations)</option>
             <option value="hindi">Hindi</option>
-            <option value="bagheli_3">Bagheli</option>
+            <option value="bagheli">Bagheli</option>
             <option value="bundeli">Bundeli</option>
             <option value="chhattisgarhi">Chhattisgarhi</option>
             <option value="malwi">Malwi</option>
