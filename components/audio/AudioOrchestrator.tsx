@@ -249,8 +249,9 @@ export default function AudioOrchestrator() {
          const fade = setInterval(() => {
              vol -= 0.1;
              if (vol <= 0) {
-                 player.volume = 0; // Keep playing silently to preserve iOS unlock state
-                 clearInterval(fade);
+                  player.volume = 0;
+                  player.pause();
+                  clearInterval(fade);
              } else {
                  player.volume = vol;
              }
@@ -481,8 +482,9 @@ export default function AudioOrchestrator() {
                        const fade = setInterval(() => {
                            vol -= volDrop;
                            if (vol <= 0) {
-                               player.volume = 0; // Keep playing silently
-                               clearInterval(fade);
+                                 player.volume = 0;
+                                 player.pause();
+                                 clearInterval(fade);
                            } else {
                                player.volume = vol;
                            }
