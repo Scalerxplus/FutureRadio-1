@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     const host = request.headers.get("host") || process.env.VERCEL_URL || "localhost:3000";
     const baseUrl = `${protocol}://${host}`;
 
-    const genres = ["bagheli_2"];
+    const genres = ["bagheli_3"];
     
     // We want to make sure the next 48 hours are populated.
     // To be safe, let's generate exactly the hour that is 48 hours from now.

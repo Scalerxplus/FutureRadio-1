@@ -73,7 +73,7 @@ export default async function SchedulePage({
 }: {
   searchParams: { channel?: string };
 }) {
-  const currentChannel = searchParams.channel || "bagheli_2";
+  const currentChannel = searchParams.channel || "bagheli_3";
   const supabase = createClient();
   
   // Fetch today's schedule from DB using explicit IST boundaries

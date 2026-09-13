@@ -42,7 +42,7 @@ export default function EntrySplashPage() {
     if (stationId && stationName) {
       setCityId(stationId, `Future Radio - ${stationName}`);
     } else {
-      const defaultId = section === "devotional" ? "shiva" : "bagheli_2";
+      const defaultId = section === "devotional" ? "shiva" : "bagheli_3";
       const defaultName = section === "devotional" ? "Shiv Dhun" : "Bagheli Vibe";
       setCityId(defaultId, `Future Radio - ${defaultName}`);
     }

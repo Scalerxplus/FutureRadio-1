@@ -3,7 +3,7 @@ import RadioClient from '../RadioClient';
 
 const seoMap: Record<string, { title: string, desc: string }> = {
   hindi: { title: "Future Radio Hindi | India's Best AI Hindi Music Station", desc: "Listen to the best Hindi Indie and Global music 24/7 on Future Radio Hindi." },
-  bagheli_2: { title: "Future Radio Bagheli | MP's No. 1 Bagheli Dialect Radio", desc: "Enjoy authentic Bagheli folk, regional hits, and global music mixed for Baghelkhand on Future Radio Bagheli." },
+  bagheli_3: { title: "Future Radio Bagheli | MP's No. 1 Bagheli Dialect Radio", desc: "Enjoy authentic Bagheli folk, regional hits, and global music mixed for Baghelkhand on Future Radio Bagheli." },
   bundeli: { title: "Future Radio Bundeli | The Heartbeat of Bundelkhand", desc: "Tune into Future Radio Bundeli for the best Bundeli regional songs, folk music, and global hits." },
   chhattisgarhi: { title: "Future Radio CG | Chhattisgarhi & Global Hits", desc: "Listen to Future Radio CG for non-stop Chhattisgarhi regional hits and global music." },
   malwi: { title: "Future Radio Malwi | MP's Malwi Dialect Music Station", desc: "Future Radio Malwi brings you the sweet dialect of Malwa with regional music and global hits." },

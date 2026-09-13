@@ -105,7 +105,7 @@ export async function POST(request: Request) {
     const playedCommercials = new Set<string>();
 
     const getUnplayedFile = (folderIndex: string, playedSet: Set<string>, matchDaypart: boolean = false) => {
-        const targetDir = cityId.replace('_2', '');
+        const targetDir = cityId.replace(/_\d+$/, '');
         let files = getManifestFiles(`/local_audio_vault/regional/${targetDir}/${folderIndex}/`);
         if (files.length === 0) return null; // Missing folder or files
 
