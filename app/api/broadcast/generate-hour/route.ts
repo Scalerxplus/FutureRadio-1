@@ -46,11 +46,29 @@ export async function POST(request: Request) {
     istDate.setUTCMinutes(0, 0, 0);
     startTime = new Date(istDate.getTime() - istOffsetMs);
     
+    const TARGET_HOUR_MS = 3600 * 1000;
     const targetEndTime = new Date(startTime.getTime() + 59 * 60 * 1000 + 59 * 1000 + 999);
     const currentIstHour = istDate.getUTCHours();
     const daypart = getDaypart(currentIstHour);
 
     console.log(`[Master Clock] Generating Hot Clock for ${cityId} at ${startTime.toISOString()} (Daypart: ${daypart})`);
+
+    // Check if schedule already exists to prevent stacking due to RLS delete blocks
+    const { data: existing } = await supabase
+      .from("broadcast_schedule")
+      .select("id")
+      .eq("city_id", cityId)
+      .gte("start_time", new Date(startTime.getTime()).toISOString())
+      .lt("start_time", new Date(startTime.getTime() + TARGET_HOUR_MS).toISOString())
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+        return NextResponse.json({
+          success: true,
+          message: `Schedule already exists for ${cityId} at this hour. Skipping generation to prevent overlap.`,
+          schedule: []
+        });
+    }
 
     const schedule: any[] = [];
     let currentTimeMs = startTime.getTime();
@@ -155,7 +173,6 @@ export async function POST(request: Request) {
     ];
 
     let seqIndex = 0;
-    const TARGET_HOUR_MS = 3600 * 1000;
 
     while (currentTimeMs - startTime.getTime() < (TARGET_HOUR_MS - 30000)) { // Give 30 sec grace
         const step = sequencePattern[seqIndex % sequencePattern.length];
