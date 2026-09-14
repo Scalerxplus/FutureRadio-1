@@ -465,11 +465,12 @@ export default function AudioOrchestrator() {
                    const isEnteringJock = currentElementToPlay.element_type === "jocktalk";
                    const isExitingJock = prevElement && prevElement.element_type === "jocktalk";
                    
-                    if (isEnteringJock || isExitingJock) {
-                       // Strict exclusivity: zero overlap for jocktalks
-                       player.volume = 0;
-                       try { player.currentTime = 0; } catch(e) {}
-                   } else {
+                     if (isEnteringJock || isExitingJock) {
+                         // Strict exclusivity: zero overlap for jocktalks
+                         player.volume = 0;
+                         player.pause();
+                         try { player.currentTime = 0; } catch(e) {}
+                     } else {
                        // Determine fade out duration
                        const isExitingSweeper = prevElement && (prevElement.element_type === "sweeper" || prevElement.element_type === "station_id");
                        const isEnteringSweeper = currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id";
@@ -531,15 +532,16 @@ export default function AudioOrchestrator() {
              if (offsetSeconds > 0.5) try { primaryDeck.currentTime = offsetSeconds; } catch(e) {}
              
              // Transition audio fade out or hard stop
-             if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
-                const tAudio = transitionAudioRef.current;
-                if (currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id") {
-                    tAudio.volume = 0;
-                } else {
-                    let vol = tAudio.volume;
-                    const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.volume = 0; clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
-                }
-             }
+               if (transitionAudioRef.current && !transitionAudioRef.current.paused) {
+                  const tAudio = transitionAudioRef.current;
+                  if (currentElementToPlay.element_type === "jocktalk" || currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id") {
+                      tAudio.volume = 0;
+                      tAudio.pause();
+                  } else {
+                      let vol = tAudio.volume;
+                      const fade = setInterval(() => { vol -= 0.1; if (vol <= 0) { tAudio.volume = 0; tAudio.pause(); clearInterval(fade); } else { tAudio.volume = vol; } }, 200);
+                  }
+               }
              primaryDeck.play().then(() => setIsTuning(false)).catch(e => handleMediaError(activeDeckRef.current));
         }
       } else {
@@ -557,9 +559,10 @@ export default function AudioOrchestrator() {
               const deckName = ["A", "B", "C"][index];
               const isThisDeckSupposedToPlay = deckName === activeDeckRef.current;
                   
-              if (!isThisDeckSupposedToPlay && ref.current && !ref.current.paused) {
-                  ref.current.volume = 0; // Mute instead of pause to keep iOS unlocked
-              }
+               if (!isThisDeckSupposedToPlay && ref.current && !ref.current.paused) {
+                   ref.current.volume = 0; 
+                   ref.current.pause(); // Fix iOS overlap
+                }
            });
         }
       }
