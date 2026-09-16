@@ -173,6 +173,12 @@ export async function POST(request: Request) {
     ];
 
     let seqIndex = 0;
+    let songCounter = 0;
+    
+    // Pick a random song slot (between 1st and 8th song of the hour) to play the Ganesh Bhajan
+    const ganeshBhajanTargetSlot = Math.floor(Math.random() * 8); 
+    let ganeshBhajanPlayed = false;
+    const isGaneshSeason = new Date() < new Date("2026-09-26T00:00:00Z");
 
     while (currentTimeMs - startTime.getTime() < (TARGET_HOUR_MS - 30000)) { // Give 30 sec grace
         const step = sequencePattern[seqIndex % sequencePattern.length];
@@ -183,7 +189,23 @@ export async function POST(request: Request) {
         else if (step.folder.includes("Promo")) playedSet = playedPromos;
         else if (step.folder.includes("Commercial")) playedSet = playedCommercials;
 
-        const file = getUnplayedFile(step.folder, playedSet, step.matchDaypart);
+        let file = null;
+
+        if (step.type === 'song') {
+            if (isGaneshSeason && !ganeshBhajanPlayed && songCounter === ganeshBhajanTargetSlot) {
+                const targetDir = cityId.replace(/_\d+$/, '');
+                const ganeshFiles = getManifestFiles(`/local_audio_vault/regional/${targetDir}/5_Music/`).filter(f => f.path.includes("Kajri Ganesh Bajan"));
+                if (ganeshFiles.length > 0) {
+                    file = ganeshFiles[0];
+                    ganeshBhajanPlayed = true;
+                }
+            }
+            songCounter++;
+        }
+        
+        if (!file) {
+            file = getUnplayedFile(step.folder, playedSet, step.matchDaypart);
+        }
         
         if (file) {
             let dur = file.duration ? Math.round(file.duration * 1000) : 10000;
