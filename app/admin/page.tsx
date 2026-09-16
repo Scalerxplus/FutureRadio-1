@@ -48,10 +48,10 @@ export default function AdminDashboard({ searchParams }: { searchParams?: { chan
         <div className="col-span-2 bg-[#111118] border border-[#1a1a24] rounded-2xl p-6">
           <h3 className="text-lg font-semibold text-white mb-6">Recent System Activity</h3>
           <div className="space-y-4">
-            <ActivityRow time="Just now" action="System injected EDM Sweeper" type="info" />
+            <ActivityRow time="Just now" action="Master Clock sequence verified" type="info" />
             <ActivityRow time="12 mins ago" action={`Master Clock generated 25 items for ${showName}`} type="success" />
-            <ActivityRow time="1 hr ago" action="Azure TTS rendered RJ Voiceover (68 seconds)" type="info" />
-            <ActivityRow time="2 hrs ago" action="Live Cut Overridden by Admin" type="warning" />
+            <ActivityRow time="1 hr ago" action="Self-Healing Diagnostic Completed" type="info" />
+            <ActivityRow time="2 hrs ago" action="Audio Cache Cleared" type="warning" />
           </div>
         </div>
         
