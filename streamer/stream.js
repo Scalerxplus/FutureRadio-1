@@ -5,6 +5,7 @@ const { spawn } = require('child_process');
 
 const TARGET_URL = process.env.TARGET_URL || 'https://www.thefutureradio.com/youtube';
 const YOUTUBE_RTMP_KEY = process.env.YOUTUBE_RTMP_KEY;
+const YOUTUBE_SECONDARY_KEY = process.env.YOUTUBE_SECONDARY_KEY;
 const FACEBOOK_RTMP_KEY = process.env.FACEBOOK_RTMP_KEY;
 
 if (!YOUTUBE_RTMP_KEY) {
@@ -93,6 +94,13 @@ async function startStream() {
 
   // 1. Spawn YouTube Stream
   spawnFFmpeg('YouTube', RTMP_URL);
+
+  // 1b. Spawn Secondary YouTube Stream (Isolated)
+  if (YOUTUBE_SECONDARY_KEY) {
+    console.log("YOUTUBE_SECONDARY_KEY detected. Enabling Isolated Simulcast to Secondary YouTube...");
+    const YT2_RTMP_URL = `rtmp://a.rtmp.youtube.com/live2/${YOUTUBE_SECONDARY_KEY}`;
+    spawnFFmpeg('YouTube-Secondary', YT2_RTMP_URL);
+  }
 
   // 2. Spawn Facebook Stream (Isolated)
   if (FACEBOOK_RTMP_KEY) {
