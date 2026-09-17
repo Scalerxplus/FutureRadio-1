@@ -165,9 +165,9 @@ export default function AudioOrchestrator() {
                activeDeck.load();
                activeDeck.play().catch(() => {});
             }
-            if (sweeperRef.current && !sweeperRef.current.paused) {
-               sweeperRef.current.load();
-               sweeperRef.current.play().catch(() => {});
+            if (mediaRefC.current && !mediaRefC.current.paused) {
+               mediaRefC.current.load();
+               mediaRefC.current.play().catch(() => {});
             }
          }, 500);
       }
@@ -581,7 +581,6 @@ export default function AudioOrchestrator() {
        syncAudioElement(mediaRefA.current);
        syncAudioElement(mediaRefB.current);
        syncAudioElement(mediaRefC.current);
-       syncAudioElement(sweeperRef.current);
     }, 10000);
     return () => clearInterval(interval);
   }, [hasGesture, isPlaying]);

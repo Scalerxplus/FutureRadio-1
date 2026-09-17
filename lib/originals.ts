@@ -34,9 +34,11 @@ export function getOriginalTracks(): OriginalTrack[] {
         return {
             id: track.id,
             title: track.title,
+            artist: track.artist || "",
+            durationMs: track.durationMs || 0,
+            durationSeconds: track.durationSeconds || 0,
             streamUrl: track.streamUrl,
             target_stations: track.target_stations || ["global"],
-            isNew: track.isNew || false,
             energyScore
         } as OriginalTrack;
     });
@@ -68,7 +70,7 @@ export function getOriginalForStation(cityId: string, playedSongs: Set<string>, 
         if (targetStation === "global" && t.target_stations.includes("fallback")) return false;
         if (playedSongs.has(t.id) || playedSongs.has(t.streamUrl)) return false;
         
-        if (onlyNew && !t.isNew) return false;
+        if (onlyNew && !(t as any).isNew) return false;
         
         const titleLower = t.title.toLowerCase();
         const isSpecial = titleLower.includes("dekhi leb") || titleLower.includes("tain sun");

@@ -194,7 +194,9 @@ export async function POST(request: Request) {
         if (step.type === 'song') {
             if (isGaneshSeason && !ganeshBhajanPlayed && songCounter === ganeshBhajanTargetSlot) {
                 const targetDir = cityId.replace(/_\d+$/, '');
-                const ganeshFiles = getManifestFiles(`/local_audio_vault/regional/${targetDir}/5_Music/`).filter(f => f.path.includes("Kajri Ganesh Bajan"));
+                const allMusic = getManifestFiles(`/local_audio_vault/regional/${targetDir}/5_Music/`);
+                const ganeshFiles = allMusic.filter(f => f.path.includes("Kajri Ganesh Bajan"));
+                console.log(`[Ganesh Debug] Counter: ${songCounter}, TargetSlot: ${ganeshBhajanTargetSlot}, Found: ${ganeshFiles.length}`);
                 if (ganeshFiles.length > 0) {
                     file = ganeshFiles[0];
                     ganeshBhajanPlayed = true;

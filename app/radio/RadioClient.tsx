@@ -32,7 +32,8 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
   useEffect(() => {
     if (initialStation && initialStation !== cityId) {
       // Basic check to map simple strings to known city logic if needed
-      setCityId(initialStation);
+      const stationName = initialStation.charAt(0).toUpperCase() + initialStation.slice(1);
+      setCityId(initialStation, stationName);
     }
   }, [initialStation, cityId, setCityId]);
 

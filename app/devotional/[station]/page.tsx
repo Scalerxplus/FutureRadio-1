@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: { station: string }
       description: `Join thousands tuning into the 24/7 continuous stream of ${station.name}.`,
       images: [
         {
-          url: station.artwork,
+          url: station.image,
           width: 1200,
           height: 630,
           alt: `${station.name} Live Stream Art`,
@@ -49,7 +49,7 @@ export default function DevotionalStationPage({ params }: { params: { station: s
     "name": `Future Radio ${station.name}`,
     "url": `https://thefutureradio.com/devotional/${station.id}`,
     "logo": "https://thefutureradio.com/icons/player-logo.png",
-    "image": station.artwork,
+    "image": station.image,
     "description": `India's first autonomous, AI-powered devotional virtual radio station. Streaming 24/7 ${station.name}.`,
     "parentOrganization": {
       "@type": "Organization",

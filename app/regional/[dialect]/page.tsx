@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: { dialect: string }
       description: `Listen to regional folk music streaming live on ${station.name}.`,
       images: [
         {
-          url: station.artwork,
+          url: station.image,
           width: 1200,
           height: 630,
           alt: `${station.name} Live Cover`,
@@ -49,7 +49,7 @@ export default function RegionalStationPage({ params }: { params: { dialect: str
     "name": `Future Radio ${station.name}`,
     "url": `https://thefutureradio.com/regional/${station.id}`,
     "logo": "https://thefutureradio.com/icons/player-logo.png",
-    "image": station.artwork,
+    "image": station.image,
     "description": `India's first autonomous, AI-powered ${station.name} virtual radio station. Streaming 24/7 folk music, traditional geet, and regional tracks.`,
     "parentOrganization": {
       "@type": "Organization",
