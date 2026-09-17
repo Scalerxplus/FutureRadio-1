@@ -108,13 +108,13 @@ export default function YouTubeClient() {
       {/* Left Sidebar: Brutalist Logos */}
       <div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
         <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#E5FF00] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
-          <img src="/icons/media-mafias-logo.png" alt="Media Mafias" className="w-full h-full object-contain" />
+          <img src="/media-mafias-logo-new.jpg" alt="Media Mafias" className="w-full h-full object-contain" />
         </div>
         <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#FF69B4] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
-          <img src="/icons/future-radio-logo.png" alt="Future Radio" className="w-full h-full object-contain" />
+          <img src="/future-radio-logo-new.jpg" alt="Future Radio" className="w-full h-full object-contain" />
         </div>
         <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#00E5FF] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
-          <img src="/icons/bagheli-logo.png" alt="Bagheli Logo" className="w-full h-full object-contain" />
+          <img src="/bagheli-logo-new.png" alt="Bagheli Logo" className="w-full h-full object-contain" />
         </div>
       </div>
 
