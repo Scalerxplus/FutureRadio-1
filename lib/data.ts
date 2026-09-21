@@ -49,6 +49,7 @@ export const dialectMarkers: DialectMarker[] = [
   { coordinates: [83.0, 23.0], name: "Surgujia", speakers: "1.7M+", engagement: "91", type: "NODE", networkStatus: "DEPLOYABLE", color: "#9B59B6", spread: { rx: 20, ry: 15, rotate: 10 }, majorCities: ["Ambikapur", "Surajpur", "Balrampur"], smartphonePenetration: 48 },
 ];
 export const REGIONAL_STATIONS = [
+  { id: 'bhojpuri', name: 'Bhojpuri Vibes', region: 'Bihar & UP', listeners: '4.5k', comingSoon: true, image: '/assets/stations/bhojpuri_artwork.png', color: '#E74C3C' },
   { id: 'bagheli', name: 'Bagheli Vibes', region: 'Vindhya Region', listeners: '2.1k', comingSoon: false, image: '/assets/stations/bagheli_artwork.png', color: '#9B59B6' },
   { id: 'awadhi', name: 'Awadhi Vibes', region: 'Awadh Region', listeners: '3.2k', comingSoon: true, image: '/assets/stations/awadhi_artwork.png', color: '#D35400' },
   { id: 'bundeli', name: 'Bundeli Vibes', region: 'Bundelkhand', listeners: '1.9k', comingSoon: true, image: '/assets/stations/bundeli_artwork.png', color: '#E67E22' },
