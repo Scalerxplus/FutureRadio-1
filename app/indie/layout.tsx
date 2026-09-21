@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Indie Vibes | Independent Music | Future Radio",
-  description: "Listen to 24/7 underground, alternative, and indie music on Future Radio Indie.
+  description: "Listen to 24/7 underground, alternative, and indie music on Future Radio Indie.",
   keywords: [
     "Rewa radio station", "Satna radio station", "Maihar Radio Station", "Shahdol Radio Station", 
     "Sidhi Radio Sation", "Sidhi Radio Station", "Umaria Radio Station", "Indie Lokgeet", 

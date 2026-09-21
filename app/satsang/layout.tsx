@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Satsang Vibes | Spiritual Awakening | Future Radio",
-  description: "Listen to 24/7 Satsang, spiritual discourses, and meditation music on Future Radio Satsang.
+  description: "Listen to 24/7 Satsang, spiritual discourses, and meditation music on Future Radio Satsang.",
   keywords: [
     "Rewa radio station", "Satna radio station", "Maihar Radio Station", "Shahdol Radio Station", 
     "Sidhi Radio Sation", "Sidhi Radio Station", "Umaria Radio Station", "Satsang Lokgeet", 

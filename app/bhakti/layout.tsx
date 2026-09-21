@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Bhakti Vibes | India's #1 Devotional Station | Future Radio",
-  description: "Listen to 24/7 Bhajans, Aarti, and Devotional streams on Future Radio Bhakti.
+  description: "Listen to 24/7 Bhajans, Aarti, and Devotional streams on Future Radio Bhakti.",
   keywords: [
     "Rewa radio station", "Satna radio station", "Maihar Radio Station", "Shahdol Radio Station", 
     "Sidhi Radio Sation", "Sidhi Radio Station", "Umaria Radio Station", "Bhakti Lokgeet", 
