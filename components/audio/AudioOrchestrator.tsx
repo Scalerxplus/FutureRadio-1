@@ -366,9 +366,12 @@ export default function AudioOrchestrator() {
          }
       }
       
-      // Do not allow early clock expiration to clip non-song elements
-      if (!shouldAdvance && isExpiredByClock && activeElement.element_type === "song") {
-         shouldAdvance = true;
+      // Rely on the actual audio element to finish naturally. 
+      // Only force advance by clock if the audio element's duration is unknown (e.g. stalled or not loaded)
+      if (!shouldAdvance && isExpiredByClock) {
+         if (!activeDeck || isNaN(activeDeck.duration)) {
+            shouldAdvance = true;
+         }
       }
 
       if (shouldAdvance) {
