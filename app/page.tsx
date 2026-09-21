@@ -100,7 +100,7 @@ export default function EntrySplashPage() {
             transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
             className="inline-block bg-[#E5FF00] border-4 border-black px-6 py-2 rounded-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-10 transform -rotate-2"
           >
-            <span className="font-bold text-black uppercase tracking-widest text-sm md:text-base">India's First Vernacular Radio Network</span>
+            <span className="font-bold text-black uppercase tracking-widest text-sm md:text-base">THE FUTURE RADIO NETWORK</span>
           </motion.div>
 
           <motion.div 
@@ -119,21 +119,21 @@ export default function EntrySplashPage() {
 
             {/* Visible Hero Elements (UX Friendly) */}
             <div aria-hidden="true" className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.2] md:leading-[1.1] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw] text-center">
-              FUTURE RADIO: <br />
+              
               <span className="font-sans font-black tracking-tighter">
-                HYPER-LOCAL
+                LOCAL VOICES
                 <span className="relative inline-block mx-4 text-[#E5FF00] drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
                   &
                   <Speaker className="absolute -top-4 -left-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#FF69B4] transform -rotate-12 shadow-sm" strokeWidth={1.5} />
                   <Speaker className="absolute -top-4 -right-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#00E5FF] transform rotate-12 shadow-sm" strokeWidth={1.5} />
                 </span> 
-                VERNACULAR
-              </span> <br />
-              DIGITAL RADIO NETWORK
+                GLOBAL VIBES
+              </span>
+              
             </div>
             
             <div aria-hidden="true" className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">
-              Sound of India, <br className="md:hidden"/> Straight to your devices.
+              India's first hyper-local and vernacular digital radio.
             </div>
           </motion.div>
 
