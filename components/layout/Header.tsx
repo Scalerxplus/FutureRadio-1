@@ -4,16 +4,11 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, UserCircle } from "lucide-react";
-import { useAuthStore } from "@/lib/store";
-import AuthModal from "@/components/auth/AuthModal";
+import { Menu, X } from "lucide-react";
 
 export const Header = () => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false);
-  
-  const { user, isYtPremium } = useAuthStore();
 
   const links: { name: string; href: string; external?: boolean }[] = [
     { name: "Radio", href: "/radio" },
@@ -69,20 +64,6 @@ export const Header = () => {
           
           <div className="w-px h-6 bg-gray-300 mx-2"></div>
           
-          {/* Global Auth Button */}
-          <button
-            onClick={() => setIsAuthOpen(true)}
-            className={`flex items-center gap-2 px-4 py-2 border-2 text-xs font-bold uppercase tracking-wider transition-all hover:-translate-y-1 ${
-              user
-                ? isYtPremium
-                  ? "bg-brand-dark text-white border-brand-dark shadow-brutal-sm"
-                  : "bg-white text-brand-red border-brand-red shadow-brutal-sm hover:shadow-none"
-                : "bg-gray-100 text-brand-dark border-brand-dark shadow-brutal-sm hover:shadow-none hover:bg-white"
-            }`}
-          >
-            <UserCircle size={16} className={user ? (isYtPremium ? "text-brand-yellow" : "text-brand-red") : "text-gray-500"} />
-            <span>{user ? (isYtPremium ? "Premium" : "Connected") : "Sync"}</span>
-          </button>
 
           <Link 
             href="/partner" 
@@ -94,14 +75,6 @@ export const Header = () => {
 
         {/* Mobile Nav Toggle */}
         <div className="xl:hidden flex items-center gap-3">
-          <button
-            onClick={() => setIsAuthOpen(true)}
-            className={`flex items-center justify-center p-2 border-2 transition-all ${
-              user ? "border-brand-red text-brand-red" : "border-brand-dark text-brand-dark"
-            }`}
-          >
-            <UserCircle size={20} />
-          </button>
           <button 
             className="text-brand-dark p-2 border-2 border-brand-dark bg-brand-yellow shadow-brutal-sm active:translate-y-1 active:shadow-none transition-all"
             onClick={() => setIsMobileMenuOpen(true)}
@@ -110,9 +83,6 @@ export const Header = () => {
           </button>
         </div>
       </motion.header>
-
-      {/* Global Auth Modal */}
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
