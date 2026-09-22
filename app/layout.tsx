@@ -41,14 +41,14 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
-  description: "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat.",
+  title: "Future Radio | India's First AI-Powered Vernacular Radio Network",
+  description: "India's First AI-Powered Vernacular Radio Network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat.",
   keywords: [
     "hyper-local radio", "vernacular radio", "digital radio network", "folk music india", "bagheli lokgeet", "bhojpuri music", "awadhi songs", "devotional radio", "internet radio india", "future radio"
   ],
   openGraph: {
-    title: "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
-    description: "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat.",
+    title: "Future Radio | India's First AI-Powered Vernacular Radio Network",
+    description: "India's First AI-Powered Vernacular Radio Network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",
     images: [
@@ -63,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
-    description: "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri.",
+    title: "Future Radio | India's First AI-Powered Vernacular Radio Network",
+    description: "India's First AI-Powered Vernacular Radio Network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri.",
     images: ["/og-image.jpg"],
   },
   icons: {
@@ -123,13 +123,13 @@ export default function RootLayout({
                   "name": "Future Radio India",
                   "url": "https://thefutureradio.com",
                   "logo": "https://thefutureradio.com/icons/player-logo.png",
-                  "description": "India's first hyper-local vernacular digital radio network for Bharat’s dialect-first audience."
+                  "description": "India's First AI-Powered Vernacular Radio Network for Bharat’s dialect-first audience."
                 },
                 {
                   "@type": "WebSite",
-                  "name": "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
+                  "name": "Future Radio | India's First AI-Powered Vernacular Radio Network",
                   "url": "https://www.thefutureradio.com",
-                  "description": "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat."
+                  "description": "India's First AI-Powered Vernacular Radio Network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat."
                 },
                 {
                   "@type": "RadioChannel",
@@ -166,7 +166,7 @@ export default function RootLayout({
               "name": "Future Radio",
               "url": "https://thefutureradio.com",
               "logo": "https://thefutureradio.com/logo-badge.png",
-              "description": "India's first hyper-local vernacular digital radio network. The new-age radio network for Bharat.",
+              "description": "India's First AI-Powered Vernacular Radio Network. The new-age radio network for Bharat.",
               "sameAs": [
                 "https://thefutureradio.com"
               ]

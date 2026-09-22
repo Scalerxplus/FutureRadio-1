@@ -130,7 +130,7 @@ export default function EntrySplashPage() {
             </div>
             
             <div aria-hidden="true" className="text-xl md:text-3xl font-bold text-black/90 max-w-3xl font-sans leading-snug tracking-tight bg-white px-8 py-4 border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center relative z-10 mx-auto mt-4">
-              India's First Hyper-Local Vernacular Digital Radio Network
+              India's First AI-Powered Vernacular Radio Network
             </div>
           </motion.div>
 
