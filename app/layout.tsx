@@ -41,16 +41,14 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Future Radio India | Regional, Devotional & Folk Radio Network",
-  description: "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, an Indie & Folk radio network built for Bharat.",
+  title: "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
+  description: "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat.",
   keywords: [
-    "devotional radio", "shiva devotional songs", "shiva bhajan", "shiva mantra", "ramayan", "radio ramayan", "ram", "ganesh", "krishna", "hanuman chalisa", "sundar kand", "ramcharit manas",
-    "regional radio", "folk music india", "bagheli lokgeet", "up ke lokgeet", "rewa ke lokgeet", "satna ke lokgeet", "bhojpuri folk music", "bhojpuri music", "awadhi", "bundeli", "braj",
-    "radio", "internet radio india", "future radio", "ai radio station", "new stations", "new structure", "new business model", "autonomous radio", "indie music"
+    "hyper-local radio", "vernacular radio", "digital radio network", "folk music india", "bagheli lokgeet", "bhojpuri music", "awadhi songs", "devotional radio", "internet radio india", "future radio"
   ],
   openGraph: {
-    title: "Future Radio | #1 Devotional, Regional & Folk Radio Network",
-    description: "Stream Shiva Bhajans, Hanuman Chalisa, Bagheli Lokgeet, Bhojpuri Music, and Regional Folk songs 24/7. The ultimate autonomous radio network.",
+    title: "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
+    description: "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat.",
     url: "https://thefutureradio.com",
     siteName: "Future Radio",
     images: [
@@ -65,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Radio | #1 Devotional, Regional & Folk Radio Network",
-    description: "Stream Shiva Bhajans, Bagheli Lokgeet, and Bhojpuri Music 24/7.",
+    title: "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
+    description: "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri.",
     images: ["/og-image.jpg"],
   },
   icons: {
@@ -125,13 +123,13 @@ export default function RootLayout({
                   "name": "Future Radio India",
                   "url": "https://thefutureradio.com",
                   "logo": "https://thefutureradio.com/icons/player-logo.png",
-                  "description": "Hyperlocal devotional, regional and folk audio for Bharat’s dialect-first audience."
+                  "description": "India's first hyper-local vernacular digital radio network for Bharat’s dialect-first audience."
                 },
                 {
                   "@type": "WebSite",
-                  "name": "Future Radio India | Regional, Devotional & Folk Radio Network",
+                  "name": "Future Radio | India's First Hyper-Local Vernacular Digital Radio Network",
                   "url": "https://www.thefutureradio.com",
-                  "description": "Stream Shiva Bhajans, Ramayan, Bagheli Lokgeet, Bhojpuri music, Awadhi songs and 24/7 devotional radio on Future Radio India, a regional radio network built for Bharat."
+                  "description": "India's first hyper-local vernacular digital radio network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri, and devotional audio built for Bharat."
                 },
                 {
                   "@type": "RadioChannel",
@@ -168,7 +166,7 @@ export default function RootLayout({
               "name": "Future Radio",
               "url": "https://thefutureradio.com",
               "logo": "https://thefutureradio.com/logo-badge.png",
-              "description": "India's first 100% autonomous, AI-powered Indie & Folk radio station. The New-age radio station.",
+              "description": "India's first hyper-local vernacular digital radio network. The new-age radio network for Bharat.",
               "sameAs": [
                 "https://thefutureradio.com"
               ]
