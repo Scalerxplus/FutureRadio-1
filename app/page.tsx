@@ -118,22 +118,19 @@ export default function EntrySplashPage() {
             </p>
 
             {/* Visible Hero Elements (UX Friendly) */}
-            <div aria-hidden="true" className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.2] md:leading-[1.1] tracking-tighter uppercase drop-shadow-sm mb-6 max-w-[95vw] text-center">
-              
-              <span className="font-sans font-black tracking-tighter">
-                LOCAL VOICES
-                <span className="relative inline-block mx-4 text-[#E5FF00] drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
-                  &
-                  <Speaker className="absolute -top-4 -left-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#FF69B4] transform -rotate-12 shadow-sm" strokeWidth={1.5} />
-                  <Speaker className="absolute -top-4 -right-6 w-10 h-10 md:w-16 md:h-16 text-black fill-[#00E5FF] transform rotate-12 shadow-sm" strokeWidth={1.5} />
-                </span> 
-                GLOBAL VIBES
-              </span>
-              
+            <div aria-hidden="true" className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black text-black leading-[1.1] md:leading-[1.0] tracking-tighter uppercase mb-6 max-w-[95vw] text-center [-webkit-text-stroke:2px_#E5FF00] md:[-webkit-text-stroke:4px_#E5FF00] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)]">
+              <span className="block">LOCAL VOICES</span>
+              <span className="block">GLOBAL VIBES</span>
             </div>
             
-            <div aria-hidden="true" className="text-xl md:text-3xl font-bold text-black/80 max-w-3xl font-sans mt-4 leading-snug tracking-tight bg-white/40 px-6 py-3 border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">
-              India's first hyper-local and vernacular digital radio.
+            <div aria-hidden="true" className="relative flex items-center justify-center mt-8">
+              <Speaker className="hidden md:block absolute -left-12 lg:-left-20 w-12 h-12 md:w-16 md:h-16 text-black fill-[#FF69B4] transform -rotate-12 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]" strokeWidth={1.5} />
+              
+              <div className="text-xl md:text-3xl font-bold text-black/90 max-w-3xl font-sans leading-snug tracking-tight bg-[#E5FF00] px-8 py-4 border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center relative z-10">
+                India's first hyper-local and vernacular digital radio.
+              </div>
+
+              <Speaker className="hidden md:block absolute -right-12 lg:-right-20 w-12 h-12 md:w-16 md:h-16 text-black fill-[#00E5FF] transform rotate-12 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]" strokeWidth={1.5} />
             </div>
           </motion.div>
 
