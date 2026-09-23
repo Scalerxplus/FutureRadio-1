@@ -196,28 +196,7 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
 
         </header>
 
-        <div className="flex justify-center mt-3 z-10 relative">
-          <div className="bg-[#98FB98] border-4 border-black p-1 flex items-center shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-            <button
-              onClick={() => {
-                setRadioSection("regional");
-                setIsVibeSheetOpen(true);
-              }}
-              className={`px-4 py-1.5 border-r-4 border-black text-sm font-black uppercase tracking-wider transition-all duration-300 ${radioSection === "regional" ? 'bg-[#FFD1DC] text-black' : 'text-black hover:bg-black hover:text-white'}`}
-            >
-              Regional
-            </button>
-            <button
-              onClick={() => {
-                setRadioSection("devotional");
-                setIsVibeSheetOpen(true);
-              }}
-              className={`px-4 py-1.5 text-sm font-black uppercase tracking-wider transition-all duration-300 ${radioSection === "devotional" ? 'bg-[#FFD1DC] text-black' : 'text-black hover:bg-black hover:text-white'}`}
-            >
-              Devotional
-            </button>
-          </div>
-        </div>
+        
 
         {/* Now Playing Metadata */}
         <div className="space-y-1">
@@ -334,13 +313,7 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
             <div className="text-xs font-black uppercase tracking-widest text-black bg-[#FFFDD0] border-2 border-black px-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)] select-none">
               {cityName}
             </div>
-            {/* Select Vibe / Genre Trigger */}
-            <button
-              onClick={handleOpenVibeSheet}
-              className="flex items-center gap-1.5 text-black hover:bg-black hover:text-white border-2 border-black px-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)] text-xs font-black uppercase tracking-[0.2em] transition-colors duration-300 select-none"
-            >
-              CHANNELS 🎧
-            </button>
+            
           </div>
         </div>
 
@@ -392,3 +365,6 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
     </motion.div>
   );
 }
+
+
+

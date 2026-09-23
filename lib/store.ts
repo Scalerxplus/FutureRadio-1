@@ -12,8 +12,8 @@ interface CityStore {
 export const useCityStore = create<CityStore>()(
   persist(
     (set) => ({
-      cityId: "bagheli",
-      cityName: "Bagheli Vibe",
+      cityId: "roots",
+      cityName: "Media Mafias Roots",
       radioSection: "regional",
       setCityId: (cityId, cityName) => set({ cityId, cityName }),
       setRadioSection: (radioSection) => set({ radioSection }),
@@ -55,3 +55,4 @@ export const useAuthStore = create<AuthStore>((set) => ({
   setSession: (session) => set({ session }),
   setIsYtPremium: (isYtPremium) => set({ isYtPremium }),
 }));
+

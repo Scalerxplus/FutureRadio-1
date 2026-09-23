@@ -99,13 +99,26 @@ export async function getBroadcastSchedule(cityId: string) {
     // Offset by -15 minutes to prevent dropping the active block if the user's clock is skewed
     const fetchThreshold = new Date(Date.now() - 15 * 60 * 1000).toISOString();
     
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from("broadcast_schedule")
       .select("*")
       .eq("city_id", cityId)
       .gte("end_time", fetchThreshold)
       .order("start_time", { ascending: true })
       .limit(500);
+
+    // Migration fallback: If "roots" is requested but empty, check "bagheli" since cron might not have run yet.
+    if (cityId === "roots" && (!data || data.length === 0)) {
+      const fallback = await supabase
+        .from("broadcast_schedule")
+        .select("*")
+        .eq("city_id", "bagheli")
+        .gte("end_time", fetchThreshold)
+        .order("start_time", { ascending: true })
+        .limit(500);
+      data = fallback.data;
+      error = fallback.error;
+    }
     
     if (error) throw error;
     if (!data || data.length === 0) return [];

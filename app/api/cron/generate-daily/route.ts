@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     const baseUrl = `${protocol}://${host}`;
 
     // Generate next 48 hours in batches of 8 to prevent Vercel 60s timeout
-    const genres = ["bagheli"];
+    const genres = ["roots"];
     const batchSize = 8;
     for (let i = 0; i < 48; i += batchSize) {
       const batchPromises = [];
@@ -103,3 +103,4 @@ export async function GET(request: Request) {
     }, { status: 500 });
   }
 }
+

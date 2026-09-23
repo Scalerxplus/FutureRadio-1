@@ -41,16 +41,16 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefutureradio.com"),
-  title: "Media Mafias Roots | The Sound of the Indo-Gangetic Belt",
+  title: "Future Radio Roots | India's First AI-Powered Vernacular Radio Network",
   description: "India's premier autonomous AI-powered vernacular radio network. Broadcasting raw culture 24/7 across the Indo-Gangetic belt including Bagheli, Bhojpuri, Awadhi, Bundeli, and Maithili.",
   keywords: [
-    "hyper-local radio", "vernacular radio", "digital radio network", "folk music india", "bagheli lokgeet", "bhojpuri music", "awadhi songs", "devotional radio", "internet radio india", "media mafias roots", "indo-gangetic belt", "bhojpuri music", "bagheli lokgeet", "bundeli", "awadhi", "maithili"
+    "hyper-local radio", "vernacular radio", "digital radio network", "folk music india", "bagheli lokgeet", "bhojpuri music", "awadhi songs", "devotional radio", "internet radio india", "Future Radio Roots", "indo-gangetic belt", "bhojpuri music", "bagheli lokgeet", "bundeli", "awadhi", "maithili"
   ],
   openGraph: {
-    title: "Media Mafias Roots | The Sound of the Indo-Gangetic Belt",
+    title: "Future Radio Roots | India's First AI-Powered Vernacular Radio Network",
     description: "India's premier autonomous AI-powered vernacular radio network. Broadcasting raw culture 24/7 across the Indo-Gangetic belt including Bagheli, Bhojpuri, Awadhi, Bundeli, and Maithili.",
     url: "https://thefutureradio.com",
-    siteName: "Media Mafias Roots",
+    siteName: "Future Radio Roots",
     images: [
       {
         url: "/og-image.jpg",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Media Mafias Roots | The Sound of the Indo-Gangetic Belt",
+    title: "Future Radio Roots | India's First AI-Powered Vernacular Radio Network",
     description: "India's First AI-Powered Vernacular Radio Network. Stream 24/7 authentic folk music, local dialects like Bagheli and Bhojpuri.",
     images: ["/og-image.jpg"],
   },
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Media Mafias Roots",
+    title: "Future Radio Roots",
   },
 };
 
@@ -127,13 +127,13 @@ export default function RootLayout({
                 },
                 {
                   "@type": "WebSite",
-                  "name": "Media Mafias Roots | The Sound of the Indo-Gangetic Belt",
+                  "name": "Future Radio Roots | India's First AI-Powered Vernacular Radio Network",
                   "url": "https://www.thefutureradio.com",
                   "description": "India's premier autonomous AI-powered vernacular radio network. Broadcasting raw culture 24/7 across the Indo-Gangetic belt including Bagheli, Bhojpuri, Awadhi, Bundeli, and Maithili."
                 },
                 {
                   "@type": "RadioChannel",
-                  "name": "media mafias roots", "indo-gangetic belt", "bhojpuri music", "bagheli lokgeet", "bundeli", "awadhi", "maithili",
+                  "name": "Future Radio Roots", "indo-gangetic belt", "bhojpuri music", "bagheli lokgeet", "bundeli", "awadhi", "maithili",
                   "url": "https://thefutureradio.com",
                   "genre": ["Devotional", "Regional Folk", "Indian Music", "Local News"]
                 }
@@ -163,7 +163,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": ["RadioStation", "Organization"],
-              "name": "Media Mafias Roots",
+              "name": "Future Radio Roots",
               "url": "https://thefutureradio.com",
               "logo": "https://thefutureradio.com/logo-badge.png",
               "description": "India's First AI-Powered Vernacular Radio Network. The new-age radio network for Bharat.",
@@ -177,4 +177,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
