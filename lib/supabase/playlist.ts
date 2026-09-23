@@ -107,18 +107,7 @@ export async function getBroadcastSchedule(cityId: string) {
       .order("start_time", { ascending: true })
       .limit(500);
 
-    // Migration fallback: If "roots" is requested but empty, check "bagheli" since cron might not have run yet.
-    if (cityId === "roots" && (!data || data.length === 0)) {
-      const fallback = await supabase
-        .from("broadcast_schedule")
-        .select("*")
-        .eq("city_id", "bagheli")
-        .gte("end_time", fetchThreshold)
-        .order("start_time", { ascending: true })
-        .limit(500);
-      data = fallback.data;
-      error = fallback.error;
-    }
+    
     
     if (error) throw error;
     if (!data || data.length === 0) return [];
@@ -195,3 +184,4 @@ export async function getUserLikedSongs(userId: string): Promise<string[]> {
     return [];
   }
 }
+

@@ -123,8 +123,8 @@ export async function POST(request: Request) {
     const playedCommercials = new Set<string>();
 
     const getUnplayedFile = (folderIndex: string, playedSet: Set<string>, matchDaypart: boolean = false) => {
-        const targetDir = cityId === "roots" ? "bagheli" : cityId.replace(/_\d+$/, '');
-        let files = getManifestFiles(`/local_audio_vault/regional/${targetDir}/${folderIndex}/`);
+        const targetDir = cityId.replace(/_\d+$/, '');
+        let files = getManifestFiles(`/local_audio_vault/${targetDir}/${folderIndex}/`);
         if (files.length === 0) return null; // Missing folder or files
 
         if (matchDaypart) {
@@ -193,8 +193,8 @@ export async function POST(request: Request) {
 
         if (step.type === 'song') {
             if (isGaneshSeason && !ganeshBhajanPlayed && songCounter === ganeshBhajanTargetSlot) {
-                const targetDir = cityId === "roots" ? "bagheli" : cityId.replace(/_\d+$/, '');
-                const allMusic = getManifestFiles(`/local_audio_vault/regional/${targetDir}/5_Music/`);
+                const targetDir = cityId.replace(/_\d+$/, '');
+                const allMusic = getManifestFiles(`/local_audio_vault/${targetDir}/5_Music/`);
                 const ganeshFiles = allMusic.filter(f => f.path.includes("Kajri Ganesh Bajan"));
                 console.log(`[Ganesh Debug] Counter: ${songCounter}, TargetSlot: ${ganeshBhajanTargetSlot}, Found: ${ganeshFiles.length}`);
                 if (ganeshFiles.length > 0) {
@@ -259,4 +259,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
+
 
