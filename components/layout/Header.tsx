@@ -31,7 +31,7 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <Link href="/" className="hover:-translate-y-1 transition-transform">
             <img 
-              src="/roots-logo.jpg" 
+              src="/icons/logo-horizontal-light.png" 
               alt="Media Mafias Roots" 
               className="h-16 md:h-20 object-contain"
             />
@@ -152,3 +152,4 @@ export const Header = () => {
     </>
   );
 };
+

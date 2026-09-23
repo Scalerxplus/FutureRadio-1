@@ -30,7 +30,7 @@ export default function EntrySplashPage() {
   const handlePlayRoots = () => {
     setMode("radio");
     setRadioSection("regional");
-    setCityId("roots", "Media Mafias Roots");
+    setCityId("roots", "FUTURE RADIO Roots");
     unlockAudio();
     setIsPlaying(true);
     router.push("/radio");
@@ -70,14 +70,14 @@ export default function EntrySplashPage() {
             className="flex flex-col items-center w-full"
           >
             <h1 className="sr-only">
-              Media Mafias Roots. The sound of the Indo-Gangetic Belt.
+              FUTURE RADIO Roots. The sound of the Indo-Gangetic Belt.
             </h1>
 
             <div aria-hidden="true" className="relative flex items-center justify-center w-full max-w-[95vw] mx-auto mb-6 mt-4">
               <Speaker className="hidden md:block absolute left-0 lg:left-4 top-1/4 w-12 h-12 md:w-24 md:h-24 text-black fill-[#FF69B4] transform -rotate-12 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] z-0" strokeWidth={1.5} />
 
               <div className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black leading-[1.1] md:leading-[1.0] tracking-tighter uppercase text-center relative z-10">
-                <span className="block text-[#c4913c] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)] mb-2 md:mb-4">MEDIA MAFIAS</span>
+                <span className="block text-[#c4913c] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)] mb-2 md:mb-4">FUTURE RADIO</span>
                 <span className="block text-white [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)]">ROOTS</span>
               </div>
 
@@ -140,7 +140,7 @@ export default function EntrySplashPage() {
             
             {/* Network Info */}
             <div className="flex flex-col items-start">
-              <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight mb-4 text-[#c4913c] drop-shadow-[2px_2px_0px_rgba(255,255,255,0.2)]">Media Mafias Roots</h2>
+              <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight mb-4 text-[#c4913c] drop-shadow-[2px_2px_0px_rgba(255,255,255,0.2)]">FUTURE RADIO Roots</h2>
               <p className="text-white/80 font-bold mb-6 max-w-sm">
                 India's premier autonomous AI-powered vernacular radio network. Broadcasting raw culture 24/7.
               </p>
@@ -159,13 +159,13 @@ export default function EntrySplashPage() {
               </div>
             </div>
 
-            {/* Media Mafias */}
+            {/* FUTURE RADIO */}
             <div className="flex flex-col items-start">
               <a href="https://mediamafias.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
-                <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#FF69B4]">Curated by Media Mafias</h3>
+                <h3 className="text-2xl font-black font-khand uppercase mb-4 text-[#FF69B4]">Curated by FUTURE RADIO</h3>
               </a>
               <p className="text-white/80 font-bold">
-                Handpicked underground talent, raw regional stories, and pure spiritual streams curated by the <a href="https://mediamafias.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">Media Mafias</a> collective. Where the underground becomes mainstream.
+                Handpicked underground talent, raw regional stories, and pure spiritual streams curated by the <a href="https://mediamafias.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">FUTURE RADIO</a> collective. Where the underground becomes mainstream.
               </p>
             </div>
 
@@ -173,7 +173,7 @@ export default function EntrySplashPage() {
           
           <div className="max-w-7xl mx-auto mt-16 pt-8 border-t-4 border-white/20 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="font-black text-white/50 text-sm uppercase tracking-wide">
-              &copy; {new Date().getFullYear()} Media Mafias Roots. All rights reserved.
+              &copy; {new Date().getFullYear()} FUTURE RADIO Roots. All rights reserved.
             </div>
             <div className="flex items-center gap-6 text-white/50 font-bold text-sm uppercase">
               <Link href="/privacy" className="hover:text-[#E5FF00] transition-colors">Privacy</Link>
@@ -187,3 +187,4 @@ export default function EntrySplashPage() {
     </div>
   );
 }
+
