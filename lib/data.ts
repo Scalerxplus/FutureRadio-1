@@ -48,19 +48,15 @@ export const dialectMarkers: DialectMarker[] = [
   { coordinates: [75.0, 21.0], name: "Khandeshi", speakers: "1.8M+", engagement: "90", type: "NODE", networkStatus: "DEPLOYABLE", color: "#E67E22", spread: { rx: 25, ry: 15, rotate: 0 }, majorCities: ["Jalgaon", "Dhule", "Nandurbar"], smartphonePenetration: 60 },
   { coordinates: [83.0, 23.0], name: "Surgujia", speakers: "1.7M+", engagement: "91", type: "NODE", networkStatus: "DEPLOYABLE", color: "#9B59B6", spread: { rx: 20, ry: 15, rotate: 10 }, majorCities: ["Ambikapur", "Surajpur", "Balrampur"], smartphonePenetration: 48 },
 ];
-export const REGIONAL_STATIONS = [
-  { id: 'bagheli', name: 'Bagheli Vibes', region: 'Vindhya Region', listeners: '2.1k', comingSoon: false, image: '/assets/stations/bagheli_artwork.png', color: '#9B59B6' },
-  { id: 'bhojpuri', name: 'Bhojpuri Vibes', region: 'Bihar & UP', listeners: '4.5k', comingSoon: true, image: '/assets/stations/bhojpuri_artwork.png', color: '#E74C3C' },
-  { id: 'awadhi', name: 'Awadhi Vibes', region: 'Awadh Region', listeners: '3.2k', comingSoon: true, image: '/assets/stations/awadhi_artwork.png', color: '#D35400' },
-  { id: 'bundeli', name: 'Bundeli Vibes', region: 'Bundelkhand', listeners: '1.9k', comingSoon: true, image: '/assets/stations/bundeli_artwork.png', color: '#E67E22' },
-  { id: 'chhattisgarhi', name: 'Chhattisgarhi Vibes', region: 'Chhattisgarh', listeners: '2.4k', comingSoon: true, image: '/assets/stations/chhattisgarhi_artwork.png', color: '#8E44AD' },
-];
+export const ROOTS_STATION = {
+  id: 'roots',
+  name: 'Roots',
+  region: 'Indo-Gangetic Belt',
+  listeners: '25k+',
+  comingSoon: false,
+  image: '/roots-logo.jpg',
+  color: '#c4913c'
+};
 
-export const DEVOTIONAL_STATIONS = [
-  { id: 'bhakti', name: 'Bhakti Vibes', region: 'Devotional', listeners: '15k+', comingSoon: true, image: '/assets/stations/bhakti_artwork.jpg', color: '#8E44AD' },
-  { id: 'satsang', name: 'Satsang Vibes', region: 'Devotional', listeners: '12k+', comingSoon: true, image: '/assets/stations/satsang_artwork.png', color: '#16A085' },
-];
-
-export const INDIE_STATIONS = [
-  { id: 'indie', name: 'Indie Vibes', region: 'Independent', listeners: '18k+', comingSoon: true, image: '/assets/stations/indie_artwork.jpg', color: '#FF69B4' },
-];
+export const REGIONAL_STATIONS: any[] = [];
+export const DEVOTIONAL_STATIONS: any[] = [];

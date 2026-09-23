@@ -114,7 +114,7 @@ export default function YouTubeClient() {
           <img src="/future-radio-logo-new.jpg" alt="Future Radio" className="w-full h-full object-contain" />
         </div>
         <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#00E5FF] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
-          <img src="/bagheli-logo-new.png" alt="Bagheli Logo" className="w-full h-full object-contain" />
+          <img src="/roots-logo.jpg" alt="Roots Logo" className="w-full h-full object-contain" />
         </div>
       </div>
 
@@ -154,7 +154,7 @@ export default function YouTubeClient() {
         {/* Center Content: Visuals & Panels */}
         <div className="flex-1 flex gap-16 mt-12 items-center justify-center">
           
-          {/* Left: Dynamic Bagheli Artwork Visual */}
+          {/* Left: Dynamic Roots Artwork Visual */}
           <div className="flex-1 flex flex-col justify-center items-center">
             
             {/* Circular Frame with RGB Border */}
@@ -177,8 +177,8 @@ export default function YouTubeClient() {
               {/* Center Image Container */}
               <div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10 border-4 border-black">
                 <img 
-                  src="/images/stations/bagheli_artwork.png" 
-                  alt="Bagheli Vibes" 
+                  src="/roots-logo.jpg" 
+                  alt="Roots Vibes" 
                   className="w-full h-full object-cover scale-105"
                 />
               </div>

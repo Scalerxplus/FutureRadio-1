@@ -9,7 +9,7 @@ import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import CinematicSplash from "@/components/ui/CinematicSplash";
 import { Header } from "@/components/layout/Header";
 import { Play, Radio, Heart, Users, ArrowRight, Activity, Globe, Speaker } from "lucide-react";
-import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS, INDIE_STATIONS } from "@/lib/data";
+import { ROOTS_STATION } from "@/lib/data";
 
 export default function EntrySplashPage() {
   const router = useRouter();
@@ -17,7 +17,6 @@ export default function EntrySplashPage() {
   const { setRadioSection, setCityId } = useCityStore();
   const { isPlaying, setIsPlaying } = useAudioStore();
   const [mounted, setMounted] = useState(false);
-  const [listeners, setListeners] = useState(5638);
 
   const containerRef = useRef(null);
 
@@ -28,57 +27,18 @@ export default function EntrySplashPage() {
     }
   }, [setSplashComplete]);
 
-  useEffect(() => {
-    const listenerInterval = setInterval(() => {
-      setListeners(prev => prev + (Math.floor(Math.random() * 15) - 5));
-    }, 3000);
-    return () => clearInterval(listenerInterval);
-  }, []);
-
-  const handlePlayCard = (mode: "radio" | "news", section: "regional" | "devotional", stationId?: string, stationName?: string) => {
-    setMode(mode);
-    setRadioSection(section);
-    
-    if (stationId && stationName) {
-      setCityId(stationId, `Future Radio - ${stationName}`);
-    } else {
-      const defaultId = section === "devotional" ? "shiva" : "bagheli";
-      const defaultName = section === "devotional" ? "Shiv Dhun" : "Bagheli Vibe";
-      setCityId(defaultId, `Future Radio - ${defaultName}`);
-    }
-    
+  const handlePlayRoots = () => {
+    setMode("radio");
+    setRadioSection("regional");
+    setCityId("roots", "Media Mafias Roots");
     unlockAudio();
     setIsPlaying(true);
     router.push("/radio");
   };
 
-  const stations = [
-    "रेडियो महाकाल", "केशव वाइब", "राघव वाइब", 
-    "भोजपुरी वाइब", "बघेली वाइब", "रेडियो आदि शक्ति", 
-    "बुंदेली वाइब", "रेडियो गणपति"
-  ];
-
   return (
     <div ref={containerRef} className="relative bg-[#C4B5FD] min-h-screen overflow-hidden selection:bg-black selection:text-[#E5FF00] font-sans">
-      {/* Light Pastel Background with Flat Vector Watermarks */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Massive Flat Om */}
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[-10%] right-[-5%] text-[60vw] leading-none text-black/[0.03] font-black select-none"
-        >
-          ॐ
-        </motion.div>
-        {/* Massive Flat Swastika */}
-        <motion.div 
-          animate={{ rotate: -360 }}
-          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[-10%] left-[-10%] text-[50vw] leading-none text-white/[0.15] font-black select-none"
-        >
-          卐
-        </motion.div>
-        {/* Subtle noise for texture */}
         <div className="absolute inset-0 opacity-[0.08] bg-[url('/textures/noise.png')] mix-blend-overlay" />
       </div>
 
@@ -109,21 +69,16 @@ export default function EntrySplashPage() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="flex flex-col items-center w-full"
           >
-            {/* SEO Hidden Elements (For Crawlers & Bots) */}
             <h1 className="sr-only">
-              Hyperlocal devotional, regional and folk audio for Bharat’s dialect-first audience.
+              Media Mafias Roots. The sound of the Indo-Gangetic Belt.
             </h1>
-            <p className="sr-only">
-              Future Radio is a regional and devotional radio network where listeners discover bhajans, folk music and local-language streams in formats that feel familiar, daily and culturally rooted.
-            </p>
 
-            {/* Visible Hero Elements (UX Friendly) */}
             <div aria-hidden="true" className="relative flex items-center justify-center w-full max-w-[95vw] mx-auto mb-6 mt-4">
               <Speaker className="hidden md:block absolute left-0 lg:left-4 top-1/4 w-12 h-12 md:w-24 md:h-24 text-black fill-[#FF69B4] transform -rotate-12 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] z-0" strokeWidth={1.5} />
 
               <div className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black leading-[1.1] md:leading-[1.0] tracking-tighter uppercase text-center relative z-10">
-                <span className="block text-[#FF69B4] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)] mb-2 md:mb-4">LOCAL VOICES</span>
-                <span className="block text-[#00E5FF] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)]">GLOBAL VIBES</span>
+                <span className="block text-[#c4913c] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)] mb-2 md:mb-4">MEDIA MAFIAS</span>
+                <span className="block text-white [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)]">ROOTS</span>
               </div>
 
               <Speaker className="hidden md:block absolute right-0 lg:right-4 bottom-1/4 w-12 h-12 md:w-24 md:h-24 text-black fill-[#00E5FF] transform rotate-12 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] z-0" strokeWidth={1.5} />
@@ -132,189 +87,20 @@ export default function EntrySplashPage() {
             <div aria-hidden="true" className="text-xl md:text-3xl font-bold text-black/90 max-w-3xl font-sans leading-snug tracking-tight bg-white px-8 py-4 border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center relative z-10 mx-auto mt-4">
               India's First AI-Powered Vernacular Radio Network
             </div>
-          </motion.div>
-
-          {/* STATION CATALOGS (Neo-Brutalist Grid) */}
-          <div className="w-full max-w-7xl mx-auto mt-24 flex flex-col gap-16 text-left">
             
-            {/* Regional Stations */}
-            <div>
-              <div className="flex items-center gap-4 mb-2">
-                <h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block">Explore Bagheli, Bhojpuri, Awadhi and more.</h2>
-                <div className="bg-[#E5FF00] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full hidden md:block">Regional</div>
-              </div>
-              <p className="text-lg md:text-xl font-bold text-black/70 mb-8 max-w-2xl">Listen to authentic folk songs and hyper-local audio in the language people actually live in.</p>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {REGIONAL_STATIONS.map((station) => (
-                  <Link href={`/${station.id}`} key={station.id} passHref legacyBehavior>
-                    <motion.a
-                      whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
-                      whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
-                      onClick={(e) => {
-                        if (station.comingSoon) e.preventDefault();
-                      }}
-                      className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col block ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200 pointer-events-none' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
-                      style={{ backgroundColor: station.color }}
-                    >
-                      <div className="aspect-square border-b-4 border-black bg-white relative">
-                        {station.image ? (
-                          <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
-                        )}
-                        
-                        {station.comingSoon && (
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
-                            <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="p-4 bg-white flex flex-col justify-between flex-grow">
-                      <div>
-                        <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
-                        <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
-                      </div>
-                      
-                      {!station.comingSoon && (
-                        <div className="mt-4 flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                             <span className="text-[10px] font-black">{station.listeners}</span>
-                          </div>
-                          <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
-                            <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    </motion.a>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Devotional Stations */}
-            <div>
-              <div className="flex items-center gap-4 mb-2">
-                <Link href="/devotional"><h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block hover:text-[#C0392B] transition-colors cursor-pointer">24/7 live streams for bhajans, aarti and pure devotion.</h2></Link>
-                <div className="bg-[#FFA500] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full hidden md:block">Devotional</div>
-              </div>
-              <p className="text-lg md:text-xl font-bold text-black/70 mb-8 max-w-2xl">Deity-specific spiritual audio for your daily journey.</p>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {DEVOTIONAL_STATIONS.map((station) => (
-                  <Link href={`/devotional/${station.id}`} key={station.id} passHref legacyBehavior>
-                    <motion.a
-                      whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
-                      whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
-                      onClick={(e) => {
-                        if (station.comingSoon) e.preventDefault();
-                      }}
-                      className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col block ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200 pointer-events-none' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
-                      style={{ backgroundColor: station.color }}
-                    >
-                      <div className="aspect-square border-b-4 border-black bg-white relative">
-                        {station.image ? (
-                          <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
-                        )}
-                        
-                        {station.comingSoon && (
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
-                            <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="p-4 bg-white flex flex-col justify-between flex-grow">
-                        <div>
-                          <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
-                          <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
-                        </div>
-                        
-                        {!station.comingSoon && (
-                          <div className="mt-4 flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                               <span className="text-[10px] font-black">{station.listeners}</span>
-                            </div>
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
-                              <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </motion.a>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Indie Stations */}
-            <div className="mt-16">
-              <div className="flex items-center gap-4 mb-2">
-                <Link href="/indie"><h2 className="text-4xl md:text-5xl font-black font-khand tracking-tight text-black border-b-4 border-black pb-2 inline-block hover:text-[#FF69B4] transition-colors cursor-pointer">Underground, alternative, and raw talent.</h2></Link>
-                <div className="bg-[#FF69B4] border-2 border-black px-3 py-1 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full hidden md:block">Indie</div>
-              </div>
-              <p className="text-lg md:text-xl font-bold text-black/70 mb-8 max-w-2xl">Discover India's vibrant independent music scene.</p>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {INDIE_STATIONS.map((station) => (
-                  <Link href={`/indie/${station.id}`} key={station.id} passHref legacyBehavior>
-                    <motion.a
-                      whileHover={!station.comingSoon ? { y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" } : {}}
-                      whileTap={!station.comingSoon ? { y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" } : {}}
-                      onClick={(e) => {
-                        if (station.comingSoon) e.preventDefault();
-                      }}
-                      className={`relative rounded-2xl border-4 border-black overflow-hidden flex flex-col block ${station.comingSoon ? 'opacity-60 cursor-not-allowed bg-gray-200 pointer-events-none' : 'cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all'} `}
-                      style={{ backgroundColor: station.color }}
-                    >
-                      <div className="aspect-square border-b-4 border-black bg-white relative">
-                        {station.image ? (
-                          <img src={station.image} alt={station.name} className={`w-full h-full object-cover ${station.comingSoon ? 'grayscale' : ''}`} />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center font-black text-6xl text-black/20">?</div>
-                        )}
-                        
-                        {station.comingSoon && (
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
-                            <div className="bg-white border-2 border-black font-black uppercase text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -rotate-12">Coming Soon</div>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="p-4 bg-white flex flex-col justify-between flex-grow">
-                        <div>
-                          <h3 className="font-black text-lg md:text-xl leading-tight text-black mb-1 line-clamp-1">{station.name}</h3>
-                          <p className="text-black/60 font-bold text-xs uppercase">{station.region}</p>
-                        </div>
-                        
-                        {!station.comingSoon && (
-                          <div className="mt-4 flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 bg-[#E5FF00] border-2 border-black rounded-full px-2 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                               <span className="text-[10px] font-black">{station.listeners}</span>
-                            </div>
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center border-2 border-black hover:bg-[#E5FF00] hover:text-black text-white transition-colors">
-                              <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </motion.a>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-          </div>
+            <motion.button
+              whileHover={{ y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
+              whileTap={{ y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" }}
+              onClick={handlePlayRoots}
+              className="mt-12 bg-[#FF69B4] border-4 border-black text-black font-black uppercase text-2xl md:text-4xl px-12 py-6 rounded-full flex items-center gap-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer z-20 hover:bg-[#E5FF00]"
+            >
+              <Play className="w-8 h-8 md:w-10 md:h-10 fill-current" />
+              <span>LISTEN LIVE</span>
+            </motion.button>
+          </motion.div>
         </div>
 
-        {/* NEO-BRUTALIST FEATURES SECTION (English) */}
+        {/* NEO-BRUTALIST FEATURES SECTION */}
         <div className="w-full max-w-7xl mx-auto px-6 py-20 mt-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-black font-khand text-black mb-4 uppercase">Why We Hit Different</h2>
@@ -354,9 +140,9 @@ export default function EntrySplashPage() {
             
             {/* Network Info */}
             <div className="flex flex-col items-start">
-              <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight mb-4 text-[#E5FF00] drop-shadow-[2px_2px_0px_rgba(255,255,255,0.2)]">The Future Radio Network</h2>
+              <h2 className="text-4xl md:text-5xl font-black font-khand uppercase tracking-tight mb-4 text-[#c4913c] drop-shadow-[2px_2px_0px_rgba(255,255,255,0.2)]">Media Mafias Roots</h2>
               <p className="text-white/80 font-bold mb-6 max-w-sm">
-                India's premier autonomous AI-powered regional, devotional, and independent radio network. Broadcasting raw culture 24/7.
+                India's premier autonomous AI-powered vernacular radio network. Broadcasting raw culture 24/7.
               </p>
             </div>
             
@@ -387,7 +173,7 @@ export default function EntrySplashPage() {
           
           <div className="max-w-7xl mx-auto mt-16 pt-8 border-t-4 border-white/20 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="font-black text-white/50 text-sm uppercase tracking-wide">
-              &copy; {new Date().getFullYear()} The Future Radio Network. All rights reserved.
+              &copy; {new Date().getFullYear()} Media Mafias Roots. All rights reserved.
             </div>
             <div className="flex items-center gap-6 text-white/50 font-bold text-sm uppercase">
               <Link href="/privacy" className="hover:text-[#E5FF00] transition-colors">Privacy</Link>

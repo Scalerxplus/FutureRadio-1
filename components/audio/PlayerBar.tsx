@@ -13,8 +13,8 @@ export default function PlayerBar() {
 
   const handleShare = async () => {
     const shareData = {
-      title: "Future Radio",
-      text: "Vibe with GenZ on Future Radio 📻 - 100% Autonomous AI Radio Station. Tune in live!",
+      title: "Media Mafias Roots",
+      text: "Vibe on Media Mafias Roots 📻 - 100% Autonomous AI Radio Station. Tune in live!",
       url: "https://radio.factoricai.com/radio",
     };
 
@@ -44,7 +44,7 @@ export default function PlayerBar() {
           </div>
           <div>
             <h4 className="text-lg font-black text-black leading-tight uppercase tracking-wide">
-              {currentBlock ? currentBlock.songTitle : "Future Radio Stream"}
+              {currentBlock ? currentBlock.songTitle : "Media Mafias Roots Stream"}
             </h4>
             <div className="flex items-center gap-2">
               <p className="text-sm text-black font-bold">

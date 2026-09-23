@@ -31,13 +31,13 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <Link href="/" className="hover:-translate-y-1 transition-transform">
             <img 
-              src="/icons/logo-horizontal-dark.png" 
-              alt="Future Radio" 
+              src="/roots-logo.jpg" 
+              alt="Media Mafias Roots" 
               className="h-16 md:h-20 object-contain"
             />
           </Link>
           <span className="hidden lg:inline-block text-[10px] font-mono text-brand-dark font-bold tracking-widest uppercase border-2 border-brand-dark px-2 py-0.5 bg-brand-yellow shadow-brutal-sm">
-            FUTURE_RADIO_LIVE
+            MEDIA_MAFIAS_ROOTS
           </span>
         </div>
 

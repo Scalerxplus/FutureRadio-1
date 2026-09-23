@@ -62,9 +62,9 @@ export default function AudioOrchestrator() {
     };
 
     switch(deckType) {
-      case "A": targetRef = mediaRefA; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/dekhi_leb_3.mp3"); break;
-      case "B": targetRef = mediaRefB; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/tain_sun_5.mp3"); break;
-      case "C": targetRef = mediaRefC; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/regional/bagheli/5_Music/purani_kitab_2.mp3"); break;
+      case "A": targetRef = mediaRefA; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/roots/5_Music/fallback_1.mp3"); break;
+      case "B": targetRef = mediaRefB; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/roots/5_Music/fallback_2.mp3"); break;
+      case "C": targetRef = mediaRefC; fallbackSrc = getRandomFile(musicOptions, "/local_audio_vault/roots/5_Music/fallback_3.mp3"); break;
           }
 
     if (targetRef && targetRef.current && targetRef.current.src && !targetRef.current.src.includes(encodeURI(fallbackSrc))) {
@@ -266,7 +266,7 @@ export default function AudioOrchestrator() {
     
     if (isFirstLoadRef.current) {
       // First App Open: Premium Startup Jingle / Sonic Branding
-      transitionAudioRef.current.src = "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3"; // Using existing jingle as placeholder for the 2s startup sound
+      transitionAudioRef.current.src = "/local_audio_vault/roots/1_Station_Jingle/Roots_Jingle_01.mp3"; // Using existing jingle as placeholder for the 2s startup sound
       isFirstLoadRef.current = false;
     } else {
       // Channel Change: Play analog tuning/glitch sound effect
@@ -275,11 +275,11 @@ export default function AudioOrchestrator() {
         "/audio/Zappers/zapper_laser_02.mp3",
         "/audio/Zappers/zapper_transition_03.mp3"
       ];
-      transitionAudioRef.current.src = GLITCHES[Math.floor(Math.random() * GLITCHES.length)] || "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 01.mp3";
+      transitionAudioRef.current.src = GLITCHES[Math.floor(Math.random() * GLITCHES.length)] || "/local_audio_vault/roots/1_Station_Jingle/Roots_Jingle_01.mp3";
     }
     
     transitionAudioRef.current.onerror = () => {
-       transitionAudioRef.current!.src = "/local_audio_vault/regional/bagheli/1_Station_Jingle/FR - Bagheli Jingle 02.mp3";
+       transitionAudioRef.current!.src = "/local_audio_vault/roots/1_Station_Jingle/Roots_Jingle_02.mp3";
     };
     
     transitionAudioRef.current.play().catch(e => console.warn("Transition audio blocked:", e));
