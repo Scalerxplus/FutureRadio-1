@@ -12,7 +12,7 @@ export default function TelemetryDisplay() {
   const getFallbackImage = (id: string) => {
     const validIds = ['shiva', 'hanuman', 'ram', 'krishna', 'jagannath', 'ganesha', 'vishnu', 'laxmi', 'saraswati', 'durga', 'satsang', 'bhakti', 'bagheli', 'roots', 'bhojpuri', 'awadhi', 'maithili', 'bundeli'];
     if (validIds.includes(id)) {
-      return `/images/stations/${id}_artwork.png`;
+      return id === "roots" ? `/images/stations/roots_artwork.jpg` : `/images/stations/${id}_artwork.png`;
     }
     return "/icons/player-logo.png";
   };
@@ -48,4 +48,5 @@ export default function TelemetryDisplay() {
     </div>
   );
 }
+
 
