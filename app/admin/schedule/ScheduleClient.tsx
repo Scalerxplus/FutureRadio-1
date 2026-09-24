@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Music, Mic2, AlertCircle, Trash2, Edit3, PlusCircle, Clock, Volume2, Target, X, Check, Lock, UploadCloud } from "lucide-react";
-import { updateScheduleElement } from "./actions";
+import { updateScheduleElement, fixLegacyPromos } from "./actions";
 import LibraryPane from "@/components/admin/LibraryPane";
 import MixingConsole from "@/components/admin/MixingConsole";
 import { REGIONAL_STATIONS, DEVOTIONAL_STATIONS } from "@/lib/data";
@@ -631,8 +631,7 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
             <span className="text-[10px] uppercase tracking-wider font-bold">Now Playing</span>
           </button>
           
-          <button 
-            onClick={handleRunDiagnostics}
+          <button onClick={async () => { const res = await fixLegacyPromos(); alert("Fixed " + res.count + " rows! Refreshing..."); window.location.reload(); }} className="group flex flex-col justify-center items-center gap-2 bg-[#1a1a24] hover:bg-[#20202c] text-gray-400 hover:text-white aspect-square rounded-[24px] font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] border border-[#2a2a35] hover:border-purple-500/50 active:scale-95 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]"><Check size={20} className="group-hover:scale-110 transition-transform group-hover:text-purple-400" /><span className="text-[10px] uppercase tracking-wider text-gray-500 group-hover:text-gray-300">Clean Promos</span></button><button onClick={handleRunDiagnostics}
             disabled={isRunningDiagnostics}
             className="group flex flex-col justify-center items-center gap-2 bg-[#1a1a24] hover:bg-[#20202c] text-gray-400 hover:text-white aspect-square rounded-[24px] font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] border border-[#2a2a35] hover:border-blue-500/50 active:scale-95 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] disabled:opacity-50"
           >
@@ -721,5 +720,7 @@ function TypeBadge({ type, isStatic }: { type: string, isStatic?: boolean }) {
     </span>
   );
 }
+
+
 
 
