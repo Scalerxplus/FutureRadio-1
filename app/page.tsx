@@ -52,13 +52,13 @@ export default function EntrySplashPage() {
       <main className={`min-h-screen text-black flex flex-col pt-20 pb-24 transition-opacity duration-1000 relative z-10 ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
         
         {/* NEO-BRUTALIST HERO SECTION */}
-        <div className="w-full max-w-7xl mx-auto px-6 pt-12 pb-16 flex flex-col items-center text-center">
+        <div className="w-full max-w-7xl mx-auto px-6 pt-8 pb-4 flex flex-col items-center text-center">
           
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
-            className="inline-block bg-[#E5FF00] border-4 border-black px-6 py-2 rounded-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-10 transform -rotate-2"
+            className="inline-block bg-[#E5FF00] border-4 border-black px-6 py-2 rounded-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-6 transform -rotate-2"
           >
             <span className="font-bold text-black uppercase tracking-widest text-sm md:text-base">THE FUTURE RADIO NETWORK</span>
           </motion.div>
@@ -77,8 +77,8 @@ export default function EntrySplashPage() {
               <Speaker className="hidden md:block absolute left-0 lg:left-4 top-1/4 w-12 h-12 md:w-24 md:h-24 text-black fill-[#FF69B4] transform -rotate-12 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] z-0" strokeWidth={1.5} />
 
               <div className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black leading-[1.1] md:leading-[1.0] tracking-tighter uppercase text-center relative z-10">
-                <span className="block text-[#c4913c] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)] mb-2 md:mb-4">FUTURE RADIO</span>
-                <span className="block text-white [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[10px_10px_0_rgba(0,0,0,1)]">ROOTS</span>
+                <span className="block text-[#c4913c]   drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-xl mb-2 md:mb-4">FUTURE RADIO</span>
+                <span className="block text-white   drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-xl">ROOTS</span>
               </div>
 
               <Speaker className="hidden md:block absolute right-0 lg:right-4 bottom-1/4 w-12 h-12 md:w-24 md:h-24 text-black fill-[#00E5FF] transform rotate-12 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] z-0" strokeWidth={1.5} />
@@ -92,7 +92,7 @@ export default function EntrySplashPage() {
               whileHover={{ y: -4, x: -4, boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
               whileTap={{ y: 0, x: 0, boxShadow: "0px 0px 0px 0px rgba(0,0,0,1)" }}
               onClick={handlePlayRoots}
-              className="mt-12 bg-[#FF69B4] border-4 border-black text-black font-black uppercase text-2xl md:text-4xl px-12 py-6 rounded-full flex items-center gap-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer z-20 hover:bg-[#E5FF00]"
+              className="mt-8 bg-[#FF69B4] border-4 border-black text-black font-black uppercase text-2xl md:text-4xl px-12 py-6 rounded-full flex items-center gap-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer z-20 hover:bg-[#E5FF00]"
             >
               <Play className="w-8 h-8 md:w-10 md:h-10 fill-current" />
               <span>LISTEN LIVE</span>
@@ -101,8 +101,8 @@ export default function EntrySplashPage() {
         </div>
 
         {/* NEO-BRUTALIST FEATURES SECTION */}
-        <div className="w-full max-w-7xl mx-auto px-6 py-20 mt-10">
-          <div className="text-center mb-16">
+        <div className="w-full max-w-7xl mx-auto px-6 py-8 mt-4">
+          <div className="text-center mb-8">
             <h2 className="text-4xl md:text-6xl font-black font-khand text-black mb-4 uppercase">Why We Hit Different</h2>
             <p className="text-xl font-bold text-black/70">Not just a stream, but a cultural movement.</p>
           </div>
@@ -187,5 +187,7 @@ export default function EntrySplashPage() {
     </div>
   );
 }
+
+
 
 
