@@ -29,7 +29,13 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
   const [isVibeSheetOpen, setIsVibeSheetOpen] = useState(false);
 
   // Initialize store with dynamic route station if provided and different
-  useEffect(() => { setCityId('roots', 'FUTURE RADIO Roots'); }, [setCityId]);
+  useEffect(() => {
+    if (initialStation && initialStation !== cityId) {
+      // Basic check to map simple strings to known city logic if needed
+      const stationName = initialStation.charAt(0).toUpperCase() + initialStation.slice(1);
+      setCityId(initialStation, stationName);
+    }
+  }, [initialStation, cityId, setCityId]);
 
   // Synchronize active song liked states from Supabase
   useEffect(() => {
@@ -359,7 +365,6 @@ export default function RadioClient({ initialStation }: { initialStation?: strin
     </motion.div>
   );
 }
-
 
 
 
