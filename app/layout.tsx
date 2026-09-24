@@ -7,13 +7,9 @@ import PlayerBar from "@/components/audio/PlayerBar";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 
-import { Baloo_2, Space_Grotesk, Space_Mono, Khand, Rozha_One } from "next/font/google";
+import { Baloo_2, Space_Grotesk, Khand } from "next/font/google";
 
-const digitalFont = Space_Mono({
-  subsets: ["latin"],
-  variable: "--font-digital",
-  weight: ["400", "700"],
-});
+
 
 const balooFont = Baloo_2({
   subsets: ["devanagari", "latin"],
@@ -27,11 +23,7 @@ const khandFont = Khand({
   weight: ["700", "600", "500", "400", "300"],
 });
 
-const rozhaOne = Rozha_One({
-  subsets: ["devanagari", "latin"],
-  variable: "--font-rozha",
-  weight: ["400"],
-});
+
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -95,7 +87,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark scroll-smooth ${khandFont.variable} ${rozhaOne.variable}`}>
+    <html lang="en" className={`dark scroll-smooth ${khandFont.variable} `}>
       <head>
         {/* Google Analytics */}
         <Script
@@ -143,7 +135,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${balooFont.variable} ${spaceGrotesk.variable} ${digitalFont.variable} font-sans antialiased text-white min-h-screen selection:bg-brand-red selection:text-white`}
+        className={`${balooFont.variable} ${spaceGrotesk.variable} font-sans antialiased text-white min-h-screen selection:bg-brand-red selection:text-white`}
       >
         {/* Persistent Audio Core Layers */}
         <AudioOrchestrator />
@@ -177,5 +169,7 @@ export default function RootLayout({
     </html>
   );
 }
+
+
 
 

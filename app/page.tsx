@@ -178,7 +178,7 @@ export default function EntrySplashPage() {
             <div className="flex items-center gap-6 text-white/50 font-bold text-sm uppercase">
               <Link href="/privacy" className="hover:text-[#E5FF00] transition-colors">Privacy</Link>
               <Link href="/terms" className="hover:text-[#FF69B4] transition-colors">Terms</Link>
-              <Link href="/partner" className="hover:text-[#00E5FF] transition-colors">Partner With Us</Link>
+              
             </div>
           </div>
         </footer>
@@ -187,4 +187,5 @@ export default function EntrySplashPage() {
     </div>
   );
 }
+
 

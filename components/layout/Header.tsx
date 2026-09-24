@@ -14,9 +14,9 @@ export const Header = () => {
     { name: "Radio", href: "/radio" },
     { name: "Tech", href: "/technology" },
     { name: "Business", href: "/business" },
-    { name: "Partner", href: "/partner" },
+    
     { name: "Creators", href: "/creators" },
-    { name: "Analysis", href: "/analysis" },
+    
     { name: "About", href: "/about" },
   ];
 
@@ -65,12 +65,7 @@ export const Header = () => {
           <div className="w-px h-6 bg-gray-300 mx-2"></div>
           
 
-          <Link 
-            href="/partner" 
-            className="ml-2 border-2 border-brand-dark bg-brand-red text-white px-4 py-2 shadow-brutal hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all whitespace-nowrap uppercase font-bold text-xs"
-          >
-            Partner
-          </Link>
+          
         </nav>
 
         {/* Mobile Nav Toggle */}
@@ -131,13 +126,7 @@ export const Header = () => {
                 transition={{ delay: links.length * 0.05 }}
                 className="mt-8"
               >
-                <Link 
-                  href="/partner" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full border-4 border-brand-dark bg-brand-red text-white font-bold px-8 py-4 shadow-brutal hover:bg-white hover:text-brand-dark transition-colors text-2xl uppercase"
-                >
-                  BECOME A PARTNER
-                </Link>
+                
               </motion.div>
             </nav>
             
@@ -152,5 +141,6 @@ export const Header = () => {
     </>
   );
 };
+
 
 
