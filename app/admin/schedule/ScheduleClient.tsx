@@ -533,7 +533,7 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
 
                       <div className="flex flex-col justify-center min-w-0">
                         <p className={`font-medium truncate text-sm ${isPlayingNow ? 'text-white' : isSkipped ? 'line-through text-red-400' : isPlaceholder && !isStatic ? 'text-gray-400 italic' : 'text-gray-200'}`}>
-                          {element.metadata?.title || element.metadata?.transcript?.substring(0, 50) + "..." || "Station ID"}
+                          {(element.metadata?.title || "").replace(/Bagheli/g, "Roots") || element.metadata?.transcript?.substring(0, 50) + "..." || "Station ID"}
                         </p>
                       <p className="text-[10px] text-gray-500 truncate mt-0.5">
                         {isSkipped ? (
@@ -721,4 +721,5 @@ function TypeBadge({ type, isStatic }: { type: string, isStatic?: boolean }) {
     </span>
   );
 }
+
 

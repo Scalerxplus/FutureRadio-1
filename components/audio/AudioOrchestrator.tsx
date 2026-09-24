@@ -424,7 +424,7 @@ export default function AudioOrchestrator() {
           blockId: currentElementToPlay.id,
           cityId: currentElementToPlay.city_id,
           youtubeId: currentElementToPlay.youtube_id || "",
-          songTitle: currentElementToPlay.metadata?.title || "Future Radio Broadcast",
+          songTitle: (currentElementToPlay.metadata?.title || "Future Radio Broadcast").replace(/Bagheli/g, "Roots"),
           songArtist: currentElementToPlay.metadata?.artist || "Future Radio Intelligence",
           songDurationS: currentElementToPlay.duration_ms / 1000,
           rjAudioUrl: "", jingleUrl: "", rjTranscript: currentElementToPlay.metadata?.transcript || "",
@@ -448,7 +448,7 @@ export default function AudioOrchestrator() {
           blockId: el.id,
           cityId: el.city_id,
           youtubeId: el.youtube_id || "",
-          songTitle: el.metadata?.title || (el.element_type === 'jocktalk' ? 'Station Intelligence Break' : 'Radio Sweeper'),
+          songTitle: (el.metadata?.title || (el.element_type === "jocktalk" ? "Station Intelligence Break" : "Radio Sweeper")).replace(/Bagheli/g, "Roots"),
           songArtist: el.metadata?.artist || "Future Radio Intelligence",
           songDurationS: el.duration_ms / 1000,
           rjAudioUrl: "", jingleUrl: "", rjTranscript: "",
@@ -609,4 +609,5 @@ export default function AudioOrchestrator() {
           </>
   );
 }
+
 
