@@ -12,11 +12,11 @@ export const Header = () => {
 
   const links: { name: string; href: string; external?: boolean }[] = [
     { name: "Radio", href: "/radio" },
-    { name: "Tech", href: "/technology" },
-    { name: "Business", href: "/business" },
+    
+    
     { name: "Partner", href: "/partner" },
-    { name: "Creators", href: "/creators" },
-    { name: "Analysis", href: "/analysis" },
+    
+    
     { name: "About", href: "/about" },
   ];
 
@@ -152,5 +152,6 @@ export const Header = () => {
     </>
   );
 };
+
 
 
