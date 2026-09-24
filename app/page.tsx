@@ -77,8 +77,8 @@ export default function EntrySplashPage() {
               <Speaker className="hidden md:block absolute left-0 lg:left-4 top-1/4 w-12 h-12 md:w-24 md:h-24 text-black fill-[#FF69B4] transform -rotate-12 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] z-0" strokeWidth={1.5} />
 
               <div className="text-6xl md:text-8xl lg:text-[130px] font-khand font-black leading-[1.1] md:leading-[1.0] tracking-tighter uppercase text-center relative z-10">
-                <span className="block text-[#c4913c]   drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-xl mb-2 md:mb-4">FUTURE RADIO</span>
-                <span className="block text-white   drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-xl">ROOTS</span>
+                <span className="block text-[#FF69B4] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] [text-shadow:6px_6px_0px_#000] md:[text-shadow:12px_12px_0px_#000] mb-2 md:mb-4">FUTURE RADIO</span>
+                <span className="block text-[#00E5FF] [-webkit-text-stroke:2px_black] md:[-webkit-text-stroke:4px_black] [text-shadow:6px_6px_0px_#000] md:[text-shadow:12px_12px_0px_#000]">ROOTS</span>
               </div>
 
               <Speaker className="hidden md:block absolute right-0 lg:right-4 bottom-1/4 w-12 h-12 md:w-24 md:h-24 text-black fill-[#00E5FF] transform rotate-12 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] z-0" strokeWidth={1.5} />
@@ -187,6 +187,7 @@ export default function EntrySplashPage() {
     </div>
   );
 }
+
 
 
 
