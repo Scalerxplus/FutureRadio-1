@@ -9,16 +9,19 @@ export const Footer = () => {
         <div className="md:col-span-2 space-y-6">
           <Link href="/">
             <img 
-              src="/icons/logo-horizontal-light.png" 
+              src="/future-radio-logo.png" 
               alt="Future Radio" 
               className="h-10 object-contain hover:-translate-y-1 transition-transform"
             />
           </Link>
           <p className="font-mono text-sm max-w-sm leading-relaxed border-l-4 border-brand-yellow pl-4">
-            Digital India's #1 Digital & Virtual Radio Network. Broadcasting from the regional underground to the world.
+            Digital India's #1 Digital & Virtual Radio Network. Broadcasting the true voice of the Indo-Gangetic belt to the world.
           </p>
+          <div className="text-[10px] font-mono text-gray-400 mt-2 max-w-sm leading-relaxed">
+            Dialects: Awadhi &bull; Bagheli &bull; Bhojpuri &bull; Braj &bull; Bundeli &bull; Chhattisgarhi &bull; Magahi &bull; Maithili &bull; Malwi &bull; Nimari
+          </div>
           <div className="text-[10px] font-mono tracking-widest uppercase text-brand-yellow">
-            10 DIALECTS :: 1 PLATFORM :: ALWAYS LIVE
+            INDO-GANGETIC BELT :: 1 PLATFORM :: ALWAYS LIVE
           </div>
         </div>
 
@@ -29,9 +32,7 @@ export const Footer = () => {
             <li><Link href="/business" className="hover:text-brand-yellow transition-colors">Business</Link></li>
             <li><Link href="/radio" className="hover:text-brand-yellow transition-colors">Future Radio</Link></li>
             <li><Link href="/technology" className="hover:text-brand-yellow transition-colors">Technology</Link></li>
-            <li><Link href="/partner" className="hover:text-brand-yellow transition-colors">Partner Program</Link></li>
             <li><Link href="/creators" className="hover:text-brand-yellow transition-all">Creator Program</Link></li>
-            <li><Link href="/analysis" className="hover:text-brand-yellow transition-all">Market Analysis</Link></li>
             <li><Link href="/about" className="hover:text-brand-yellow transition-all">About</Link></li>
           </ul>
         </div>
@@ -60,3 +61,5 @@ export const Footer = () => {
     </footer>
   );
 };
+
+

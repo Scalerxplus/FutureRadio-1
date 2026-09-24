@@ -51,7 +51,7 @@ export default function AboutPage() {
           <div className="bg-[#E5FF00] border-4 border-black p-10 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col">
             <h3 className="text-3xl font-black font-khand uppercase tracking-wide text-black mb-6 bg-white inline-block px-4 py-2 border-4 border-black self-start shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-2">Our Vision</h3>
             <p className="text-black/90 font-bold text-xl leading-relaxed">
-              To build a decentralized global audio platform that empowers independent artists and creators by deeply integrating local dialects and pure devotional content into one seamless app-less experience.
+              To build a decentralized global audio platform that empowers independent artists and creators by deeply integrating the rich folk traditions and dialects of the Indo-Gangetic belt into one seamless digital experience.
             </p>
           </div>
 
@@ -80,3 +80,4 @@ export default function AboutPage() {
     </div>
   );
 }
+
