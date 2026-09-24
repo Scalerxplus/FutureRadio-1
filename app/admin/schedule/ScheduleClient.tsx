@@ -375,16 +375,12 @@ export default function ScheduleClient({ initialSchedule, currentChannel }: { in
               onChange={(e) => window.location.href = `/admin/schedule?channel=${e.target.value}`}
               className="bg-[#111118] border border-[#2a2a35] text-white rounded-lg px-4 py-2 text-sm font-bold shadow-lg"
             >
-              <optgroup label="Regional Stations">
+              <optgroup label="Active Stations">
                 {REGIONAL_STATIONS.map(s => (
                   <option key={s.id} value={s.id}>Future Radio - {s.name.replace(' Vibe', '')}</option>
                 ))}
               </optgroup>
-              <optgroup label="Devotional Stations">
-                {DEVOTIONAL_STATIONS.map(s => (
-                  <option key={s.id} value={s.id}>Devotional - {s.name}</option>
-                ))}
-              </optgroup>
+              
             </select>
           </div>
         </header>
@@ -725,3 +721,4 @@ function TypeBadge({ type, isStatic }: { type: string, isStatic?: boolean }) {
     </span>
   );
 }
+

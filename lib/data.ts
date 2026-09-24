@@ -54,10 +54,11 @@ export const ROOTS_STATION = {
   region: 'Indo-Gangetic Belt',
   listeners: '25k+',
   comingSoon: false,
-  image: '/images/stations/roots_artwork.jpg',
+  image: '/images/stations/roots_artwork.png',
   color: '#c4913c'
 };
 
-export const REGIONAL_STATIONS: any[] = [];
+export const REGIONAL_STATIONS: any[] = [ROOTS_STATION];
 export const DEVOTIONAL_STATIONS: any[] = [];
+
 
