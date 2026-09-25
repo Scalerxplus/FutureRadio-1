@@ -122,60 +122,60 @@ export default function YouTubeClient() {
         
         {/* Top Header: Promo Banner */}
           <div className="flex justify-center items-start w-full mb-8">
-            <div className="w-[1500px] h-[140px] bg-black border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden flex items-center justify-center">
+            <div className="w-[1400px] h-[140px] bg-black border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden flex items-center justify-center">
               <img src="/images/stations/promo_banner.png" alt="Promotional Banner" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; if(e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-4xl font-khand font-black text-black">Promo Banner Space (1500x140)</span>'; }} />
             </div>
           </div>
 
         {/* Center Content: Visuals & Panels */}
-        <div className="flex-1 flex gap-16 mt-12 items-center justify-center">
+        <div className="flex-1 flex gap-16 mt-4 items-center justify-center">
           
           {/* Left: Dynamic Roots Artwork Visual */}
-          <div className="flex-1 flex flex-col justify-center items-center">
-            
-            {/* Circular Frame with RGB Border */}
-            <div className="relative w-[500px] h-[500px] flex items-center justify-center mt-[-60px]">
+            <div className="flex-1 flex flex-col justify-center items-center gap-12">
               
-              {/* Glowing RGB Border (Similar to Radio Player) */}
-              <div 
-                className={`absolute inset-[-12px] rounded-full blur-[15px] opacity-70 ${isPlaying ? 'smooth-spin' : ''}`}
-                style={{
-                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
-                }}
-              />
-              <div 
-                className={`absolute inset-[-4px] rounded-full ${isPlaying ? 'smooth-spin' : ''}`}
-                style={{
-                  background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
-                }}
-              />
-              
-              {/* Center Image Container */}
-              <div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10 border-4 border-black">
-                <img 
-                  src="/images/stations/roots_artwork.jpg" 
-                  alt="Roots Vibes" 
-                  className="w-full h-full object-cover scale-105"
+              {/* Circular Frame with RGB Border */}
+              <div className="relative w-[500px] h-[500px] flex items-center justify-center">
+                
+                {/* Glowing RGB Border (Similar to Radio Player) */}
+                <div 
+                  className={`absolute inset-[-12px] rounded-full blur-[15px] opacity-70 ${isPlaying ? 'smooth-spin' : ''}`}
+                  style={{
+                    background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
+                  }}
                 />
+                <div 
+                  className={`absolute inset-[-4px] rounded-full ${isPlaying ? 'smooth-spin' : ''}`}
+                  style={{
+                    background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
+                  }}
+                />
+                
+                {/* Center Image Container */}
+                <div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10 border-4 border-black">
+                  <img 
+                    src="/images/stations/roots_artwork.jpg" 
+                    alt="Roots Vibes" 
+                    className="w-full h-full object-cover scale-105"
+                  />
+                </div>
+              </div>
+  
+              {/* Now Playing Info (Solid Card) */}
+              <div className="bg-[#00E5FF] border-[6px] border-black p-6 w-full max-w-[800px] shadow-[16px_16px_0_0_rgba(0,0,0,1)] flex flex-col items-center justify-center relative min-h-[140px]">
+                <div className="absolute -top-5 -left-5 bg-black text-[#E5FF00] px-4 py-1 font-bold text-2xl uppercase shadow-[4px_4px_0_0_rgba(255,255,255,1)] transform -rotate-12 border-2 border-white z-20">
+                  NOW PLAYING!
+                </div>
+                <h1 className="text-5xl font-black font-khand tracking-tight uppercase text-black text-center truncate w-full">
+                  {formatTitle(currentBlock?.songTitle)}
+                </h1>
+                <p className="text-3xl font-bold font-khand uppercase text-black/70 tracking-widest truncate mt-1">
+                  {formatArtist(currentBlock?.songArtist)}
+                </p>
               </div>
             </div>
-
-            {/* Now Playing Info (Solid Card) */}
-            <div className="mt-20 bg-[#00E5FF] border-[6px] border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] flex flex-col items-center">
-              <div className="bg-black text-[#E5FF00] px-4 py-1 font-bold text-xl uppercase mb-4 shadow-[4px_4px_0_0_rgba(255,255,255,1)] transform -rotate-2">
-                NOW PLAYING
-              </div>
-              <h1 className="text-5xl font-black font-khand tracking-tight uppercase text-black text-center truncate w-full">
-                {formatTitle(currentBlock?.songTitle)}
-              </h1>
-              <p className="text-3xl font-bold font-khand uppercase text-black/70 tracking-widest truncate mt-2">
-                {formatArtist(currentBlock?.songArtist)}
-              </p>
-            </div>
-          </div>
-
-          {/* Right: Solid Panels (Visualizer & Up Next) */}
-          <div className="w-[500px] flex flex-col gap-12 h-[800px] mt-[-40px]">
+  
+            {/* Right: Solid Panels (Visualizer & Up Next) */}
+          <div className="w-[500px] flex flex-col gap-12 h-[800px]">
             
             {/* Brutalist Equalizer Panel */}
             <div className="h-[280px] bg-[#FF69B4] border-[6px] border-black p-8 flex flex-col justify-between shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative overflow-hidden">
