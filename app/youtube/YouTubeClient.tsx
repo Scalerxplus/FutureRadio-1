@@ -194,7 +194,7 @@ export default function YouTubeClient() {
               <span className="text-[#FF69B4] mx-8 text-4xl">✦</span>
               YOU ARE LISTENING TO FUTURE RADIO
               <span className="text-[#00E5FF] mx-8 text-4xl">✦</span>
-              STREAM OUR SONGS ON: SPOTIFY | JIOSAAVN | APPLE MUSIC | AMAZON MUSIC | YOUTUBE MUSIC | GAANA <span className='text-[#E5FF00] mx-8 text-4xl'>&#x25CF;</span> 100% AUTONOMOUS PREMIUM FOLK RADIO
+              <span className="flex items-center gap-4 text-2xl font-bold">STREAM OUR SONGS ON: <img src="/images/logos/spotify.png" className="h-8 object-contain bg-white rounded-full p-1" /> SPOTIFY <img src="/images/logos/applemusic.svg" className="h-8 object-contain bg-white rounded-md p-1" /> APPLE MUSIC <img src="/images/logos/youtubemusic.svg" className="h-8 object-contain bg-white rounded-md p-1" /> YOUTUBE MUSIC <span className="bg-[#2bc5b4] text-white px-2 py-1 rounded-md">JioSaavn</span> <span className="bg-[#e72c30] text-white px-2 py-1 rounded-md">Gaana</span> <span className="bg-[#232f3e] text-[#00a8e1] px-2 py-1 rounded-md border border-[#00a8e1]">amazon music</span></span> <span className='text-[#E5FF00] mx-8 text-4xl'>&#x25CF;</span> 100% AUTONOMOUS PREMIUM FOLK RADIO
               <span className="text-[#E5FF00] mx-8 text-4xl">✦</span>
               LIVE 24/7
             </React.Fragment>
@@ -205,3 +205,5 @@ export default function YouTubeClient() {
     </div>
   );
 }
+
+
