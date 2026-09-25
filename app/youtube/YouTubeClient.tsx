@@ -122,8 +122,8 @@ export default function YouTubeClient() {
         
         {/* Top Header: Promo Banner */}
           <div className="flex justify-center items-start w-full mb-8">
-            <div className="w-[1500px] h-[140px] bg-white border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden flex items-center justify-center">
-              <img src="/images/stations/promo_banner.png" alt="Promotional Banner" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; if(e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-4xl font-khand font-black text-black">Promo Banner Space (1500x140)</span>'; }} />
+            <div className="w-[1500px] h-[140px] bg-black border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden flex items-center justify-center">
+              <img src="/images/stations/promo_banner.png" alt="Promotional Banner" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; if(e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-4xl font-khand font-black text-black">Promo Banner Space (1500x140)</span>'; }} />
             </div>
           </div>
 
