@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useAudioStore, unlockAudio } from "@/components/audio/useAudioStore";
 import { motion } from "framer-motion";
-import QRCode from "react-qr-code";
 
 // Helpers to clean raw metadata
 function formatTitle(title?: string): string {
@@ -121,35 +120,12 @@ export default function YouTubeClient() {
       {/* Main Content Area */}
       <div className="flex-1 h-full relative flex flex-col z-10 p-12">
         
-        {/* Top Header: Clock & ON AIR Badge */}
-        <div className="flex justify-between items-start w-full">
-          {/* QR Code */}
-          <div className="bg-white border-4 border-black p-3 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex gap-4 items-center">
-            <div className="border-2 border-black p-1 bg-white">
-              <QRCode value="https://thefutureradio.com" size={72} bgColor="#ffffff" fgColor="#000000" level="H" />
-            </div>
-            <div className="flex flex-col pr-2">
-              <p className="text-2xl font-black font-khand uppercase leading-none tracking-wide">Scan to</p>
-              <p className="text-4xl font-black font-khand uppercase text-[#FF69B4] leading-none tracking-wide mt-1">Listen</p>
-              <p className="text-2xl font-black font-khand uppercase leading-none tracking-wide mt-1">Live</p>
+        {/* Top Header: Promo Banner */}
+          <div className="flex justify-center items-start w-full mb-8">
+            <div className="w-[1500px] h-[140px] bg-white border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden flex items-center justify-center">
+              <img src="/images/stations/promo_banner.png" alt="Promotional Banner" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; if(e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-4xl font-khand font-black text-black">Promo Banner Space (1500x140)</span>'; }} />
             </div>
           </div>
-          <div className="flex items-center">
-            <div className="bg-white border-4 border-black px-6 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center">
-              <div className="text-5xl font-black font-khand tracking-widest text-black">
-                {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-              </div>
-            </div>
-            
-            {/* ON AIR Neo-Brutalist Badge */}
-            <div className="bg-[#E5FF00] border-4 border-black px-8 py-3 ml-8 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center gap-4">
-              <div className="w-5 h-5 bg-red-500 border-2 border-black rounded-full animate-pulse shadow-[2px_2px_0_0_rgba(0,0,0,1)]" />
-              <p className="text-4xl font-black font-khand tracking-widest text-black mt-1">
-                ON AIR
-              </p>
-            </div>
-          </div>
-        </div>
 
         {/* Center Content: Visuals & Panels */}
         <div className="flex-1 flex gap-16 mt-12 items-center justify-center">
@@ -243,11 +219,25 @@ export default function YouTubeClient() {
               </div>
             </div>
 
+          {/* Clock and ON AIR */}
+            <div className="mt-8 flex justify-end items-center gap-6 w-full">
+              <div className="bg-white border-4 border-black px-6 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center">
+                <div className="text-5xl font-black font-khand tracking-widest text-black">
+                  {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                </div>
+              </div>
+              <motion.div
+                animate={{ opacity: [1, 0.5, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="bg-[#E5FF00] border-4 border-black px-4 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center gap-3"
+              >
+                <div className="w-4 h-4 bg-red-600 rounded-full animate-pulse border-2 border-black"></div>
+                <span className="text-3xl font-black font-khand tracking-wider text-black">ON AIR</span>
+              </motion.div>
+            </div>
           </div>
         </div>
-
       </div>
-
       {/* Brutalist Ticker */}
       <div className="absolute bottom-0 w-full h-16 bg-white border-t-[8px] border-black z-40 flex items-center overflow-hidden">
         <motion.div
