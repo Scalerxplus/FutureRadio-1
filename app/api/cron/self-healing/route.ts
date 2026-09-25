@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 
 export const maxDuration = 300; // Allow 5 minutes on Vercel Pro
 export const dynamic = "force-dynamic";
@@ -15,8 +15,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const supabase = createClient();
-    const cityId = "raipur"; // Assuming standard single-station for now
+    const supabase = createAdminClient();
+    const cityId = "roots"; // Assuming standard single-station for now
 
     const now = new Date();
     // Anchor to top of current hour
@@ -119,7 +119,7 @@ export async function GET(request: Request) {
 
           // 2. Regenerate cleanly
           const encodedTime = encodeURIComponent(new Date(new Date(hourIso).getTime() + istOffsetMs).toISOString().replace("Z", "+05:30"));
-          const genUrl = `${appUrl}/api/broadcast/generate-hour?startTime=${encodedTime}`;
+          const genUrl = `${appUrl}/api/broadcast/generate-hour?city=roots&startTime=${encodedTime}`;
           
           await fetch(genUrl, { method: "POST" });
           diagnostics.healed++;
@@ -137,3 +137,5 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+

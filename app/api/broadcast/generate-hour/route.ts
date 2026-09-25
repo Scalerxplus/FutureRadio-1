@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 // @ts-ignore
 import audioManifest from "../../../../public/audio-manifest.json";
 import crypto from "crypto";
@@ -34,7 +34,7 @@ function getBaseTitle(filename: string): string {
 
 export async function POST(request: Request) {
   try {
-    const supabase = createClient();
+    const authHeader = request.headers.get("authorization"); const isCron = authHeader === `Bearer ${process.env.CRON_SECRET}` || request.headers.get("x-vercel-cron") === "1"; const supabase = isCron ? createAdminClient() : createClient();
     const url = new URL(request.url);
     const cityId = url.searchParams.get("city") || "raipur";
     const startTimeParam = url.searchParams.get("startTime");
@@ -259,5 +259,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
+
 
 
