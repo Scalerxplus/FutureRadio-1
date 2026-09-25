@@ -260,7 +260,7 @@ export default function YouTubeClient() {
               <span className="text-[#FF69B4] mx-8 text-4xl">✦</span>
               YOU ARE LISTENING TO FUTURE RADIO
               <span className="text-[#00E5FF] mx-8 text-4xl">✦</span>
-              <span className="mr-8">STREAM OUR SONGS ON:</span> <span className="flex items-center text-3xl font-bold align-middle translate-y-[-2px]"><span className="flex items-center mr-8"><img src="/images/logos/spotify.png" className="h-10 w-10 object-contain rounded-full bg-black mr-3" /> SPOTIFY</span> <span className="flex items-center mr-8">APPLE MUSIC</span> <span className="flex items-center mr-8"><img src="/images/logos/youtubemusic.svg" className="h-10 w-10 object-contain mr-3" /> YOUTUBE MUSIC</span> <span className="bg-[#2bc5b4] text-white px-4 py-1 rounded-lg tracking-normal mr-8">JioSaavn</span> <span className="bg-[#e72c30] text-white px-4 py-1 rounded-lg tracking-normal mr-8">Gaana</span> <span className="bg-[#232f3e] text-[#00a8e1] px-4 py-1 rounded-lg border-2 border-[#00a8e1] tracking-normal lowercase">amazon music</span></span><span className="text-[#E5FF00] ml-12 mr-8 text-4xl">✦</span>100% AUTONOMOUS PREMIUM FOLK RADIO
+              <span className="mr-6">STREAM OUR SONGS ON:</span> <img src="/images/logos/dsp_strip.png" className="h-10 object-contain inline-block align-middle translate-y-[-2px]" alt="DSPs" /><span className="text-[#E5FF00] ml-12 mr-8 text-4xl">✦</span>100% AUTONOMOUS PREMIUM FOLK RADIO
               <span className="text-[#E5FF00] mx-8 text-4xl">✦</span>
               LIVE 24/7
             </React.Fragment>
