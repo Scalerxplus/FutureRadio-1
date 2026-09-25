@@ -65,26 +65,8 @@ export default function YouTubeClient() {
   `;
 
   // Clock
-  useEffect(() => {
-    const t = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  // Auto-start stream
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      unlockAudio();
-      setIsPlaying(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [setIsPlaying]);
-
-  return (
-    <div className="w-[1920px] h-[1080px] overflow-hidden flex font-khand text-black relative bg-[#C4B5FD] selection:bg-black selection:text-[#E5FF00]">
-      <style>{globalStyles}</style>
-      
-      {/* Neo-Brutalist Background Watermarks */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+  useEffect(() =>●<div className="w-[1920px] h-[1080px] overflow-hidden flex font-khand text-black relative bg-[#C4B5FD] selection:bg-black selection:text-[#E5FF00]">
+      <style>●</style>●<div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         {/* Massive Flat Om */}
         <motion.div 
           animate={{ rotate: 360 }}
@@ -100,13 +82,8 @@ export default function YouTubeClient() {
           className="absolute bottom-[-10%] left-[-10%] text-[50vw] leading-none text-white/[0.15] font-black select-none"
         >
           卐
-        </motion.div>
-        {/* Subtle noise for texture */}
-        <div className="absolute inset-0 opacity-[0.08] bg-[url('/textures/noise.png')] mix-blend-overlay" />
-      </div>
-
-      {/* Left Sidebar: Brutalist Logos */}
-      <div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
+        </motion.div>●<div className="absolute inset-0 opacity-[0.08] bg-[url('/textures/noise.png')] mix-blend-overlay" />
+      </div>●<div className="w-[360px] h-full bg-white border-r-8 border-black z-30 flex flex-col items-center py-16 justify-around shadow-[16px_0_0_0_rgba(0,0,0,1)] relative">
         <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#E5FF00] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
           <img src="/media-mafias-logo-new.jpg" alt="Media Mafias" className="w-full h-full object-contain" />
         </div>
@@ -114,54 +91,29 @@ export default function YouTubeClient() {
           <img src="/future-radio-logo-new.jpg" alt="Future Radio" className="w-full h-full object-contain" />
         </div>
         <div className="w-56 h-56 flex items-center justify-center p-2 bg-[#00E5FF] border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rounded-xl">
-          <img src="/roots-logo.jpg" alt="Roots Logo" className="w-full h-full object-contain" />
+          <img src="/images/stations/roots_artwork.jpg" alt="Roots Logo" className="w-full h-full object-contain" />
         </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 h-full relative flex flex-col z-10 p-12">
-        
-        {/* Top Header: Clock & ON AIR Badge */}
-        <div className="flex justify-between items-start w-full">
-          {/* QR Code */}
-          <div className="bg-white border-4 border-black p-3 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex gap-4 items-center">
+      </div>●<div className="flex-1 h-full relative flex flex-col z-10 p-12">●<div className="flex justify-between items-start w-full">●<div className="bg-white border-4 border-black p-3 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex gap-4 items-center">
             <div className="border-2 border-black p-1 bg-white">
               <QRCode value="https://thefutureradio.com" size={72} bgColor="#ffffff" fgColor="#000000" level="H" />
             </div>
             <div className="flex flex-col pr-2">
-              <p className="text-2xl font-black font-khand uppercase leading-none tracking-wide">Scan to</p>
+              <p className="text-2xl font-black font-khand uppercase leading-none tracking-wide">●</p>
               <p className="text-4xl font-black font-khand uppercase text-[#FF69B4] leading-none tracking-wide mt-1">Listen</p>
               <p className="text-2xl font-black font-khand uppercase leading-none tracking-wide mt-1">Live</p>
             </div>
           </div>
           <div className="flex items-center">
             <div className="bg-white border-4 border-black px-6 py-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center">
-              <div className="text-5xl font-black font-khand tracking-widest text-black">
-                {time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-              </div>
-            </div>
-            
-            {/* ON AIR Neo-Brutalist Badge */}
-            <div className="bg-[#E5FF00] border-4 border-black px-8 py-3 ml-8 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center gap-4">
+              <div className="text-5xl font-black font-khand tracking-widest text-black">●</div>
+            </div>●<div className="bg-[#E5FF00] border-4 border-black px-8 py-3 ml-8 shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex items-center gap-4">
               <div className="w-5 h-5 bg-red-500 border-2 border-black rounded-full animate-pulse shadow-[2px_2px_0_0_rgba(0,0,0,1)]" />
               <p className="text-4xl font-black font-khand tracking-widest text-black mt-1">
                 ON AIR
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Center Content: Visuals & Panels */}
-        <div className="flex-1 flex gap-16 mt-12 items-center justify-center">
-          
-          {/* Left: Dynamic Roots Artwork Visual */}
-          <div className="flex-1 flex flex-col justify-center items-center">
-            
-            {/* Circular Frame with RGB Border */}
-            <div className="relative w-[500px] h-[500px] flex items-center justify-center mt-[-60px]">
-              
-              {/* Glowing RGB Border (Similar to Radio Player) */}
-              <div 
+        </div>●<div className="flex-1 flex gap-16 mt-12 items-center justify-center">●<div className="flex-1 flex flex-col justify-center items-center">●<div className="relative w-[500px] h-[500px] flex items-center justify-center mt-[-60px]">●<div 
                 className={`absolute inset-[-12px] rounded-full blur-[15px] opacity-70 ${isPlaying ? 'smooth-spin' : ''}`}
                 style={{
                   background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
@@ -172,38 +124,25 @@ export default function YouTubeClient() {
                 style={{
                   background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000)'
                 }}
-              />
-              
-              {/* Center Image Container */}
-              <div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10 border-4 border-black">
+              />●<div className="w-full h-full rounded-full overflow-hidden bg-black relative z-10 border-4 border-black">
                 <img 
-                  src="/roots-logo.jpg" 
+                  src="/images/stations/roots_artwork.jpg" 
                   alt="Roots Vibes" 
                   className="w-full h-full object-cover scale-105"
                 />
               </div>
-            </div>
-
-            {/* Now Playing Info (Solid Card) */}
-            <div className="mt-20 bg-[#00E5FF] border-[6px] border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] flex flex-col items-center">
+            </div>●<div className="mt-20 bg-[#00E5FF] border-[6px] border-black p-8 w-full max-w-2xl shadow-[16px_16px_0_0_rgba(0,0,0,1)] flex flex-col items-center">
               <div className="bg-black text-[#E5FF00] px-4 py-1 font-bold text-xl uppercase mb-4 shadow-[4px_4px_0_0_rgba(255,255,255,1)] transform -rotate-2">
                 NOW PLAYING
               </div>
-              <h1 className="text-5xl font-black font-khand tracking-tight uppercase text-black text-center truncate w-full">
-                {formatTitle(currentBlock?.songTitle)}
-              </h1>
-              <p className="text-3xl font-bold font-khand uppercase text-black/70 tracking-widest truncate mt-2">
-                {formatArtist(currentBlock?.songArtist)}
-              </p>
+              <h1 className="text-5xl font-black font-khand tracking-tight uppercase text-black text-center truncate w-full">●</h1>
+              <p className="text-3xl font-bold font-khand uppercase text-black/70 tracking-widest truncate mt-2">●</p>
             </div>
-          </div>
-
-          {/* Right: Solid Panels (Visualizer & Up Next) */}
-          <div className="w-[500px] flex flex-col gap-12 h-[800px] mt-[-40px]">
+          </div>●<div className="w-[500px] flex flex-col gap-12 h-[800px] mt-[-40px]">
             
             {/* Brutalist Equalizer Panel */}
             <div className="h-[280px] bg-[#FF69B4] border-[6px] border-black p-8 flex flex-col justify-between shadow-[16px_16px_0_0_rgba(0,0,0,1)] relative overflow-hidden">
-              <h3 className="text-3xl font-black font-khand text-black uppercase bg-white border-2 border-black px-3 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)] inline-block w-fit">Audio Stream</h3>
+              <h3 className="text-3xl font-black font-khand text-black uppercase bg-white border-2 border-black px-3 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)] inline-block w-fit">●</h3>
               
               <div className="flex-1 flex items-end gap-3 overflow-hidden justify-between mt-8 px-2 border-b-[6px] border-black">
                 {[...Array(14)].map((_, i) => (
@@ -223,20 +162,15 @@ export default function YouTubeClient() {
             {/* Up Next Panel */}
             <div className="flex-1 bg-[#E5FF00] border-[6px] border-black p-8 shadow-[16px_16px_0_0_rgba(0,0,0,1)] flex flex-col">
               <h3 className="text-3xl font-black font-khand text-black uppercase mb-6 bg-white border-2 border-black px-3 py-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)] inline-block w-fit">Up Next</h3>
-              <div className="flex flex-col gap-5 flex-1 overflow-hidden">
-                {upcomingBlocks.slice(0, 4).map((block, i) => (
-                  <div key={i} className="flex items-center gap-4 bg-white p-3 border-[4px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
+              <div className="flex flex-col gap-5 flex-1 overflow-hidden">●<div key={i} className="flex items-center gap-4 bg-white p-3 border-[4px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
                     <div className="w-12 h-12 min-w-[48px] bg-black text-[#E5FF00] flex items-center justify-center font-black text-3xl font-khand border-2 border-black">
                       {i + 1}
                     </div>
                     <div className="overflow-hidden">
-                      <p className="text-2xl text-black font-black font-khand uppercase truncate leading-tight">{formatTitle(block.songTitle)}</p>
-                      <p className="text-lg font-bold text-black/60 uppercase truncate leading-tight mt-1">{formatArtist(block.songArtist)}</p>
+                      <p className="text-2xl text-black font-black font-khand uppercase truncate leading-tight">●</p>
+                      <p className="text-lg font-bold text-black/60 uppercase truncate leading-tight mt-1">●</p>
                     </div>
-                  </div>
-                ))}
-                {upcomingBlocks.length === 0 && (
-                  <div className="text-black/40 font-black text-3xl flex h-full items-center justify-center tracking-widest uppercase text-center border-4 border-dashed border-black/20 p-4">
+                  </div>●<div className="text-black/40 font-black text-3xl flex h-full items-center justify-center tracking-widest uppercase text-center border-4 border-dashed border-black/20 p-4">
                     QUEUE IS EMPTY
                   </div>
                 )}
@@ -260,7 +194,7 @@ export default function YouTubeClient() {
               <span className="text-[#FF69B4] mx-8 text-4xl">✦</span>
               YOU ARE LISTENING TO FUTURE RADIO
               <span className="text-[#00E5FF] mx-8 text-4xl">✦</span>
-              100% AUTONOMOUS PREMIUM FOLK RADIO
+              STREAM OUR SONGS ON: SPOTIFY | JIOSAAVN | APPLE MUSIC | AMAZON MUSIC | YOUTUBE MUSIC | GAANA <span className='text-[#E5FF00] mx-8 text-4xl'>&#x25CF;</span> 100% AUTONOMOUS PREMIUM FOLK RADIO
               <span className="text-[#E5FF00] mx-8 text-4xl">✦</span>
               LIVE 24/7
             </React.Fragment>
