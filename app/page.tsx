@@ -43,13 +43,8 @@ export default function EntrySplashPage() {
       </div>
 
       <Header />
-      
-      {!splashComplete && <CinematicSplash onComplete={() => {
-        setSplashComplete(true);
-        sessionStorage.setItem("future_radio_splash_shown", "true");
-      }} />}
 
-      <main className={`min-h-screen text-black flex flex-col pt-20 pb-24 transition-opacity duration-1000 relative z-10 ${splashComplete ? 'opacity-100' : 'opacity-0'}`}>
+      <main className="min-h-screen text-black flex flex-col pt-20 pb-24 relative z-10 opacity-100">
         
         {/* NEO-BRUTALIST HERO SECTION */}
         <div className="w-full max-w-7xl mx-auto px-6 pt-8 pb-4 flex flex-col items-center text-center">
