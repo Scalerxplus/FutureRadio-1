@@ -9,6 +9,15 @@ import { PlaylistBlock } from "@/lib/types";
 
 
 
+
+const resolveMediaUrl = (url: string | null | undefined) => {
+   if (!url) return '';
+   if (url.startsWith('/local_audio_vault/')) {
+      return 'https://pub-ba863acf4a4544f3b2c82ccd32b37e18.r2.dev' + url;
+   }
+   return url;
+};
+
 export default function AudioOrchestrator() {
   const { mode } = useUiStore();
   const { cityId } = useCityStore();
@@ -394,7 +403,7 @@ export default function AudioOrchestrator() {
       if (nextElement && (nextElement.element_type === "jocktalk" || nextElement.element_type === "traffic")) {
         if (pseudoRemainingSeconds <= 60 && pseudoRemainingSeconds > 0 && !prefetchedUrlsRef.current.has(nextElement.id)) {
           prefetchedUrlsRef.current.add(nextElement.id);
-          fetch(nextElement.media_url, { cache: "force-cache" }).catch(e => console.error("Prefetch failed", e));
+          fetch(resolveMediaUrl(nextElement.media_url), { cache: "force-cache" }).catch(e => console.error("Prefetch failed", e));
         }
       }
 
@@ -402,7 +411,8 @@ export default function AudioOrchestrator() {
       if (nextElement) {
           const nextDeckName = activeDeckRef.current === "A" ? "B" : (activeDeckRef.current === "B" ? "C" : "A");
           const nextDeck = nextDeckName === "A" ? mediaRefA.current : (nextDeckName === "B" ? mediaRefB.current : mediaRefC.current);
-          const nextTargetUrl = nextElement.element_type === "song" ? nextElement.youtube_id : nextElement.media_url;
+          const nextTargetUrlRaw = nextElement.element_type === "song" ? nextElement.youtube_id : nextElement.media_url;
+          const nextTargetUrl = resolveMediaUrl(nextTargetUrlRaw);
           
           if (nextDeck && !nextDeck.src.endsWith(encodeURI(nextTargetUrl)) && nextTargetUrl) {
               nextDeck.src = nextTargetUrl;
@@ -528,7 +538,8 @@ export default function AudioOrchestrator() {
         };
 
         setPhase(currentElementToPlay.element_type === "jocktalk" ? "playing_jocktalk" : (currentElementToPlay.element_type === "sweeper" || currentElementToPlay.element_type === "station_id" ? "playing_jingle" : "playing_song"));
-        const targetUrl = currentElementToPlay.element_type === "song" ? currentElementToPlay.youtube_id : currentElementToPlay.media_url;
+        const targetUrlRaw = currentElementToPlay.element_type === "song" ? currentElementToPlay.youtube_id : currentElementToPlay.media_url;
+        const targetUrl = resolveMediaUrl(targetUrlRaw);
         if (primaryDeck) {
              if (!primaryDeck.src.endsWith(encodeURI(targetUrl))) primaryDeck.src = targetUrl;
              applyFadeIn(primaryDeck, currentElementToPlay.element_type);
